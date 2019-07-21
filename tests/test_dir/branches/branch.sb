@@ -1,0 +1,33 @@
+[BRANCH: install_branch]
+packages: {{}}
+
+[apt_blossomX]
+- apt  
+- update, present:
+	names: "{{packages}}"
+
+[apt_blossom1]
+- apt  
+- absent:
+	names: "{{packages}}"
+
+[apt_blossom2]
+- apt  
+- absent:
+	names: "{{packages}}"
+
+[apt_blossom3]
+- apt  
+- present:
+	names: "{{packages}}"
+
+[apt_blossom4]
+- apt  
+- latest:
+	names: "{{packages}}"
+
+[apt_blossom5]
+- apt  
+- present:
+	names: "{{packages}}"
+
