@@ -134,22 +134,6 @@ SakuraThread::grow(JsonObject* growPlan,
         return;
     }
 
-    if(growPlan->getString("type") == "area")
-    {
-        std::vector<std::string> newHirarchie = hirarchie;
-        newHirarchie.push_back("AREA: " + growPlan->getString("name"));
-        processArea(growPlan, items, newHirarchie);
-        return;
-    }
-
-    if(growPlan->getString("type") == "landscape")
-    {
-        std::vector<std::string> newHirarchie = hirarchie;
-        newHirarchie.push_back("LANDSCAPE: " + growPlan->getString("name"));
-        processLandscape(growPlan, items, newHirarchie);
-        return;
-    }
-
     if(growPlan->getString("type") == "sequentiell")
     {
         processSequeniellPart(growPlan, items, hirarchie);
@@ -231,46 +215,6 @@ void
 SakuraThread::processForest(JsonObject* growPlan,
                             JsonObject* values,
                             const std::vector<std::string> &hirarchie)
-{
-    AbstractJson* parts = growPlan->get("parts");
-    assert(parts != nullptr);
-    for(uint32_t i = 0; i < parts->getSize(); i++)
-    {
-        grow(dynamic_cast<JsonObject*>(parts->get(i)),
-             values,
-             hirarchie);
-    }
-
-    return;
-}
-
-/**
- * @brief SakuraThread::processArea
- */
-void
-SakuraThread::processArea(JsonObject* growPlan,
-                          JsonObject* values,
-                          const std::vector<std::string> &hirarchie)
-{
-    AbstractJson* parts = growPlan->get("parts");
-    assert(parts != nullptr);
-    for(uint32_t i = 0; i < parts->getSize(); i++)
-    {
-        grow(dynamic_cast<JsonObject*>(parts->get(i)),
-             values,
-             hirarchie);
-    }
-
-    return;
-}
-
-/**
- * @brief SakuraThread::processLandscape
- */
-void
-SakuraThread::processLandscape(JsonObject* growPlan,
-                               JsonObject* values,
-                               const std::vector<std::string> &hirarchie)
 {
     AbstractJson* parts = growPlan->get("parts");
     assert(parts != nullptr);
