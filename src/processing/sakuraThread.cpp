@@ -11,7 +11,7 @@
 #include <sakuraRoot.h>
 #include <commonMethods.h>
 #include <processing/blossoms/blossom.h>
-#include <processing/blossoms/blossomTypeHandler.h>
+#include <processing/blossoms/blossomGetter.h>
 
 #include <processing/blossoms/install/apt/aptBlossom.h>
 #include <processing/blossoms/install/apt/aptPresentBlossom.h>
@@ -170,8 +170,9 @@ SakuraThread::processBlossom(JsonObject* growPlan,
     for(uint32_t i = 0; i < subtypes->getSize(); i++)
     {
         std::string subtype = subtypes->get(i)->toString();
-        Blossom* blossom = SakuraRoot::m_typeHandler->getBlossom(type, subtype);
+        Blossom* blossom = getBlossom(type, subtype);
         blossom->growBlossom(&blossomData);
+        delete blossom;
     }
 
     // abort if blossom-result was an error

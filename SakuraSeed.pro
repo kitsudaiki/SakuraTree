@@ -42,11 +42,11 @@ SOURCES += \
     src/processing/blossoms/install/apt/aptAbsentBlossom.cpp \
     src/processing/blossoms/install/apt/aptLatestBossom.cpp \
     src/processing/blossoms/blossom.cpp \
-    src/processing/blossoms/blossomTypeHandler.cpp \
     src/processing/blossoms/ssh/scpBlossom.cpp \
     tests/runUnitTests.cpp \
     tests/core/commonMethodsTest.cpp \
-    src/initializing/fileCollector.cpp
+    src/initializing/fileCollector.cpp \
+    src/processing/blossoms/blossomGetter.cpp
 
 
 HEADERS += \
@@ -66,10 +66,10 @@ HEADERS += \
     src/processing/blossoms/install/apt/aptPresentBlossom.h \
     src/processing/blossoms/install/apt/aptLatestBlossom.h \
     src/processing/blossoms/blossom.h \
-    src/processing/blossoms/blossomTypeHandler.h \
     src/processing/blossoms/ssh/scpBlossom.h \
     tests/runUnitTests.h \
     tests/core/commonMethodsTest.h \
-    src/initializing/fileCollector.h
+    src/initializing/fileCollector.h \
+    src/processing/blossoms/blossomGetter.h
 
 

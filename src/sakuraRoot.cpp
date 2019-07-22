@@ -12,16 +12,12 @@
 
 #include <initializing/sakuraCompiler.h>
 #include <commonMethods.h>
-
 #include <processing/sakuraThread.h>
-#include <processing/blossoms/blossom.h>
-#include <processing/blossoms/blossomTypeHandler.h>
 
 namespace SakuraSeed
 {
 
 SakuraRoot* SakuraRoot::m_root = nullptr;
-BlossomTypeHandler* SakuraRoot::m_typeHandler = nullptr;
 KitsuneJinja2Converter* SakuraRoot::m_jinja2Converter = nullptr;
 
 /**
@@ -30,10 +26,6 @@ KitsuneJinja2Converter* SakuraRoot::m_jinja2Converter = nullptr;
 SakuraRoot::SakuraRoot()
 {
     m_root = this;
-
-    m_typeHandler = new BlossomTypeHandler();
-    m_typeHandler->initBlossoms();
-
     m_jinja2Converter = new Kitsune::Jinja2::KitsuneJinja2Converter;
 }
 

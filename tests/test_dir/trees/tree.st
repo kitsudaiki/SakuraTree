@@ -1,5 +1,5 @@
 [TREE: test_tree]
-packages: asdf
+packages: nano
 
 {
 	[BRANCH: install_branch]
