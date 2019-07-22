@@ -28,7 +28,6 @@ namespace SakuraSeed
 {
 class SakuraTree;
 class SakuraThread;
-class BlossomTypeHandler;
 struct BlossomData;
 
 class SakuraRoot
@@ -44,7 +43,6 @@ public:
     void addMessage(BlossomData *blossomData);
 
     static SakuraSeed::SakuraRoot* m_root;
-    static SakuraSeed::BlossomTypeHandler* m_typeHandler;
     static KitsuneJinja2Converter* m_jinja2Converter;
 
 private:
