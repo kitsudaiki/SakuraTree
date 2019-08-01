@@ -11,7 +11,7 @@
 
 #include <tests/core/commonMethodsTest.h>
 
-namespace SakuraSeed
+namespace SakuraTree
 {
 
 RunUnitTests::RunUnitTests()
@@ -23,7 +23,7 @@ void
 RunUnitTests::run()
 {
     #ifdef RUN_UNIT_TEST
-    SakuraSeed::CommonMethodsTest();
+    SakuraTree::CommonMethodsTest();
     #endif
 }
 

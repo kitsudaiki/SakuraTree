@@ -11,7 +11,7 @@
 
 #include <sakuraRoot.h>
 
-namespace SakuraSeed
+namespace SakuraTree
 {
 
 /**

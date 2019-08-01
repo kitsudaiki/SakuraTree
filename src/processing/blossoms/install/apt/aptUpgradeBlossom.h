@@ -12,7 +12,7 @@
 
 #include <processing/blossoms/install/apt/aptBlossom.h>
 
-namespace SakuraSeed
+namespace SakuraTree
 {
 
 class AptUpgradeBlossom : public AptBlossom

@@ -9,7 +9,7 @@
 
 #include "aptPresentBlossom.h"
 
-namespace SakuraSeed
+namespace SakuraTree
 {
 
 /**

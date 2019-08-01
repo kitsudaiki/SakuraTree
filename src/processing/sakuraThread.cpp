@@ -18,7 +18,7 @@
 #include <processing/blossoms/install/apt/aptAbsentBlossom.h>
 #include <processing/blossoms/install/apt/aptUpdateBlossom.h>
 
-namespace SakuraSeed
+namespace SakuraTree
 {
 
 /**

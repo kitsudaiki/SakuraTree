@@ -9,7 +9,7 @@
 
 #include "aptAbsentBlossom.h"
 
-namespace SakuraSeed
+namespace SakuraTree
 {
 
 AptAbsentBlossom::AptAbsentBlossom() :

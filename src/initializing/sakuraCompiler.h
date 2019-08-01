@@ -27,7 +27,7 @@ class LibKitsuneSakuraParser;
 }
 }
 
-namespace SakuraSeed
+namespace SakuraTree
 {
 class FileCollector;
 

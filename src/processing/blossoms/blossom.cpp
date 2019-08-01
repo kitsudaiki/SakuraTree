@@ -12,7 +12,7 @@
 #include <commonMethods.h>
 #include <boost/algorithm/string/replace.hpp>
 
-namespace SakuraSeed
+namespace SakuraTree
 {
 
 Blossom::Blossom() {}

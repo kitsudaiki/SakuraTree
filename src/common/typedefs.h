@@ -21,10 +21,10 @@ typedef std::chrono::high_resolution_clock::time_point chronoTimePoint;
 typedef std::chrono::high_resolution_clock chronoClock;
 
 
-namespace SakuraSeed {
+namespace SakuraTree {
 class SakuraBranch;
 }
-typedef std::map<std::string, SakuraSeed::SakuraBranch*> BranchMap;
+typedef std::map<std::string, SakuraTree::SakuraBranch*> BranchMap;
 
 
 #endif // TYPEDEFS_H

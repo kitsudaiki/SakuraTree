@@ -17,7 +17,7 @@ namespace argParser = boost::program_options;
 int main(int argc, char *argv[])
 {
     #ifdef RUN_UNIT_TEST
-    SakuraSeed::RunUnitTests unitTests;
+    SakuraTree::RunUnitTests unitTests;
     unitTests.run();
     #else
 
@@ -52,7 +52,7 @@ int main(int argc, char *argv[])
         std::cout << "seed-path: "
                   << vm["seed-path"].as<std::string>()
                   << std::endl;
-        SakuraSeed::SakuraRoot* root = new SakuraSeed::SakuraRoot();
+        SakuraTree::SakuraRoot* root = new SakuraTree::SakuraRoot();
         const std::string seedPath = vm["seed-path"].as<std::string>();
         root->startProcess(seedPath, "test_tree");
     }

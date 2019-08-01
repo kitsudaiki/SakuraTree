@@ -9,7 +9,7 @@
 
 #include "scpBlossom.h"
 
-namespace SakuraSeed
+namespace SakuraTree
 {
 
 ScpBlossom::ScpBlossom()

@@ -11,7 +11,7 @@
 #include <libKitsuneSakuraParser.h>
 #include <initializing/fileCollector.h>
 
-namespace SakuraSeed
+namespace SakuraTree
 {
 
 /**

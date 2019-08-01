@@ -24,9 +24,8 @@ class KitsuneJinja2Converter;
 using Kitsune::Sakura::LibKitsuneSakuraParser;
 using Kitsune::Jinja2::KitsuneJinja2Converter;
 
-namespace SakuraSeed
+namespace SakuraTree
 {
-class SakuraTree;
 class SakuraThread;
 struct BlossomData;
 
@@ -42,11 +41,10 @@ public:
 
     void addMessage(BlossomData *blossomData);
 
-    static SakuraSeed::SakuraRoot* m_root;
+    static SakuraTree::SakuraRoot* m_root;
     static KitsuneJinja2Converter* m_jinja2Converter;
 
 private:
-    SakuraTree* m_rootTree = nullptr;
     SakuraThread* m_rootThread = nullptr;
 
     std::mutex m_mutex;

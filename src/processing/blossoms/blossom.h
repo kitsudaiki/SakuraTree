@@ -15,7 +15,7 @@
 
 using namespace Kitsune::Json;
 
-namespace SakuraSeed
+namespace SakuraTree
 {
 
 struct BlossomData

@@ -43,7 +43,7 @@ using Kitsune::Sakura::LibKitsuneSakuraParser;
 using Kitsune::Json::JsonObject;
 using Kitsune::Json::JsonItem;
 
-namespace SakuraSeed
+namespace SakuraTree
 {
 
 class FileCollector

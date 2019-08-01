@@ -13,7 +13,7 @@
 #include <common.h>
 #include <threading/commonThread.hpp>
 
-namespace SakuraSeed
+namespace SakuraTree
 {
 
 class SakuraThread : public Kitsune::CommonThread

@@ -12,7 +12,7 @@
 
 #include <processing/blossoms/blossom.h>
 
-namespace SakuraSeed
+namespace SakuraTree
 {
 
 class AptBlossom : public Blossom

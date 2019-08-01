@@ -12,7 +12,7 @@
 #include <libKitsuneSakuraParser.h>
 #include <commonMethods/stringMethods.hpp>
 
-namespace SakuraSeed
+namespace SakuraTree
 {
 
 FileCollector::FileCollector(LibKitsuneSakuraParser *driver)

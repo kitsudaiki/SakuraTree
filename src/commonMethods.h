@@ -12,7 +12,7 @@
 
 #include <common.h>
 
-namespace SakuraSeed
+namespace SakuraTree
 {
 struct BlossomData;
 

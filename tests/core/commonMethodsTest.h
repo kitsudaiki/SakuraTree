@@ -14,7 +14,7 @@
 #include <testing/commonTest.hpp>
 #include <commonMethods.h>
 
-namespace SakuraSeed
+namespace SakuraTree
 {
 class SakuraRoot;
 

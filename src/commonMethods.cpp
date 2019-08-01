@@ -15,7 +15,7 @@
 
 using Kitsune::Jinja2::KitsuneJinja2Converter;
 
-namespace SakuraSeed
+namespace SakuraTree
 {
 
 /**

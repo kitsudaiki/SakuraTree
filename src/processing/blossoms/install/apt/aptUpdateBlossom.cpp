@@ -9,7 +9,7 @@
 
 #include "aptUpdateBlossom.h"
 
-namespace SakuraSeed
+namespace SakuraTree
 {
 
 AptUdateBlossom::AptUdateBlossom() :

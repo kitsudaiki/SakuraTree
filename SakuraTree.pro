@@ -1,6 +1,6 @@
 QT -= qt core gui
 
-TARGET = SakuraSeed
+TARGET = SakuraTree
 CONFIG += console
 CONFIG += c++14
 

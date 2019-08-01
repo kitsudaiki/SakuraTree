@@ -17,7 +17,7 @@
 
 #include <sakuraRoot.h>
 
-namespace SakuraSeed
+namespace SakuraTree
 {
 
 AptBlossom::AptBlossom() :

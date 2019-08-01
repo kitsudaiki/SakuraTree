@@ -14,7 +14,7 @@
 #include <commonMethods.h>
 #include <processing/sakuraThread.h>
 
-namespace SakuraSeed
+namespace SakuraTree
 {
 
 SakuraRoot* SakuraRoot::m_root = nullptr;
