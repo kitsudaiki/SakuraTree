@@ -11,7 +11,7 @@
 #define SAKURATHREAD_H
 
 #include <common.h>
-#include <threading/commonThread.h>
+#include <threading/commonThread.hpp>
 
 namespace SakuraSeed
 {

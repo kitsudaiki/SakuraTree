@@ -51,7 +51,7 @@ fillItems(JsonObject* items,
 
     for(uint32_t i = 0; i < keys.size(); i++)
     {
-        AbstractJson* obj = items->get(keys.at(i));
+        JsonItem* obj = items->get(keys.at(i));
         if(obj->isValue())
         {
             const std::string tempItem = obj->toString();

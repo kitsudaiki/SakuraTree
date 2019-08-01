@@ -11,7 +11,7 @@
 #define BLOSSOM_H
 
 #include <common.h>
-#include <jsonObjects.h>
+#include <jsonItems.hpp>
 
 using namespace Kitsune::Json;
 

@@ -24,7 +24,7 @@
 #include <stdlib.h>
 #include <mutex>
 
-#include <jsonObjects.h>
+#include <jsonItems.hpp>
 
 using namespace Kitsune;
 using namespace Kitsune::Json;

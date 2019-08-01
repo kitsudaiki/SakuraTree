@@ -11,7 +11,7 @@
 #define COMMONMETHODSTEST_H
 
 #include <common.h>
-#include <testing/commonTest.h>
+#include <testing/commonTest.hpp>
 #include <commonMethods.h>
 
 namespace SakuraSeed

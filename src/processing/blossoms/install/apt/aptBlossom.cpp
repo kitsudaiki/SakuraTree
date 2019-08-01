@@ -13,7 +13,7 @@
 #include "aptUpdateBlossom.h"
 #include "aptUpgradeBlossom.h"
 #include <commonMethods.h>
-#include <commonMethods/stringMethods.h>
+#include <commonMethods/stringMethods.hpp>
 
 #include <sakuraRoot.h>
 

@@ -29,7 +29,7 @@ namespace Kitsune
 {
 namespace Json
 {
-class AbstractJson;
+class JsonItem;
 class JsonObject;
 }
 namespace Sakura
@@ -41,7 +41,7 @@ class LibKitsuneSakuraParser;
 using namespace boost::filesystem;
 using Kitsune::Sakura::LibKitsuneSakuraParser;
 using Kitsune::Json::JsonObject;
-using Kitsune::Json::AbstractJson;
+using Kitsune::Json::JsonItem;
 
 namespace SakuraSeed
 {

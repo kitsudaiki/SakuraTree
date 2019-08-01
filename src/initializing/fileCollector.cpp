@@ -10,7 +10,7 @@
 #include <initializing/fileCollector.h>
 
 #include <libKitsuneSakuraParser.h>
-#include <commonMethods/stringMethods.h>
+#include <commonMethods/stringMethods.hpp>
 
 namespace SakuraSeed
 {

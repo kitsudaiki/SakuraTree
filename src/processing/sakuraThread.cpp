@@ -197,7 +197,7 @@ SakuraThread::processBranch(JsonObject *growPlan,
                             JsonObject *values,
                             const std::vector<std::string> &hirarchie)
 {
-    AbstractJson* parts = growPlan->get("parts");
+    JsonItem* parts = growPlan->get("parts");
     assert(parts != nullptr);
     for(uint32_t i = 0; i < parts->getSize(); i++)
     {
@@ -217,7 +217,7 @@ SakuraThread::processForest(JsonObject* growPlan,
                             JsonObject* values,
                             const std::vector<std::string> &hirarchie)
 {
-    AbstractJson* parts = growPlan->get("parts");
+    JsonItem* parts = growPlan->get("parts");
     assert(parts != nullptr);
     for(uint32_t i = 0; i < parts->getSize(); i++)
     {
@@ -237,7 +237,7 @@ SakuraThread::processSequeniellPart(JsonObject *growPlan,
                                     JsonObject *values,
                                     const std::vector<std::string> &hirarchie)
 {
-    AbstractJson* parts = growPlan->get("parts");
+    JsonItem* parts = growPlan->get("parts");
     assert(parts != nullptr);
     for(uint32_t i = 0; i < parts->getSize(); i++)
     {
@@ -257,7 +257,7 @@ SakuraThread::processParallelPart(JsonObject* growPlan,
                                   JsonObject* values,
                                   const std::vector<std::string> &hirarchie)
 {
-    AbstractJson* parts = growPlan->get("parts");
+    JsonItem* parts = growPlan->get("parts");
     assert(parts != nullptr);
 
     // create and initialize all threads
