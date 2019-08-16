@@ -42,7 +42,7 @@ int main(int argc, char *argv[])
     // help-arg
     if(vm.count("help"))
     {
-        std::cout << desc << std::endl;;
+        std::cout << desc << std::endl;
         return 0;
     }
 

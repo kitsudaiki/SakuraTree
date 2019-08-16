@@ -17,7 +17,7 @@ namespace SakuraTree
 /**
  * @brief CommonMethodsTest::CommonMethodsTest
  */
-CommonMethodsTest::CommonMethodsTest() : Kitsune::CommonTest("CommonMethodsTest")
+CommonMethodsTest::CommonMethodsTest() : Kitsune::Common::Test("CommonMethodsTest")
 {
     initTestCase();
     testConvertString();
@@ -41,8 +41,8 @@ void CommonMethodsTest::initTestCase()
 void CommonMethodsTest::testConvertString()
 {
     std::string jinja2String = "{{test}}";
-    JsonObject obj;
-    obj.insert("test", new JsonValue("hmmm"));
+    DataObject obj;
+    obj.insert("test", new DataValue("hmmm"));
 
     std::string result = convertString(jinja2String, &obj);
     UNITTEST(result, "hmmm");
@@ -53,12 +53,12 @@ void CommonMethodsTest::testConvertString()
  */
 void CommonMethodsTest::testFillItems()
 {
-    JsonObject items;
-    items.insert("x", new JsonValue("{{test}}"));
-    JsonObject insertValues;
-    insertValues.insert("test", new JsonValue("hmmm"));
+    DataObject items;
+    items.insert("x", new DataValue("{{test}}"));
+    DataObject insertValues;
+    insertValues.insert("test", new DataValue("hmmm"));
 
-    JsonObject* result = fillItems(&items, &insertValues);
+    DataObject* result = fillItems(&items, &insertValues);
     UNITTEST(result->get("x")->toString(), "hmmm");
 }
 
@@ -67,15 +67,15 @@ void CommonMethodsTest::testFillItems()
  */
 void CommonMethodsTest::testOverrideItems()
 {
-    JsonObject original;
-    original.insert("x", new JsonValue("{{test}}"));
-    original.insert("y", new JsonValue("asdf"));
+    DataObject original;
+    original.insert("x", new DataValue("{{test}}"));
+    original.insert("y", new DataValue("asdf"));
 
-    JsonObject override;
-    override.insert("y", new JsonValue("poi"));
-    override.insert("z", new JsonValue("hmmm"));
+    DataObject override;
+    override.insert("y", new DataValue("poi"));
+    override.insert("z", new DataValue("hmmm"));
 
-    JsonObject* result = overrideItems(&original, &override);
+    DataObject* result = overrideItems(&original, &override);
     UNITTEST(result->getSize(), 3);
     UNITTEST(result->get("x")->toString(), "{{test}}");
     UNITTEST(result->get("y")->toString(), "poi");
@@ -87,9 +87,9 @@ void CommonMethodsTest::testOverrideItems()
  */
 void CommonMethodsTest::testCheckItems()
 {
-    JsonObject items;
-    items.insert("x", new JsonValue("{{}}"));
-    items.insert("y", new JsonValue("asdf"));
+    DataObject items;
+    items.insert("x", new DataValue("{{}}"));
+    items.insert("y", new DataValue("asdf"));
 
     std::vector<std::string> result = checkItems(&items);
     UNITTEST(result.size(), 1);

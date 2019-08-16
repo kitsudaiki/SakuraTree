@@ -17,13 +17,13 @@ namespace SakuraTree
 struct BlossomData;
 
 std::string convertString(const std::string &templateString,
-                          JsonObject* content);
-JsonObject* fillItems(JsonObject* items,
-                      JsonObject* insertValues);
-JsonObject* overrideItems(JsonObject* original,
-                          JsonObject* override);
+                          DataObject* content);
+DataObject* fillItems(DataObject* items,
+                      DataObject* insertValues);
+DataObject* overrideItems(DataObject* original,
+                          DataObject* override);
 
-std::vector<std::string> checkItems(JsonObject* items);
+std::vector<std::string> checkItems(DataObject* items);
 
 void printOutput(BlossomData* blossom);
 

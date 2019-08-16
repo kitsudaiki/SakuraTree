@@ -10,6 +10,7 @@
 #ifndef SAKURAPARSERINIT_H
 #define SAKURAPARSERINIT_H
 
+#include <common.h>
 #include <string>
 #include <map>
 #include <utility>
@@ -27,21 +28,19 @@
 
 namespace Kitsune
 {
-namespace Json
+namespace Common
 {
-class JsonItem;
-class JsonObject;
+class DataItem;
+class DataObject;
 }
 namespace Sakura
 {
-class LibKitsuneSakuraParser;
+class SakuraConverter;
 }
 }
 
 using namespace boost::filesystem;
-using Kitsune::Sakura::LibKitsuneSakuraParser;
-using Kitsune::Json::JsonObject;
-using Kitsune::Json::JsonItem;
+using Kitsune::Sakura::SakuraConverter;
 
 namespace SakuraTree
 {
@@ -49,22 +48,22 @@ namespace SakuraTree
 class FileCollector
 {
 public:
-    FileCollector(LibKitsuneSakuraParser* driver);
+    FileCollector(SakuraConverter* driver);
 
     bool initFileCollector(const std::string &rootPath);
 
-    JsonObject* getObject(const std::string &name,
+    DataObject* getObject(const std::string &name,
                           const std::string &type="");
     const std::string getSeedName(const uint32_t index);
     const std::string getErrorMessage() const;
 
 private:
-    LibKitsuneSakuraParser* m_driver = nullptr;
+    SakuraConverter* m_driver = nullptr;
 
     void getFilesInDir(const path &directory);
     const std::string readFile(const std::string &filePath);
 
-    std::vector<std::pair<std::string, JsonObject*>> m_fileContents;
+    std::vector<std::pair<std::string, DataObject*>> m_fileContents;
     std::string m_errorMessage = "";
 };
 

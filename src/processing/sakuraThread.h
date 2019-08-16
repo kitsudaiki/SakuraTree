@@ -11,17 +11,20 @@
 #define SAKURATHREAD_H
 
 #include <common.h>
-#include <threading/commonThread.hpp>
+#include <threading/thread.hpp>
+
+using namespace Kitsune::Common;
 
 namespace SakuraTree
 {
 
-class SakuraThread : public Kitsune::CommonThread
+class SakuraThread
+        : public Kitsune::Common::Thread
 {
 
 public:
-    SakuraThread(JsonObject *growPlan,
-                 JsonObject *values,
+    SakuraThread(DataObject *growPlan,
+                 DataObject *values,
                  const std::vector<std::string> &hirarchie);
     ~SakuraThread();
 
@@ -33,42 +36,42 @@ private:
 
     std::vector<SakuraThread*> m_childs;
 
-    JsonObject* m_growPlan;
-    JsonObject* m_values;
+    DataObject* m_growPlan;
+    DataObject* m_values;
     std::vector<std::string> m_hirarchie;
 
     void run();
 
-    void grow(JsonObject *growPlan,
-              JsonObject *values,
+    void grow(DataObject *growPlan,
+              DataObject *values,
               const std::vector<std::string> &hirarchie);
 
-    void processBlossom(JsonObject* growPlan,
-                        JsonObject* values,
+    void processBlossom(DataObject* growPlan,
+                        DataObject* values,
                         const std::vector<std::string> &hirarchie);
 
-    void processBranch(JsonObject* growPlan,
-                       JsonObject* values,
+    void processBranch(DataObject* growPlan,
+                       DataObject* values,
                        const std::vector<std::string> &hirarchie);
 
-    void processForest(JsonObject* growPlan,
-                       JsonObject* values,
+    void processForest(DataObject* growPlan,
+                       DataObject* values,
                        const std::vector<std::string> &hirarchie);
 
-    void processArea(JsonObject* growPlan,
-                     JsonObject* values,
+    void processArea(DataObject* growPlan,
+                     DataObject* values,
                      const std::vector<std::string> &hirarchie);
 
-    void processLandscape(JsonObject* growPlan,
-                          JsonObject* values,
+    void processLandscape(DataObject* growPlan,
+                          DataObject* values,
                           const std::vector<std::string> &hirarchie);
 
-    void processSequeniellPart(JsonObject* growPlan,
-                               JsonObject* values,
+    void processSequeniellPart(DataObject* growPlan,
+                               DataObject* values,
                                const std::vector<std::string> &hirarchie);
 
-    void processParallelPart(JsonObject* growPlan,
-                             JsonObject* values,
+    void processParallelPart(DataObject* growPlan,
+                             DataObject* values,
                              const std::vector<std::string> &hirarchie);
 
     void clearChilds();

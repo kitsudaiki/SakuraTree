@@ -58,7 +58,7 @@ AptBlossom::fillPackageNames(BlossomData* blossomData)
 
     if(blossomData->items->get("names")->isArray())
     {
-        JsonArray* tempItem = dynamic_cast<JsonArray*>(blossomData->items->get("names"));
+        DataArray* tempItem = dynamic_cast<DataArray*>(blossomData->items->get("names"));
         for(uint32_t i = 0; i < tempItem->getSize(); i++)
         {
             m_packageNames.push_back(tempItem->get(i)->toString());
@@ -151,7 +151,7 @@ AptBlossom::getInstalledPackages(BlossomData* blossomData)
 
     remove_if(output.begin(), output.end(), isspace);
 
-    return Kitsune::splitString(output, '\n');
+    return Kitsune::Common::splitString(output, '\n');
 }
 
 }

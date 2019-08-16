@@ -11,18 +11,18 @@
 #define SAKURAROOT_H
 
 #include <common.h>
-#include <libKitsuneSakuraParser.h>
+#include <sakura_converter.hpp>
 
 namespace Kitsune
 {
 namespace Jinja2
 {
-class KitsuneJinja2Converter;
+class Jinja2Converter;
 }
 }
 
-using Kitsune::Sakura::LibKitsuneSakuraParser;
-using Kitsune::Jinja2::KitsuneJinja2Converter;
+using Kitsune::Sakura::SakuraConverter;
+using Kitsune::Jinja2::Jinja2Converter;
 
 namespace SakuraTree
 {
@@ -42,7 +42,7 @@ public:
     void addMessage(BlossomData *blossomData);
 
     static SakuraTree::SakuraRoot* m_root;
-    static KitsuneJinja2Converter* m_jinja2Converter;
+    static Jinja2Converter* m_jinja2Converter;
 
 private:
     SakuraThread* m_rootThread = nullptr;

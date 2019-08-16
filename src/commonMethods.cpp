@@ -9,11 +9,11 @@
 
 #include "commonMethods.h"
 
-#include <libKitsuneJinja2.h>
+#include <jinja2Converter.hpp>
 #include <sakuraRoot.h>
 #include <processing/blossoms/blossom.h>
 
-using Kitsune::Jinja2::KitsuneJinja2Converter;
+using Kitsune::Jinja2::Jinja2Converter;
 
 namespace SakuraTree
 {
@@ -25,13 +25,13 @@ namespace SakuraTree
  */
 std::string
 convertString(const std::string &templateString,
-              JsonObject *content)
+              DataObject *content)
 {
     if(content->isObject() == false) {
         return std::string("");
     }
 
-    KitsuneJinja2Converter* converter = SakuraRoot::m_root->m_jinja2Converter;
+    Jinja2Converter* converter = SakuraRoot::m_root->m_jinja2Converter;
     std::pair<std::string, bool> result = converter->convert(templateString, content);
     // TODO: handle false return value
 
@@ -43,19 +43,19 @@ convertString(const std::string &templateString,
  *
  * @return the original items-object, with all jinja2-content filled
  */
-JsonObject*
-fillItems(JsonObject* items,
-          JsonObject* insertValues)
+DataObject*
+fillItems(DataObject* items,
+          DataObject* insertValues)
 {
     const std::vector<std::string> keys = items->getKeys();
 
     for(uint32_t i = 0; i < keys.size(); i++)
     {
-        JsonItem* obj = items->get(keys.at(i));
+        DataItem* obj = items->get(keys.at(i));
         if(obj->isValue())
         {
             const std::string tempItem = obj->toString();
-            JsonValue* value = new JsonValue(convertString(tempItem, insertValues));
+            DataValue* value = new DataValue(convertString(tempItem, insertValues));
             items->insert(keys.at(i), value, true);
         }
     }
@@ -68,9 +68,9 @@ fillItems(JsonObject* items,
  *
  * @return
  */
-JsonObject*
-overrideItems(JsonObject* original,
-              JsonObject* override)
+DataObject*
+overrideItems(DataObject* original,
+              DataObject* override)
 {
     const std::vector<std::string> keys = override->getKeys();
     for(uint32_t i = 0; i < keys.size(); i++)
@@ -87,7 +87,7 @@ overrideItems(JsonObject* original,
  * @return list of not initialized values
  */
 std::vector<std::string>
-checkItems(JsonObject* items)
+checkItems(DataObject* items)
 {
     std::vector<std::string> result;
 
