@@ -160,7 +160,7 @@ Blossom::runSyncProcess(BlossomData *blossomData,
                 data.append(buffer);
             }
         }
-        blossomData->execState = WEXITSTATUS(pclose(stream));
+        blossomData->execState = pclose(stream);
     }
     else
     {

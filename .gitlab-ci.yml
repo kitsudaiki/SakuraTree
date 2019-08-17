@@ -1,0 +1,58 @@
+image: registry.gitlab.com/kitsune_other/kitsune_docker_unittest:0.1.0
+
+build:
+  script:
+    - echo Working on branch $CI_COMMIT_REF_NAME
+    - mkdir /builds/build
+
+    - git clone --branch 0.3.0 git@gitlab.com:kitsune_libs/libKitsuneCommon.git /builds/kitsune_automation/libKitsuneCommon
+    
+    - cd /builds/build
+    - mkdir libKitsuneCommon
+    - cd libKitsuneCommon
+    - /usr/lib/x86_64-linux-gnu/qt5/bin/qmake /builds/kitsune_automation/libKitsuneCommon/libKitsuneCommon.pro -spec linux-g++
+    - /usr/bin/make
+
+
+    - git clone --branch 0.3.0 git@gitlab.com:kitsune_libs/libKitsuneJson.git /builds/kitsune_automation/libKitsuneJson
+    
+    - cd /builds/build
+    - mkdir libKitsuneJson
+    - cd libKitsuneJson
+    - /usr/lib/x86_64-linux-gnu/qt5/bin/qmake /builds/kitsune_automation/libKitsuneJson/libKitsuneJson.pro -spec linux-g++
+    - /usr/bin/make
+
+
+    - git clone --branch 0.2.0 git@gitlab.com:kitsune_libs/libKitsuneJinja2.git /builds/kitsune_automation/libKitsuneJinja2
+    
+    - cd /builds/build
+    - mkdir libKitsuneJinja2
+    - cd libKitsuneJinja2
+    - /usr/lib/x86_64-linux-gnu/qt5/bin/qmake /builds/kitsune_automation/libKitsuneJinja2/libKitsuneJinja2.pro -spec linux-g++
+    - /usr/bin/make
+
+
+    - git clone --branch 0.1.0 git@gitlab.com:kitsune_automation/libKitsuneSakuraParser.git /builds/kitsune_automation/libKitsuneSakuraParser
+    
+    - cd /builds/build
+    - mkdir libKitsuneSakuraParser
+    - cd libKitsuneSakuraParser
+    - /usr/lib/x86_64-linux-gnu/qt5/bin/qmake /builds/kitsune_automation/libKitsuneSakuraParser/libKitsuneSakuraParser.pro -spec linux-g++
+    - /usr/bin/make
+
+    - apt-get install -y libboost-filesystem-dev
+    - apt-get install -y libboost-program-options-dev
+    - cd /builds/build
+    - mkdir SakuraTree
+    - cd SakuraTree
+    - /usr/lib/x86_64-linux-gnu/qt5/bin/qmake /builds/kitsune_automation/SakuraTree/SakuraTree.pro -spec linux-g++ "QMAKE_CXXFLAGS += -DRUN_UNIT_TEST"
+    - /usr/bin/make
+    
+    - export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:'/builds/build/libKitsuneCommon/src'
+    - export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:'/builds/build/libKitsuneJson/src'
+    - export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:'/builds/build/libKitsuneJinja2/src'
+    - export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:'/builds/build/libKitsuneSakuraParser/src'
+    - ./SakuraTree
+
+  tags:
+    - docker

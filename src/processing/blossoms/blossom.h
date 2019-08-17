@@ -31,7 +31,7 @@ struct BlossomData
 
     bool skip = false;
     bool success = true;
-    uint8_t execState = 0;
+    int execState = 0;
     std::string outputMessage = "";
 };
 

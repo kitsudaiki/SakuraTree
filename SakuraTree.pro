@@ -7,24 +7,24 @@ CONFIG += c++14
 LIBS += -L../libKitsuneCommon/src -lKitsuneCommon
 LIBS += -L../libKitsuneCommon/src/debug -lKitsuneCommon
 LIBS += -L../libKitsuneCommon/src/release -lKitsuneCommon
-INCLUDEPATH += ../../libKitsuneCommon/include/libKitsuneCommon
+INCLUDEPATH += ../libKitsuneCommon/include/libKitsuneCommon
 
 LIBS += -L../libKitsuneJson/src -lKitsuneJson
 LIBS += -L../libKitsuneJson/src/debug -lKitsuneJson
 LIBS += -L../libKitsuneJson/src/release -lKitsuneJson
-INCLUDEPATH += ../../libKitsuneJson/include/libKitsuneJson
+INCLUDEPATH += ../libKitsuneJson/include/libKitsuneJson
 
 LIBS += -L../libKitsuneJinja2/src -lKitsuneJinja2
 LIBS += -L../libKitsuneJinja2/src/debug -lKitsuneJinja2
 LIBS += -L../libKitsuneJinja2/src/release -lKitsuneJinja2
-INCLUDEPATH += ../../libKitsuneJinja2/include/libKitsuneJinja2
+INCLUDEPATH += ../libKitsuneJinja2/include/libKitsuneJinja2
 
 LIBS += -L../libKitsuneSakuraParser/src -lKitsuneSakuraParser
 LIBS += -L../libKitsuneSakuraParser/src/debug -lKitsuneSakuraParser
 LIBS += -L../libKitsuneSakuraParser/src/release -lKitsuneSakuraParser
 INCLUDEPATH += ../libKitsuneSakuraParser/include/libKitsuneSakuraParser
 
-LIBS +=  -lboost_filesystem -lboost_system -lboost_program_options -lboost_iostreams
+LIBS +=  -lboost_filesystem -lboost_system -lboost_program_options
 
 INCLUDEPATH += $$PWD \
             src
