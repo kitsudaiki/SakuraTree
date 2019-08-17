@@ -1,5 +1,5 @@
 /**
- *  @file    sakuraCompiler.cpp
+ *  @file    sakura_compiler.cpp
  *
  *  @author  Tobias Anker
  *  Contact: tobias.anker@kitsunemimi.moe
@@ -7,9 +7,9 @@
  *  Apache License Version 2.0
  */
 
-#include "sakuraCompiler.h"
-#include <libKitsuneSakuraParser.h>
-#include <initializing/fileCollector.h>
+#include "sakura_compiler.h"
+#include <sakura_converter.h>
+#include <initializing/file_collector.h>
 
 namespace SakuraTree
 {
@@ -18,7 +18,7 @@ namespace SakuraTree
  * @brief SakuraCompiler::SakuraCompiler
  * @param driver
  */
-SakuraCompiler::SakuraCompiler(Kitsune::Sakura::LibKitsuneSakuraParser* driver)
+SakuraCompiler::SakuraCompiler(Kitsune::Sakura::SakuraConverter *driver)
 {
     m_driver = driver;
     m_fileCollector = new FileCollector(m_driver);
@@ -35,7 +35,7 @@ SakuraCompiler::~SakuraCompiler()
  * @param name
  * @return
  */
-JsonObject*
+DataObject*
 SakuraCompiler::compile(const std::string &rootPath,
                         std::string &seedName)
 {
@@ -50,7 +50,7 @@ SakuraCompiler::compile(const std::string &rootPath,
         seedName = m_fileCollector->getSeedName(0);
     }
 
-    JsonObject* result = m_fileCollector->getObject(seedName);
+    DataObject* result = m_fileCollector->getObject(seedName);
     assert(result != nullptr);
     processObject(result);
 
@@ -63,7 +63,7 @@ SakuraCompiler::compile(const std::string &rootPath,
  * @return
  */
 void
-SakuraCompiler::processObject(JsonObject* value)
+SakuraCompiler::processObject(DataObject* value)
 {
     // precheck
     if(value == nullptr) {
@@ -77,7 +77,7 @@ SakuraCompiler::processObject(JsonObject* value)
 
     // continue building
 
-    JsonObject* branch = value;
+    DataObject* branch = value;
     if(value->get("type")->toString() != "parallel"
             && value->get("type")->toString() != "sequentiell")
     {
@@ -94,7 +94,7 @@ SakuraCompiler::processObject(JsonObject* value)
  * @return
  */
 void
-SakuraCompiler::processArray(JsonArray* value)
+SakuraCompiler::processArray(DataArray* value)
 {
     for(uint32_t i = 0; i < value->getSize(); i++)
     {

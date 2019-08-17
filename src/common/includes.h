@@ -24,10 +24,11 @@
 #include <stdlib.h>
 #include <mutex>
 
-#include <jsonItems.hpp>
+#include <data_structure/data_items.h>
 
-using namespace Kitsune;
-using namespace Kitsune::Json;
-
+using Kitsune::Common::DataItem;
+using Kitsune::Common::DataArray;
+using Kitsune::Common::DataValue;
+using Kitsune::Common::DataObject;
 
 #endif // INCLUDES_H

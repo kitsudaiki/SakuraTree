@@ -1,5 +1,5 @@
 ﻿/**
- *  @file    sakuraThread.cpp
+ *  @file    sakura_thread.cpp
  *
  *  @author  Tobias Anker
  *  Contact: tobias.anker@kitsunemimi.moe
@@ -7,16 +7,17 @@
  *  Apache License Version 2.0
  */
 
-#include "sakuraThread.h"
-#include <sakuraRoot.h>
-#include <commonMethods.h>
+#include "sakura_thread.h"
+#include <sakura_root.h>
+#include <common_methods.h>
 #include <processing/blossoms/blossom.h>
-#include <processing/blossoms/blossomGetter.h>
+#include <processing/blossoms/blossom_getter.h>
 
-#include <processing/blossoms/install/apt/aptBlossom.h>
-#include <processing/blossoms/install/apt/aptPresentBlossom.h>
-#include <processing/blossoms/install/apt/aptAbsentBlossom.h>
-#include <processing/blossoms/install/apt/aptUpdateBlossom.h>
+#include <processing/blossoms/install/apt/apt_blossom.h>
+#include <processing/blossoms/install/apt/apt_present_blossom.h>
+#include <processing/blossoms/install/apt/apt_absent_blossom.h>
+#include <processing/blossoms/install/apt/apt_update_blossom.h>
+
 
 namespace SakuraTree
 {
@@ -24,8 +25,8 @@ namespace SakuraTree
 /**
  * constructor
  */
-SakuraThread::SakuraThread(JsonObject *growPlan,
-                           JsonObject *values,
+SakuraThread::SakuraThread(DataObject *growPlan,
+                           DataObject *values,
                            const std::vector<std::string> &hirarchie)
 {
     assert(growPlan != nullptr);
@@ -81,22 +82,22 @@ SakuraThread::run()
  * central method of the thread to process the current part of the execution-tree
  */
 void
-SakuraThread::grow(JsonObject* growPlan,
-                   JsonObject* values,
+SakuraThread::grow(DataObject* growPlan,
+                   DataObject* values,
                    const std::vector<std::string> &hirarchie)
 {
     if(m_abort) {
         return;
     }
 
-    JsonObject* items = values;
+    DataObject* items = values;
     if(growPlan->contains("items")) {
-        items = dynamic_cast<JsonObject*>(growPlan->get("items"));
+        items = dynamic_cast<DataObject*>(growPlan->get("items"));
     }
 
     if(growPlan->contains("items-input"))
     {
-        JsonObject* itemsInput = dynamic_cast<JsonObject*>(growPlan->get("items-input"));
+        DataObject* itemsInput = dynamic_cast<DataObject*>(growPlan->get("items-input"));
         itemsInput = fillItems(itemsInput, values);
         items = overrideItems(items, itemsInput);
     }
@@ -153,20 +154,20 @@ SakuraThread::grow(JsonObject* growPlan,
  * @brief SakuraThread::processBlossom
  */
 void
-SakuraThread::processBlossom(JsonObject* growPlan,
-                             JsonObject* values,
+SakuraThread::processBlossom(DataObject* growPlan,
+                             DataObject* values,
                              const std::vector<std::string> &hirarchie)
 {
     // init
     BlossomData blossomData;
     blossomData.name = growPlan->getString("name");
-    blossomData.settings = dynamic_cast<JsonObject*>(growPlan->get("common-settings"));
+    blossomData.settings = dynamic_cast<DataObject*>(growPlan->get("common-settings"));
     blossomData.items = values;
     blossomData.nameHirarchie = hirarchie;
     std::string type = growPlan->getString("blossom-type");
 
     // iterate over all subtypes and execute each as separate blossom
-    JsonArray* subtypes = dynamic_cast<JsonArray*>(growPlan->get("blossom-subtypes"));
+    DataArray* subtypes = dynamic_cast<DataArray*>(growPlan->get("blossom-subtypes"));
     for(uint32_t i = 0; i < subtypes->getSize(); i++)
     {
         std::string subtype = subtypes->get(i)->toString();
@@ -193,15 +194,15 @@ SakuraThread::processBlossom(JsonObject* growPlan,
  * @brief SakuraThread::processBranch
  */
 void
-SakuraThread::processBranch(JsonObject *growPlan,
-                            JsonObject *values,
+SakuraThread::processBranch(DataObject *growPlan,
+                            DataObject *values,
                             const std::vector<std::string> &hirarchie)
 {
-    JsonItem* parts = growPlan->get("parts");
+    DataItem* parts = growPlan->get("parts");
     assert(parts != nullptr);
     for(uint32_t i = 0; i < parts->getSize(); i++)
     {
-        grow(dynamic_cast<JsonObject*>(parts->get(i)),
+        grow(dynamic_cast<DataObject*>(parts->get(i)),
              values,
              hirarchie);
     }
@@ -213,15 +214,15 @@ SakuraThread::processBranch(JsonObject *growPlan,
  * @brief SakuraThread::processForest
  */
 void
-SakuraThread::processForest(JsonObject* growPlan,
-                            JsonObject* values,
+SakuraThread::processForest(DataObject* growPlan,
+                            DataObject* values,
                             const std::vector<std::string> &hirarchie)
 {
-    JsonItem* parts = growPlan->get("parts");
+    DataItem* parts = growPlan->get("parts");
     assert(parts != nullptr);
     for(uint32_t i = 0; i < parts->getSize(); i++)
     {
-        grow(dynamic_cast<JsonObject*>(parts->get(i)),
+        grow(dynamic_cast<DataObject*>(parts->get(i)),
              values,
              hirarchie);
     }
@@ -233,15 +234,15 @@ SakuraThread::processForest(JsonObject* growPlan,
  * @brief SakuraThread::processSequeniellPart
  */
 void
-SakuraThread::processSequeniellPart(JsonObject *growPlan,
-                                    JsonObject *values,
+SakuraThread::processSequeniellPart(DataObject *growPlan,
+                                    DataObject *values,
                                     const std::vector<std::string> &hirarchie)
 {
-    JsonItem* parts = growPlan->get("parts");
+    DataItem* parts = growPlan->get("parts");
     assert(parts != nullptr);
     for(uint32_t i = 0; i < parts->getSize(); i++)
     {
-        grow(dynamic_cast<JsonObject*>(parts->get(i)),
+        grow(dynamic_cast<DataObject*>(parts->get(i)),
              values,
              hirarchie);
     }
@@ -253,17 +254,17 @@ SakuraThread::processSequeniellPart(JsonObject *growPlan,
  * @brief SakuraThread::processParallelPart
  */
 void
-SakuraThread::processParallelPart(JsonObject* growPlan,
-                                  JsonObject* values,
+SakuraThread::processParallelPart(DataObject* growPlan,
+                                  DataObject* values,
                                   const std::vector<std::string> &hirarchie)
 {
-    JsonItem* parts = growPlan->get("parts");
+    DataItem* parts = growPlan->get("parts");
     assert(parts != nullptr);
 
     // create and initialize all threads
     for(uint32_t i = 0; i < parts->getSize(); i++)
     {
-        SakuraThread* child = new SakuraThread(dynamic_cast<JsonObject*>(parts->get(i)),
+        SakuraThread* child = new SakuraThread(dynamic_cast<DataObject*>(parts->get(i)),
                                                values,
                                                hirarchie);
         m_childs.push_back(child);

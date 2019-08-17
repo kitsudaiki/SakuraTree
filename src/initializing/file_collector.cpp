@@ -1,5 +1,5 @@
 /**
- *  @file    parserInit.cpp
+ *  @file    file_collector.cpp
  *
  *  @author  Tobias Anker
  *  Contact: tobias.anker@kitsunemimi.moe
@@ -7,15 +7,15 @@
  *  Apache License Version 2.0
  */
 
-#include <initializing/fileCollector.h>
+#include <initializing/file_collector.h>
 
-#include <libKitsuneSakuraParser.h>
-#include <commonMethods/stringMethods.hpp>
+#include <sakura_converter.h>
+#include <commonMethods/string_methods.h>
 
 namespace SakuraTree
 {
 
-FileCollector::FileCollector(LibKitsuneSakuraParser *driver)
+FileCollector::FileCollector(SakuraConverter *driver)
 {
     m_driver = driver;
 }
@@ -55,7 +55,7 @@ FileCollector::initFileCollector(const std::string &rootPath)
     for(uint32_t i = 0; i < m_fileContents.size(); i++)
     {
         const std::string filePath = m_fileContents.at(i).first;
-        std::pair<Kitsune::Json::JsonObject*, bool> result = m_driver->convert(readFile(filePath));
+        std::pair<Kitsune::Common::DataItem*, bool> result = m_driver->parse(readFile(filePath));
 
         if(result.second == false)
         {
@@ -65,7 +65,7 @@ FileCollector::initFileCollector(const std::string &rootPath)
             return false;
         }
 
-        m_fileContents[i].second = result.first;
+        m_fileContents[i].second = result.first->toObject();
         std::string output = "";
         m_fileContents[i].second->print(&output, true);
         std::cout<<output<<std::endl;
@@ -80,7 +80,7 @@ FileCollector::initFileCollector(const std::string &rootPath)
  * @param type
  * @return
  */
-Kitsune::Json::JsonObject*
+Kitsune::Common::DataObject*
 FileCollector::getObject(const std::string &name,
                          const std::string &type)
 {
@@ -90,7 +90,7 @@ FileCollector::getObject(const std::string &name,
     }
 
     // search
-    std::vector<std::pair<std::string, JsonObject*>>::iterator it;
+    std::vector<std::pair<std::string, DataObject*>>::iterator it;
     for(it = m_fileContents.begin();
         it != m_fileContents.end();
         it++)

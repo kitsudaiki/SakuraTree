@@ -1,5 +1,5 @@
 /**
- *  @file    blossomGetter.h
+ *  @file    blossom_getter.h
  *
  *  @author  Tobias Anker
  *  Contact: tobias.anker@kitsunemimi.moe
@@ -7,8 +7,8 @@
  *  Apache License Version 2.0
  */
 
-#ifndef BLOSSOMGETTER_H
-#define BLOSSOMGETTER_H
+#ifndef BLOSSOM_GETTER_H
+#define BLOSSOM_GETTER_H
 
 #include <common.h>
 
@@ -21,4 +21,4 @@ Blossom* getBlossom(const std::string type,
 
 }
 
-#endif // BLOSSOMGETTER_H
+#endif // BLOSSOM_GETTER_H

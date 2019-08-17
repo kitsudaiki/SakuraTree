@@ -1,5 +1,5 @@
 /**
- *  @file    commonMethodsTest.h
+ *  @file    common_methods_test.h
  *
  *  @author  Tobias Anker
  *  Contact: tobias.anker@kitsunemimi.moe
@@ -7,18 +7,18 @@
  *  Apache License Version 2.0
  */
 
-#ifndef COMMONMETHODSTEST_H
-#define COMMONMETHODSTEST_H
+#ifndef COMMON_METHODS_TEST_H
+#define COMMON_METHODS_TEST_H
 
 #include <common.h>
-#include <testing/commonTest.hpp>
-#include <commonMethods.h>
+#include <testing/test.h>
+#include <common_methods.h>
 
 namespace SakuraTree
 {
 class SakuraRoot;
 
-class CommonMethodsTest : public Kitsune::CommonTest
+class CommonMethodsTest : public Kitsune::Common::Test
 {
 public:
     CommonMethodsTest();
@@ -36,4 +36,4 @@ private:
 
 }
 
-#endif // COMMONMETHODSTEST_H
+#endif // COMMON_METHODS_TEST_H
