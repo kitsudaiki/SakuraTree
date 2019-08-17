@@ -1,5 +1,5 @@
 /**
- *  @file    aptUpgradeBlosson.h
+ *  @file    apt_absent_blossom.h
  *
  *  @author  Tobias Anker
  *  Contact: tobias.anker@kitsunemimi.moe
@@ -7,19 +7,19 @@
  *  Apache License Version 2.0
  */
 
-#ifndef APTUPGRADEBLOSSOM_H
-#define APTUPGRADEBLOSSOM_H
+#ifndef APT_ABSENT_BLOSSOM_H
+#define APT_ABSENT_BLOSSOM_H
 
-#include <processing/blossoms/install/apt/aptBlossom.h>
+#include <processing/blossoms/install/apt/apt_blossom.h>
 
 namespace SakuraTree
 {
 
-class AptUpgradeBlossom : public AptBlossom
+class AptAbsentBlossom : public AptBlossom
 {
 
 public:
-    AptUpgradeBlossom();
+    AptAbsentBlossom();
 
 protected:
     void initTask(BlossomData *blossomData);
@@ -27,11 +27,8 @@ protected:
     void runTask(BlossomData *blossomData);
     void postCheck(BlossomData *blossomData);
     void closeTask(BlossomData *blossomData);
-
-private:
-    std::string m_action = "";
 };
 
 }
 
-#endif // APTUPGRADEBLOSSOM_H
+#endif // APT_ABSENT_BLOSSOM_H

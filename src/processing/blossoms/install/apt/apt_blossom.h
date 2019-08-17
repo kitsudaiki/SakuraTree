@@ -1,5 +1,5 @@
 /**
- *  @file    aptBlossom.h
+ *  @file    apt_blossom.h
  *
  *  @author  Tobias Anker
  *  Contact: tobias.anker@kitsunemimi.moe
@@ -7,8 +7,8 @@
  *  Apache License Version 2.0
  */
 
-#ifndef APTBLOSSOM_H
-#define APTBLOSSOM_H
+#ifndef APT_BLOSSOM_H
+#define APT_BLOSSOM_H
 
 #include <processing/blossoms/blossom.h>
 
@@ -42,4 +42,4 @@ protected:
 
 }
 
-#endif // APTBLOSSOM_H
+#endif // APT_BLOSSOM_H

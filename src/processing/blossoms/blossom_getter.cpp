@@ -1,5 +1,5 @@
 /**
- *  @file    blossomGetter.cpp
+ *  @file    blossom_getter.cpp
  *
  *  @author  Tobias Anker
  *  Contact: tobias.anker@kitsunemimi.moe
@@ -7,14 +7,14 @@
  *  Apache License Version 2.0
  */
 
-#include "blossomGetter.h"
+#include "blossom_getter.h"
 #include <processing/blossoms/blossom.h>
 
-#include <processing/blossoms/install/apt/aptAbsentBlossom.h>
-#include <processing/blossoms/install/apt/aptLatestBlossom.h>
-#include <processing/blossoms/install/apt/aptPresentBlossom.h>
-#include <processing/blossoms/install/apt/aptUpdateBlossom.h>
-#include <processing/blossoms/install/apt/aptUpgradeBlossom.h>
+#include <processing/blossoms/install/apt/apt_absent_blossom.h>
+#include <processing/blossoms/install/apt/apt_latest_blossom.h>
+#include <processing/blossoms/install/apt/apt_present_blossom.h>
+#include <processing/blossoms/install/apt/apt_update_blossom.h>
+#include <processing/blossoms/install/apt/apt_upgrade_blossom.h>
 
 namespace SakuraTree
 {
