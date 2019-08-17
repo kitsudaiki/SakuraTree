@@ -1,5 +1,5 @@
 /**
- *  @file    commonMethodsTest.cpp
+ *  @file    common_methods_test.cpp
  *
  *  @author  Tobias Anker
  *  Contact: tobias.anker@kitsunemimi.moe
@@ -7,9 +7,9 @@
  *  Apache License Version 2.0
  */
 
-#include "commonMethodsTest.h"
+#include "common_methods_test.h"
 
-#include <sakuraRoot.h>
+#include <sakura_root.h>
 
 namespace SakuraTree
 {

@@ -11,7 +11,9 @@
 #define BLOSSOM_H
 
 #include <common.h>
-#include <data_structure/dataItems.hpp>
+#include <data_structure/data_items.h>
+
+using Kitsune::Common::DataObject;
 
 namespace SakuraTree
 {
@@ -21,8 +23,8 @@ struct BlossomData
     std::string name = "";
     std::string type = "";
 
-    Common::DataObject* items;
-    Common::DataObject* settings;
+    DataObject* items;
+    DataObject* settings;
 
     BlossomStates resultState = UNDEFINED_STATE;
     std::vector<std::string> nameHirarchie;

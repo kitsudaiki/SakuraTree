@@ -7,8 +7,8 @@
  *  Apache License Version 2.0
  */
 
-#ifndef RUNUNITTESTS_H
-#define RUNUNITTESTS_H
+#ifndef RUN_UNIT_TESTS_H
+#define RUN_UNIT_TESTS_H
 
 #include <common.h>
 
@@ -25,4 +25,4 @@ public:
 
 }
 
-#endif // RUNUNITTESTS_H
+#endif // RUN_UNIT_TESTS_H

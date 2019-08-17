@@ -1,5 +1,5 @@
 /**
- *  @file    aptAbsentBlossom.cpp
+ *  @file    apt_absent_blossom.cpp
  *
  *  @author  Tobias Anker
  *  Contact: tobias.anker@kitsunemimi.moe
@@ -7,7 +7,7 @@
  *  Apache License Version 2.0
  */
 
-#include "aptAbsentBlossom.h"
+#include "apt_absent_blossom.h"
 
 namespace SakuraTree
 {

@@ -1,5 +1,5 @@
 /**
- *  @file    parserInit.cpp
+ *  @file    file_collector.cpp
  *
  *  @author  Tobias Anker
  *  Contact: tobias.anker@kitsunemimi.moe
@@ -7,10 +7,10 @@
  *  Apache License Version 2.0
  */
 
-#include <initializing/fileCollector.h>
+#include <initializing/file_collector.h>
 
-#include <sakura_converter.hpp>
-#include <commonMethods/stringMethods.hpp>
+#include <sakura_converter.h>
+#include <commonMethods/string_methods.h>
 
 namespace SakuraTree
 {

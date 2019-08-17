@@ -1,5 +1,5 @@
 ﻿/**
- *  @file    sakuraThread.cpp
+ *  @file    sakura_thread.cpp
  *
  *  @author  Tobias Anker
  *  Contact: tobias.anker@kitsunemimi.moe
@@ -7,16 +7,16 @@
  *  Apache License Version 2.0
  */
 
-#include "sakuraThread.h"
-#include <sakuraRoot.h>
-#include <commonMethods.h>
+#include "sakura_thread.h"
+#include <sakura_root.h>
+#include <common_methods.h>
 #include <processing/blossoms/blossom.h>
-#include <processing/blossoms/blossomGetter.h>
+#include <processing/blossoms/blossom_getter.h>
 
-#include <processing/blossoms/install/apt/aptBlossom.h>
-#include <processing/blossoms/install/apt/aptPresentBlossom.h>
-#include <processing/blossoms/install/apt/aptAbsentBlossom.h>
-#include <processing/blossoms/install/apt/aptUpdateBlossom.h>
+#include <processing/blossoms/install/apt/apt_blossom.h>
+#include <processing/blossoms/install/apt/apt_present_blossom.h>
+#include <processing/blossoms/install/apt/apt_absent_blossom.h>
+#include <processing/blossoms/install/apt/apt_update_blossom.h>
 
 
 namespace SakuraTree

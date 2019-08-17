@@ -1,5 +1,5 @@
 /**
- *  @file    scpBlossom.h
+ *  @file    apt_update_blossom.h
  *
  *  @author  Tobias Anker
  *  Contact: tobias.anker@kitsunemimi.moe
@@ -7,18 +7,19 @@
  *  Apache License Version 2.0
  */
 
-#ifndef SCPBLOSSOM_H
-#define SCPBLOSSOM_H
+#ifndef APT_UPDATE_BLOSSOM_H
+#define APT_UPDATE_BLOSSOM_H
 
-#include <processing/blossoms/blossom.h>
+#include <processing/blossoms/install/apt/apt_blossom.h>
 
 namespace SakuraTree
 {
 
-class ScpBlossom : public Blossom
+class AptUdateBlossom : public AptBlossom
 {
+
 public:
-    ScpBlossom();
+    AptUdateBlossom();
 
 protected:
     void initTask(BlossomData *blossomData);
@@ -30,4 +31,4 @@ protected:
 
 }
 
-#endif // SCPBLOSSOM_H
+#endif // APT_UPDATE_BLOSSOM_H

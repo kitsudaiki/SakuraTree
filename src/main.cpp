@@ -8,8 +8,8 @@
  */
 
 #include <common.h>
-#include <sakuraRoot.h>
-#include <tests/runUnitTests.h>
+#include <sakura_root.h>
+#include <tests/run_unit_tests.h>
 #include <boost/program_options.hpp>
 
 namespace argParser = boost::program_options;

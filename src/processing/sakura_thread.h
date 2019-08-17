@@ -1,5 +1,5 @@
 /**
- *  @file    sakuraThread.h
+ *  @file    sakura_thread.h
  *
  *  @author  Tobias Anker
  *  Contact: tobias.anker@kitsunemimi.moe
@@ -7,11 +7,11 @@
  *  Apache License Version 2.0
  */
 
-#ifndef SAKURATHREAD_H
-#define SAKURATHREAD_H
+#ifndef SAKURA_THREAD_H
+#define SAKURA_THREAD_H
 
 #include <common.h>
-#include <threading/thread.hpp>
+#include <threading/thread.h>
 
 using namespace Kitsune::Common;
 
@@ -79,4 +79,4 @@ private:
 
 }
 
-#endif // SAKURATHREAD_H
+#endif // SAKURA_THREAD_H

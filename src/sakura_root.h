@@ -1,5 +1,5 @@
 /**
- *  @file    sakuraRoot.h
+ *  @file    sakura_root.h
  *
  *  @author  Tobias Anker
  *  Contact: tobias.anker@kitsunemimi.moe
@@ -7,11 +7,11 @@
  *  Apache License Version 2.0
  */
 
-#ifndef SAKURAROOT_H
-#define SAKURAROOT_H
+#ifndef SAKURA_ROOT_H
+#define SAKURA_ROOT_H
 
 #include <common.h>
-#include <sakura_converter.hpp>
+#include <sakura_converter.h>
 
 namespace Kitsune
 {
@@ -52,4 +52,4 @@ private:
 
 }
 
-#endif // SAKURAROOT_H
+#endif // SAKURA_ROOT_H

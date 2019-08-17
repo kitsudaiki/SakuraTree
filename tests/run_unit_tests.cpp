@@ -7,9 +7,9 @@
  *  Apache License Version 2.0
  */
 
-#include "runUnitTests.h"
+#include "run_unit_tests.h"
 
-#include <tests/core/commonMethodsTest.h>
+#include <tests/core/common_methods_test.h>
 
 namespace SakuraTree
 {

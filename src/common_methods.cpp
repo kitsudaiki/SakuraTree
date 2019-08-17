@@ -1,5 +1,5 @@
 /**
- *  @file    commonMethods.cpp
+ *  @file    common_methods.cpp
  *
  *  @author  Tobias Anker
  *  Contact: tobias.anker@kitsunemimi.moe
@@ -7,10 +7,10 @@
  *  Apache License Version 2.0
  */
 
-#include "commonMethods.h"
+#include "common_methods.h"
 
-#include <jinja2Converter.hpp>
-#include <sakuraRoot.h>
+#include <jinja2_converter.h>
+#include <sakura_root.h>
 #include <processing/blossoms/blossom.h>
 
 using Kitsune::Jinja2::Jinja2Converter;

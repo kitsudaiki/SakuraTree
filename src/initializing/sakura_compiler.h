@@ -1,5 +1,5 @@
 /**
- *  @file    sakuraCompiler.h
+ *  @file    sakura_compiler.h
  *
  *  @author  Tobias Anker
  *  Contact: tobias.anker@kitsunemimi.moe
@@ -7,8 +7,8 @@
  *  Apache License Version 2.0
  */
 
-#ifndef SAKURACOMPILER_H
-#define SAKURACOMPILER_H
+#ifndef SAKURA_COMPILER_H
+#define SAKURA_COMPILER_H
 
 #include <common.h>
 #include <string>
@@ -48,4 +48,4 @@ private:
 
 }
 
-#endif // SAKURACOMPILER_H
+#endif // SAKURA_COMPILER_H

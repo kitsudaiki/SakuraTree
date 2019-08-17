@@ -1,5 +1,5 @@
 /**
- *  @file    aptLatestBlossom.h
+ *  @file    apt_present_blossom.h
  *
  *  @author  Tobias Anker
  *  Contact: tobias.anker@kitsunemimi.moe
@@ -7,19 +7,19 @@
  *  Apache License Version 2.0
  */
 
-#ifndef APTLATESTBLOSSOM_H
-#define APTLATESTBLOSSOM_H
+#ifndef APT_PRESENT_BLOSSOM_H
+#define APT_PRESENT_BLOSSOM_H
 
-#include <processing/blossoms/install/apt/aptBlossom.h>
+#include <processing/blossoms/install/apt/apt_blossom.h>
 
 namespace SakuraTree
 {
 
-class AptLatestBlossom : public AptBlossom
+class AptPresentBlossom : public AptBlossom
 {
 
 public:
-    AptLatestBlossom();
+    AptPresentBlossom();
 
 protected:
     void initTask(BlossomData *blossomData);
@@ -31,4 +31,4 @@ protected:
 
 }
 
-#endif // APTLATESTBLOSSOM_H
+#endif // APT_PRESENT_BLOSSOM_H

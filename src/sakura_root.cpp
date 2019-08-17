@@ -1,5 +1,5 @@
 /**
- *  @file    sakuraRoot.cpp
+ *  @file    sakura_root.cpp
  *
  *  @author  Tobias Anker
  *  Contact: tobias.anker@kitsunemimi.moe
@@ -7,12 +7,12 @@
  *  Apache License Version 2.0
  */
 
-#include "sakuraRoot.h"
-#include <jinja2Converter.hpp>
+#include "sakura_root.h"
+#include <jinja2_converter.h>
 
-#include <initializing/sakuraCompiler.h>
-#include <commonMethods.h>
-#include <processing/sakuraThread.h>
+#include <initializing/sakura_compiler.h>
+#include <common_methods.h>
+#include <processing/sakura_thread.h>
 
 namespace SakuraTree
 {

@@ -8,8 +8,8 @@
  */
 
 #include "blossom.h"
-#include <sakuraRoot.h>
-#include <commonMethods.h>
+#include <sakura_root.h>
+#include <common_methods.h>
 #include <boost/algorithm/string/replace.hpp>
 
 namespace SakuraTree

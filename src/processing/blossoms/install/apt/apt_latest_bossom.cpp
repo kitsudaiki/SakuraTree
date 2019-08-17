@@ -1,5 +1,5 @@
 /**
- *  @file    aptPresentBlossom.cpp
+ *  @file    apt_latest_blossom.cpp
  *
  *  @author  Tobias Anker
  *  Contact: tobias.anker@kitsunemimi.moe
@@ -7,24 +7,20 @@
  *  Apache License Version 2.0
  */
 
-#include "aptPresentBlossom.h"
+#include "apt_latest_blossom.h"
 
 namespace SakuraTree
 {
 
-/**
- * @brief AptInstallBlossom::AptInstallBlossom
- * @param content
- */
-AptPresentBlossom::AptPresentBlossom() :
+AptLatestBlossom::AptLatestBlossom() :
     AptBlossom() {}
 
 /**
- * @brief AptInstallBlossom::initTask
+ * @brief AptLatestBlossom::initTask
  * @return
  */
 void
-AptPresentBlossom::initTask(BlossomData* blossomData)
+AptLatestBlossom::initTask(BlossomData *blossomData)
 {
     if(blossomData->items->contains("names") == false)
     {
@@ -44,18 +40,12 @@ AptPresentBlossom::initTask(BlossomData* blossomData)
 }
 
 /**
- * @brief AptInstallBlossom::preCheck
+ * @brief AptLatestBlossom::preCheck
  * @return
  */
 void
-AptPresentBlossom::preCheck(BlossomData *blossomData)
+AptLatestBlossom::preCheck(BlossomData *blossomData)
 {
-    m_packageNames = getAbsendPackages(blossomData, m_packageNames);
-
-    if(m_packageNames.size() == 0) {
-        blossomData->skip = true;
-    }
-
     blossomData->success = true;
 }
 
@@ -64,15 +54,16 @@ AptPresentBlossom::preCheck(BlossomData *blossomData)
  * @return
  */
 void
-AptPresentBlossom::runTask(BlossomData *blossomData)
+AptLatestBlossom::runTask(BlossomData *blossomData)
 {
+    std::string appendedList = "";
     for(uint32_t i = 0; i < m_packageNames.size(); i++)
     {
-        std::string programm = "sudo apt-get install -y " + m_packageNames.at(i);
-        runSyncProcess(blossomData, programm);
+        appendedList += m_packageNames.at(i) + " ";
     }
 
-    blossomData->success = true;
+    std::string programm = "sudo apt-get install -y " + appendedList;
+    runSyncProcess(blossomData, programm);
 }
 
 /**
@@ -80,7 +71,7 @@ AptPresentBlossom::runTask(BlossomData *blossomData)
  * @return
  */
 void
-AptPresentBlossom::postCheck(BlossomData *blossomData)
+AptLatestBlossom::postCheck(BlossomData *blossomData)
 {
     m_packageNames = getAbsendPackages(blossomData, m_packageNames);
     if(m_packageNames.size() > 0)
@@ -103,7 +94,7 @@ AptPresentBlossom::postCheck(BlossomData *blossomData)
  * @return
  */
 void
-AptPresentBlossom::closeTask(BlossomData *blossomData)
+AptLatestBlossom::closeTask(BlossomData *blossomData)
 {
     m_packageNames.clear();
     blossomData->success = true;

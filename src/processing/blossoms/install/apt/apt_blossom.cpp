@@ -1,5 +1,5 @@
 ﻿/**
- *  @file    aptBlossom.cpp
+ *  @file    apt_blossom.cpp
  *
  *  @author  Tobias Anker
  *  Contact: tobias.anker@kitsunemimi.moe
@@ -7,15 +7,15 @@
  *  Apache License Version 2.0
  */
 
-#include "aptBlossom.h"
-#include "aptAbsentBlossom.h"
-#include "aptPresentBlossom.h"
-#include "aptUpdateBlossom.h"
-#include "aptUpgradeBlossom.h"
-#include <commonMethods.h>
-#include <commonMethods/stringMethods.hpp>
+#include "apt_blossom.h"
+#include "apt_absent_blossom.h"
+#include "apt_present_blossom.h"
+#include "apt_update_blossom.h"
+#include "apt_upgrade_blossom.h"
+#include <common_methods.h>
+#include <commonMethods/string_methods.h>
 
-#include <sakuraRoot.h>
+#include <sakura_root.h>
 
 namespace SakuraTree
 {

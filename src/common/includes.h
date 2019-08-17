@@ -24,9 +24,8 @@
 #include <stdlib.h>
 #include <mutex>
 
-#include <data_structure/dataItems.hpp>
+#include <data_structure/data_items.h>
 
-using namespace Kitsune;
 using Kitsune::Common::DataItem;
 using Kitsune::Common::DataArray;
 using Kitsune::Common::DataValue;

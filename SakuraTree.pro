@@ -31,45 +31,45 @@ INCLUDEPATH += $$PWD \
 
 SOURCES += \
     src/main.cpp \
-    src/processing/blossoms/install/apt/aptBlossom.cpp \
-    src/sakuraRoot.cpp \
-    src/processing/sakuraThread.cpp \
-    src/initializing/sakuraCompiler.cpp \
-    src/commonMethods.cpp \
-    src/processing/blossoms/install/apt/aptUpdateBlossom.cpp \
-    src/processing/blossoms/install/apt/aptUpgradeBlossom.cpp \
-    src/processing/blossoms/install/apt/aptPresentBossom.cpp \
-    src/processing/blossoms/install/apt/aptAbsentBlossom.cpp \
-    src/processing/blossoms/install/apt/aptLatestBossom.cpp \
     src/processing/blossoms/blossom.cpp \
     src/processing/blossoms/ssh/scpBlossom.cpp \
-    tests/runUnitTests.cpp \
-    tests/core/commonMethodsTest.cpp \
-    src/initializing/fileCollector.cpp \
-    src/processing/blossoms/blossomGetter.cpp
+    src/initializing/file_collector.cpp \
+    src/initializing/sakura_compiler.cpp \
+    src/processing/blossoms/install/apt/apt_absent_blossom.cpp \
+    src/processing/blossoms/install/apt/apt_blossom.cpp \
+    src/processing/blossoms/install/apt/apt_latest_bossom.cpp \
+    src/processing/blossoms/install/apt/apt_present_bossom.cpp \
+    src/processing/blossoms/install/apt/apt_update_blossom.cpp \
+    src/processing/blossoms/install/apt/apt_upgrade_blossom.cpp \
+    src/processing/blossoms/blossom_getter.cpp \
+    src/processing/sakura_thread.cpp \
+    src/common_methods.cpp \
+    src/sakura_root.cpp \
+    tests/core/common_methods_test.cpp \
+    tests/run_unit_tests.cpp
 
 
 HEADERS += \
-    src/processing/blossoms/install/apt/aptBlossom.h \
-    src/sakuraRoot.h \
     src/common.h \
     src/common/defines.h \
     src/common/enums.h \
     src/common/includes.h \
     src/common/typedefs.h \
-    src/processing/sakuraThread.h \
-    src/initializing/sakuraCompiler.h \
-    src/commonMethods.h \
-    src/processing/blossoms/install/apt/aptUpdateBlossom.h \
-    src/processing/blossoms/install/apt/aptUpgradeBlossom.h \
-    src/processing/blossoms/install/apt/aptAbsentBlossom.h \
-    src/processing/blossoms/install/apt/aptPresentBlossom.h \
-    src/processing/blossoms/install/apt/aptLatestBlossom.h \
     src/processing/blossoms/blossom.h \
-    src/processing/blossoms/ssh/scpBlossom.h \
-    tests/runUnitTests.h \
-    tests/core/commonMethodsTest.h \
-    src/initializing/fileCollector.h \
-    src/processing/blossoms/blossomGetter.h
+    src/initializing/file_collector.h \
+    src/initializing/sakura_compiler.h \
+    src/processing/blossoms/ssh/scp_blossom.h \
+    src/processing/blossoms/install/apt/apt_blossom.h \
+    src/processing/blossoms/install/apt/apt_absent_blossom.h \
+    src/processing/blossoms/install/apt/apt_latest_blossom.h \
+    src/processing/blossoms/install/apt/apt_update_blossom.h \
+    src/processing/blossoms/install/apt/apt_present_blossom.h \
+    src/processing/blossoms/install/apt/apt_upgrade_blossom.h \
+    src/processing/blossoms/blossom_getter.h \
+    src/processing/sakura_thread.h \
+    src/common_methods.h \
+    src/sakura_root.h \
+    tests/core/common_methods_test.h \
+    tests/run_unit_tests.h
 
 
