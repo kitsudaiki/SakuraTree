@@ -51,15 +51,15 @@ ScpBlossom::runTask(BlossomData *blossomData)
 {
     std::string programm = "scp ";
     if(blossomData->items->contains("port")) {
-        programm += " -P " + blossomData->items->getString("port");
+        programm += " -P " + blossomData->items->getStringByKey("port");
     }
     if(blossomData->items->contains("ssh_key")) {
-        programm += " -i " + blossomData->items->getString("ssh_key");
+        programm += " -i " + blossomData->items->getStringByKey("ssh_key");
     }
 
-    programm += blossomData->items->getString("user");
+    programm += blossomData->items->getStringByKey("user");
     programm += "@";
-    programm += blossomData->items->getString("address");
+    programm += blossomData->items->getStringByKey("address");
     programm += ":";
 
     runSyncProcess(blossomData, programm);

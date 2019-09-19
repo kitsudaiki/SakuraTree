@@ -10,7 +10,7 @@
 #include <initializing/file_collector.h>
 
 #include <sakura_converter.h>
-#include <commonMethods/string_methods.h>
+#include <common_methods/string_methods.h>
 
 namespace SakuraTree
 {
@@ -65,9 +65,8 @@ FileCollector::initFileCollector(const std::string &rootPath)
             return false;
         }
 
-        m_fileContents[i].second = result.first->toObject();
-        std::string output = "";
-        m_fileContents[i].second->print(&output, true);
+        m_fileContents[i].second = result.first->toMap();
+        std::string output = m_fileContents[i].second->toString(true);
         std::cout<<output<<std::endl;
     }
 
@@ -80,7 +79,7 @@ FileCollector::initFileCollector(const std::string &rootPath)
  * @param type
  * @return
  */
-Kitsune::Common::DataObject*
+Kitsune::Common::DataMap*
 FileCollector::getObject(const std::string &name,
                          const std::string &type)
 {
@@ -90,7 +89,7 @@ FileCollector::getObject(const std::string &name,
     }
 
     // search
-    std::vector<std::pair<std::string, DataObject*>>::iterator it;
+    std::vector<std::pair<std::string, DataMap*>>::iterator it;
     for(it = m_fileContents.begin();
         it != m_fileContents.end();
         it++)

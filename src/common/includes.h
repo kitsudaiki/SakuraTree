@@ -24,11 +24,11 @@
 #include <stdlib.h>
 #include <mutex>
 
-#include <data_structure/data_items.h>
+#include <common_items/data_items.h>
 
 using Kitsune::Common::DataItem;
 using Kitsune::Common::DataArray;
 using Kitsune::Common::DataValue;
-using Kitsune::Common::DataObject;
+using Kitsune::Common::DataMap;
 
 #endif // INCLUDES_H

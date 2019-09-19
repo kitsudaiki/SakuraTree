@@ -35,7 +35,7 @@ SakuraCompiler::~SakuraCompiler()
  * @param name
  * @return
  */
-DataObject*
+DataMap*
 SakuraCompiler::compile(const std::string &rootPath,
                         std::string &seedName)
 {
@@ -50,7 +50,7 @@ SakuraCompiler::compile(const std::string &rootPath,
         seedName = m_fileCollector->getSeedName(0);
     }
 
-    DataObject* result = m_fileCollector->getObject(seedName);
+    DataMap* result = m_fileCollector->getObject(seedName);
     assert(result != nullptr);
     processObject(result);
 
@@ -63,7 +63,7 @@ SakuraCompiler::compile(const std::string &rootPath,
  * @return
  */
 void
-SakuraCompiler::processObject(DataObject* value)
+SakuraCompiler::processObject(DataMap* value)
 {
     // precheck
     if(value == nullptr) {
@@ -77,7 +77,7 @@ SakuraCompiler::processObject(DataObject* value)
 
     // continue building
 
-    DataObject* branch = value;
+    DataMap* branch = value;
     if(value->get("type")->toString() != "parallel"
             && value->get("type")->toString() != "sequentiell")
     {
@@ -96,9 +96,9 @@ SakuraCompiler::processObject(DataObject* value)
 void
 SakuraCompiler::processArray(DataArray* value)
 {
-    for(uint32_t i = 0; i < value->getSize(); i++)
+    for(uint32_t i = 0; i < value->size(); i++)
     {
-        processObject(value->get(i)->toObject());
+        processObject(value->get(i)->toMap());
     }
 }
 

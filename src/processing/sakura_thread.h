@@ -23,8 +23,8 @@ class SakuraThread
 {
 
 public:
-    SakuraThread(DataObject *growPlan,
-                 DataObject *values,
+    SakuraThread(DataMap *growPlan,
+                 DataMap *values,
                  const std::vector<std::string> &hirarchie);
     ~SakuraThread();
 
@@ -36,42 +36,42 @@ private:
 
     std::vector<SakuraThread*> m_childs;
 
-    DataObject* m_growPlan;
-    DataObject* m_values;
+    DataMap* m_growPlan;
+    DataMap* m_values;
     std::vector<std::string> m_hirarchie;
 
     void run();
 
-    void grow(DataObject *growPlan,
-              DataObject *values,
+    void grow(DataMap *growPlan,
+              DataMap *values,
               const std::vector<std::string> &hirarchie);
 
-    void processBlossom(DataObject* growPlan,
-                        DataObject* values,
+    void processBlossom(DataMap* growPlan,
+                        DataMap* values,
                         const std::vector<std::string> &hirarchie);
 
-    void processBranch(DataObject* growPlan,
-                       DataObject* values,
+    void processBranch(DataMap* growPlan,
+                       DataMap* values,
                        const std::vector<std::string> &hirarchie);
 
-    void processForest(DataObject* growPlan,
-                       DataObject* values,
+    void processForest(DataMap* growPlan,
+                       DataMap* values,
                        const std::vector<std::string> &hirarchie);
 
-    void processArea(DataObject* growPlan,
-                     DataObject* values,
+    void processArea(DataMap* growPlan,
+                     DataMap* values,
                      const std::vector<std::string> &hirarchie);
 
-    void processLandscape(DataObject* growPlan,
-                          DataObject* values,
+    void processLandscape(DataMap* growPlan,
+                          DataMap* values,
                           const std::vector<std::string> &hirarchie);
 
-    void processSequeniellPart(DataObject* growPlan,
-                               DataObject* values,
+    void processSequeniellPart(DataMap* growPlan,
+                               DataMap* values,
                                const std::vector<std::string> &hirarchie);
 
-    void processParallelPart(DataObject* growPlan,
-                             DataObject* values,
+    void processParallelPart(DataMap* growPlan,
+                             DataMap* values,
                              const std::vector<std::string> &hirarchie);
 
     void clearChilds();

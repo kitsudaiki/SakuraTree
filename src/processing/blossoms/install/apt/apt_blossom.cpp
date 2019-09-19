@@ -13,7 +13,7 @@
 #include "apt_update_blossom.h"
 #include "apt_upgrade_blossom.h"
 #include <common_methods.h>
-#include <commonMethods/string_methods.h>
+#include <common_methods/string_methods.h>
 
 #include <sakura_root.h>
 
@@ -53,13 +53,13 @@ void
 AptBlossom::fillPackageNames(BlossomData* blossomData)
 {
     if(blossomData->items->get("names")->isValue()) {
-        m_packageNames.push_back(blossomData->items->getString("names"));
+        m_packageNames.push_back(blossomData->items->getStringByKey("names"));
     }
 
     if(blossomData->items->get("names")->isArray())
     {
         DataArray* tempItem = dynamic_cast<DataArray*>(blossomData->items->get("names"));
-        for(uint32_t i = 0; i < tempItem->getSize(); i++)
+        for(uint32_t i = 0; i < tempItem->size(); i++)
         {
             m_packageNames.push_back(tempItem->get(i)->toString());
         }
@@ -151,7 +151,7 @@ AptBlossom::getInstalledPackages(BlossomData* blossomData)
 
     remove_if(output.begin(), output.end(), isspace);
 
-    return Kitsune::Common::splitString(output, '\n');
+    return Kitsune::Common::splitStringByDelimiter(output, '\n');
 }
 
 }

@@ -54,20 +54,19 @@ SakuraRoot::startProcess(const std::string &rootPath,
     // parsing
     SakuraConverter* sakuraParser = new SakuraConverter(DEBUG);
     SakuraCompiler compiler(sakuraParser);
-    DataObject* processPlan = compiler.compile(rootPath, seedName);
+    DataMap* processPlan = compiler.compile(rootPath, seedName);
 
     // debug-output
     if(DEBUG)
     {
         std::cout<<"+++++++++++++++++++++++++++++++++++++++++++++++++++++"<<std::endl;
-        std::string output = "";
-        processPlan->print(&output, true);
+        std::string output = processPlan->toString(true);
         std::cout<<output<<std::endl;
         std::cout<<"-----------------------------------------------------"<<std::endl;
     }
 
     // run process
-    DataObject* dummyObj = new DataObject();
+    DataMap* dummyObj = new DataMap();
     m_rootThread = new SakuraThread(processPlan, dummyObj, std::vector<std::string>());
     m_rootThread->start();
     m_rootThread->waitUntilStarted();

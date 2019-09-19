@@ -25,9 +25,9 @@ namespace SakuraTree
  */
 std::string
 convertString(const std::string &templateString,
-              DataObject *content)
+              DataMap *content)
 {
-    if(content->isObject() == false) {
+    if(content->isMap() == false) {
         return std::string("");
     }
 
@@ -43,9 +43,9 @@ convertString(const std::string &templateString,
  *
  * @return the original items-object, with all jinja2-content filled
  */
-DataObject*
-fillItems(DataObject* items,
-          DataObject* insertValues)
+DataMap*
+fillItems(DataMap* items,
+          DataMap* insertValues)
 {
     const std::vector<std::string> keys = items->getKeys();
 
@@ -68,9 +68,9 @@ fillItems(DataObject* items,
  *
  * @return
  */
-DataObject*
-overrideItems(DataObject* original,
-              DataObject* override)
+DataMap*
+overrideItems(DataMap* original,
+              DataMap* override)
 {
     const std::vector<std::string> keys = override->getKeys();
     for(uint32_t i = 0; i < keys.size(); i++)
@@ -87,7 +87,7 @@ overrideItems(DataObject* original,
  * @return list of not initialized values
  */
 std::vector<std::string>
-checkItems(DataObject* items)
+checkItems(DataMap* items)
 {
     std::vector<std::string> result;
 
@@ -95,7 +95,7 @@ checkItems(DataObject* items)
 
     for(uint32_t i = 0; i < keys.size(); i++)
     {
-        if(items->get(keys.at(i))->toString() == "{{}}") {
+        if(items->get(keys.at(i))->getString() == "{{}}") {
             result.push_back(keys.at(i));
         }
     }

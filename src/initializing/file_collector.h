@@ -31,7 +31,7 @@ namespace Kitsune
 namespace Common
 {
 class DataItem;
-class DataObject;
+class DataMap;
 }
 namespace Sakura
 {
@@ -52,7 +52,7 @@ public:
 
     bool initFileCollector(const std::string &rootPath);
 
-    DataObject* getObject(const std::string &name,
+    DataMap* getObject(const std::string &name,
                           const std::string &type="");
     const std::string getSeedName(const uint32_t index);
     const std::string getErrorMessage() const;
@@ -63,7 +63,7 @@ private:
     void getFilesInDir(const path &directory);
     const std::string readFile(const std::string &filePath);
 
-    std::vector<std::pair<std::string, DataObject*>> m_fileContents;
+    std::vector<std::pair<std::string, DataMap*>> m_fileContents;
     std::string m_errorMessage = "";
 };
 

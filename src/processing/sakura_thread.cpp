@@ -25,8 +25,8 @@ namespace SakuraTree
 /**
  * constructor
  */
-SakuraThread::SakuraThread(DataObject *growPlan,
-                           DataObject *values,
+SakuraThread::SakuraThread(DataMap *growPlan,
+                           DataMap *values,
                            const std::vector<std::string> &hirarchie)
 {
     assert(growPlan != nullptr);
@@ -82,66 +82,66 @@ SakuraThread::run()
  * central method of the thread to process the current part of the execution-tree
  */
 void
-SakuraThread::grow(DataObject* growPlan,
-                   DataObject* values,
+SakuraThread::grow(DataMap* growPlan,
+                   DataMap* values,
                    const std::vector<std::string> &hirarchie)
 {
     if(m_abort) {
         return;
     }
 
-    DataObject* items = values;
+    DataMap* items = values;
     if(growPlan->contains("items")) {
-        items = dynamic_cast<DataObject*>(growPlan->get("items"));
+        items = dynamic_cast<DataMap*>(growPlan->get("items"));
     }
 
     if(growPlan->contains("items-input"))
     {
-        DataObject* itemsInput = dynamic_cast<DataObject*>(growPlan->get("items-input"));
+        DataMap* itemsInput = dynamic_cast<DataMap*>(growPlan->get("items-input"));
         itemsInput = fillItems(itemsInput, values);
         items = overrideItems(items, itemsInput);
     }
 
-    if(growPlan->getString("type") == "blossom")
+    if(growPlan->getStringByKey("type") == "blossom")
     {
         items = fillItems(items, values);
         std::vector<std::string> newHirarchie = hirarchie;
-        newHirarchie.push_back("BLOSSOM: " + growPlan->getString("name"));
+        newHirarchie.push_back("BLOSSOM: " + growPlan->getStringByKey("name"));
         processBlossom(growPlan, items, newHirarchie);
         return;
     }
 
-    if(growPlan->getString("type") == "branch")
+    if(growPlan->getStringByKey("type") == "branch")
     {
         std::vector<std::string> newHirarchie = hirarchie;
-        newHirarchie.push_back("BRANCH: " + growPlan->getString("name"));
+        newHirarchie.push_back("BRANCH: " + growPlan->getStringByKey("name"));
         processBranch(growPlan, items, newHirarchie);
         return;
     }
 
-    if(growPlan->getString("type") == "tree")
+    if(growPlan->getStringByKey("type") == "tree")
     {
         std::vector<std::string> newHirarchie = hirarchie;
-        newHirarchie.push_back("TREE: " + growPlan->getString("name"));
+        newHirarchie.push_back("TREE: " + growPlan->getStringByKey("name"));
         processParallelPart(growPlan, items, newHirarchie);
         return;
     }
 
-    if(growPlan->getString("type") == "forest")
+    if(growPlan->getStringByKey("type") == "forest")
     {
         std::vector<std::string> newHirarchie = hirarchie;
-        newHirarchie.push_back("FOREST: " + growPlan->getString("name"));
+        newHirarchie.push_back("FOREST: " + growPlan->getStringByKey("name"));
         processForest(growPlan, items, newHirarchie);
         return;
     }
 
-    if(growPlan->getString("type") == "sequentiell")
+    if(growPlan->getStringByKey("type") == "sequentiell")
     {
         processSequeniellPart(growPlan, items, hirarchie);
         return;
     }
 
-    if(growPlan->getString("type") == "parallel")
+    if(growPlan->getStringByKey("type") == "parallel")
     {
         processParallelPart(growPlan, items, hirarchie);
         return;
@@ -154,21 +154,21 @@ SakuraThread::grow(DataObject* growPlan,
  * @brief SakuraThread::processBlossom
  */
 void
-SakuraThread::processBlossom(DataObject* growPlan,
-                             DataObject* values,
+SakuraThread::processBlossom(DataMap* growPlan,
+                             DataMap* values,
                              const std::vector<std::string> &hirarchie)
 {
     // init
     BlossomData blossomData;
-    blossomData.name = growPlan->getString("name");
-    blossomData.settings = dynamic_cast<DataObject*>(growPlan->get("common-settings"));
+    blossomData.name = growPlan->getStringByKey("name");
+    blossomData.settings = dynamic_cast<DataMap*>(growPlan->get("common-settings"));
     blossomData.items = values;
     blossomData.nameHirarchie = hirarchie;
-    std::string type = growPlan->getString("blossom-type");
+    std::string type = growPlan->getStringByKey("blossom-type");
 
     // iterate over all subtypes and execute each as separate blossom
     DataArray* subtypes = dynamic_cast<DataArray*>(growPlan->get("blossom-subtypes"));
-    for(uint32_t i = 0; i < subtypes->getSize(); i++)
+    for(uint32_t i = 0; i < subtypes->size(); i++)
     {
         std::string subtype = subtypes->get(i)->toString();
         Blossom* blossom = getBlossom(type, subtype);
@@ -194,15 +194,15 @@ SakuraThread::processBlossom(DataObject* growPlan,
  * @brief SakuraThread::processBranch
  */
 void
-SakuraThread::processBranch(DataObject *growPlan,
-                            DataObject *values,
+SakuraThread::processBranch(DataMap *growPlan,
+                            DataMap *values,
                             const std::vector<std::string> &hirarchie)
 {
     DataItem* parts = growPlan->get("parts");
     assert(parts != nullptr);
-    for(uint32_t i = 0; i < parts->getSize(); i++)
+    for(uint32_t i = 0; i < parts->size(); i++)
     {
-        grow(dynamic_cast<DataObject*>(parts->get(i)),
+        grow(dynamic_cast<DataMap*>(parts->get(i)),
              values,
              hirarchie);
     }
@@ -214,15 +214,15 @@ SakuraThread::processBranch(DataObject *growPlan,
  * @brief SakuraThread::processForest
  */
 void
-SakuraThread::processForest(DataObject* growPlan,
-                            DataObject* values,
+SakuraThread::processForest(DataMap* growPlan,
+                            DataMap* values,
                             const std::vector<std::string> &hirarchie)
 {
     DataItem* parts = growPlan->get("parts");
     assert(parts != nullptr);
-    for(uint32_t i = 0; i < parts->getSize(); i++)
+    for(uint32_t i = 0; i < parts->size(); i++)
     {
-        grow(dynamic_cast<DataObject*>(parts->get(i)),
+        grow(dynamic_cast<DataMap*>(parts->get(i)),
              values,
              hirarchie);
     }
@@ -234,15 +234,15 @@ SakuraThread::processForest(DataObject* growPlan,
  * @brief SakuraThread::processSequeniellPart
  */
 void
-SakuraThread::processSequeniellPart(DataObject *growPlan,
-                                    DataObject *values,
+SakuraThread::processSequeniellPart(DataMap *growPlan,
+                                    DataMap *values,
                                     const std::vector<std::string> &hirarchie)
 {
     DataItem* parts = growPlan->get("parts");
     assert(parts != nullptr);
-    for(uint32_t i = 0; i < parts->getSize(); i++)
+    for(uint32_t i = 0; i < parts->size(); i++)
     {
-        grow(dynamic_cast<DataObject*>(parts->get(i)),
+        grow(dynamic_cast<DataMap*>(parts->get(i)),
              values,
              hirarchie);
     }
@@ -254,17 +254,17 @@ SakuraThread::processSequeniellPart(DataObject *growPlan,
  * @brief SakuraThread::processParallelPart
  */
 void
-SakuraThread::processParallelPart(DataObject* growPlan,
-                                  DataObject* values,
+SakuraThread::processParallelPart(DataMap* growPlan,
+                                  DataMap* values,
                                   const std::vector<std::string> &hirarchie)
 {
     DataItem* parts = growPlan->get("parts");
     assert(parts != nullptr);
 
     // create and initialize all threads
-    for(uint32_t i = 0; i < parts->getSize(); i++)
+    for(uint32_t i = 0; i < parts->size(); i++)
     {
-        SakuraThread* child = new SakuraThread(dynamic_cast<DataObject*>(parts->get(i)),
+        SakuraThread* child = new SakuraThread(dynamic_cast<DataMap*>(parts->get(i)),
                                                values,
                                                hirarchie);
         m_childs.push_back(child);

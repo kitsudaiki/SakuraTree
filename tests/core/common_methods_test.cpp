@@ -17,7 +17,7 @@ namespace SakuraTree
 /**
  * @brief CommonMethodsTest::CommonMethodsTest
  */
-CommonMethodsTest::CommonMethodsTest() : Kitsune::Common::Test("CommonMethodsTest")
+CommonMethodsTest::CommonMethodsTest() : Kitsune::Common::UnitTest("CommonMethodsTest")
 {
     initTestCase();
     testConvertString();
@@ -41,7 +41,7 @@ void CommonMethodsTest::initTestCase()
 void CommonMethodsTest::testConvertString()
 {
     std::string jinja2String = "{{test}}";
-    DataObject obj;
+    DataMap obj;
     obj.insert("test", new DataValue("hmmm"));
 
     std::string result = convertString(jinja2String, &obj);
@@ -53,12 +53,12 @@ void CommonMethodsTest::testConvertString()
  */
 void CommonMethodsTest::testFillItems()
 {
-    DataObject items;
+    DataMap items;
     items.insert("x", new DataValue("{{test}}"));
-    DataObject insertValues;
+    DataMap insertValues;
     insertValues.insert("test", new DataValue("hmmm"));
 
-    DataObject* result = fillItems(&items, &insertValues);
+    DataMap* result = fillItems(&items, &insertValues);
     UNITTEST(result->get("x")->toString(), "hmmm");
 }
 
@@ -67,16 +67,16 @@ void CommonMethodsTest::testFillItems()
  */
 void CommonMethodsTest::testOverrideItems()
 {
-    DataObject original;
+    DataMap original;
     original.insert("x", new DataValue("{{test}}"));
     original.insert("y", new DataValue("asdf"));
 
-    DataObject override;
+    DataMap override;
     override.insert("y", new DataValue("poi"));
     override.insert("z", new DataValue("hmmm"));
 
-    DataObject* result = overrideItems(&original, &override);
-    UNITTEST(result->getSize(), 3);
+    DataMap* result = overrideItems(&original, &override);
+    UNITTEST(result->size(), 3);
     UNITTEST(result->get("x")->toString(), "{{test}}");
     UNITTEST(result->get("y")->toString(), "poi");
     UNITTEST(result->get("z")->toString(), "hmmm");
@@ -87,7 +87,7 @@ void CommonMethodsTest::testOverrideItems()
  */
 void CommonMethodsTest::testCheckItems()
 {
-    DataObject items;
+    DataMap items;
     items.insert("x", new DataValue("{{}}"));
     items.insert("y", new DataValue("asdf"));
 
