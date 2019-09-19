@@ -7,7 +7,7 @@
  *  Apache License Version 2.0
  */
 
-#include "common_methods.h"
+#include "item_methods.h"
 
 #include <jinja2_converter.h>
 #include <sakura_root.h>
@@ -108,32 +108,32 @@ checkItems(DataMap* items)
  * @param blossom
  */
 void
-printOutput(BlossomData* blossom)
+printOutput(BlossomItem* blossom)
 {
     std::cout<<"+++++++++++++++++++++++++++++++++++++++++++++++++"<<std::endl;
 
     // print executeion-state
     switch(blossom->resultState)
     {
-        case SKIPPED_STATE:
+        case BlossomItem::SKIPPED_STATE:
             std::cout<<"SKIPPED"<<std::endl;
             break;
-        case CHANGED_STATE:
+        case BlossomItem::CHANGED_STATE:
             std::cout<<"CHANGED"<<std::endl;
             break;
-        case ERROR_INIT_STATE:
+        case BlossomItem::ERROR_INIT_STATE:
             std::cout<<"ERROR in init-state"<<std::endl;
             break;
-        case ERROR_PRECHECK_STATE:
+        case BlossomItem::ERROR_PRECHECK_STATE:
             std::cout<<"ERROR in pre-check-state"<<std::endl;
             break;
-        case ERROR_EXEC_STATE:
+        case BlossomItem::ERROR_EXEC_STATE:
             std::cout<<"ERROR in exec-state with error-code: "<<blossom->execState<<std::endl;
             break;
-        case ERROR_POSTCHECK_STATE:
+        case BlossomItem::ERROR_POSTCHECK_STATE:
             std::cout<<"ERROR in post-check-state"<<std::endl;
             break;
-        case ERROR_CLOSE_STATE:
+        case BlossomItem::ERROR_CLOSE_STATE:
             std::cout<<"ERROR in error-state"<<std::endl;
             break;
         default:

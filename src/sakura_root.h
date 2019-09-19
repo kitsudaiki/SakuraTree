@@ -27,7 +27,7 @@ using Kitsune::Jinja2::Jinja2Converter;
 namespace SakuraTree
 {
 class SakuraThread;
-struct BlossomData;
+struct BlossomItem;
 
 class SakuraRoot
 {
@@ -39,7 +39,7 @@ public:
     bool startProcess(const std::string &rootPath,
                      std::string seedName="");
 
-    void addMessage(BlossomData *blossomData);
+    void addMessage(BlossomItem *blossomItem);
 
     static SakuraTree::SakuraRoot* m_root;
     static Jinja2Converter* m_jinja2Converter;

@@ -12,6 +12,7 @@
 
 #include <common.h>
 #include <threading/thread.h>
+#include <items/sakura_items.h>
 
 using namespace Kitsune::Common;
 
@@ -23,7 +24,7 @@ class SakuraThread
 {
 
 public:
-    SakuraThread(DataMap *growPlan,
+    SakuraThread(SakuraItem* growPlan,
                  DataMap *values,
                  const std::vector<std::string> &hirarchie);
     ~SakuraThread();
@@ -36,41 +37,33 @@ private:
 
     std::vector<SakuraThread*> m_childs;
 
-    DataMap* m_growPlan;
+    SakuraItem* m_growPlan;
     DataMap* m_values;
     std::vector<std::string> m_hirarchie;
 
     void run();
 
-    void grow(DataMap *growPlan,
-              DataMap *values,
+    void grow(SakuraItem* growPlan,
+              DataMap* values,
               const std::vector<std::string> &hirarchie);
 
-    void processBlossom(DataMap* growPlan,
+    void processBlossom(BlossomItem* growPlan,
                         DataMap* values,
                         const std::vector<std::string> &hirarchie);
 
-    void processBranch(DataMap* growPlan,
+    void processBranch(BranchItem* growPlan,
                        DataMap* values,
                        const std::vector<std::string> &hirarchie);
 
-    void processForest(DataMap* growPlan,
-                       DataMap* values,
-                       const std::vector<std::string> &hirarchie);
-
-    void processArea(DataMap* growPlan,
+    void processTree(TreeItem* growPlan,
                      DataMap* values,
                      const std::vector<std::string> &hirarchie);
 
-    void processLandscape(DataMap* growPlan,
-                          DataMap* values,
-                          const std::vector<std::string> &hirarchie);
-
-    void processSequeniellPart(DataMap* growPlan,
+    void processSequeniellPart(SequeniellBranching* growPlan,
                                DataMap* values,
                                const std::vector<std::string> &hirarchie);
 
-    void processParallelPart(DataMap* growPlan,
+    void processParallelPart(ParallelBranching* growPlan,
                              DataMap* values,
                              const std::vector<std::string> &hirarchie);
 

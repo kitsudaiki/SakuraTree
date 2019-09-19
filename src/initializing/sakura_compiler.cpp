@@ -10,6 +10,8 @@
 #include "sakura_compiler.h"
 #include <sakura_converter.h>
 #include <initializing/file_collector.h>
+#include <items/sakura_items.h>
+#include <items/item_methods.h>
 
 namespace SakuraTree
 {
@@ -18,7 +20,7 @@ namespace SakuraTree
  * @brief SakuraCompiler::SakuraCompiler
  * @param driver
  */
-SakuraCompiler::SakuraCompiler(Kitsune::Sakura::SakuraConverter *driver)
+SakuraCompiler::SakuraCompiler(Kitsune::Sakura::SakuraConverter* driver)
 {
     m_driver = driver;
     m_fileCollector = new FileCollector(m_driver);
@@ -35,7 +37,7 @@ SakuraCompiler::~SakuraCompiler()
  * @param name
  * @return
  */
-DataMap*
+SakuraItem*
 SakuraCompiler::compile(const std::string &rootPath,
                         std::string &seedName)
 {
@@ -50,9 +52,21 @@ SakuraCompiler::compile(const std::string &rootPath,
         seedName = m_fileCollector->getSeedName(0);
     }
 
-    DataMap* result = m_fileCollector->getObject(seedName);
-    assert(result != nullptr);
-    processObject(result);
+    DataMap* completePlan = m_fileCollector->getObject(seedName);
+    assert(completePlan != nullptr);
+
+    preProcessObject(completePlan);
+
+    // debug-output
+    if(DEBUG)
+    {
+        std::cout<<"+++++++++++++++++++++++++++++++++++++++++++++++++++++"<<std::endl;
+        std::string output = completePlan->toString(true);
+        std::cout<<output<<std::endl;
+        std::cout<<"-----------------------------------------------------"<<std::endl;
+    }
+
+    SakuraItem* result = convert(completePlan);
 
     return result;
 }
@@ -63,7 +77,7 @@ SakuraCompiler::compile(const std::string &rootPath,
  * @return
  */
 void
-SakuraCompiler::processObject(DataMap* value)
+SakuraCompiler::preProcessObject(DataMap* value)
 {
     // precheck
     if(value == nullptr) {
@@ -76,8 +90,8 @@ SakuraCompiler::processObject(DataMap* value)
     }
 
     // continue building
-
     DataMap* branch = value;
+
     if(value->get("type")->toString() != "parallel"
             && value->get("type")->toString() != "sequentiell")
     {
@@ -85,7 +99,8 @@ SakuraCompiler::processObject(DataMap* value)
         value->insert("parts", branch->get("parts"));
         value->insert("items", branch->get("items"));
     }
-    processArray(value->get("parts")->toArray());
+
+    preProcessArray(value->get("parts")->toArray());
 }
 
 /**
@@ -94,12 +109,167 @@ SakuraCompiler::processObject(DataMap* value)
  * @return
  */
 void
-SakuraCompiler::processArray(DataArray* value)
+SakuraCompiler::preProcessArray(DataArray* value)
 {
     for(uint32_t i = 0; i < value->size(); i++)
     {
-        processObject(value->get(i)->toMap());
+        preProcessObject(value->get(i)->toMap());
     }
 }
+
+/**
+ * @brief SakuraCompiler::process
+ * @param growPlan
+ * @return
+ */
+SakuraItem*
+SakuraCompiler::convert(DataMap* growPlan)
+{
+    if(growPlan->getStringByKey("type") == "blossom") {
+        return convertBlossom(growPlan);
+    }
+
+    if(growPlan->getStringByKey("type") == "branch") {
+        return convertBranch(growPlan);
+    }
+
+    if(growPlan->getStringByKey("type") == "tree") {
+        return convertTree(growPlan);
+    }
+
+    if(growPlan->getStringByKey("type") == "sequentiell") {
+        return convertSequeniellPart(growPlan);
+    }
+
+    if(growPlan->getStringByKey("type") == "parallel") {
+        return convertParallelPart(growPlan);
+    }
+
+    return nullptr;
+}
+
+/**
+ * @brief SakuraCompiler::processBlossom
+ * @param growPlan
+ * @return
+ */
+SakuraItem*
+SakuraCompiler::convertBlossom(DataMap* growPlan)
+{
+    BlossomItem* newItem =  new BlossomItem();
+    newItem->name = growPlan->getStringByKey("name");
+    newItem->settings = *dynamic_cast<DataMap*>(growPlan->get("common-settings"));
+    newItem->blossomType = growPlan->getStringByKey("blossom-type");
+
+    DataArray* subTypeArray = dynamic_cast<DataArray*>(growPlan->get("blossom-subtypes"));
+    for(uint64_t i = 0; i < subTypeArray->size(); i++)
+    {
+        newItem->blossomSubTypes.push_back(subTypeArray->get(i)->toString());
+    }
+
+    return newItem;
+}
+
+/**
+ * @brief SakuraCompiler::convertBranch
+ * @param growPlan
+ * @return
+ */
+SakuraItem*
+SakuraCompiler::convertBranch(DataMap* growPlan)
+{
+    BranchItem* newItem = new BranchItem();
+
+    DataMap* items = dynamic_cast<DataMap*>(growPlan->get("items"));
+    newItem->values = *items;
+
+    if(growPlan->contains("items-input"))
+    {
+        DataMap* itemsInput = dynamic_cast<DataMap*>(growPlan->get("items-input"));
+        overrideItems(&newItem->values, itemsInput);
+    }
+
+    DataItem* parts = growPlan->get("parts");
+    assert(parts != nullptr);
+
+    for(uint32_t i = 0; i < parts->size(); i++)
+    {
+        DataMap* newMap = dynamic_cast<DataMap*>(parts->get(i));
+        newItem->childs.push_back(convert(newMap));
+    }
+
+    return newItem;
+}
+
+/**
+ * @brief SakuraCompiler::convertTree
+ * @param growPlan
+ * @return
+ */
+SakuraItem*
+SakuraCompiler::convertTree(DataMap* growPlan)
+{
+    TreeItem* newItem = new TreeItem();
+
+    DataMap* items = dynamic_cast<DataMap*>(growPlan->get("items"));
+    newItem->values = *items;
+
+    DataItem* parts = growPlan->get("parts");
+    assert(parts != nullptr);
+
+    for(uint32_t i = 0; i < parts->size(); i++)
+    {
+        DataMap* newMap = dynamic_cast<DataMap*>(parts->get(i));
+        newItem->childs.push_back(convert(newMap));
+    }
+
+    return newItem;
+}
+
+/**
+ * @brief SakuraCompiler::processSequeniellPart
+ * @param growPlan
+ * @return
+ */
+SakuraItem*
+SakuraCompiler::convertSequeniellPart(DataMap* growPlan)
+{
+    SequeniellBranching* newItem = new SequeniellBranching();
+
+    DataItem* parts = growPlan->get("parts");
+    assert(parts != nullptr);
+
+    for(uint32_t i = 0; i < parts->size(); i++)
+    {
+        DataMap* newMap = dynamic_cast<DataMap*>(parts->get(i));
+        newItem->childs.push_back(convert(newMap));
+    }
+
+    return newItem;
+}
+
+/**
+ * @brief SakuraCompiler::processParallelPart
+ * @param growPlan
+ * @return
+ */
+SakuraItem*
+SakuraCompiler::convertParallelPart(DataMap* growPlan)
+{
+    ParallelBranching* newItem = new ParallelBranching();
+
+    DataItem* parts = growPlan->get("parts");
+    assert(parts != nullptr);
+
+    for(uint32_t i = 0; i < parts->size(); i++)
+    {
+        DataMap* newMap = dynamic_cast<DataMap*>(parts->get(i));
+        newItem->childs.push_back(convert(newMap));
+    }
+
+    return newItem;
+}
+
+
 
 }

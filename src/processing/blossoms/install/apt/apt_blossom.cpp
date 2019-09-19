@@ -12,7 +12,7 @@
 #include "apt_present_blossom.h"
 #include "apt_update_blossom.h"
 #include "apt_upgrade_blossom.h"
-#include <common_methods.h>
+#include <items/item_methods.h>
 #include <common_methods/string_methods.h>
 
 #include <sakura_root.h>
@@ -29,13 +29,13 @@ AptBlossom::AptBlossom() :
  * @return
  */
 bool
-AptBlossom::isInstalled(BlossomData* blossomData, const std::string &paket)
+AptBlossom::isInstalled(BlossomItem* blossomItem, const std::string &paket)
 {
     if(paket.length() == 0) {
         return false;
     }
 
-    const std::vector<std::string> currentInstalled = getInstalledPackages(blossomData);
+    const std::vector<std::string> currentInstalled = getInstalledPackages(blossomItem);
     for(uint32_t i = 0; i < currentInstalled.size(); i++)
     {
         if(currentInstalled.at(i) == paket) {
@@ -50,15 +50,15 @@ AptBlossom::isInstalled(BlossomData* blossomData, const std::string &paket)
  * @brief AptBlossom::fillPackageNames
  */
 void
-AptBlossom::fillPackageNames(BlossomData* blossomData)
+AptBlossom::fillPackageNames(BlossomItem* blossomItem)
 {
-    if(blossomData->items->get("names")->isValue()) {
-        m_packageNames.push_back(blossomData->items->getStringByKey("names"));
+    if(blossomItem->values.get("names")->isValue()) {
+        m_packageNames.push_back(blossomItem->values.getStringByKey("names"));
     }
 
-    if(blossomData->items->get("names")->isArray())
+    if(blossomItem->values.get("names")->isArray())
     {
-        DataArray* tempItem = dynamic_cast<DataArray*>(blossomData->items->get("names"));
+        DataArray* tempItem = dynamic_cast<DataArray*>(blossomItem->values.get("names"));
         for(uint32_t i = 0; i < tempItem->size(); i++)
         {
             m_packageNames.push_back(tempItem->get(i)->toString());
@@ -88,11 +88,11 @@ AptBlossom::createPackageList()
  * @return
  */
 std::vector<std::string>
-AptBlossom::getInstalledPackages(BlossomData* blossomData,
+AptBlossom::getInstalledPackages(BlossomItem* blossomItem,
                                  const std::vector<std::string> &packageList)
 {
     std::vector<std::string> result;
-    const std::vector<std::string> currentInstalled = getInstalledPackages(blossomData);
+    const std::vector<std::string> currentInstalled = getInstalledPackages(blossomItem);
 
     for(uint32_t i = 0; i < packageList.size(); i++)
     {
@@ -113,11 +113,11 @@ AptBlossom::getInstalledPackages(BlossomData* blossomData,
  * @return
  */
 std::vector<std::string>
-AptBlossom::getAbsendPackages(BlossomData* blossomData,
+AptBlossom::getAbsendPackages(BlossomItem* blossomItem,
                               const std::vector<std::string> &packageList)
 {
     std::vector<std::string> result;
-    const std::vector<std::string> currentInstalled = getInstalledPackages(blossomData);
+    const std::vector<std::string> currentInstalled = getInstalledPackages(blossomItem);
 
     for(uint32_t i = 0; i < packageList.size(); i++)
     {
@@ -143,11 +143,11 @@ AptBlossom::getAbsendPackages(BlossomData* blossomData,
  * @return
  */
 std::vector<std::string>
-AptBlossom::getInstalledPackages(BlossomData* blossomData)
+AptBlossom::getInstalledPackages(BlossomItem* blossomItem)
 {
     std::string command = "dpkg --list | grep ^ii  | awk ' {print $2} '";
-    runSyncProcess(blossomData, command);
-    std::string output(blossomData->outputMessage);
+    runSyncProcess(blossomItem, command);
+    std::string output(blossomItem->outputMessage);
 
     remove_if(output.begin(), output.end(), isspace);
 

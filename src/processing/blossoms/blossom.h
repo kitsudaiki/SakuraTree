@@ -12,28 +12,12 @@
 
 #include <common.h>
 #include <common_items/data_items.h>
+#include <items/sakura_items.h>
 
 using Kitsune::Common::DataMap;
 
 namespace SakuraTree
 {
-
-struct BlossomData
-{
-    std::string name = "";
-    std::string type = "";
-
-    DataMap* items;
-    DataMap* settings;
-
-    BlossomStates resultState = UNDEFINED_STATE;
-    std::vector<std::string> nameHirarchie;
-
-    bool skip = false;
-    bool success = true;
-    int execState = 0;
-    std::string outputMessage = "";
-};
 
 class Blossom
 {
@@ -41,20 +25,20 @@ public:
     Blossom();
     virtual ~Blossom();
 
-    void growBlossom(BlossomData *blossomData);
+    void growBlossom(BlossomItem* blossomItem);
 
-    bool runSyncProcess(BlossomData *blossomData,
+    bool runSyncProcess(BlossomItem* blossomItem,
                         std::string command);
-    bool runSyncProcess(BlossomData *blossomData,
+    bool runSyncProcess(BlossomItem* blossomItem,
                         const std::string &programm,
                         const std::vector<std::string> &args);
 
 protected:
-    virtual void initTask(BlossomData *blossomData) = 0;
-    virtual void preCheck(BlossomData *blossomData) = 0;
-    virtual void runTask(BlossomData *blossomData) = 0;
-    virtual void postCheck(BlossomData *blossomData) = 0;
-    virtual void closeTask(BlossomData *blossomData) = 0;
+    virtual void initTask(BlossomItem* blossomItem) = 0;
+    virtual void preCheck(BlossomItem* blossomItem) = 0;
+    virtual void runTask(BlossomItem* blossomItem) = 0;
+    virtual void postCheck(BlossomItem* blossomItem) = 0;
+    virtual void closeTask(BlossomItem* blossomItem) = 0;
 };
 
 }

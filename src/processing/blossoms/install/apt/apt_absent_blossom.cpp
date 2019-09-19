@@ -19,44 +19,44 @@ AptAbsentBlossom::AptAbsentBlossom() :
  * initTask
  */
 void
-AptAbsentBlossom::initTask(BlossomData *blossomData)
+AptAbsentBlossom::initTask(BlossomItem *blossomItem)
 {
-    if(blossomData->items->contains("names") == false)
+    if(blossomItem->values.contains("names") == false)
     {
-        blossomData->success = false;
-        blossomData->outputMessage = "no packages to defined";
+        blossomItem->success = false;
+        blossomItem->outputMessage = "no packages to defined";
     }
 
-    fillPackageNames(blossomData);
+    fillPackageNames(blossomItem);
 
     if(m_packageNames.size() == 0)
     {
-        blossomData->success = false;
-        blossomData->outputMessage = "no packages to defined";
+        blossomItem->success = false;
+        blossomItem->outputMessage = "no packages to defined";
     }
 
-    blossomData->success = true;
+    blossomItem->success = true;
 }
 
 /**
  * preCheck
  */
 void
-AptAbsentBlossom::preCheck(BlossomData *blossomData)
+AptAbsentBlossom::preCheck(BlossomItem *blossomItem)
 {
-    m_packageNames = getInstalledPackages(blossomData, m_packageNames);
+    m_packageNames = getInstalledPackages(blossomItem, m_packageNames);
     if(m_packageNames.size() == 0) {
-        blossomData->skip = true;
+        blossomItem->skip = true;
     }
 
-    blossomData->success = true;
+    blossomItem->success = true;
 }
 
 /**
  * runTask
  */
 void
-AptAbsentBlossom::runTask(BlossomData *blossomData)
+AptAbsentBlossom::runTask(BlossomItem *blossomItem)
 {
     std::string appendedList = "";
     for(uint32_t i = 0; i < m_packageNames.size(); i++)
@@ -65,16 +65,16 @@ AptAbsentBlossom::runTask(BlossomData *blossomData)
     }
 
     std::string programm = "sudo apt-get remove -y " + appendedList;
-    runSyncProcess(blossomData, programm);
+    runSyncProcess(blossomItem, programm);
 }
 
 /**
  * postCheck
  */
 void
-AptAbsentBlossom::postCheck(BlossomData *blossomData)
+AptAbsentBlossom::postCheck(BlossomItem *blossomItem)
 {
-    m_packageNames = getInstalledPackages(blossomData, m_packageNames);
+    m_packageNames = getInstalledPackages(blossomItem, m_packageNames);
     if(m_packageNames.size() > 0)
     {
         std::string output = "couldn't remove following packages: \n";
@@ -83,21 +83,21 @@ AptAbsentBlossom::postCheck(BlossomData *blossomData)
             output += m_packageNames.at(i) + "\n";
         }
 
-        blossomData->success = false;
-        blossomData->outputMessage = output;
+        blossomItem->success = false;
+        blossomItem->outputMessage = output;
     }
 
-    blossomData->success = true;
+    blossomItem->success = true;
 }
 
 /**
  * closeTask
  */
 void
-AptAbsentBlossom::closeTask(BlossomData *blossomData)
+AptAbsentBlossom::closeTask(BlossomItem *blossomItem)
 {
     m_packageNames.clear();
-    blossomData->success = true;
+    blossomItem->success = true;
 }
 
 }

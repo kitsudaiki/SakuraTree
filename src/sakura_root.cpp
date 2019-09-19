@@ -11,7 +11,7 @@
 #include <jinja2_converter.h>
 
 #include <initializing/sakura_compiler.h>
-#include <common_methods.h>
+#include <items/item_methods.h>
 #include <processing/sakura_thread.h>
 
 namespace SakuraTree
@@ -54,16 +54,7 @@ SakuraRoot::startProcess(const std::string &rootPath,
     // parsing
     SakuraConverter* sakuraParser = new SakuraConverter(DEBUG);
     SakuraCompiler compiler(sakuraParser);
-    DataMap* processPlan = compiler.compile(rootPath, seedName);
-
-    // debug-output
-    if(DEBUG)
-    {
-        std::cout<<"+++++++++++++++++++++++++++++++++++++++++++++++++++++"<<std::endl;
-        std::string output = processPlan->toString(true);
-        std::cout<<output<<std::endl;
-        std::cout<<"-----------------------------------------------------"<<std::endl;
-    }
+    SakuraItem* processPlan = compiler.compile(rootPath, seedName);
 
     // run process
     DataMap* dummyObj = new DataMap();
@@ -81,11 +72,11 @@ SakuraRoot::startProcess(const std::string &rootPath,
  * @brief SakuraRoot::addMessage
  */
 void
-SakuraRoot::addMessage(BlossomData* blossomData)
+SakuraRoot::addMessage(BlossomItem* blossomItem)
 {
     m_mutex.lock();
     std::cout<<" "<<std::endl;
-    printOutput(blossomData);
+    printOutput(blossomItem);
     m_mutex.unlock();
 }
 

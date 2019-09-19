@@ -12,7 +12,7 @@
 
 #include <common.h>
 #include <testing/unit_test.h>
-#include <common_methods.h>
+#include <items/item_methods.h>
 
 namespace SakuraTree
 {
