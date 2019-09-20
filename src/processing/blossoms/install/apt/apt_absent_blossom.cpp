@@ -19,44 +19,44 @@ AptAbsentBlossom::AptAbsentBlossom() :
  * initTask
  */
 void
-AptAbsentBlossom::initTask(BlossomItem *blossomItem)
+AptAbsentBlossom::initTask(BlossomItem &blossomItem)
 {
-    if(blossomItem->values.contains("names") == false)
+    if(blossomItem.values.contains("names") == false)
     {
-        blossomItem->success = false;
-        blossomItem->outputMessage = "no packages to defined";
+        blossomItem.success = false;
+        blossomItem.outputMessage = "no packages to defined";
     }
 
     fillPackageNames(blossomItem);
 
     if(m_packageNames.size() == 0)
     {
-        blossomItem->success = false;
-        blossomItem->outputMessage = "no packages to defined";
+        blossomItem.success = false;
+        blossomItem.outputMessage = "no packages to defined";
     }
 
-    blossomItem->success = true;
+    blossomItem.success = true;
 }
 
 /**
  * preCheck
  */
 void
-AptAbsentBlossom::preCheck(BlossomItem *blossomItem)
+AptAbsentBlossom::preCheck(BlossomItem &blossomItem)
 {
     m_packageNames = getInstalledPackages(blossomItem, m_packageNames);
     if(m_packageNames.size() == 0) {
-        blossomItem->skip = true;
+        blossomItem.skip = true;
     }
 
-    blossomItem->success = true;
+    blossomItem.success = true;
 }
 
 /**
  * runTask
  */
 void
-AptAbsentBlossom::runTask(BlossomItem *blossomItem)
+AptAbsentBlossom::runTask(BlossomItem &blossomItem)
 {
     std::string appendedList = "";
     for(uint32_t i = 0; i < m_packageNames.size(); i++)
@@ -72,7 +72,7 @@ AptAbsentBlossom::runTask(BlossomItem *blossomItem)
  * postCheck
  */
 void
-AptAbsentBlossom::postCheck(BlossomItem *blossomItem)
+AptAbsentBlossom::postCheck(BlossomItem &blossomItem)
 {
     m_packageNames = getInstalledPackages(blossomItem, m_packageNames);
     if(m_packageNames.size() > 0)
@@ -83,21 +83,21 @@ AptAbsentBlossom::postCheck(BlossomItem *blossomItem)
             output += m_packageNames.at(i) + "\n";
         }
 
-        blossomItem->success = false;
-        blossomItem->outputMessage = output;
+        blossomItem.success = false;
+        blossomItem.outputMessage = output;
     }
 
-    blossomItem->success = true;
+    blossomItem.success = true;
 }
 
 /**
  * closeTask
  */
 void
-AptAbsentBlossom::closeTask(BlossomItem *blossomItem)
+AptAbsentBlossom::closeTask(BlossomItem &blossomItem)
 {
     m_packageNames.clear();
-    blossomItem->success = true;
+    blossomItem.success = true;
 }
 
 }

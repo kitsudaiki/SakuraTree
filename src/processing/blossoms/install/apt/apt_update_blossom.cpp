@@ -19,25 +19,25 @@ AptUdateBlossom::AptUdateBlossom() :
  * initTask
  */
 void
-AptUdateBlossom::initTask(BlossomItem *blossomItem)
+AptUdateBlossom::initTask(BlossomItem &blossomItem)
 {
-    blossomItem->success = true;
+    blossomItem.success = true;
 }
 
 /**
  * preCheck
  */
 void
-AptUdateBlossom::preCheck(BlossomItem *blossomItem)
+AptUdateBlossom::preCheck(BlossomItem &blossomItem)
 {
-    blossomItem->success = true;
+    blossomItem.success = true;
 }
 
 /**
  * runTask
  */
 void
-AptUdateBlossom::runTask(BlossomItem *blossomItem)
+AptUdateBlossom::runTask(BlossomItem &blossomItem)
 {
     std::string programm = "sudo apt-get update";
     runSyncProcess(blossomItem, programm);
@@ -47,18 +47,18 @@ AptUdateBlossom::runTask(BlossomItem *blossomItem)
  * postCheck
  */
 void
-AptUdateBlossom::postCheck(BlossomItem *blossomItem)
+AptUdateBlossom::postCheck(BlossomItem &blossomItem)
 {
-    blossomItem->success = true;
+    blossomItem.success = true;
 }
 
 /**
  * closeTask
  */
 void
-AptUdateBlossom::closeTask(BlossomItem *blossomItem)
+AptUdateBlossom::closeTask(BlossomItem &blossomItem)
 {
-    blossomItem->success = true;
+    blossomItem.success = true;
 }
 
 }

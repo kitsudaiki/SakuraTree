@@ -23,21 +23,21 @@ public:
 protected:
     std::vector<std::string> m_packageNames;
 
-    virtual void initTask(BlossomItem *blossomItem) = 0;
-    virtual void preCheck(BlossomItem *blossomItem) = 0;
-    virtual void runTask(BlossomItem *blossomItem) = 0;
-    virtual void postCheck(BlossomItem *blossomItem) = 0;
-    virtual void closeTask(BlossomItem *blossomItem) = 0;
+    virtual void initTask(BlossomItem &blossomItem) = 0;
+    virtual void preCheck(BlossomItem &blossomItem) = 0;
+    virtual void runTask(BlossomItem &blossomItem) = 0;
+    virtual void postCheck(BlossomItem &blossomItem) = 0;
+    virtual void closeTask(BlossomItem &blossomItem) = 0;
 
-    bool isInstalled(BlossomItem *blossomItem, const std::string &paket);
-    void fillPackageNames(BlossomItem* blossomItem);
+    bool isInstalled(BlossomItem &blossomItem, const std::string &paket);
+    void fillPackageNames(BlossomItem &blossomItem);
     std::string createPackageList();
 
-    std::vector<std::string> getInstalledPackages(BlossomItem *blossomItem,
+    std::vector<std::string> getInstalledPackages(BlossomItem &blossomItem,
                                                   const std::vector<std::string> &packageList);
-    std::vector<std::string> getAbsendPackages(BlossomItem* blossomDataconst,
+    std::vector<std::string> getAbsendPackages(BlossomItem &blossomDataconst,
                                                const std::vector<std::string> &packageList);
-    std::vector<std::string> getInstalledPackages(BlossomItem *blossomItem);
+    std::vector<std::string> getInstalledPackages(BlossomItem &blossomItem);
 };
 
 }

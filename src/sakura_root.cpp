@@ -72,7 +72,7 @@ SakuraRoot::startProcess(const std::string &rootPath,
  * @brief SakuraRoot::addMessage
  */
 void
-SakuraRoot::addMessage(BlossomItem* blossomItem)
+SakuraRoot::addMessage(const BlossomItem &blossomItem)
 {
     m_mutex.lock();
     std::cout<<" "<<std::endl;

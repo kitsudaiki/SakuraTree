@@ -90,17 +90,17 @@ SakuraThread::grow(SakuraItem* growPlan,
     if(growPlan->getType() == SakuraItem::BLOSSOM_ITEM)
     {
         BlossomItem* blossomItem = dynamic_cast<BlossomItem*>(growPlan);
-        fillItems(&blossomItem->values, values);
+        fillItems(blossomItem->values, *values);
         std::vector<std::string> newHirarchie = hirarchie;
         newHirarchie.push_back("BLOSSOM: " + blossomItem->name);
-        processBlossom(blossomItem, &blossomItem->values, newHirarchie);
+        processBlossom(*blossomItem, &blossomItem->values, newHirarchie);
         return;
     }
 
     if(growPlan->getType() == SakuraItem::BRANCH_ITEM)
     {
         BranchItem* branchItem = dynamic_cast<BranchItem*>(growPlan);
-        fillItems(&branchItem->values, values);
+        fillItems(branchItem->values, *values);
         processBranch(branchItem, &branchItem->values, hirarchie);
         return;
     }
@@ -108,7 +108,7 @@ SakuraThread::grow(SakuraItem* growPlan,
     if(growPlan->getType() == SakuraItem::TREE_ITEM)
     {
         TreeItem* treeItem = dynamic_cast<TreeItem*>(growPlan);
-        fillItems(&treeItem->values, values);
+        fillItems(treeItem->values, *values);
         processTree(treeItem, &treeItem->values, hirarchie);
         return;
     }
@@ -132,25 +132,25 @@ SakuraThread::grow(SakuraItem* growPlan,
  * @brief SakuraThread::processBlossom
  */
 void
-SakuraThread::processBlossom(BlossomItem* growPlan,
+SakuraThread::processBlossom(BlossomItem &growPlan,
                              DataMap* values,
                              const std::vector<std::string> &hirarchie)
 {
     // init
-    growPlan->values = *dynamic_cast<DataMap*>(values->copy());
-    growPlan->nameHirarchie = hirarchie;
+    growPlan.values = *dynamic_cast<DataMap*>(values->copy());
+    growPlan.nameHirarchie = hirarchie;
 
     // iterate over all subtypes and execute each as separate blossom
-    for(uint32_t i = 0; i < growPlan->blossomSubTypes.size(); i++)
+    for(uint32_t i = 0; i < growPlan.blossomSubTypes.size(); i++)
     {
-        std::string subtype = growPlan->blossomSubTypes.at(i);
-        Blossom* blossom = getBlossom(growPlan->blossomType, subtype);
+        std::string subtype = growPlan.blossomSubTypes.at(i);
+        Blossom* blossom = getBlossom(growPlan.blossomType, subtype);
         blossom->growBlossom(growPlan);
         delete blossom;
     }
 
     // abort if blossom-result was an error
-    if(growPlan->success == false)
+    if(growPlan.success == false)
     {
         m_abort = true;
         std::string output = "ABORT after ERROR";

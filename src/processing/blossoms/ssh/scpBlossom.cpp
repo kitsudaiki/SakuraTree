@@ -21,45 +21,45 @@ ScpBlossom::ScpBlossom()
  * initTask
  */
 void
-ScpBlossom::initTask(BlossomItem *blossomItem)
+ScpBlossom::initTask(BlossomItem &blossomItem)
 {
-    if(blossomItem->values.contains("user") == false
-            || blossomItem->values.contains("address") == false)
+    if(blossomItem.values.contains("user") == false
+            || blossomItem.values.contains("address") == false)
     {
-        blossomItem->success = false;
-        blossomItem->outputMessage = "missing connection informations";
+        blossomItem.success = false;
+        blossomItem.outputMessage = "missing connection informations";
     }
 
-    blossomItem->success = true;
+    blossomItem.success = true;
 }
 
 /**
  * preCheck
  */
 void
-ScpBlossom::preCheck(BlossomItem *blossomItem)
+ScpBlossom::preCheck(BlossomItem &blossomItem)
 {
     //TODO: check per ssh if file already exist
-    blossomItem->success = true;
+    blossomItem.success = true;
 }
 
 /**
  * runTask
  */
 void
-ScpBlossom::runTask(BlossomItem *blossomItem)
+ScpBlossom::runTask(BlossomItem &blossomItem)
 {
     std::string programm = "scp ";
-    if(blossomItem->values.contains("port")) {
-        programm += " -P " + blossomItem->values.getStringByKey("port");
+    if(blossomItem.values.contains("port")) {
+        programm += " -P " + blossomItem.values.getStringByKey("port");
     }
-    if(blossomItem->values.contains("ssh_key")) {
-        programm += " -i " + blossomItem->values.getStringByKey("ssh_key");
+    if(blossomItem.values.contains("ssh_key")) {
+        programm += " -i " + blossomItem.values.getStringByKey("ssh_key");
     }
 
-    programm += blossomItem->values.getStringByKey("user");
+    programm += blossomItem.values.getStringByKey("user");
     programm += "@";
-    programm += blossomItem->values.getStringByKey("address");
+    programm += blossomItem.values.getStringByKey("address");
     programm += ":";
 
     runSyncProcess(blossomItem, programm);
@@ -69,18 +69,18 @@ ScpBlossom::runTask(BlossomItem *blossomItem)
  * postCheck
  */
 void
-ScpBlossom::postCheck(BlossomItem *blossomItem)
+ScpBlossom::postCheck(BlossomItem &blossomItem)
 {
-    blossomItem->success = true;
+    blossomItem.success = true;
 }
 
 /**
  * closeTask
  */
 void
-ScpBlossom::closeTask(BlossomItem *blossomItem)
+ScpBlossom::closeTask(BlossomItem &blossomItem)
 {
-    blossomItem->success = true;
+    blossomItem.success = true;
 }
 
 }

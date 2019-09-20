@@ -19,25 +19,25 @@ AptUpgradeBlossom::AptUpgradeBlossom() :
  * initTask
  */
 void
-AptUpgradeBlossom::initTask(BlossomItem *blossomItem)
+AptUpgradeBlossom::initTask(BlossomItem &blossomItem)
 {
-    blossomItem->success = true;
+    blossomItem.success = true;
 }
 
 /**
  * preCheck
  */
 void
-AptUpgradeBlossom::preCheck(BlossomItem *blossomItem)
+AptUpgradeBlossom::preCheck(BlossomItem &blossomItem)
 {
-    blossomItem->success = true;
+    blossomItem.success = true;
 }
 
 /**
  * runTask
  */
 void
-AptUpgradeBlossom::runTask(BlossomItem *blossomItem)
+AptUpgradeBlossom::runTask(BlossomItem &blossomItem)
 {
     std::string programm = "sudo apt-get -y upgrade";
     runSyncProcess(blossomItem, programm);
@@ -47,18 +47,18 @@ AptUpgradeBlossom::runTask(BlossomItem *blossomItem)
  * postCheck
  */
 void
-AptUpgradeBlossom::postCheck(BlossomItem *blossomItem)
+AptUpgradeBlossom::postCheck(BlossomItem &blossomItem)
 {
-    blossomItem->success = true;
+    blossomItem.success = true;
 }
 
 /**
  * closeTask
  */
 void
-AptUpgradeBlossom::closeTask(BlossomItem *blossomItem)
+AptUpgradeBlossom::closeTask(BlossomItem &blossomItem)
 {
-    blossomItem->success = true;
+    blossomItem.success = true;
 }
 
 }

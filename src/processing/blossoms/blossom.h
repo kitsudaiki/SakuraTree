@@ -25,20 +25,20 @@ public:
     Blossom();
     virtual ~Blossom();
 
-    void growBlossom(BlossomItem* blossomItem);
+    void growBlossom(BlossomItem &blossomItem);
 
-    bool runSyncProcess(BlossomItem* blossomItem,
+    bool runSyncProcess(BlossomItem &blossomItem,
                         std::string command);
-    bool runSyncProcess(BlossomItem* blossomItem,
+    bool runSyncProcess(BlossomItem &blossomItem,
                         const std::string &programm,
                         const std::vector<std::string> &args);
 
 protected:
-    virtual void initTask(BlossomItem* blossomItem) = 0;
-    virtual void preCheck(BlossomItem* blossomItem) = 0;
-    virtual void runTask(BlossomItem* blossomItem) = 0;
-    virtual void postCheck(BlossomItem* blossomItem) = 0;
-    virtual void closeTask(BlossomItem* blossomItem) = 0;
+    virtual void initTask(BlossomItem &blossomItem) = 0;
+    virtual void preCheck(BlossomItem &blossomItem) = 0;
+    virtual void runTask(BlossomItem &blossomItem) = 0;
+    virtual void postCheck(BlossomItem &blossomItem) = 0;
+    virtual void closeTask(BlossomItem &blossomItem) = 0;
 };
 
 }

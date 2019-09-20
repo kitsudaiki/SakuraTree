@@ -25,9 +25,9 @@ Blossom::~Blossom() {}
  * @return
  */
 void
-Blossom::growBlossom(BlossomItem* blossomItem)
+Blossom::growBlossom(BlossomItem &blossomItem)
 {
-    std::vector<std::string> uninitItems = checkItems(&blossomItem->values);
+    std::vector<std::string> uninitItems = checkItems(&blossomItem.values);
     if(uninitItems.size() > 0)
     {
         std::string output = "The following items are not initialized: \n";
@@ -35,8 +35,8 @@ Blossom::growBlossom(BlossomItem* blossomItem)
         {
             output += uninitItems.at(i) + "\n";
         }
-        blossomItem->outputMessage = output;
-        blossomItem->success = false;
+        blossomItem.outputMessage = output;
+        blossomItem.success = false;
         return;
     }
 
@@ -45,9 +45,9 @@ Blossom::growBlossom(BlossomItem* blossomItem)
         std::cout<<"initTask"<<std::endl;
     }
     initTask(blossomItem);
-    if(blossomItem->success == false)
+    if(blossomItem.success == false)
     {
-        blossomItem->resultState = BlossomItem::ERROR_INIT_STATE;
+        blossomItem.resultState = BlossomItem::ERROR_INIT_STATE;
         return;
     }
 
@@ -56,15 +56,15 @@ Blossom::growBlossom(BlossomItem* blossomItem)
         std::cout<<"preCheck"<<std::endl;
     }
     preCheck(blossomItem);
-    if(blossomItem->success == false)
+    if(blossomItem.success == false)
     {
-        blossomItem->resultState = BlossomItem::ERROR_PRECHECK_STATE;
+        blossomItem.resultState = BlossomItem::ERROR_PRECHECK_STATE;
         return;
     }
 
-    if(blossomItem->skip)
+    if(blossomItem.skip)
     {
-        blossomItem->resultState = BlossomItem::SKIPPED_STATE;
+        blossomItem.resultState = BlossomItem::SKIPPED_STATE;
         return;
     }
 
@@ -73,9 +73,9 @@ Blossom::growBlossom(BlossomItem* blossomItem)
         std::cout<<"runTask"<<std::endl;
     }
     runTask(blossomItem);
-    if(blossomItem->success == false)
+    if(blossomItem.success == false)
     {
-        blossomItem->resultState = BlossomItem::ERROR_EXEC_STATE;
+        blossomItem.resultState = BlossomItem::ERROR_EXEC_STATE;
         return;
     }
 
@@ -84,9 +84,9 @@ Blossom::growBlossom(BlossomItem* blossomItem)
         std::cout<<"postCheck"<<std::endl;
     }
     postCheck(blossomItem);
-    if(blossomItem->success == false)
+    if(blossomItem.success == false)
     {
-        blossomItem->resultState = BlossomItem::ERROR_POSTCHECK_STATE;
+        blossomItem.resultState = BlossomItem::ERROR_POSTCHECK_STATE;
 
         return;
     }
@@ -95,15 +95,15 @@ Blossom::growBlossom(BlossomItem* blossomItem)
         std::cout<<"closeTask"<<std::endl;
     }
     closeTask(blossomItem);
-    if(blossomItem->success == false)
+    if(blossomItem.success == false)
     {
-        blossomItem->resultState = BlossomItem::ERROR_CLOSE_STATE;
+        blossomItem.resultState = BlossomItem::ERROR_CLOSE_STATE;
         return;
     }
 
     //-------------------------------
 
-    blossomItem->resultState = BlossomItem::CHANGED_STATE;
+    blossomItem.resultState = BlossomItem::CHANGED_STATE;
     return;
 }
 
@@ -113,7 +113,7 @@ Blossom::growBlossom(BlossomItem* blossomItem)
  * @return
  */
 bool
-Blossom::runSyncProcess(BlossomItem *blossomItem,
+Blossom::runSyncProcess(BlossomItem &blossomItem,
                         std::string command)
 {
     std::vector<std::string> args;
@@ -130,9 +130,9 @@ Blossom::runSyncProcess(BlossomItem *blossomItem,
  * @return
  */
 bool
-Blossom::runSyncProcess(BlossomItem *blossomItem,
-                              const std::string &programm,
-                              const std::vector<std::string> &args)
+Blossom::runSyncProcess(BlossomItem &blossomItem,
+                        const std::string &programm,
+                        const std::vector<std::string> &args)
 {
     std::string call = programm;
     for(uint32_t i = 0; i < args.size(); i++)
@@ -161,25 +161,29 @@ Blossom::runSyncProcess(BlossomItem *blossomItem,
                 data.append(buffer);
             }
         }
-        blossomItem->execState = pclose(stream);
+        blossomItem.execState = pclose(stream);
     }
     else
     {
-        blossomItem->outputMessage = "can not execute programm: " + programm;
-        blossomItem->success = false;
+        blossomItem.outputMessage = "can not execute programm: " + programm;
+        blossomItem.success = false;
 
         return false;
     }
 
-    std::cout<<"+++++++++++++++++++++++++++++++++++++++ exit status: "<<(int)blossomItem->execState<<std::endl;
+    std::cout<<"+++++++++++++++++++++++++++++++++++++++ exit status: "
+             <<blossomItem.execState
+             <<std::endl;
+
     if(data.size() < 10000){
         std::cout<<data<<std::endl;
     }
-    blossomItem->outputMessage = data;
-    if(blossomItem->execState == 0) {
-        blossomItem->success = true;
+
+    blossomItem.outputMessage = data;
+    if(blossomItem.execState == 0) {
+        blossomItem.success = true;
     } else {
-        blossomItem->success = false;
+        blossomItem.success = false;
     }
 
     return true;

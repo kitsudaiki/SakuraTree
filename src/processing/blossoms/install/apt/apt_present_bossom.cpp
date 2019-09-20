@@ -24,23 +24,23 @@ AptPresentBlossom::AptPresentBlossom() :
  * @return
  */
 void
-AptPresentBlossom::initTask(BlossomItem* blossomItem)
+AptPresentBlossom::initTask(BlossomItem &blossomItem)
 {
-    if(blossomItem->values.contains("names") == false)
+    if(blossomItem.values.contains("names") == false)
     {
-        blossomItem->success = false;
-        blossomItem->outputMessage = "no packages to defined";
+        blossomItem.success = false;
+        blossomItem.outputMessage = "no packages to defined";
     }
 
     fillPackageNames(blossomItem);
 
     if(m_packageNames.size() == 0)
     {
-        blossomItem->success = false;
-        blossomItem->outputMessage = "no packages to defined";
+        blossomItem.success = false;
+        blossomItem.outputMessage = "no packages to defined";
     }
 
-    blossomItem->success = true;
+    blossomItem.success = true;
 }
 
 /**
@@ -48,15 +48,15 @@ AptPresentBlossom::initTask(BlossomItem* blossomItem)
  * @return
  */
 void
-AptPresentBlossom::preCheck(BlossomItem *blossomItem)
+AptPresentBlossom::preCheck(BlossomItem &blossomItem)
 {
     m_packageNames = getAbsendPackages(blossomItem, m_packageNames);
 
     if(m_packageNames.size() == 0) {
-        blossomItem->skip = true;
+        blossomItem.skip = true;
     }
 
-    blossomItem->success = true;
+    blossomItem.success = true;
 }
 
 /**
@@ -64,7 +64,7 @@ AptPresentBlossom::preCheck(BlossomItem *blossomItem)
  * @return
  */
 void
-AptPresentBlossom::runTask(BlossomItem *blossomItem)
+AptPresentBlossom::runTask(BlossomItem &blossomItem)
 {
     for(uint32_t i = 0; i < m_packageNames.size(); i++)
     {
@@ -72,7 +72,7 @@ AptPresentBlossom::runTask(BlossomItem *blossomItem)
         runSyncProcess(blossomItem, programm);
     }
 
-    blossomItem->success = true;
+    blossomItem.success = true;
 }
 
 /**
@@ -80,7 +80,7 @@ AptPresentBlossom::runTask(BlossomItem *blossomItem)
  * @return
  */
 void
-AptPresentBlossom::postCheck(BlossomItem *blossomItem)
+AptPresentBlossom::postCheck(BlossomItem &blossomItem)
 {
     m_packageNames = getAbsendPackages(blossomItem, m_packageNames);
     if(m_packageNames.size() > 0)
@@ -91,11 +91,11 @@ AptPresentBlossom::postCheck(BlossomItem *blossomItem)
             output += m_packageNames.at(i) + "\n";
         }
 
-        blossomItem->success = false;
-        blossomItem->outputMessage = output;
+        blossomItem.success = false;
+        blossomItem.outputMessage = output;
     }
 
-    blossomItem->success = true;
+    blossomItem.success = true;
 }
 
 /**
@@ -103,10 +103,10 @@ AptPresentBlossom::postCheck(BlossomItem *blossomItem)
  * @return
  */
 void
-AptPresentBlossom::closeTask(BlossomItem *blossomItem)
+AptPresentBlossom::closeTask(BlossomItem &blossomItem)
 {
     m_packageNames.clear();
-    blossomItem->success = true;
+    blossomItem.success = true;
 }
 
 }

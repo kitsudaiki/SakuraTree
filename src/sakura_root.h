@@ -39,7 +39,7 @@ public:
     bool startProcess(const std::string &rootPath,
                      std::string seedName="");
 
-    void addMessage(BlossomItem *blossomItem);
+    void addMessage(const BlossomItem &blossomItem);
 
     static SakuraTree::SakuraRoot* m_root;
     static Jinja2Converter* m_jinja2Converter;

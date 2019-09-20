@@ -20,23 +20,23 @@ AptLatestBlossom::AptLatestBlossom() :
  * @return
  */
 void
-AptLatestBlossom::initTask(BlossomItem *blossomItem)
+AptLatestBlossom::initTask(BlossomItem &blossomItem)
 {
-    if(blossomItem->values.contains("names") == false)
+    if(blossomItem.values.contains("names") == false)
     {
-        blossomItem->success = false;
-        blossomItem->outputMessage = "no packages to defined";
+        blossomItem.success = false;
+        blossomItem.outputMessage = "no packages to defined";
     }
 
     fillPackageNames(blossomItem);
 
     if(m_packageNames.size() == 0)
     {
-        blossomItem->success = false;
-        blossomItem->outputMessage = "no packages to defined";
+        blossomItem.success = false;
+        blossomItem.outputMessage = "no packages to defined";
     }
 
-    blossomItem->success = true;
+    blossomItem.success = true;
 }
 
 /**
@@ -44,9 +44,9 @@ AptLatestBlossom::initTask(BlossomItem *blossomItem)
  * @return
  */
 void
-AptLatestBlossom::preCheck(BlossomItem *blossomItem)
+AptLatestBlossom::preCheck(BlossomItem &blossomItem)
 {
-    blossomItem->success = true;
+    blossomItem.success = true;
 }
 
 /**
@@ -54,7 +54,7 @@ AptLatestBlossom::preCheck(BlossomItem *blossomItem)
  * @return
  */
 void
-AptLatestBlossom::runTask(BlossomItem *blossomItem)
+AptLatestBlossom::runTask(BlossomItem &blossomItem)
 {
     std::string appendedList = "";
     for(uint32_t i = 0; i < m_packageNames.size(); i++)
@@ -71,7 +71,7 @@ AptLatestBlossom::runTask(BlossomItem *blossomItem)
  * @return
  */
 void
-AptLatestBlossom::postCheck(BlossomItem *blossomItem)
+AptLatestBlossom::postCheck(BlossomItem &blossomItem)
 {
     m_packageNames = getAbsendPackages(blossomItem, m_packageNames);
     if(m_packageNames.size() > 0)
@@ -82,11 +82,11 @@ AptLatestBlossom::postCheck(BlossomItem *blossomItem)
             output += m_packageNames.at(i) + "\n";
         }
 
-        blossomItem->success = false;
-        blossomItem->outputMessage = output;
+        blossomItem.success = false;
+        blossomItem.outputMessage = output;
     }
 
-    blossomItem->success = true;
+    blossomItem.success = true;
 }
 
 /**
@@ -94,10 +94,10 @@ AptLatestBlossom::postCheck(BlossomItem *blossomItem)
  * @return
  */
 void
-AptLatestBlossom::closeTask(BlossomItem *blossomItem)
+AptLatestBlossom::closeTask(BlossomItem &blossomItem)
 {
     m_packageNames.clear();
-    blossomItem->success = true;
+    blossomItem.success = true;
 }
 
 }

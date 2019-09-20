@@ -29,7 +29,7 @@ AptBlossom::AptBlossom() :
  * @return
  */
 bool
-AptBlossom::isInstalled(BlossomItem* blossomItem, const std::string &paket)
+AptBlossom::isInstalled(BlossomItem &blossomItem, const std::string &paket)
 {
     if(paket.length() == 0) {
         return false;
@@ -50,15 +50,15 @@ AptBlossom::isInstalled(BlossomItem* blossomItem, const std::string &paket)
  * @brief AptBlossom::fillPackageNames
  */
 void
-AptBlossom::fillPackageNames(BlossomItem* blossomItem)
+AptBlossom::fillPackageNames(BlossomItem &blossomItem)
 {
-    if(blossomItem->values.get("names")->isValue()) {
-        m_packageNames.push_back(blossomItem->values.getStringByKey("names"));
+    if(blossomItem.values.get("names")->isValue()) {
+        m_packageNames.push_back(blossomItem.values.getStringByKey("names"));
     }
 
-    if(blossomItem->values.get("names")->isArray())
+    if(blossomItem.values.get("names")->isArray())
     {
-        DataArray* tempItem = dynamic_cast<DataArray*>(blossomItem->values.get("names"));
+        DataArray* tempItem = dynamic_cast<DataArray*>(blossomItem.values.get("names"));
         for(uint32_t i = 0; i < tempItem->size(); i++)
         {
             m_packageNames.push_back(tempItem->get(i)->toString());
@@ -88,7 +88,7 @@ AptBlossom::createPackageList()
  * @return
  */
 std::vector<std::string>
-AptBlossom::getInstalledPackages(BlossomItem* blossomItem,
+AptBlossom::getInstalledPackages(BlossomItem &blossomItem,
                                  const std::vector<std::string> &packageList)
 {
     std::vector<std::string> result;
@@ -113,7 +113,7 @@ AptBlossom::getInstalledPackages(BlossomItem* blossomItem,
  * @return
  */
 std::vector<std::string>
-AptBlossom::getAbsendPackages(BlossomItem* blossomItem,
+AptBlossom::getAbsendPackages(BlossomItem &blossomItem,
                               const std::vector<std::string> &packageList)
 {
     std::vector<std::string> result;
@@ -143,11 +143,11 @@ AptBlossom::getAbsendPackages(BlossomItem* blossomItem,
  * @return
  */
 std::vector<std::string>
-AptBlossom::getInstalledPackages(BlossomItem* blossomItem)
+AptBlossom::getInstalledPackages(BlossomItem &blossomItem)
 {
     std::string command = "dpkg --list | grep ^ii  | awk ' {print $2} '";
     runSyncProcess(blossomItem, command);
-    std::string output(blossomItem->outputMessage);
+    std::string output(blossomItem.outputMessage);
 
     remove_if(output.begin(), output.end(), isspace);
 

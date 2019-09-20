@@ -40,45 +40,38 @@ convertString(const std::string &templateString,
 
 /**
  * replace the jinja2-converted values of the items-object with the stuff of the insertValues-object
- *
- * @return the original items-object, with all jinja2-content filled
  */
-DataMap*
-fillItems(DataMap* items,
-          DataMap* insertValues)
+void
+fillItems(DataMap &items,
+          DataMap &insertValues)
 {
-    const std::vector<std::string> keys = items->getKeys();
+    const std::vector<std::string> keys = items.getKeys();
 
     for(uint32_t i = 0; i < keys.size(); i++)
     {
-        DataItem* obj = items->get(keys.at(i));
+        DataItem* obj = items.get(keys.at(i));
         if(obj->isValue())
         {
             const std::string tempItem = obj->toString();
-            DataValue* value = new DataValue(convertString(tempItem, insertValues));
-            items->insert(keys.at(i), value, true);
+            DataValue* value = new DataValue(convertString(tempItem, &insertValues));
+            items.insert(keys.at(i), value, true);
         }
     }
-
-    return items;
 }
 
 /**
  * @brief overrideItems
- *
- * @return
  */
-DataMap*
-overrideItems(DataMap* original,
-              DataMap* override)
+void overrideItems(DataMap &original,
+                   DataMap &override)
 {
-    const std::vector<std::string> keys = override->getKeys();
+    const std::vector<std::string> keys = override.getKeys();
     for(uint32_t i = 0; i < keys.size(); i++)
     {
-        original->insert(keys.at(i), override->get(keys.at(i))->copy(), true);
+        original.insert(keys.at(i),
+                        override.get(keys.at(i))->copy(),
+                        true);
     }
-
-    return original;
 }
 
 /**
@@ -108,12 +101,12 @@ checkItems(DataMap* items)
  * @param blossom
  */
 void
-printOutput(BlossomItem* blossom)
+printOutput(const BlossomItem &blossom)
 {
     std::cout<<"+++++++++++++++++++++++++++++++++++++++++++++++++"<<std::endl;
 
     // print executeion-state
-    switch(blossom->resultState)
+    switch(blossom.resultState)
     {
         case BlossomItem::SKIPPED_STATE:
             std::cout<<"SKIPPED"<<std::endl;
@@ -128,7 +121,7 @@ printOutput(BlossomItem* blossom)
             std::cout<<"ERROR in pre-check-state"<<std::endl;
             break;
         case BlossomItem::ERROR_EXEC_STATE:
-            std::cout<<"ERROR in exec-state with error-code: "<<blossom->execState<<std::endl;
+            std::cout<<"ERROR in exec-state with error-code: "<<blossom.execState<<std::endl;
             break;
         case BlossomItem::ERROR_POSTCHECK_STATE:
             std::cout<<"ERROR in post-check-state"<<std::endl;
@@ -141,21 +134,21 @@ printOutput(BlossomItem* blossom)
     }
 
     // print call-hirarchie
-    for(uint32_t i = 0; i < blossom->nameHirarchie.size(); i++)
+    for(uint32_t i = 0; i < blossom.nameHirarchie.size(); i++)
     {
         for(uint32_t j = 0; j < i; j++)
         {
             std::cout<<"   ";
         }
-        std::cout<<blossom->nameHirarchie.at(i)<<std::endl;
+        std::cout<<blossom.nameHirarchie.at(i)<<std::endl;
     }
 
     // print process-output
-    if(blossom->outputMessage.size() > 0
-            && blossom->resultState >= 3)
+    if(blossom.outputMessage.size() > 0
+            && blossom.resultState >= 3)
     {
         std::cout<<std::endl;
-        std::cout<<blossom->outputMessage<<std::endl;
+        std::cout<<blossom.outputMessage<<std::endl;
     }
 
     std::cout<<"-------------------------------------------------"<<std::endl;

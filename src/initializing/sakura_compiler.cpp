@@ -186,7 +186,7 @@ SakuraCompiler::convertBranch(DataMap* growPlan)
     if(growPlan->contains("items-input"))
     {
         DataMap* itemsInput = dynamic_cast<DataMap*>(growPlan->get("items-input"));
-        overrideItems(&newItem->values, itemsInput);
+        overrideItems(newItem->values, *itemsInput);
     }
 
     DataItem* parts = growPlan->get("parts");
