@@ -161,6 +161,12 @@ SakuraCompiler::convertBlossom(DataMap* growPlan)
     newItem->settings = *dynamic_cast<DataMap*>(growPlan->get("common-settings"));
     newItem->blossomType = growPlan->getStringByKey("blossom-type");
 
+    if(growPlan->contains("items-input"))
+    {
+        DataMap* itemsInput = dynamic_cast<DataMap*>(growPlan->get("items-input"));
+        newItem->values = *itemsInput;
+    }
+
     DataArray* subTypeArray = dynamic_cast<DataArray*>(growPlan->get("blossom-subtypes"));
     for(uint64_t i = 0; i < subTypeArray->size(); i++)
     {
@@ -213,6 +219,12 @@ SakuraCompiler::convertTree(DataMap* growPlan)
 
     DataMap* items = dynamic_cast<DataMap*>(growPlan->get("items"));
     newItem->values = *items;
+
+    if(growPlan->contains("items-input"))
+    {
+        DataMap* itemsInput = dynamic_cast<DataMap*>(growPlan->get("items-input"));
+        overrideItems(newItem->values, *itemsInput);
+    }
 
     DataItem* parts = growPlan->get("parts");
     assert(parts != nullptr);
