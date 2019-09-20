@@ -43,10 +43,11 @@ SOURCES += \
     src/processing/blossoms/install/apt/apt_upgrade_blossom.cpp \
     src/processing/blossoms/blossom_getter.cpp \
     src/processing/sakura_thread.cpp \
-    src/common_methods.cpp \
+    src/items/item_methods.cpp \
     src/sakura_root.cpp \
     tests/core/common_methods_test.cpp \
-    tests/run_unit_tests.cpp
+    tests/run_unit_tests.cpp \
+    src/items/sakura_items.cpp
 
 
 HEADERS += \
@@ -67,9 +68,10 @@ HEADERS += \
     src/processing/blossoms/install/apt/apt_upgrade_blossom.h \
     src/processing/blossoms/blossom_getter.h \
     src/processing/sakura_thread.h \
-    src/common_methods.h \
+    src/items/item_methods.h \
     src/sakura_root.h \
     tests/core/common_methods_test.h \
-    tests/run_unit_tests.h
+    tests/run_unit_tests.h \
+    src/items/sakura_items.h
 
 

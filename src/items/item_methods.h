@@ -14,18 +14,18 @@
 
 namespace SakuraTree
 {
-struct BlossomData;
+struct BlossomItem;
 
 std::string convertString(const std::string &templateString,
                           DataMap* content);
-DataMap* fillItems(DataMap* items,
-                      DataMap* insertValues);
-DataMap* overrideItems(DataMap* original,
-                          DataMap* override);
+void fillItems(DataMap &items,
+               Kitsune::Common::DataMap &insertValues);
+void overrideItems(DataMap &original,
+                   Kitsune::Common::DataMap &override);
 
 std::vector<std::string> checkItems(DataMap* items);
 
-void printOutput(BlossomData* blossom);
+void printOutput(const BlossomItem &blossom);
 
 }
 

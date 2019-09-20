@@ -22,11 +22,11 @@ public:
     AptUdateBlossom();
 
 protected:
-    void initTask(BlossomData *blossomData);
-    void preCheck(BlossomData *blossomData);
-    void runTask(BlossomData *blossomData);
-    void postCheck(BlossomData *blossomData);
-    void closeTask(BlossomData *blossomData);
+    void initTask(BlossomItem &blossomItem);
+    void preCheck(BlossomItem &blossomItem);
+    void runTask(BlossomItem &blossomItem);
+    void postCheck(BlossomItem &blossomItem);
+    void closeTask(BlossomItem &blossomItem);
 };
 
 }

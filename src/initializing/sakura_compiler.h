@@ -28,6 +28,7 @@ class SakuraConverter;
 namespace SakuraTree
 {
 class FileCollector;
+class SakuraItem;
 
 class SakuraCompiler
 {
@@ -35,15 +36,23 @@ public:
     SakuraCompiler(Kitsune::Sakura::SakuraConverter* driver);
     ~SakuraCompiler();
 
-    DataMap* compile(const std::string &rootPath,
+    SakuraItem* compile(const std::string &rootPath,
                         std::string &seedName);
 
 private:
     Kitsune::Sakura::SakuraConverter* m_driver = nullptr;
     FileCollector* m_fileCollector = nullptr;
 
-    void processObject(DataMap* value);
-    void processArray(DataArray* value);
+    void preProcessObject(DataMap* value);
+    void preProcessArray(DataArray* value);
+
+    SakuraItem* convert(DataMap* growPlan);
+    SakuraItem* convertBlossom(DataMap* growPlan);
+    SakuraItem* convertBranch(DataMap* growPlan);
+    SakuraItem* convertTree(DataMap* growPlan);
+
+    SakuraItem* convertSequeniellPart(DataMap* growPlan);
+    SakuraItem* convertParallelPart(DataMap* growPlan);
 };
 
 }

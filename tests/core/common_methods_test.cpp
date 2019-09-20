@@ -58,8 +58,8 @@ void CommonMethodsTest::testFillItems()
     DataMap insertValues;
     insertValues.insert("test", new DataValue("hmmm"));
 
-    DataMap* result = fillItems(&items, &insertValues);
-    UNITTEST(result->get("x")->toString(), "hmmm");
+    fillItems(items, insertValues);
+    UNITTEST(items.get("x")->toString(), "hmmm");
 }
 
 /**
@@ -75,11 +75,11 @@ void CommonMethodsTest::testOverrideItems()
     override.insert("y", new DataValue("poi"));
     override.insert("z", new DataValue("hmmm"));
 
-    DataMap* result = overrideItems(&original, &override);
-    UNITTEST(result->size(), 3);
-    UNITTEST(result->get("x")->toString(), "{{test}}");
-    UNITTEST(result->get("y")->toString(), "poi");
-    UNITTEST(result->get("z")->toString(), "hmmm");
+    overrideItems(original, override);
+    UNITTEST(original.size(), 3);
+    UNITTEST(original.get("x")->toString(), "{{test}}");
+    UNITTEST(original.get("y")->toString(), "poi");
+    UNITTEST(original.get("z")->toString(), "hmmm");
 }
 
 /**

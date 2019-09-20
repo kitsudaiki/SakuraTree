@@ -24,23 +24,23 @@ AptPresentBlossom::AptPresentBlossom() :
  * @return
  */
 void
-AptPresentBlossom::initTask(BlossomData* blossomData)
+AptPresentBlossom::initTask(BlossomItem &blossomItem)
 {
-    if(blossomData->items->contains("names") == false)
+    if(blossomItem.values.contains("names") == false)
     {
-        blossomData->success = false;
-        blossomData->outputMessage = "no packages to defined";
+        blossomItem.success = false;
+        blossomItem.outputMessage = "no packages to defined";
     }
 
-    fillPackageNames(blossomData);
+    fillPackageNames(blossomItem);
 
     if(m_packageNames.size() == 0)
     {
-        blossomData->success = false;
-        blossomData->outputMessage = "no packages to defined";
+        blossomItem.success = false;
+        blossomItem.outputMessage = "no packages to defined";
     }
 
-    blossomData->success = true;
+    blossomItem.success = true;
 }
 
 /**
@@ -48,15 +48,15 @@ AptPresentBlossom::initTask(BlossomData* blossomData)
  * @return
  */
 void
-AptPresentBlossom::preCheck(BlossomData *blossomData)
+AptPresentBlossom::preCheck(BlossomItem &blossomItem)
 {
-    m_packageNames = getAbsendPackages(blossomData, m_packageNames);
+    m_packageNames = getAbsendPackages(blossomItem, m_packageNames);
 
     if(m_packageNames.size() == 0) {
-        blossomData->skip = true;
+        blossomItem.skip = true;
     }
 
-    blossomData->success = true;
+    blossomItem.success = true;
 }
 
 /**
@@ -64,15 +64,15 @@ AptPresentBlossom::preCheck(BlossomData *blossomData)
  * @return
  */
 void
-AptPresentBlossom::runTask(BlossomData *blossomData)
+AptPresentBlossom::runTask(BlossomItem &blossomItem)
 {
     for(uint32_t i = 0; i < m_packageNames.size(); i++)
     {
         std::string programm = "sudo apt-get install -y " + m_packageNames.at(i);
-        runSyncProcess(blossomData, programm);
+        runSyncProcess(blossomItem, programm);
     }
 
-    blossomData->success = true;
+    blossomItem.success = true;
 }
 
 /**
@@ -80,9 +80,9 @@ AptPresentBlossom::runTask(BlossomData *blossomData)
  * @return
  */
 void
-AptPresentBlossom::postCheck(BlossomData *blossomData)
+AptPresentBlossom::postCheck(BlossomItem &blossomItem)
 {
-    m_packageNames = getAbsendPackages(blossomData, m_packageNames);
+    m_packageNames = getAbsendPackages(blossomItem, m_packageNames);
     if(m_packageNames.size() > 0)
     {
         std::string output = "couldn't install following packages: \n";
@@ -91,11 +91,11 @@ AptPresentBlossom::postCheck(BlossomData *blossomData)
             output += m_packageNames.at(i) + "\n";
         }
 
-        blossomData->success = false;
-        blossomData->outputMessage = output;
+        blossomItem.success = false;
+        blossomItem.outputMessage = output;
     }
 
-    blossomData->success = true;
+    blossomItem.success = true;
 }
 
 /**
@@ -103,10 +103,10 @@ AptPresentBlossom::postCheck(BlossomData *blossomData)
  * @return
  */
 void
-AptPresentBlossom::closeTask(BlossomData *blossomData)
+AptPresentBlossom::closeTask(BlossomItem &blossomItem)
 {
     m_packageNames.clear();
-    blossomData->success = true;
+    blossomItem.success = true;
 }
 
 }
