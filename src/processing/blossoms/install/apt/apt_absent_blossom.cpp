@@ -8,12 +8,14 @@
  */
 
 #include "apt_absent_blossom.h"
+#include <processing/blossoms/install/apt/apt_methods.h>
+#include <processing/process_methods.h>
 
 namespace SakuraTree
 {
 
 AptAbsentBlossom::AptAbsentBlossom() :
-    AptBlossom() {}
+    Blossom() {}
 
 /**
  * initTask
@@ -25,14 +27,16 @@ AptAbsentBlossom::initTask(BlossomItem &blossomItem)
     {
         blossomItem.success = false;
         blossomItem.outputMessage = "no packages to defined";
+        return;
     }
 
-    fillPackageNames(blossomItem);
+    fillPackageNames(blossomItem, m_packageNames);
 
     if(m_packageNames.size() == 0)
     {
         blossomItem.success = false;
         blossomItem.outputMessage = "no packages to defined";
+        return;
     }
 
     blossomItem.success = true;
@@ -45,8 +49,10 @@ void
 AptAbsentBlossom::preCheck(BlossomItem &blossomItem)
 {
     m_packageNames = getInstalledPackages(blossomItem, m_packageNames);
-    if(m_packageNames.size() == 0) {
+    if(m_packageNames.size() == 0)
+    {
         blossomItem.skip = true;
+        return;
     }
 
     blossomItem.success = true;
@@ -85,6 +91,7 @@ AptAbsentBlossom::postCheck(BlossomItem &blossomItem)
 
         blossomItem.success = false;
         blossomItem.outputMessage = output;
+        return;
     }
 
     blossomItem.success = true;

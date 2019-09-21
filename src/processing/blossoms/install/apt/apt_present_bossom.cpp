@@ -8,6 +8,8 @@
  */
 
 #include "apt_present_blossom.h"
+#include <processing/blossoms/install/apt/apt_methods.h>
+#include <processing/process_methods.h>
 
 namespace SakuraTree
 {
@@ -17,7 +19,7 @@ namespace SakuraTree
  * @param content
  */
 AptPresentBlossom::AptPresentBlossom() :
-    AptBlossom() {}
+    Blossom() {}
 
 /**
  * @brief AptInstallBlossom::initTask
@@ -30,14 +32,16 @@ AptPresentBlossom::initTask(BlossomItem &blossomItem)
     {
         blossomItem.success = false;
         blossomItem.outputMessage = "no packages to defined";
+        return;
     }
 
-    fillPackageNames(blossomItem);
+    fillPackageNames(blossomItem, m_packageNames);
 
     if(m_packageNames.size() == 0)
     {
         blossomItem.success = false;
         blossomItem.outputMessage = "no packages to defined";
+        return;
     }
 
     blossomItem.success = true;
@@ -52,8 +56,10 @@ AptPresentBlossom::preCheck(BlossomItem &blossomItem)
 {
     m_packageNames = getAbsendPackages(blossomItem, m_packageNames);
 
-    if(m_packageNames.size() == 0) {
+    if(m_packageNames.size() == 0)
+    {
         blossomItem.skip = true;
+        return;
     }
 
     blossomItem.success = true;
@@ -93,6 +99,7 @@ AptPresentBlossom::postCheck(BlossomItem &blossomItem)
 
         blossomItem.success = false;
         blossomItem.outputMessage = output;
+        return;
     }
 
     blossomItem.success = true;

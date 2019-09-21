@@ -36,7 +36,6 @@ SOURCES += \
     src/initializing/file_collector.cpp \
     src/initializing/sakura_compiler.cpp \
     src/processing/blossoms/install/apt/apt_absent_blossom.cpp \
-    src/processing/blossoms/install/apt/apt_blossom.cpp \
     src/processing/blossoms/install/apt/apt_latest_bossom.cpp \
     src/processing/blossoms/install/apt/apt_present_bossom.cpp \
     src/processing/blossoms/install/apt/apt_update_blossom.cpp \
@@ -47,7 +46,9 @@ SOURCES += \
     src/sakura_root.cpp \
     tests/core/common_methods_test.cpp \
     tests/run_unit_tests.cpp \
-    src/items/sakura_items.cpp
+    src/items/sakura_items.cpp \
+    src/processing/blossoms/install/apt/apt_methods.cpp \
+    src/processing/process_methods.cpp
 
 
 HEADERS += \
@@ -60,7 +61,6 @@ HEADERS += \
     src/initializing/file_collector.h \
     src/initializing/sakura_compiler.h \
     src/processing/blossoms/ssh/scp_blossom.h \
-    src/processing/blossoms/install/apt/apt_blossom.h \
     src/processing/blossoms/install/apt/apt_absent_blossom.h \
     src/processing/blossoms/install/apt/apt_latest_blossom.h \
     src/processing/blossoms/install/apt/apt_update_blossom.h \
@@ -72,6 +72,8 @@ HEADERS += \
     src/sakura_root.h \
     tests/core/common_methods_test.h \
     tests/run_unit_tests.h \
-    src/items/sakura_items.h
+    src/items/sakura_items.h \
+    src/processing/blossoms/install/apt/apt_methods.h \
+    src/processing/process_methods.h
 
 

@@ -10,12 +10,12 @@
 #ifndef APT_LATEST_BLOSSOM_H
 #define APT_LATEST_BLOSSOM_H
 
-#include <processing/blossoms/install/apt/apt_blossom.h>
+#include <processing/blossoms/blossom.h>
 
 namespace SakuraTree
 {
 
-class AptLatestBlossom : public AptBlossom
+class AptLatestBlossom : public Blossom
 {
 
 public:
@@ -27,6 +27,9 @@ protected:
     void runTask(BlossomItem &blossomItem);
     void postCheck(BlossomItem &blossomItem);
     void closeTask(BlossomItem &blossomItem);
+
+private:
+    std::vector<std::string> m_packageNames;
 };
 
 }

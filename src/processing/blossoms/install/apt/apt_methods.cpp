@@ -1,27 +1,11 @@
-﻿/**
- *  @file    apt_blossom.cpp
- *
- *  @author  Tobias Anker
- *  Contact: tobias.anker@kitsunemimi.moe
- *
- *  Apache License Version 2.0
- */
+#include "apt_methods.h"
 
-#include "apt_blossom.h"
-#include "apt_absent_blossom.h"
-#include "apt_present_blossom.h"
-#include "apt_update_blossom.h"
-#include "apt_upgrade_blossom.h"
-#include <items/item_methods.h>
 #include <common_methods/string_methods.h>
-
-#include <sakura_root.h>
+#include <common_items/data_items.h>
+#include <processing/process_methods.h>
 
 namespace SakuraTree
 {
-
-AptBlossom::AptBlossom() :
-    Blossom() {}
 
 /**
  * @brief AptBlossom::isInstalled
@@ -29,7 +13,8 @@ AptBlossom::AptBlossom() :
  * @return
  */
 bool
-AptBlossom::isInstalled(BlossomItem &blossomItem, const std::string &paket)
+isInstalled(BlossomItem &blossomItem,
+            const std::string &paket)
 {
     if(paket.length() == 0) {
         return false;
@@ -50,10 +35,11 @@ AptBlossom::isInstalled(BlossomItem &blossomItem, const std::string &paket)
  * @brief AptBlossom::fillPackageNames
  */
 void
-AptBlossom::fillPackageNames(BlossomItem &blossomItem)
+fillPackageNames(BlossomItem &blossomItem,
+                 std::vector<std::string> &packageList)
 {
     if(blossomItem.values.get("names")->isValue()) {
-        m_packageNames.push_back(blossomItem.values.getStringByKey("names"));
+        packageList.push_back(blossomItem.values.getStringByKey("names"));
     }
 
     if(blossomItem.values.get("names")->isArray())
@@ -61,7 +47,7 @@ AptBlossom::fillPackageNames(BlossomItem &blossomItem)
         DataArray* tempItem = dynamic_cast<DataArray*>(blossomItem.values.get("names"));
         for(uint32_t i = 0; i < tempItem->size(); i++)
         {
-            m_packageNames.push_back(tempItem->get(i)->toString());
+            packageList.push_back(tempItem->get(i)->toString());
         }
     }
 }
@@ -71,12 +57,12 @@ AptBlossom::fillPackageNames(BlossomItem &blossomItem)
  * @return
  */
 std::string
-AptBlossom::createPackageList()
+createPackageList(const std::vector<std::string> &packageList)
 {
     std::string result = "";
-    for(uint32_t i = 0; i < m_packageNames.size(); i++)
+    for(uint32_t i = 0; i < packageList.size(); i++)
     {
-        result += " " + m_packageNames.at(i);
+        result += " " + packageList.at(i);
     }
 
     return result;
@@ -88,8 +74,8 @@ AptBlossom::createPackageList()
  * @return
  */
 std::vector<std::string>
-AptBlossom::getInstalledPackages(BlossomItem &blossomItem,
-                                 const std::vector<std::string> &packageList)
+getInstalledPackages(BlossomItem &blossomItem,
+                     const std::vector<std::string> &packageList)
 {
     std::vector<std::string> result;
     const std::vector<std::string> currentInstalled = getInstalledPackages(blossomItem);
@@ -98,8 +84,10 @@ AptBlossom::getInstalledPackages(BlossomItem &blossomItem,
     {
         for(uint32_t j = 0; j < currentInstalled.size(); j++)
         {
-            if(currentInstalled.at(j) == packageList.at(i)) {
-                result.push_back(packageList.at(j));
+            if(currentInstalled.at(j) == packageList.at(i))
+            {
+                result.push_back(packageList.at(i));
+                continue;
             }
         }
     }
@@ -113,8 +101,8 @@ AptBlossom::getInstalledPackages(BlossomItem &blossomItem,
  * @return
  */
 std::vector<std::string>
-AptBlossom::getAbsendPackages(BlossomItem &blossomItem,
-                              const std::vector<std::string> &packageList)
+getAbsendPackages(BlossomItem &blossomItem,
+                  const std::vector<std::string> &packageList)
 {
     std::vector<std::string> result;
     const std::vector<std::string> currentInstalled = getInstalledPackages(blossomItem);
@@ -124,8 +112,10 @@ AptBlossom::getAbsendPackages(BlossomItem &blossomItem,
         bool found = false;
         for(uint32_t j = 0; j < currentInstalled.size(); j++)
         {
-            if(currentInstalled.at(j) == packageList.at(i)) {
+            if(currentInstalled.at(j) == packageList.at(i))
+            {
                 found = true;
+                continue;
             }
         }
 
@@ -143,14 +133,11 @@ AptBlossom::getAbsendPackages(BlossomItem &blossomItem,
  * @return
  */
 std::vector<std::string>
-AptBlossom::getInstalledPackages(BlossomItem &blossomItem)
+getInstalledPackages(BlossomItem &blossomItem)
 {
-    std::string command = "dpkg --list | grep ^ii  | awk ' {print $2} '";
+    std::string command = "dpkg --list | grep ^ii  | awk ' {print \\$2} '";
     runSyncProcess(blossomItem, command);
     std::string output(blossomItem.outputMessage);
-
-    remove_if(output.begin(), output.end(), isspace);
-
     return Kitsune::Common::splitStringByDelimiter(output, '\n');
 }
 
