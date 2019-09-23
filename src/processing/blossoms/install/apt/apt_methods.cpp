@@ -1,3 +1,12 @@
+/**
+ *  @file    apt_methods.cpp
+ *
+ *  @author  Tobias Anker
+ *  Contact: tobias.anker@kitsunemimi.moe
+ *
+ *  Apache License Version 2.0
+ */
+
 #include "apt_methods.h"
 
 #include <common_methods/string_methods.h>
@@ -137,7 +146,7 @@ getInstalledPackages(BlossomItem &blossomItem)
 {
     std::string command = "dpkg --list | grep ^ii  | awk ' {print \\$2} '";
     runSyncProcess(blossomItem, command);
-    std::string output(blossomItem.outputMessage);
+    const std::string output(blossomItem.outputMessage);
     return Kitsune::Common::splitStringByDelimiter(output, '\n');
 }
 

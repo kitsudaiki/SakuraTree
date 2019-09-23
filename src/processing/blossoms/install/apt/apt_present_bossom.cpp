@@ -56,10 +56,8 @@ AptPresentBlossom::preCheck(BlossomItem &blossomItem)
 {
     m_packageNames = getAbsendPackages(blossomItem, m_packageNames);
 
-    if(m_packageNames.size() == 0)
-    {
+    if(m_packageNames.size() == 0) {
         blossomItem.skip = true;
-        return;
     }
 
     blossomItem.success = true;
