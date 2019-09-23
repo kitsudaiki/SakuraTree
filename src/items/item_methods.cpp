@@ -32,10 +32,10 @@ convertString(const std::string &templateString,
     }
 
     Jinja2Converter* converter = SakuraRoot::m_root->m_jinja2Converter;
-    std::pair<std::string, bool> result = converter->convert(templateString, content);
+    std::pair<bool, std::string> result = converter->convert(templateString, content);
     // TODO: handle false return value
 
-    return result.first;
+    return result.second;
 }
 
 /**

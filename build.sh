@@ -57,7 +57,7 @@ cp -r "$PARENT_DIR/libKitsuneJson/include" "$RESULT_DIR/"
 # clone libKitsuneJinja2
 git clone  git@gitlab.com:tobiasanker/libKitsuneJinja2.git "$PARENT_DIR/libKitsuneJinja2"
 cd "$PARENT_DIR/libKitsuneJinja2"
-git checkout ab1b4fbb8cbc8151fb459279842980d715bb154e
+git checkout 0.3.0
 
 # create build directory for libKitsuneJinja2 and go into this directory
 LIB_KITSUNE_JINJA2_DIR="$BUILD_DIR/libKitsuneJinja2"
@@ -69,7 +69,7 @@ cd $LIB_KITSUNE_JINJA2_DIR
 /usr/bin/make -j4
 
 # copy build-result and include-files into the result-directory
-cp "$LIB_KITSUNE_JINJA2_DIR/src/libKitsuneJinja2.so.0.2.0" "$RESULT_DIR/"
+cp "$LIB_KITSUNE_JINJA2_DIR/src/libKitsuneJinja2.so.0.3.0" "$RESULT_DIR/"
 cp -r "$PARENT_DIR/libKitsuneJinja2/include" "$RESULT_DIR/"
 
 #-----------------------------------------------------------------------------------------------------------------
@@ -118,9 +118,9 @@ ln -s libKitsuneJson.so.0.5.0 libKitsuneJson.so.0.5
 ln -s libKitsuneJson.so.0.5.0 libKitsuneJson.so.0
 ln -s libKitsuneJson.so.0.5.0 libKitsuneJson.so
 
-ln -s libKitsuneJinja2.so.0.2.0 libKitsuneJinja2.so.0.2
-ln -s libKitsuneJinja2.so.0.2.0 libKitsuneJinja2.so.0
-ln -s libKitsuneJinja2.so.0.2.0 libKitsuneJinja2.so
+ln -s libKitsuneJinja2.so.0.3.0 libKitsuneJinja2.so.0.3
+ln -s libKitsuneJinja2.so.0.3.0 libKitsuneJinja2.so.0
+ln -s libKitsuneJinja2.so.0.3.0 libKitsuneJinja2.so
 
 ln -s libKitsuneSakuraParser.so.0.1.0 libKitsuneSakuraParser.so.0.1
 ln -s libKitsuneSakuraParser.so.0.1.0 libKitsuneSakuraParser.so.0
