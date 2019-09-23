@@ -52,7 +52,7 @@ int main(int argc, char *argv[])
         std::cout << "seed-path: "
                   << vm["seed-path"].as<std::string>()
                   << std::endl;
-        SakuraTree::SakuraRoot* root = new SakuraTree::SakuraRoot();
+        SakuraTree::SakuraRoot* root = new SakuraTree::SakuraRoot(std::string(argv[0]));
         const std::string seedPath = vm["seed-path"].as<std::string>();
         root->startProcess(seedPath, "test_tree");
     }

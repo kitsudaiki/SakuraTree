@@ -33,7 +33,7 @@ class SakuraRoot
 {
 
 public:
-    SakuraRoot();
+    SakuraRoot(const std::string &executablePath);
     ~SakuraRoot();
 
     bool startProcess(const std::string &rootPath,
@@ -43,6 +43,7 @@ public:
 
     static SakuraTree::SakuraRoot* m_root;
     static Jinja2Converter* m_jinja2Converter;
+    static std::string m_executablePath;
 
 private:
     SakuraThread* m_rootThread = nullptr;

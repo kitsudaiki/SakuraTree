@@ -32,7 +32,7 @@ CommonMethodsTest::CommonMethodsTest() : Kitsune::Common::UnitTest("CommonMethod
  */
 void CommonMethodsTest::initTestCase()
 {
-    m_root = new SakuraRoot();
+    m_root = new SakuraRoot(std::string("test"));
 }
 
 /**

@@ -19,14 +19,16 @@ namespace SakuraTree
 
 SakuraRoot* SakuraRoot::m_root = nullptr;
 Jinja2Converter* SakuraRoot::m_jinja2Converter = nullptr;
+std::string SakuraRoot::m_executablePath = "";
 
 /**
  * constructor
  */
-SakuraRoot::SakuraRoot()
+SakuraRoot::SakuraRoot(const std::string &executablePath)
 {
     m_root = this;
     m_jinja2Converter = new Kitsune::Jinja2::Jinja2Converter;
+    m_executablePath = executablePath;
 }
 
 /**
