@@ -11,7 +11,6 @@
 #define BLOSSOM_H
 
 #include <common.h>
-#include <common_items/data_items.h>
 #include <items/sakura_items.h>
 
 using Kitsune::Common::DataMap;
@@ -26,12 +25,6 @@ public:
     virtual ~Blossom();
 
     void growBlossom(BlossomItem &blossomItem);
-
-    bool runSyncProcess(BlossomItem &blossomItem,
-                        std::string command);
-    bool runSyncProcess(BlossomItem &blossomItem,
-                        const std::string &programm,
-                        const std::vector<std::string> &args);
 
 protected:
     virtual void initTask(BlossomItem &blossomItem) = 0;

@@ -8,12 +8,14 @@
  */
 
 #include "apt_update_blossom.h"
+#include <processing/blossoms/install/apt/apt_methods.h>
+#include <processing/process_methods.h>
 
 namespace SakuraTree
 {
 
 AptUdateBlossom::AptUdateBlossom() :
-    AptBlossom() {}
+    Blossom() {}
 
 /**
  * initTask

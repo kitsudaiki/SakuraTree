@@ -8,12 +8,14 @@
  */
 
 #include "apt_latest_blossom.h"
+#include <processing/blossoms/install/apt/apt_methods.h>
+#include <processing/process_methods.h>
 
 namespace SakuraTree
 {
 
 AptLatestBlossom::AptLatestBlossom() :
-    AptBlossom() {}
+    Blossom() {}
 
 /**
  * @brief AptLatestBlossom::initTask
@@ -26,14 +28,16 @@ AptLatestBlossom::initTask(BlossomItem &blossomItem)
     {
         blossomItem.success = false;
         blossomItem.outputMessage = "no packages to defined";
+        return;
     }
 
-    fillPackageNames(blossomItem);
+    fillPackageNames(blossomItem, m_packageNames);
 
     if(m_packageNames.size() == 0)
     {
         blossomItem.success = false;
         blossomItem.outputMessage = "no packages to defined";
+        return;
     }
 
     blossomItem.success = true;
@@ -84,6 +88,7 @@ AptLatestBlossom::postCheck(BlossomItem &blossomItem)
 
         blossomItem.success = false;
         blossomItem.outputMessage = output;
+        return;
     }
 
     blossomItem.success = true;

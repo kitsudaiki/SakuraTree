@@ -8,6 +8,7 @@
  */
 
 #include "scp_blossom.h"
+#include <processing/process_methods.h>
 
 namespace SakuraTree
 {

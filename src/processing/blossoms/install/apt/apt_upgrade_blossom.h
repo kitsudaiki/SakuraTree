@@ -10,12 +10,12 @@
 #ifndef APT_UPGRADE_BLOSSOM_H
 #define APT_UPGRADE_BLOSSOM_H
 
-#include <processing/blossoms/install/apt/apt_blossom.h>
+#include <processing/blossoms/blossom.h>
 
 namespace SakuraTree
 {
 
-class AptUpgradeBlossom : public AptBlossom
+class AptUpgradeBlossom : public Blossom
 {
 
 public:
@@ -30,6 +30,7 @@ protected:
 
 private:
     std::string m_action = "";
+    std::vector<std::string> m_packageNames;
 };
 
 }
