@@ -20,13 +20,13 @@ bool isInstalled(BlossomItem &blossomItem,
                  const std::string &paket);
 void fillPackageNames(BlossomItem &blossomItem,
                       std::vector<std::string> &packageList);
-std::string createPackageList(const std::vector<std::string> &packageList);
+const std::string createPackageList(const std::vector<std::string> &packageList);
 
-std::vector<std::string> getInstalledPackages(BlossomItem &blossomItem,
-                                              const std::vector<std::string> &packageList);
-std::vector<std::string> getAbsendPackages(BlossomItem &blossomDataconst,
-                                           const std::vector<std::string> &packageList);
-std::vector<std::string> getInstalledPackages(BlossomItem &blossomItem);
+const std::vector<std::string> getInstalledPackages(BlossomItem &blossomItem,
+                                                    const std::vector<std::string> &packageList);
+const std::vector<std::string> getAbsendPackages(BlossomItem &blossomDataconst,
+                                                 const std::vector<std::string> &packageList);
+const std::vector<std::string> getInstalledPackages(BlossomItem &blossomItem);
 
 }
 

@@ -33,8 +33,8 @@ SakuraCompiler::~SakuraCompiler()
 
 /**
  * @brief SakuraCompiler::compile
- * @param type
- * @param name
+ * @param rootPath
+ * @param seedName
  * @return
  */
 SakuraItem*
@@ -93,14 +93,16 @@ SakuraCompiler::preProcessObject(DataMap* value)
     DataMap* branch = value;
 
     if(value->get("type")->toString() == "tree"
-            && value->get("type")->toString() == "branch")
+            || value->get("type")->toString() == "branch")
     {
         branch = m_fileCollector->getObject(value->get("name")->toString());
         value->insert("parts", branch->get("parts"));
         value->insert("items", branch->get("items"));
     }
 
-    preProcessArray(value->get("parts")->toArray());
+    if(value->contains("parts")) {
+        preProcessArray(value->get("parts")->toArray());
+    }
 }
 
 /**
@@ -135,6 +137,10 @@ SakuraCompiler::convert(DataMap* growPlan)
 
     if(growPlan->getStringByKey("type") == "tree") {
         return convertTree(growPlan);
+    }
+
+    if(growPlan->getStringByKey("type") == "forest") {
+        return convertForest(growPlan);
     }
 
     if(growPlan->getStringByKey("type") == "sequentiell") {
@@ -233,6 +239,40 @@ SakuraCompiler::convertTree(DataMap* growPlan)
     {
         DataMap* newMap = dynamic_cast<DataMap*>(parts->get(i));
         newItem->childs.push_back(convert(newMap));
+    }
+
+    return newItem;
+}
+
+/**
+ * @brief SakuraCompiler::convertForest
+ * @param growPlan
+ * @return
+ */
+SakuraItem*
+SakuraCompiler::convertForest(DataMap* growPlan)
+{
+    ForestItem* newItem = new ForestItem();
+    DataMap* items = dynamic_cast<DataMap*>(growPlan);
+
+    newItem->name = items->get("name")->toValue()->getString();
+
+    DataItem* parts = growPlan->get("parts");
+    assert(parts != nullptr);
+
+    for(uint32_t i = 0; i < parts->size(); i++)
+    {
+        DataMap* newMap = dynamic_cast<DataMap*>(parts->get(i));
+
+        TreeGroupItem* singlePart = new TreeGroupItem();
+        singlePart->address = newMap->get("common-settings")->get("address")->toString();
+        singlePart->port = newMap->get("common-settings")->get("port")->toValue()->getInt();
+        singlePart->ssh_key = newMap->get("common-settings")->get("ssh_key")->toString();
+        singlePart->user = newMap->get("common-settings")->get("user")->toString();
+
+        singlePart->content = newMap->get("parts")->toString();
+
+        newItem->childs.push_back(singlePart);
     }
 
     return newItem;

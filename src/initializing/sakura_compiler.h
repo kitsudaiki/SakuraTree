@@ -50,6 +50,7 @@ private:
     SakuraItem* convertBlossom(DataMap* growPlan);
     SakuraItem* convertBranch(DataMap* growPlan);
     SakuraItem* convertTree(DataMap* growPlan);
+    SakuraItem* convertForest(DataMap* growPlan);
 
     SakuraItem* convertSequeniellPart(DataMap* growPlan);
     SakuraItem* convertParallelPart(DataMap* growPlan);

@@ -33,10 +33,12 @@ public:
         BLOSSOM_ITEM = 1,
         BRANCH_ITEM = 2,
         TREE_ITEM = 3,
-        SEQUENTIELL_ITEM = 4,
-        PARALLEL_ITEM = 5,
-        IF_ITEM = 6,
-        FOR_ITEM = 7
+        TREE_GROUP_ITEM = 4,
+        FOREST_ITEM = 5,
+        SEQUENTIELL_ITEM = 6,
+        PARALLEL_ITEM = 7,
+        IF_ITEM = 8,
+        FOR_ITEM = 9
     };
 
     SakuraItem();
@@ -85,6 +87,35 @@ public:
     bool success = true;
     int execState = 0;
     std::string outputMessage = "";
+};
+
+//===================================================================
+// ForestItem
+//===================================================================
+class ForestItem : public SakuraItem
+{
+public:
+    ForestItem();
+    ~ForestItem();
+
+    std::string name = "";
+    std::vector<SakuraItem*> childs;
+};
+
+//===================================================================
+// TreeGroupItem
+//===================================================================
+class TreeGroupItem : public SakuraItem
+{
+public:
+    TreeGroupItem();
+    ~TreeGroupItem();
+
+    std::string address = "";
+    int port = 0;
+    std::string user = "";
+    std::string ssh_key = "";
+    std::string content = "";
 };
 
 //===================================================================

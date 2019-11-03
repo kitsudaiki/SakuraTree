@@ -58,6 +58,8 @@ SakuraRoot::startProcess(const std::string &rootPath,
     SakuraCompiler compiler(sakuraParser);
     SakuraItem* processPlan = compiler.compile(rootPath, seedName);
 
+    assert(processPlan != nullptr);
+
     // run process
     DataMap* dummyObj = new DataMap();
     m_rootThread = new SakuraThread(processPlan, dummyObj, std::vector<std::string>());

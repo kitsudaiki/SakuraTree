@@ -65,7 +65,7 @@ fillPackageNames(BlossomItem &blossomItem,
  * @brief AptBlossom::createPackageList
  * @return
  */
-std::string
+const std::string
 createPackageList(const std::vector<std::string> &packageList)
 {
     std::string result = "";
@@ -82,7 +82,7 @@ createPackageList(const std::vector<std::string> &packageList)
  * @param packageList
  * @return
  */
-std::vector<std::string>
+const std::vector<std::string>
 getInstalledPackages(BlossomItem &blossomItem,
                      const std::vector<std::string> &packageList)
 {
@@ -109,7 +109,7 @@ getInstalledPackages(BlossomItem &blossomItem,
  * @param packageList
  * @return
  */
-std::vector<std::string>
+const std::vector<std::string>
 getAbsendPackages(BlossomItem &blossomItem,
                   const std::vector<std::string> &packageList)
 {
@@ -141,7 +141,7 @@ getAbsendPackages(BlossomItem &blossomItem,
  * @brief AptBlossom::getInstalledPackages
  * @return
  */
-std::vector<std::string>
+const std::vector<std::string>
 getInstalledPackages(BlossomItem &blossomItem)
 {
     std::string command = "dpkg --list | grep ^ii  | awk ' {print \\$2} '";

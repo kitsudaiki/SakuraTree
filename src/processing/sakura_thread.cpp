@@ -125,6 +125,16 @@ SakuraThread::grow(SakuraItem* growPlan,
         return;
     }
 
+    if(growPlan->getType() == SakuraItem::FOREST_ITEM)
+    {
+        ForestItem* forestItem = dynamic_cast<ForestItem*>(growPlan);
+
+        BlossomItem scp;
+        scp.values.insert("port", new DataValue());
+    }
+
+
+
     return;
 }
 

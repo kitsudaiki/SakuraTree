@@ -39,6 +39,20 @@ BranchItem::BranchItem() {type = BRANCH_ITEM;}
 BranchItem::~BranchItem() {}
 
 //===================================================================
+// ForestItem
+//===================================================================
+ForestItem::ForestItem() {type = FOREST_ITEM;}
+
+ForestItem::~ForestItem() {}
+
+//===================================================================
+// TreeGroupItem
+//===================================================================
+TreeGroupItem::TreeGroupItem() {type = TREE_GROUP_ITEM;}
+
+TreeGroupItem::~TreeGroupItem() {}
+
+//===================================================================
 // TreeItem
 //===================================================================
 TreeItem::TreeItem() {type = TREE_ITEM;}
