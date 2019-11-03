@@ -11,14 +11,14 @@
 #define COMMON_METHODS_TEST_H
 
 #include <common.h>
-#include <testing/unit_test.h>
+#include <libKitsunemimiCommon/test.h>
 #include <items/item_methods.h>
 
 namespace SakuraTree
 {
 class SakuraRoot;
 
-class CommonMethodsTest : public Kitsune::Common::UnitTest
+class CommonMethodsTest : public Kitsunemimi::Common::Test
 {
 public:
     CommonMethodsTest();

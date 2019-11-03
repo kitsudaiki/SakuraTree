@@ -11,16 +11,16 @@
 #define SAKURA_THREAD_H
 
 #include <common.h>
-#include <threading/thread.h>
+#include <libKitsunemimiCommon/thread.h>
 #include <items/sakura_items.h>
 
-using namespace Kitsune::Common;
+using namespace Kitsunemimi::Common;
 
 namespace SakuraTree
 {
 
 class SakuraThread
-        : public Kitsune::Common::Thread
+        : public Kitsunemimi::Common::Thread
 {
 
 public:

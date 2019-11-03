@@ -8,7 +8,7 @@
  */
 
 #include "sakura_root.h"
-#include <jinja2_converter.h>
+#include <libKitsunemimiJinja2/jinja2_converter.h>
 
 #include <initializing/sakura_compiler.h>
 #include <items/item_methods.h>
@@ -27,7 +27,7 @@ std::string SakuraRoot::m_executablePath = "";
 SakuraRoot::SakuraRoot(const std::string &executablePath)
 {
     m_root = this;
-    m_jinja2Converter = new Kitsune::Jinja2::Jinja2Converter;
+    m_jinja2Converter = new Kitsunemimi::Jinja2::Jinja2Converter;
     m_executablePath = executablePath;
 }
 
@@ -38,7 +38,7 @@ SakuraRoot::~SakuraRoot()
 {
     if(m_rootThread != nullptr)
     {
-        m_rootThread->stop();
+        m_rootThread->stopThread();
         delete m_rootThread;
         m_rootThread = nullptr;
     }
@@ -61,7 +61,7 @@ SakuraRoot::startProcess(const std::string &rootPath,
     // run process
     DataMap* dummyObj = new DataMap();
     m_rootThread = new SakuraThread(processPlan, dummyObj, std::vector<std::string>());
-    m_rootThread->start();
+    m_rootThread->startThread();
     m_rootThread->waitUntilStarted();
     m_rootThread->waitForFinish();
 

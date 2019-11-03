@@ -9,8 +9,8 @@
 
 #include "apt_methods.h"
 
-#include <common_methods/string_methods.h>
-#include <common_items/data_items.h>
+#include <libKitsunemimiCommon/common_methods/string_methods.h>
+#include <libKitsunemimiCommon/common_items/data_items.h>
 #include <processing/process_methods.h>
 
 namespace SakuraTree
@@ -147,7 +147,7 @@ getInstalledPackages(BlossomItem &blossomItem)
     std::string command = "dpkg --list | grep ^ii  | awk ' {print \\$2} '";
     runSyncProcess(blossomItem, command);
     const std::string output(blossomItem.outputMessage);
-    return Kitsune::Common::splitStringByDelimiter(output, '\n');
+    return Kitsunemimi::Common::splitStringByDelimiter(output, '\n');
 }
 
 }

@@ -11,12 +11,12 @@
 #define SAKURA_ITEMS_H
 
 #include <iostream>
-#include <common_items/data_items.h>
+#include <libKitsunemimiCommon/common_items/data_items.h>
 
-using Kitsune::Common::DataItem;
-using Kitsune::Common::DataMap;
-using Kitsune::Common::DataArray;
-using Kitsune::Common::DataValue;
+using Kitsunemimi::Common::DataItem;
+using Kitsunemimi::Common::DataMap;
+using Kitsunemimi::Common::DataArray;
+using Kitsunemimi::Common::DataValue;
 
 namespace SakuraTree
 {

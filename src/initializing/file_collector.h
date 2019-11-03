@@ -26,7 +26,7 @@
 #include <iostream>
 #include <boost/filesystem.hpp>
 
-namespace Kitsune
+namespace Kitsunemimi
 {
 namespace Common
 {
@@ -40,7 +40,7 @@ class SakuraConverter;
 }
 
 using namespace boost::filesystem;
-using Kitsune::Sakura::SakuraConverter;
+using Kitsunemimi::Sakura::SakuraConverter;
 
 namespace SakuraTree
 {

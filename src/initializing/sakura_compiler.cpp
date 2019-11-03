@@ -8,7 +8,7 @@
  */
 
 #include "sakura_compiler.h"
-#include <sakura_converter.h>
+#include <libKitsunemimiSakuraParser/sakura_converter.h>
 #include <initializing/file_collector.h>
 #include <items/sakura_items.h>
 #include <items/item_methods.h>
@@ -20,7 +20,7 @@ namespace SakuraTree
  * @brief SakuraCompiler::SakuraCompiler
  * @param driver
  */
-SakuraCompiler::SakuraCompiler(Kitsune::Sakura::SakuraConverter* driver)
+SakuraCompiler::SakuraCompiler(Kitsunemimi::Sakura::SakuraConverter* driver)
 {
     m_driver = driver;
     m_fileCollector = new FileCollector(m_driver);
@@ -92,8 +92,8 @@ SakuraCompiler::preProcessObject(DataMap* value)
     // continue building
     DataMap* branch = value;
 
-    if(value->get("type")->toString() != "parallel"
-            && value->get("type")->toString() != "sequentiell")
+    if(value->get("type")->toString() == "tree"
+            && value->get("type")->toString() == "branch")
     {
         branch = m_fileCollector->getObject(value->get("name")->toString());
         value->insert("parts", branch->get("parts"));

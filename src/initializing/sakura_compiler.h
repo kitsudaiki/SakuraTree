@@ -17,7 +17,7 @@
 #include <vector>
 #include <iostream>
 
-namespace Kitsune
+namespace Kitsunemimi
 {
 namespace Sakura
 {
@@ -33,14 +33,14 @@ class SakuraItem;
 class SakuraCompiler
 {
 public:
-    SakuraCompiler(Kitsune::Sakura::SakuraConverter* driver);
+    SakuraCompiler(Kitsunemimi::Sakura::SakuraConverter* driver);
     ~SakuraCompiler();
 
     SakuraItem* compile(const std::string &rootPath,
                         std::string &seedName);
 
 private:
-    Kitsune::Sakura::SakuraConverter* m_driver = nullptr;
+    Kitsunemimi::Sakura::SakuraConverter* m_driver = nullptr;
     FileCollector* m_fileCollector = nullptr;
 
     void preProcessObject(DataMap* value);

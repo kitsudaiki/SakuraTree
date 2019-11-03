@@ -13,7 +13,7 @@
 #include <common.h>
 #include <items/sakura_items.h>
 
-using Kitsune::Common::DataMap;
+using Kitsunemimi::Common::DataMap;
 
 namespace SakuraTree
 {

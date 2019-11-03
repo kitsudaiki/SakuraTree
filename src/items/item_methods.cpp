@@ -9,11 +9,11 @@
 
 #include "item_methods.h"
 
-#include <jinja2_converter.h>
+#include <libKitsunemimiJinja2/jinja2_converter.h>
 #include <sakura_root.h>
 #include <processing/blossoms/blossom.h>
 
-using Kitsune::Jinja2::Jinja2Converter;
+using Kitsunemimi::Jinja2::Jinja2Converter;
 
 namespace SakuraTree
 {

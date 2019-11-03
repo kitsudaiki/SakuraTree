@@ -17,7 +17,8 @@ namespace SakuraTree
 /**
  * @brief CommonMethodsTest::CommonMethodsTest
  */
-CommonMethodsTest::CommonMethodsTest() : Kitsune::Common::UnitTest("CommonMethodsTest")
+CommonMethodsTest::CommonMethodsTest()
+    : Kitsunemimi::Common::Test("CommonMethodsTest")
 {
     initTestCase();
     testConvertString();
@@ -45,7 +46,7 @@ void CommonMethodsTest::testConvertString()
     obj.insert("test", new DataValue("hmmm"));
 
     std::string result = convertString(jinja2String, &obj);
-    UNITTEST(result, "hmmm");
+    TEST_EQUAL(result, "hmmm");
 }
 
 /**
@@ -59,7 +60,7 @@ void CommonMethodsTest::testFillItems()
     insertValues.insert("test", new DataValue("hmmm"));
 
     fillItems(items, insertValues);
-    UNITTEST(items.get("x")->toString(), "hmmm");
+    TEST_EQUAL(items.get("x")->toString(), "hmmm");
 }
 
 /**
@@ -76,10 +77,10 @@ void CommonMethodsTest::testOverrideItems()
     override.insert("z", new DataValue("hmmm"));
 
     overrideItems(original, override);
-    UNITTEST(original.size(), 3);
-    UNITTEST(original.get("x")->toString(), "{{test}}");
-    UNITTEST(original.get("y")->toString(), "poi");
-    UNITTEST(original.get("z")->toString(), "hmmm");
+    TEST_EQUAL(original.size(), 3);
+    TEST_EQUAL(original.get("x")->toString(), "{{test}}");
+    TEST_EQUAL(original.get("y")->toString(), "poi");
+    TEST_EQUAL(original.get("z")->toString(), "hmmm");
 }
 
 /**
@@ -92,8 +93,8 @@ void CommonMethodsTest::testCheckItems()
     items.insert("y", new DataValue("asdf"));
 
     std::vector<std::string> result = checkItems(&items);
-    UNITTEST(result.size(), 1);
-    UNITTEST(result.at(0), "x");
+    TEST_EQUAL(result.size(), 1);
+    TEST_EQUAL(result.at(0), "x");
 }
 
 /**

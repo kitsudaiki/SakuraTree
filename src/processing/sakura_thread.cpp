@@ -196,7 +196,7 @@ SakuraThread::processTree(TreeItem* growPlan,
                                                values,
                                                hirarchie);
         m_childs.push_back(child);
-        child->start();
+        child->startThread();
     }
 
     // wait for the end of all threads
@@ -252,7 +252,7 @@ SakuraThread::processParallelPart(ParallelBranching* growPlan,
                                                values,
                                                hirarchie);
         m_childs.push_back(child);
-        child->start();
+        child->startThread();
     }
 
     // wait for the end of all threads
@@ -283,7 +283,7 @@ SakuraThread::clearChilds()
 {
     for(uint32_t i = 0; i < m_childs.size(); i++)
     {
-        m_childs.at(i)->stop();
+        m_childs.at(i)->stopThread();
         delete m_childs[i];
     }
     m_childs.clear();

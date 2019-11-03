@@ -19,9 +19,9 @@ struct BlossomItem;
 std::string convertString(const std::string &templateString,
                           DataMap* content);
 void fillItems(DataMap &items,
-               Kitsune::Common::DataMap &insertValues);
+               Kitsunemimi::Common::DataMap &insertValues);
 void overrideItems(DataMap &original,
-                   Kitsune::Common::DataMap &override);
+                   Kitsunemimi::Common::DataMap &override);
 
 std::vector<std::string> checkItems(DataMap* items);
 

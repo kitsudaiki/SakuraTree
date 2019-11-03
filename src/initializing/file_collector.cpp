@@ -9,8 +9,8 @@
 
 #include <initializing/file_collector.h>
 
-#include <sakura_converter.h>
-#include <common_methods/string_methods.h>
+#include <libKitsunemimiSakuraParser/sakura_converter.h>
+#include <libKitsunemimiCommon/common_methods/string_methods.h>
 
 namespace SakuraTree
 {
@@ -55,7 +55,7 @@ FileCollector::initFileCollector(const std::string &rootPath)
     for(uint32_t i = 0; i < m_fileContents.size(); i++)
     {
         const std::string filePath = m_fileContents.at(i).first;
-        std::pair<Kitsune::Common::DataItem*, bool> result = m_driver->parse(readFile(filePath));
+        std::pair<Kitsunemimi::Common::DataItem*, bool> result = m_driver->parse(readFile(filePath));
 
         if(result.second == false)
         {
@@ -79,7 +79,7 @@ FileCollector::initFileCollector(const std::string &rootPath)
  * @param type
  * @return
  */
-Kitsune::Common::DataMap*
+Kitsunemimi::Common::DataMap*
 FileCollector::getObject(const std::string &name,
                          const std::string &type)
 {

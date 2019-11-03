@@ -11,9 +11,9 @@
 #define SAKURA_ROOT_H
 
 #include <common.h>
-#include <sakura_converter.h>
+#include <libKitsunemimiSakuraParser/sakura_converter.h>
 
-namespace Kitsune
+namespace Kitsunemimi
 {
 namespace Jinja2
 {
@@ -21,8 +21,8 @@ class Jinja2Converter;
 }
 }
 
-using Kitsune::Sakura::SakuraConverter;
-using Kitsune::Jinja2::Jinja2Converter;
+using Kitsunemimi::Sakura::SakuraConverter;
+using Kitsunemimi::Jinja2::Jinja2Converter;
 
 namespace SakuraTree
 {

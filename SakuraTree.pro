@@ -4,30 +4,30 @@ TARGET = SakuraTree
 CONFIG += console
 CONFIG += c++14
 
-LIBS += -L../libKitsuneCommon/src -lKitsuneCommon
-LIBS += -L../libKitsuneCommon/src/debug -lKitsuneCommon
-LIBS += -L../libKitsuneCommon/src/release -lKitsuneCommon
-INCLUDEPATH += ../libKitsuneCommon/include/libKitsuneCommon
+LIBS += -L../libKitsunemimiCommon/src -lKitsunemimiCommon
+LIBS += -L../libKitsunemimiCommon/src/debug -lKitsunemimiCommon
+LIBS += -L../libKitsunemimiCommon/src/release -lKitsunemimiCommon
+INCLUDEPATH += ../libKitsunemimiCommon/include
 
-LIBS += -L../libKitsuneJson/src -lKitsuneJson
-LIBS += -L../libKitsuneJson/src/debug -lKitsuneJson
-LIBS += -L../libKitsuneJson/src/release -lKitsuneJson
-INCLUDEPATH += ../libKitsuneJson/include/libKitsuneJson
+LIBS += -L../libKitsunemimiJson/src -lKitsunemimiJson
+LIBS += -L../libKitsunemimiJson/src/debug -lKitsunemimiJson
+LIBS += -L../libKitsunemimiJson/src/release -lKitsunemimiJson
+INCLUDEPATH += ../libKitsunemimiJson/include
 
-LIBS += -L../libKitsuneJinja2/src -lKitsuneJinja2
-LIBS += -L../libKitsuneJinja2/src/debug -lKitsuneJinja2
-LIBS += -L../libKitsuneJinja2/src/release -lKitsuneJinja2
-INCLUDEPATH += ../libKitsuneJinja2/include/libKitsuneJinja2
+LIBS += -L../libKitsunemimiJinja2/src -lKitsunemimiJinja2
+LIBS += -L../libKitsunemimiJinja2/src/debug -lKitsunemimiJinja2
+LIBS += -L../libKitsunemimiJinja2/src/release -lKitsunemimiJinja2
+INCLUDEPATH += ../libKitsunemimiJinja2/include
 
-LIBS += -L../libKitsuneSakuraParser/src -lKitsuneSakuraParser
-LIBS += -L../libKitsuneSakuraParser/src/debug -lKitsuneSakuraParser
-LIBS += -L../libKitsuneSakuraParser/src/release -lKitsuneSakuraParser
-INCLUDEPATH += ../libKitsuneSakuraParser/include/libKitsuneSakuraParser
+LIBS += -L../libKitsunemimiSakuraParser/src -lKitsunemimiSakuraParser
+LIBS += -L../libKitsunemimiSakuraParser/src/debug -lKitsunemimiSakuraParser
+LIBS += -L../libKitsunemimiSakuraParser/src/release -lKitsunemimiSakuraParser
+INCLUDEPATH += ../libKitsunemimiSakuraParser/include
 
 LIBS +=  -lboost_filesystem -lboost_system -lboost_program_options
 
 INCLUDEPATH += $$PWD \
-            src
+               src
 
 SOURCES += \
     src/main.cpp \
