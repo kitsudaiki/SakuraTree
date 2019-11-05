@@ -1,5 +1,5 @@
 /**
- * @file        typedefs.h
+ * @file        provision_branch_builder.h
  *
  * @author      Tobias Anker <tobias.anker@kitsunemimi.moe>
  *
@@ -20,24 +20,17 @@
  *      limitations under the License.
  */
 
-#ifndef TYPEDEFS_H
-#define TYPEDEFS_H
+#ifndef PROVISION_BRANCH_BUILDER_H
+#define PROVISION_BRANCH_BUILDER_H
 
-#include <chrono>
-#include <map>
-#include <string>
+#include <common.h>
 
-typedef std::chrono::microseconds chronoMicroSec;
-typedef std::chrono::nanoseconds chronoNanoSec;
-typedef std::chrono::seconds chronoSec;
-typedef std::chrono::high_resolution_clock::time_point chronoTimePoint;
-typedef std::chrono::high_resolution_clock chronoClock;
+namespace SakuraTree
+{
+class BranchItem;
 
+BranchItem* createProvisionBranch();
 
-namespace SakuraTree {
-class SakuraBranch;
 }
-typedef std::map<std::string, SakuraTree::SakuraBranch*> BranchMap;
 
-
-#endif // TYPEDEFS_H
+#endif // PROVISION_BRANCH_BUILDER_H

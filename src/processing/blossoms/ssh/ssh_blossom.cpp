@@ -1,5 +1,5 @@
 /**
- * @file        apt_update_blossom.cpp
+ * @file        scp_blossom.cpp
  *
  * @author      Tobias Anker <tobias.anker@kitsunemimi.moe>
  *
@@ -20,22 +20,30 @@
  *      limitations under the License.
  */
 
-#include "apt_update_blossom.h"
-#include <processing/blossoms/install/apt/apt_methods.h>
+#include "ssh_blossom.h"
 #include <processing/process_methods.h>
 
 namespace SakuraTree
 {
 
-AptUdateBlossom::AptUdateBlossom() :
-    Blossom() {}
+SshBlossom::SshBlossom()
+{
+
+}
 
 /**
  * initTask
  */
 void
-AptUdateBlossom::initTask(BlossomItem &blossomItem)
+SshBlossom::initTask(BlossomItem &blossomItem)
 {
+    if(blossomItem.values.contains("user") == false
+            || blossomItem.values.contains("address") == false)
+    {
+        blossomItem.success = false;
+        blossomItem.outputMessage = "missing connection informations";
+    }
+
     blossomItem.success = true;
 }
 
@@ -43,8 +51,9 @@ AptUdateBlossom::initTask(BlossomItem &blossomItem)
  * preCheck
  */
 void
-AptUdateBlossom::preCheck(BlossomItem &blossomItem)
+SshBlossom::preCheck(BlossomItem &blossomItem)
 {
+    //TODO: check per ssh if file already exist
     blossomItem.success = true;
 }
 
@@ -52,9 +61,21 @@ AptUdateBlossom::preCheck(BlossomItem &blossomItem)
  * runTask
  */
 void
-AptUdateBlossom::runTask(BlossomItem &blossomItem)
+SshBlossom::runTask(BlossomItem &blossomItem)
 {
-    std::string programm = "sudo apt-get update";
+    std::string programm = "ssh ";
+    if(blossomItem.values.contains("port")) {
+        programm += " -p " + blossomItem.values.getStringByKey("port");
+    }
+    if(blossomItem.values.contains("ssh_key")) {
+        programm += " -i " + blossomItem.values.getStringByKey("ssh_key");
+    }
+
+    programm += blossomItem.values.getStringByKey("user");
+    programm += "@";
+    programm += blossomItem.values.getStringByKey("address");
+    programm += ":";
+
     runSyncProcess(blossomItem, programm);
 }
 
@@ -62,7 +83,7 @@ AptUdateBlossom::runTask(BlossomItem &blossomItem)
  * postCheck
  */
 void
-AptUdateBlossom::postCheck(BlossomItem &blossomItem)
+SshBlossom::postCheck(BlossomItem &blossomItem)
 {
     blossomItem.success = true;
 }
@@ -71,7 +92,7 @@ AptUdateBlossom::postCheck(BlossomItem &blossomItem)
  * closeTask
  */
 void
-AptUdateBlossom::closeTask(BlossomItem &blossomItem)
+SshBlossom::closeTask(BlossomItem &blossomItem)
 {
     blossomItem.success = true;
 }

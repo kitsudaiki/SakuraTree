@@ -1,5 +1,5 @@
 /**
- * @file        typedefs.h
+ * @file        ssh_blossom.h
  *
  * @author      Tobias Anker <tobias.anker@kitsunemimi.moe>
  *
@@ -20,24 +20,27 @@
  *      limitations under the License.
  */
 
-#ifndef TYPEDEFS_H
-#define TYPEDEFS_H
+#ifndef SSH_BLOSSOM_H
+#define SSH_BLOSSOM_H
 
-#include <chrono>
-#include <map>
-#include <string>
+#include <processing/blossoms/blossom.h>
 
-typedef std::chrono::microseconds chronoMicroSec;
-typedef std::chrono::nanoseconds chronoNanoSec;
-typedef std::chrono::seconds chronoSec;
-typedef std::chrono::high_resolution_clock::time_point chronoTimePoint;
-typedef std::chrono::high_resolution_clock chronoClock;
+namespace SakuraTree
+{
 
+class SshBlossom : public Blossom
+{
+public:
+    SshBlossom();
 
-namespace SakuraTree {
-class SakuraBranch;
+protected:
+    void initTask(BlossomItem &blossomItem);
+    void preCheck(BlossomItem &blossomItem);
+    void runTask(BlossomItem &blossomItem);
+    void postCheck(BlossomItem &blossomItem);
+    void closeTask(BlossomItem &blossomItem);
+};
+
 }
-typedef std::map<std::string, SakuraTree::SakuraBranch*> BranchMap;
 
-
-#endif // TYPEDEFS_H
+#endif // SSH_BLOSSOM_H

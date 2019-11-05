@@ -32,7 +32,6 @@ INCLUDEPATH += $$PWD \
 SOURCES += \
     src/main.cpp \
     src/processing/blossoms/blossom.cpp \
-    src/processing/blossoms/ssh/scpBlossom.cpp \
     src/initializing/file_collector.cpp \
     src/initializing/sakura_compiler.cpp \
     src/processing/blossoms/install/apt/apt_absent_blossom.cpp \
@@ -48,7 +47,10 @@ SOURCES += \
     tests/run_unit_tests.cpp \
     src/items/sakura_items.cpp \
     src/processing/blossoms/install/apt/apt_methods.cpp \
-    src/processing/process_methods.cpp
+    src/processing/process_methods.cpp \
+    src/processing/blossoms/ssh/ssh_blossom.cpp \
+    src/processing/blossoms/ssh/scp_blossom.cpp \
+    src/branch_builder/provision_branch_builder.cpp
 
 
 HEADERS += \
@@ -74,6 +76,8 @@ HEADERS += \
     tests/run_unit_tests.h \
     src/items/sakura_items.h \
     src/processing/blossoms/install/apt/apt_methods.h \
-    src/processing/process_methods.h
+    src/processing/process_methods.h \
+    src/processing/blossoms/ssh/ssh_blossom.h \
+    src/branch_builder/provision_branch_builder.h
 
 
