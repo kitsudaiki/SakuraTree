@@ -92,7 +92,7 @@ void CommonMethodsTest::testCheckItems()
     items.insert("x", new DataValue("{{}}"));
     items.insert("y", new DataValue("asdf"));
 
-    std::vector<std::string> result = checkItems(&items);
+    std::vector<std::string> result = checkItems(items);
     TEST_EQUAL(result.size(), 1);
     TEST_EQUAL(result.at(0), "x");
 }

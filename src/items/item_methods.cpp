@@ -23,7 +23,7 @@ namespace SakuraTree
  *
  * @return
  */
-std::string
+const std::string
 convertString(const std::string &templateString,
               DataMap *content)
 {
@@ -79,16 +79,16 @@ void overrideItems(DataMap &original,
  *
  * @return list of not initialized values
  */
-std::vector<std::string>
-checkItems(DataMap* items)
+const std::vector<std::string>
+checkItems(DataMap &items)
 {
     std::vector<std::string> result;
 
-    const std::vector<std::string> keys = items->getKeys();
+    const std::vector<std::string> keys = items.getKeys();
 
     for(uint32_t i = 0; i < keys.size(); i++)
     {
-        if(items->get(keys.at(i))->getString() == "{{}}") {
+        if(items.get(keys.at(i))->getString() == "{{}}") {
             result.push_back(keys.at(i));
         }
     }

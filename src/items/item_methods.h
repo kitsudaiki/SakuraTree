@@ -12,18 +12,20 @@
 
 #include <common.h>
 
+using Kitsunemimi::Common::DataMap;
 namespace SakuraTree
 {
 struct BlossomItem;
 
-std::string convertString(const std::string &templateString,
-                          DataMap* content);
+const std::string convertString(const std::string &templateString,
+                                DataMap* content);
 void fillItems(DataMap &items,
                Kitsunemimi::Common::DataMap &insertValues);
-void overrideItems(DataMap &original,
-                   Kitsunemimi::Common::DataMap &override);
 
-std::vector<std::string> checkItems(DataMap* items);
+void overrideItems(DataMap &original,
+                   DataMap &override);
+
+const std::vector<std::string> checkItems(DataMap &items);
 
 void printOutput(const BlossomItem &blossom);
 
