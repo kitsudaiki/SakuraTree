@@ -9,15 +9,15 @@ LIBS += -L../libKitsunemimiCommon/src/debug -lKitsunemimiCommon
 LIBS += -L../libKitsunemimiCommon/src/release -lKitsunemimiCommon
 INCLUDEPATH += ../libKitsunemimiCommon/include
 
-LIBS += -L../libKitsunemimiJson/src -lKitsunemimiJson
-LIBS += -L../libKitsunemimiJson/src/debug -lKitsunemimiJson
-LIBS += -L../libKitsunemimiJson/src/release -lKitsunemimiJson
-INCLUDEPATH += ../libKitsunemimiJson/include
-
 LIBS += -L../libKitsunemimiJinja2/src -lKitsunemimiJinja2
 LIBS += -L../libKitsunemimiJinja2/src/debug -lKitsunemimiJinja2
 LIBS += -L../libKitsunemimiJinja2/src/release -lKitsunemimiJinja2
 INCLUDEPATH += ../libKitsunemimiJinja2/include
+
+LIBS += -L../libKitsunemimiJson/src -lKitsunemimiJson
+LIBS += -L../libKitsunemimiJson/src/debug -lKitsunemimiJson
+LIBS += -L../libKitsunemimiJson/src/release -lKitsunemimiJson
+INCLUDEPATH += ../libKitsunemimiJson/include
 
 LIBS += -L../libKitsunemimiSakuraParser/src -lKitsunemimiSakuraParser
 LIBS += -L../libKitsunemimiSakuraParser/src/debug -lKitsunemimiSakuraParser
