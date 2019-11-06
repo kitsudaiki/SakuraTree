@@ -141,9 +141,8 @@ SakuraThread::grow(SakuraItem* growPlan,
     if(growPlan->getType() == SakuraItem::FOREST_ITEM)
     {
         ForestItem* forestItem = dynamic_cast<ForestItem*>(growPlan);
-
-        BlossomItem scp;
-        scp.values.insert("port", new DataValue());
+        BranchItem* branchItem = dynamic_cast<BranchItem*>(forestItem->childs.at(0));
+        processBranch(branchItem, &branchItem->values, hirarchie);
     }
 
     return;

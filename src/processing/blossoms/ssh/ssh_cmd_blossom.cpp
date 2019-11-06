@@ -1,5 +1,5 @@
 /**
- * @file        scp_blossom.cpp
+ * @file        ssh_cmd_blossom.cpp
  *
  * @author      Tobias Anker <tobias.anker@kitsunemimi.moe>
  *
@@ -20,13 +20,13 @@
  *      limitations under the License.
  */
 
-#include "ssh_blossom.h"
+#include "ssh_cmd_blossom.h"
 #include <processing/process_methods.h>
 
 namespace SakuraTree
 {
 
-SshBlossom::SshBlossom()
+SshCmdBlossom::SshCmdBlossom()
 {
 
 }
@@ -35,7 +35,7 @@ SshBlossom::SshBlossom()
  * initTask
  */
 void
-SshBlossom::initTask(BlossomItem &blossomItem)
+SshCmdBlossom::initTask(BlossomItem &blossomItem)
 {
     if(blossomItem.values.contains("user") == false
             || blossomItem.values.contains("address") == false)
@@ -51,7 +51,7 @@ SshBlossom::initTask(BlossomItem &blossomItem)
  * preCheck
  */
 void
-SshBlossom::preCheck(BlossomItem &blossomItem)
+SshCmdBlossom::preCheck(BlossomItem &blossomItem)
 {
     //TODO: check per ssh if file already exist
     blossomItem.success = true;
@@ -61,7 +61,7 @@ SshBlossom::preCheck(BlossomItem &blossomItem)
  * runTask
  */
 void
-SshBlossom::runTask(BlossomItem &blossomItem)
+SshCmdBlossom::runTask(BlossomItem &blossomItem)
 {
     std::string programm = "ssh ";
     if(blossomItem.values.contains("port")) {
@@ -83,7 +83,7 @@ SshBlossom::runTask(BlossomItem &blossomItem)
  * postCheck
  */
 void
-SshBlossom::postCheck(BlossomItem &blossomItem)
+SshCmdBlossom::postCheck(BlossomItem &blossomItem)
 {
     blossomItem.success = true;
 }
@@ -92,7 +92,7 @@ SshBlossom::postCheck(BlossomItem &blossomItem)
  * closeTask
  */
 void
-SshBlossom::closeTask(BlossomItem &blossomItem)
+SshCmdBlossom::closeTask(BlossomItem &blossomItem)
 {
     blossomItem.success = true;
 }

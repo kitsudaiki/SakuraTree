@@ -21,10 +21,15 @@
  */
 
 #include "sakura_compiler.h"
+
 #include <libKitsunemimiSakuraParser/sakura_converter.h>
+
 #include <initializing/file_collector.h>
+#include <sakura_root.h>
 #include <items/sakura_items.h>
 #include <items/item_methods.h>
+
+#include <branch_builder/provision_branch_builder.h>
 
 namespace SakuraTree
 {
@@ -265,30 +270,32 @@ SakuraCompiler::convertTree(DataMap* growPlan)
 SakuraItem*
 SakuraCompiler::convertForest(DataMap* growPlan)
 {
-    ForestItem* newItem = new ForestItem();
+    ForestItem* forestItem = new ForestItem();
     DataMap* items = dynamic_cast<DataMap*>(growPlan);
 
-    newItem->name = items->get("name")->toValue()->getString();
+    forestItem->name = items->get("name")->toValue()->getString();
 
-    DataItem* parts = growPlan->get("parts");
-    assert(parts != nullptr);
+    DataItem* allForestParts = growPlan->get("parts");
+    assert(allForestParts != nullptr);
 
-    for(uint32_t i = 0; i < parts->size(); i++)
+    for(uint32_t i = 0; i < allForestParts->size(); i++)
     {
-        DataMap* newMap = dynamic_cast<DataMap*>(parts->get(i));
+        DataMap* singleForestPart = dynamic_cast<DataMap*>(allForestParts->get(i));
 
-        TreeGroupItem* singlePart = new TreeGroupItem();
-        singlePart->address = newMap->get("common-settings")->get("address")->toString();
-        singlePart->port = newMap->get("common-settings")->get("port")->toValue()->getInt();
-        singlePart->ssh_key = newMap->get("common-settings")->get("ssh_key")->toString();
-        singlePart->user = newMap->get("common-settings")->get("user")->toString();
+        BranchItem* provisioningBranch = createProvisionBranch
+                (
+                    singleForestPart->get("common-settings")->get("address")->toString(),
+                    singleForestPart->get("common-settings")->get("port")->toValue()->getInt(),
+                    singleForestPart->get("common-settings")->get("user")->toString(),
+                    singleForestPart->get("common-settings")->get("ssh_key")->toString(),
+                    SakuraRoot::m_executablePath,
+                    ""
+                );
 
-        singlePart->content = newMap->get("parts")->toString();
-
-        newItem->childs.push_back(singlePart);
+        forestItem->childs.push_back(provisioningBranch);
     }
 
-    return newItem;
+    return forestItem;
 }
 
 /**

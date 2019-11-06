@@ -1,5 +1,5 @@
 /**
- * @file        ssh_blossom.h
+ * @file        ssh_scp_blossom.h
  *
  * @author      Tobias Anker <tobias.anker@kitsunemimi.moe>
  *
@@ -20,18 +20,18 @@
  *      limitations under the License.
  */
 
-#ifndef SSH_BLOSSOM_H
-#define SSH_BLOSSOM_H
+#ifndef SCP_BLOSSOM_H
+#define SCP_BLOSSOM_H
 
 #include <processing/blossoms/blossom.h>
 
 namespace SakuraTree
 {
 
-class SshBlossom : public Blossom
+class SshScpBlossom : public Blossom
 {
 public:
-    SshBlossom();
+    SshScpBlossom();
 
 protected:
     void initTask(BlossomItem &blossomItem);
@@ -43,4 +43,4 @@ protected:
 
 }
 
-#endif // SSH_BLOSSOM_H
+#endif // SCP_BLOSSOM_H

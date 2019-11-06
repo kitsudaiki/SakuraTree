@@ -29,6 +29,9 @@
 #include <processing/blossoms/install/apt/apt_update_blossom.h>
 #include <processing/blossoms/install/apt/apt_upgrade_blossom.h>
 
+#include <processing/blossoms/ssh/ssh_cmd_blossom.h>
+#include <processing/blossoms/ssh/ssh_scp_blossom.h>
+
 namespace SakuraTree
 {
 
@@ -57,6 +60,16 @@ getBlossom(const std::string type,
         }
         if(subType == "upgrade") {
             return new AptUpgradeBlossom();
+        }
+    }
+
+    if(type == "ssh")
+    {
+        if(subType == "cmd") {
+            return new SshCmdBlossom();
+        }
+        if(subType == "scp") {
+            return new SshScpBlossom();
         }
     }
 

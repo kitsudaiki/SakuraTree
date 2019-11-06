@@ -1,5 +1,5 @@
 /**
- * @file        scp_blossom.cpp
+ * @file        ssh_scp_blossom.cpp
  *
  * @author      Tobias Anker <tobias.anker@kitsunemimi.moe>
  *
@@ -20,13 +20,13 @@
  *      limitations under the License.
  */
 
-#include "scp_blossom.h"
+#include "ssh_scp_blossom.h"
 #include <processing/process_methods.h>
 
 namespace SakuraTree
 {
 
-ScpBlossom::ScpBlossom()
+SshScpBlossom::SshScpBlossom()
 {
 
 }
@@ -35,10 +35,12 @@ ScpBlossom::ScpBlossom()
  * initTask
  */
 void
-ScpBlossom::initTask(BlossomItem &blossomItem)
+SshScpBlossom::initTask(BlossomItem &blossomItem)
 {
     if(blossomItem.values.contains("user") == false
-            || blossomItem.values.contains("address") == false)
+            || blossomItem.values.contains("address") == false
+            || blossomItem.values.contains("target_path") == false
+            || blossomItem.values.contains("source_path") == false)
     {
         blossomItem.success = false;
         blossomItem.outputMessage = "missing connection informations";
@@ -51,7 +53,7 @@ ScpBlossom::initTask(BlossomItem &blossomItem)
  * preCheck
  */
 void
-ScpBlossom::preCheck(BlossomItem &blossomItem)
+SshScpBlossom::preCheck(BlossomItem &blossomItem)
 {
     //TODO: check per ssh if file already exist
     blossomItem.success = true;
@@ -61,7 +63,7 @@ ScpBlossom::preCheck(BlossomItem &blossomItem)
  * runTask
  */
 void
-ScpBlossom::runTask(BlossomItem &blossomItem)
+SshScpBlossom::runTask(BlossomItem &blossomItem)
 {
     std::string programm = "scp ";
     if(blossomItem.values.contains("port")) {
@@ -71,10 +73,14 @@ ScpBlossom::runTask(BlossomItem &blossomItem)
         programm += " -i " + blossomItem.values.getStringByKey("ssh_key");
     }
 
+    programm += " ";
+    programm += blossomItem.values.getStringByKey("source_path");
+    programm += " ";
     programm += blossomItem.values.getStringByKey("user");
     programm += "@";
     programm += blossomItem.values.getStringByKey("address");
     programm += ":";
+    programm += blossomItem.values.getStringByKey("target_path");
 
     runSyncProcess(blossomItem, programm);
 }
@@ -83,7 +89,7 @@ ScpBlossom::runTask(BlossomItem &blossomItem)
  * postCheck
  */
 void
-ScpBlossom::postCheck(BlossomItem &blossomItem)
+SshScpBlossom::postCheck(BlossomItem &blossomItem)
 {
     blossomItem.success = true;
 }
@@ -92,7 +98,7 @@ ScpBlossom::postCheck(BlossomItem &blossomItem)
  * closeTask
  */
 void
-ScpBlossom::closeTask(BlossomItem &blossomItem)
+SshScpBlossom::closeTask(BlossomItem &blossomItem)
 {
     blossomItem.success = true;
 }

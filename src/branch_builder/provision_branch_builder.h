@@ -28,9 +28,22 @@
 namespace SakuraTree
 {
 class BranchItem;
+class BlossomItem;
 
-BranchItem* createProvisionBranch();
+BranchItem* createProvisionBranch(const std::string address,
+                                  const int port,
+                                  const std::string userName,
+                                  const std::string keyPath,
+                                  const std::string sakaraTreePath,
+                                  const std::string targetPath);
 
+
+BlossomItem* createScpBlossom(const std::string address,
+                              const int port,
+                              const std::string userName,
+                              const std::string keyPath,
+                              const std::string sakaraTreePath,
+                              const std::string targetPath);
 }
 
 #endif // PROVISION_BRANCH_BUILDER_H

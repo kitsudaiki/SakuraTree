@@ -26,9 +26,48 @@
 namespace SakuraTree
 {
 
-BranchItem* createProvisionBranch()
+BranchItem*
+createProvisionBranch(const std::string address,
+                      const int port,
+                      const std::string userName,
+                      const std::string keyPath,
+                      const std::string sakaraTreePath,
+                      const std::string targetPath)
 {
+    BranchItem* item = new BranchItem();
 
+    BlossomItem* scpBlossom = createScpBlossom(address,
+                                               port,
+                                               userName,
+                                               keyPath,
+                                               sakaraTreePath,
+                                               targetPath);
+    item->childs.push_back(scpBlossom);
+
+    return item;
+}
+
+BlossomItem*
+createScpBlossom(const std::string address,
+                 const int port,
+                 const std::string userName,
+                 const std::string keyPath,
+                 const std::string sakaraTreePath,
+                 const std::string targetPath)
+{
+    BlossomItem* item = new BlossomItem();
+
+    item->blossomType = "ssh";
+    item->blossomSubTypes.push_back("scp");
+
+    item->values.insert("address", new DataValue(address));
+    item->values.insert("user", new DataValue(userName));
+    item->values.insert("port", new DataValue(port));
+    item->values.insert("ssh_key", new DataValue(keyPath));
+    item->values.insert("source_path", new DataValue(sakaraTreePath));
+    item->values.insert("target_path", new DataValue(targetPath));
+
+    return item;
 }
 
 }
