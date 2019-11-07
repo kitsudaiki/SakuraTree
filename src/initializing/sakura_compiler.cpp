@@ -157,10 +157,6 @@ SakuraCompiler::convert(DataMap* growPlan)
         return convertTree(growPlan);
     }
 
-    if(growPlan->getStringByKey("type") == "forest") {
-        return convertForest(growPlan);
-    }
-
     if(growPlan->getStringByKey("type") == "sequentiell") {
         return convertSequeniellPart(growPlan);
     }
@@ -182,7 +178,7 @@ SakuraCompiler::convertBlossom(DataMap* growPlan)
 {
     BlossomItem* newItem =  new BlossomItem();
     newItem->name = growPlan->getStringByKey("name");
-    newItem->settings = *dynamic_cast<DataMap*>(growPlan->get("common-settings"));
+    newItem->settings = *dynamic_cast<DataMap*>(growPlan->get("static-options"));
     newItem->blossomType = growPlan->getStringByKey("blossom-type");
 
     if(growPlan->contains("items-input"))
@@ -284,10 +280,10 @@ SakuraCompiler::convertForest(DataMap* growPlan)
 
         BranchItem* provisioningBranch = createProvisionBranch
                 (
-                    singleForestPart->get("common-settings")->get("address")->toString(),
-                    singleForestPart->get("common-settings")->get("port")->toValue()->getInt(),
-                    singleForestPart->get("common-settings")->get("user")->toString(),
-                    singleForestPart->get("common-settings")->get("ssh_key")->toString(),
+                    singleForestPart->get("static-options")->get("address")->toString(),
+                    singleForestPart->get("static-options")->get("port")->toValue()->getInt(),
+                    singleForestPart->get("static-options")->get("user")->toString(),
+                    singleForestPart->get("static-options")->get("ssh_key")->toString(),
                     SakuraRoot::m_executablePath,
                     ""
                 );

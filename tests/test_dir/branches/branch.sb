@@ -1,4 +1,4 @@
-[BRANCH: install_branch]
+[install_branch]
 packages: {{}}
 
 [apt_blossomX]
