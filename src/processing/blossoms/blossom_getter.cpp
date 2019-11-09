@@ -73,6 +73,15 @@ getBlossom(const std::string type,
         }
     }
 
+    if(type == "sakura-connection")
+    {
+        if(subType == "copy-subtree") {
+            return new SshCmdBlossom();
+        }
+    }
+
+    assert(false);
+
     return nullptr;
 }
 

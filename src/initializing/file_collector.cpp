@@ -107,7 +107,7 @@ FileCollector::getObject(const std::string &name,
         it != m_fileContents.end();
         it++)
     {
-        if(it->second->get("name")->toString() == name)
+        if(it->second->get("id")->toString() == name)
         {
             if(type != ""
                     && it->second->get("type")->toString() == type)

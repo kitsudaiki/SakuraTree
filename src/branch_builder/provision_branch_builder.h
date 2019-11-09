@@ -30,20 +30,24 @@ namespace SakuraTree
 class BranchItem;
 class BlossomItem;
 
-BranchItem* createProvisionBranch(const std::string address,
+BranchItem* createProvisionBranch(const std::string &address,
                                   const int port,
-                                  const std::string userName,
-                                  const std::string keyPath,
-                                  const std::string sakaraTreePath,
-                                  const std::string targetPath);
+                                  const std::string &userName,
+                                  const std::string &keyPath,
+                                  const std::string &sakaraTreePath,
+                                  const std::string &targetPath,
+                                  const std::string &subtree);
 
 
-BlossomItem* createScpBlossom(const std::string address,
+BlossomItem* createScpBlossom(const std::string &address,
                               const int port,
-                              const std::string userName,
-                              const std::string keyPath,
-                              const std::string sakaraTreePath,
-                              const std::string targetPath);
+                              const std::string &userName,
+                              const std::string &keyPath,
+                              const std::string &sakaraTreePath,
+                              const std::string &targetPath);
+
+BlossomItem* createCopySubtreeBlossom(const std::string &address,
+                                      const std::string &subtree);
 }
 
 #endif // PROVISION_BRANCH_BUILDER_H

@@ -56,14 +56,14 @@ private:
     Kitsunemimi::Sakura::SakuraConverter* m_driver = nullptr;
     FileCollector* m_fileCollector = nullptr;
 
-    void preProcessObject(DataMap* value);
-    void preProcessArray(DataArray* value);
+    void preProcessObject(DataMap* object);
+    void preProcessArray(DataArray* object);
 
     SakuraItem* convert(DataMap* growPlan);
     SakuraItem* convertBlossom(DataMap* growPlan);
     SakuraItem* convertBranch(DataMap* growPlan);
     SakuraItem* convertTree(DataMap* growPlan);
-    SakuraItem* convertForest(DataMap* growPlan);
+    SakuraItem* convertSeed(DataMap* growPlan);
 
     SakuraItem* convertSequeniellPart(DataMap* growPlan);
     SakuraItem* convertParallelPart(DataMap* growPlan);

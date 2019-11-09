@@ -1,33 +1,28 @@
 [install_branch]
-packages: {{}}
+- packages: {{}}
 
-[apt_blossomX]
-- apt  
-- update, present:
-	names: "{{packages}}"
+apt(apt_blossomX)  
+-> update
+-> present:
+	-names: "{{packages}}"
 
-[apt_blossom1]
-- apt  
-- absent:
-	names: "{{packages}}"
+apt(apt_blossom1)
+-> absent:
+	- names: "{{packages}}"
 
-[apt_blossom2]
-- apt  
-- absent:
-	names: "{{packages}}"
+apt(apt_blossom2)
+-> absent:
+ 	- names: "{{packages}}"
 
-[apt_blossom3]
-- apt  
-- present:
-	names: "{{packages}}"
+apt(apt_blossom3)
+-> present:
+	- names: "{{packages}}"
 
-[apt_blossom4]
-- apt  
-- latest:
-	names: "{{packages}}"
+apt(apt_blossom4)
+-> latest:
+	- names: "{{packages}}"
 
-[apt_blossom5]
-- apt  
-- present:
-	names: "{{packages}}"
+apt(apt_blossom5)
+-> present:
+	- names: "{{packages}}"
 

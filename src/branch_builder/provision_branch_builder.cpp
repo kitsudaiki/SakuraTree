@@ -26,13 +26,25 @@
 namespace SakuraTree
 {
 
+/**
+ * @brief createProvisionBranch
+ * @param address
+ * @param port
+ * @param userName
+ * @param keyPath
+ * @param sakaraTreePath
+ * @param targetPath
+ * @param subtree
+ * @return
+ */
 BranchItem*
-createProvisionBranch(const std::string address,
+createProvisionBranch(const std::string &address,
                       const int port,
-                      const std::string userName,
-                      const std::string keyPath,
-                      const std::string sakaraTreePath,
-                      const std::string targetPath)
+                      const std::string &userName,
+                      const std::string &keyPath,
+                      const std::string &sakaraTreePath,
+                      const std::string &targetPath,
+                      const std::string &subtree)
 {
     BranchItem* item = new BranchItem();
 
@@ -44,16 +56,29 @@ createProvisionBranch(const std::string address,
                                                targetPath);
     item->childs.push_back(scpBlossom);
 
+    BlossomItem* copySubtreeBlossom = createCopySubtreeBlossom(address, subtree);
+    item->childs.push_back(copySubtreeBlossom);
+
     return item;
 }
 
+/**
+ * @brief createScpBlossom
+ * @param address
+ * @param port
+ * @param userName
+ * @param keyPath
+ * @param sakaraTreePath
+ * @param targetPath
+ * @return
+ */
 BlossomItem*
-createScpBlossom(const std::string address,
+createScpBlossom(const std::string &address,
                  const int port,
-                 const std::string userName,
-                 const std::string keyPath,
-                 const std::string sakaraTreePath,
-                 const std::string targetPath)
+                 const std::string &userName,
+                 const std::string &keyPath,
+                 const std::string &sakaraTreePath,
+                 const std::string &targetPath)
 {
     BlossomItem* item = new BlossomItem();
 
@@ -66,6 +91,27 @@ createScpBlossom(const std::string address,
     item->values.insert("ssh_key", new DataValue(keyPath));
     item->values.insert("source_path", new DataValue(sakaraTreePath));
     item->values.insert("target_path", new DataValue(targetPath));
+
+    return item;
+}
+
+/**
+ * @brief createCopySubtreeBlossom
+ * @param address
+ * @param subtree
+ * @return
+ */
+BlossomItem*
+createCopySubtreeBlossom(const std::string &address,
+                         const std::string &subtree)
+{
+    BlossomItem* item = new BlossomItem();
+
+    item->blossomType = "sakura-connection";
+    item->blossomSubTypes.push_back("copy-subtree");
+
+    item->values.insert("address", new DataValue(address));
+    item->values.insert("subtree", new DataValue(subtree));
 
     return item;
 }

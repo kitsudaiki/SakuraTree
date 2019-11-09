@@ -105,7 +105,7 @@ SakuraThread::grow(SakuraItem* growPlan,
         BlossomItem* blossomItem = dynamic_cast<BlossomItem*>(growPlan);
         fillItems(blossomItem->values, *values);
         std::vector<std::string> newHirarchie = hirarchie;
-        newHirarchie.push_back("BLOSSOM: " + blossomItem->name);
+        newHirarchie.push_back("BLOSSOM: " + blossomItem->id);
         processBlossom(*blossomItem, &blossomItem->values, newHirarchie);
         return;
     }
@@ -138,10 +138,10 @@ SakuraThread::grow(SakuraItem* growPlan,
         return;
     }
 
-    if(growPlan->getType() == SakuraItem::FOREST_ITEM)
+    if(growPlan->getType() == SakuraItem::SEED_ITEM)
     {
-        ForestItem* forestItem = dynamic_cast<ForestItem*>(growPlan);
-        BranchItem* branchItem = dynamic_cast<BranchItem*>(forestItem->childs.at(0));
+        SeedItem* forestItem = dynamic_cast<SeedItem*>(growPlan);
+        BranchItem* branchItem = dynamic_cast<BranchItem*>(forestItem->child);
         processBranch(branchItem, &branchItem->values, hirarchie);
     }
 

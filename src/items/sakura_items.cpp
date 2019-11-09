@@ -52,18 +52,11 @@ BranchItem::BranchItem() {type = BRANCH_ITEM;}
 BranchItem::~BranchItem() {}
 
 //===================================================================
-// ForestItem
+// SeedItem
 //===================================================================
-ForestItem::ForestItem() {type = FOREST_ITEM;}
+SeedItem::SeedItem() {type = SEED_ITEM;}
 
-ForestItem::~ForestItem() {}
-
-//===================================================================
-// TreeGroupItem
-//===================================================================
-TreeGroupItem::TreeGroupItem() {type = TREE_GROUP_ITEM;}
-
-TreeGroupItem::~TreeGroupItem() {}
+SeedItem::~SeedItem() {}
 
 //===================================================================
 // TreeItem
