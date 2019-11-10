@@ -39,7 +39,6 @@ LIBS += -L../libKitsunemimiJson/src/debug -lKitsunemimiJson
 LIBS += -L../libKitsunemimiJson/src/release -lKitsunemimiJson
 INCLUDEPATH += ../libKitsunemimiJson/include
 
-
 LIBS += -L../libKitsunemimiSakuraParser/src -lKitsunemimiSakuraParser
 LIBS += -L../libKitsunemimiSakuraParser/src/debug -lKitsunemimiSakuraParser
 LIBS += -L../libKitsunemimiSakuraParser/src/release -lKitsunemimiSakuraParser

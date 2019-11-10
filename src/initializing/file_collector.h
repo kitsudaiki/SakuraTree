@@ -48,12 +48,12 @@ class DataMap;
 }
 namespace Sakura
 {
-class SakuraConverter;
+class SakuraParsing;
 }
 }
 
 using namespace boost::filesystem;
-using Kitsunemimi::Sakura::SakuraConverter;
+using Kitsunemimi::Sakura::SakuraParsing;
 
 namespace SakuraTree
 {
@@ -61,7 +61,7 @@ namespace SakuraTree
 class FileCollector
 {
 public:
-    FileCollector(SakuraConverter* driver);
+    FileCollector(SakuraParsing* driver);
 
     bool initFileCollector(const std::string &rootPath);
 
@@ -71,7 +71,7 @@ public:
     const std::string getErrorMessage() const;
 
 private:
-    SakuraConverter* m_driver = nullptr;
+    SakuraParsing* m_driver = nullptr;
 
     void getFilesInDir(const path &directory);
     const std::string readFile(const std::string &filePath);

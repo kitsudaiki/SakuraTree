@@ -24,7 +24,7 @@
 #define SAKURA_ROOT_H
 
 #include <common.h>
-#include <libKitsunemimiSakuraParser/sakura_converter.h>
+#include <libKitsunemimiSakuraParser/sakura_parsing.h>
 
 namespace Kitsunemimi
 {
@@ -36,7 +36,7 @@ class SakuraHostHandler;
 }
 }
 
-using Kitsunemimi::Sakura::SakuraConverter;
+using Kitsunemimi::Sakura::SakuraParsing;
 using Kitsunemimi::Jinja2::Jinja2Converter;
 
 namespace SakuraTree
@@ -53,9 +53,15 @@ public:
 
     bool startProcess(const std::string &rootPath,
                       std::string seedName="");
+    bool startSubtreeProcess(const std::string &subtree);
+
+    bool sendPlan(const std::string address,
+                  const std::string plan);
+
     bool startClientConnection(const std::string &address,
                                const int port);
-    void addMessage(const BlossomItem &blossomItem);
+    void printOutput(const BlossomItem &blossomItem);
+    void printOutput(const std::string &output);
 
     static SakuraTree::SakuraRoot* m_root;
     static Jinja2Converter* m_jinja2Converter;

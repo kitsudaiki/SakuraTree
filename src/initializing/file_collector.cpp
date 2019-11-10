@@ -22,13 +22,13 @@
 
 #include <initializing/file_collector.h>
 
-#include <libKitsunemimiSakuraParser/sakura_converter.h>
+#include <libKitsunemimiSakuraParser/sakura_parsing.h>
 #include <libKitsunemimiCommon/common_methods/string_methods.h>
 
 namespace SakuraTree
 {
 
-FileCollector::FileCollector(SakuraConverter *driver)
+FileCollector::FileCollector(SakuraParsing *driver)
 {
     m_driver = driver;
 }

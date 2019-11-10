@@ -40,7 +40,7 @@ void overrideItems(DataMap &original,
 
 const std::vector<std::string> checkItems(DataMap &items);
 
-void printOutput(const BlossomItem &blossom);
+std::string convertBlossomOutput(const BlossomItem &blossom);
 
 }
 

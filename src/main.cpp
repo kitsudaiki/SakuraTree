@@ -92,7 +92,12 @@ int main(int argc, char *argv[])
         const std::string address = vm["server-address"].as<std::string>();
         const int port = vm["server-port"].as<int>();
 
+        root->startClientConnection(address, port);
 
+        while(true)
+        {
+            sleep(10);
+        }
     }
     else
     {

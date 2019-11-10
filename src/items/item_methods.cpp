@@ -62,6 +62,11 @@ fillItems(DataMap &items,
 
     for(uint32_t i = 0; i < keys.size(); i++)
     {
+        // TODO: make better
+        if(keys.at(i) == "subtree") {
+            continue;
+        }
+
         DataItem* obj = items.get(keys.at(i));
         if(obj->isValue())
         {
@@ -113,34 +118,36 @@ checkItems(DataMap &items)
  * @brief printOutput
  * @param blossom
  */
-void
-printOutput(const BlossomItem &blossom)
+std::string
+convertBlossomOutput(const BlossomItem &blossom)
 {
-    std::cout<<"+++++++++++++++++++++++++++++++++++++++++++++++++"<<std::endl;
+    std::string output = "";
+    output += "+++++++++++++++++++++++++++++++++++++++++++++++++\n";
 
     // print executeion-state
     switch(blossom.resultState)
     {
         case BlossomItem::SKIPPED_STATE:
-            std::cout<<"SKIPPED"<<std::endl;
+            output += "SKIPPED\n";
             break;
         case BlossomItem::CHANGED_STATE:
-            std::cout<<"CHANGED"<<std::endl;
+            output += "CHANGED\n";
             break;
         case BlossomItem::ERROR_INIT_STATE:
-            std::cout<<"ERROR in init-state"<<std::endl;
+            output += "ERROR in init-state\n";
             break;
         case BlossomItem::ERROR_PRECHECK_STATE:
-            std::cout<<"ERROR in pre-check-state"<<std::endl;
+            output += "ERROR in pre-check-state\n";
             break;
         case BlossomItem::ERROR_EXEC_STATE:
-            std::cout<<"ERROR in exec-state with error-code: "<<blossom.execState<<std::endl;
+            output += "ERROR in exec-state with error-code: "
+                    + std::to_string(blossom.execState) + "\n";
             break;
         case BlossomItem::ERROR_POSTCHECK_STATE:
-            std::cout<<"ERROR in post-check-state"<<std::endl;
+            output += "ERROR in post-check-state\n";
             break;
         case BlossomItem::ERROR_CLOSE_STATE:
-            std::cout<<"ERROR in error-state"<<std::endl;
+            output += "ERROR in error-state\n";
             break;
         default:
             break;
@@ -151,21 +158,21 @@ printOutput(const BlossomItem &blossom)
     {
         for(uint32_t j = 0; j < i; j++)
         {
-            std::cout<<"   ";
+            output += "   ";
         }
-        std::cout<<blossom.nameHirarchie.at(i)<<std::endl;
+        output += blossom.nameHirarchie.at(i) + "\n";
     }
 
     // print process-output
     if(blossom.outputMessage.size() > 0
             && blossom.resultState >= 3)
     {
-        std::cout<<std::endl;
-        std::cout<<blossom.outputMessage<<std::endl;
+        output += "\n";
+        output += blossom.outputMessage + "\n";
     }
 
-    std::cout<<"-------------------------------------------------"<<std::endl;
-    std::cout<<std::endl;
+    output += "-------------------------------------------------\n";
+    output += "\n";
 }
 
 }

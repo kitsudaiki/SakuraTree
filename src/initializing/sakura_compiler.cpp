@@ -22,7 +22,9 @@
 
 #include "sakura_compiler.h"
 
-#include <libKitsunemimiSakuraParser/sakura_converter.h>
+#include <libKitsunemimiSakuraParser/sakura_parsing.h>
+
+#include <libKitsunemimiJson/json_item.h>
 
 #include <initializing/file_collector.h>
 #include <sakura_root.h>
@@ -31,6 +33,8 @@
 
 #include <branch_builder/provision_branch_builder.h>
 
+using Kitsunemimi::Json::JsonItem;
+
 namespace SakuraTree
 {
 
@@ -38,7 +42,7 @@ namespace SakuraTree
  * @brief SakuraCompiler::SakuraCompiler
  * @param driver
  */
-SakuraCompiler::SakuraCompiler(Kitsunemimi::Sakura::SakuraConverter* driver)
+SakuraCompiler::SakuraCompiler(Kitsunemimi::Sakura::SakuraParsing* driver)
 {
     m_driver = driver;
     m_fileCollector = new FileCollector(m_driver);
@@ -73,6 +77,34 @@ SakuraCompiler::compile(const std::string &rootPath,
     DataMap* completePlan = m_fileCollector->getObject(seedName);
     assert(completePlan != nullptr);
 
+    preProcessObject(completePlan);
+
+    // debug-output
+    if(DEBUG)
+    {
+        std::cout<<"+++++++++++++++++++++++++++++++++++++++++++++++++++++"<<std::endl;
+        std::string output = completePlan->toString(true);
+        std::cout<<output<<std::endl;
+        std::cout<<"-----------------------------------------------------"<<std::endl;
+    }
+
+    SakuraItem* result = convert(completePlan);
+
+    return result;
+}
+
+/**
+ * @brief SakuraCompiler::compileSubtree
+ * @param subtree
+ * @return
+ */
+SakuraItem*
+SakuraCompiler::compileSubtree(const std::string subtree)
+{
+    JsonItem json;
+    json.parse(subtree);
+
+    DataMap* completePlan = json.getItemContent()->copy()->toMap();
     preProcessObject(completePlan);
 
     // debug-output

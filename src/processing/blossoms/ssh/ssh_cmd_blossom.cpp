@@ -81,7 +81,12 @@ SshCmdBlossom::runTask(BlossomItem &blossomItem)
     programm += blossomItem.values.getStringByKey("command");
     programm += "'";
 
+    if(blossomItem.values.contains("async")) {
+        programm += " &";
+    }
+
     runSyncProcess(blossomItem, programm);
+    sleep(1);
 }
 
 /**

@@ -192,7 +192,8 @@ createSshBlossom(const std::string &address,
     item->values.insert("user", new DataValue(userName));
     item->values.insert("port", new DataValue(port));
     item->values.insert("ssh_key", new DataValue(keyPath));
-    item->values.insert("command", new DataValue("~/SakuraTree --server-address 127.0.0.1 --server-port 1337 &"));
+    item->values.insert("async", new DataValue(true));
+    item->values.insert("command", new DataValue("sudo ~/SakuraTree --server-address 127.0.0.1 --server-port 1337"));
 
     return item;
 }

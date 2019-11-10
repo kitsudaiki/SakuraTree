@@ -22,6 +22,7 @@
 
 #include "sakura_copy_subtree_blossom.h"
 #include <processing/process_methods.h>
+#include <sakura_root.h>
 
 namespace SakuraTree
 {
@@ -53,7 +54,10 @@ SakuraCopySubtreeBlossom::preCheck(BlossomItem &blossomItem)
 void
 SakuraCopySubtreeBlossom::runTask(BlossomItem &blossomItem)
 {
+    const std::string address = blossomItem.values.getStringByKey("address");
+    const std::string plan = blossomItem.values.getStringByKey("subtree");
 
+    SakuraRoot::m_root->sendPlan(address, plan);
 }
 
 /**

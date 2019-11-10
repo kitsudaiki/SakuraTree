@@ -34,7 +34,7 @@ namespace Kitsunemimi
 {
 namespace Sakura
 {
-class SakuraConverter;
+class SakuraParsing;
 }
 }
 
@@ -46,14 +46,16 @@ class SakuraItem;
 class SakuraCompiler
 {
 public:
-    SakuraCompiler(Kitsunemimi::Sakura::SakuraConverter* driver);
+    SakuraCompiler(Kitsunemimi::Sakura::SakuraParsing* driver);
     ~SakuraCompiler();
 
     SakuraItem* compile(const std::string &rootPath,
                         std::string &seedName);
 
+    SakuraItem* compileSubtree(const std::string subtree);
+
 private:
-    Kitsunemimi::Sakura::SakuraConverter* m_driver = nullptr;
+    Kitsunemimi::Sakura::SakuraParsing* m_driver = nullptr;
     FileCollector* m_fileCollector = nullptr;
 
     void preProcessObject(DataMap* object);

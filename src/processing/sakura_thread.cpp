@@ -174,11 +174,11 @@ SakuraThread::processBlossom(BlossomItem &growPlan,
     {
         m_abort = true;
         std::string output = "ABORT after ERROR";
-        SakuraRoot::m_root->addMessage(growPlan);
+        SakuraRoot::m_root->printOutput(growPlan);
     }
 
     // send result to root
-    SakuraRoot::m_root->addMessage(growPlan);
+    SakuraRoot::m_root->printOutput(growPlan);
 
     return;
 }

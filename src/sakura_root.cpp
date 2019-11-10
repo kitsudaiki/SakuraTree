@@ -40,8 +40,17 @@ void dataCallback(void* target,
                   const std::string plan)
 {
     SakuraRoot* rootClass = static_cast<SakuraRoot*>(target);
-
+    rootClass->startSubtreeProcess(plan);
 }
+
+void blossomOutputCallback(void* target,
+                           const std::string address,
+                           const std::string output)
+{
+    SakuraRoot* rootClass = static_cast<SakuraRoot*>(target);
+    rootClass->printOutput(output);
+}
+
 
 void sessionCallback(void* target,
                      const std::string)
@@ -60,7 +69,8 @@ SakuraRoot::SakuraRoot(const std::string &executablePath)
 
     m_controller = new Kitsunemimi::Sakura::SakuraHostHandler(this,
                                                               &sessionCallback,
-                                                              &dataCallback);
+                                                              &dataCallback,
+                                                              &blossomOutputCallback);
 }
 
 /**
@@ -88,7 +98,7 @@ SakuraRoot::startProcess(const std::string &rootPath,
     m_controller->createServer(1337);
 
     // parsing
-    SakuraConverter* sakuraParser = new SakuraConverter(DEBUG);
+    SakuraParsing* sakuraParser = new SakuraParsing(DEBUG);
     SakuraCompiler compiler(sakuraParser);
     SakuraItem* processPlan = compiler.compile(rootPath, seedName);
 
@@ -107,6 +117,49 @@ SakuraRoot::startProcess(const std::string &rootPath,
 }
 
 /**
+ * @brief SakuraRoot::startSubtreeProcess
+ * @param subtree
+ * @return
+ */
+bool
+SakuraRoot::startSubtreeProcess(const std::string &subtree)
+{
+    m_controller->createServer(1337);
+
+    // parsing
+    SakuraParsing* sakuraParser = new SakuraParsing(DEBUG);
+    SakuraCompiler compiler(sakuraParser);
+    SakuraItem* processPlan = compiler.compileSubtree(subtree);
+
+    assert(processPlan != nullptr);
+
+    // run process
+    DataMap* dummyObj = new DataMap();
+    m_rootThread = new SakuraThread(processPlan, dummyObj, std::vector<std::string>());
+    m_rootThread->startThread();
+    m_rootThread->waitUntilStarted();
+    m_rootThread->waitForFinish();
+
+    std::cout<<"finish"<<std::endl;
+
+    return true;
+}
+
+/**
+ * @brief SakuraRoot::sendPlan
+ * @param address
+ * @param plan
+ * @return
+ */
+bool
+SakuraRoot::sendPlan(const std::string address,
+                     const std::string plan)
+{
+    return m_controller->sendGrowPlan(address, plan);
+}
+
+
+/**
  * @brief SakuraRoot::startClientConnection
  * @param address
  * @param port
@@ -120,14 +173,29 @@ SakuraRoot::startClientConnection(const std::string &address,
 }
 
 /**
- * @brief SakuraRoot::addMessage
+ * @brief SakuraRoot::pringOutpue
  */
 void
-SakuraRoot::addMessage(const BlossomItem &blossomItem)
+SakuraRoot::printOutput(const BlossomItem &blossomItem)
 {
     m_mutex.lock();
     std::cout<<" "<<std::endl;
-    printOutput(blossomItem);
+    std::string output = convertBlossomOutput(blossomItem);
+
+    std::cout<<output<<std::endl;
+
+    m_mutex.unlock();
+}
+
+/**
+ * @brief SakuraRoot::pringOutput
+ * @param output
+ */
+void
+SakuraRoot::printOutput(const std::string &output)
+{
+    m_mutex.lock();
+    std::cout<<output<<std::endl;
     m_mutex.unlock();
 }
 

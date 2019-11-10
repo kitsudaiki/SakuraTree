@@ -24,6 +24,7 @@
 #define SSH_BLOSSOM_H
 
 #include <processing/blossoms/blossom.h>
+#include <unistd.h>
 
 namespace SakuraTree
 {
