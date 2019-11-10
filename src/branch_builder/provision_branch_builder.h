@@ -39,12 +39,27 @@ BranchItem* createProvisionBranch(const std::string &address,
                                   const std::string &subtree);
 
 
+BlossomItem* createAptUpdateBlossom(const std::string &address,
+                                    const int port,
+                                    const std::string &userName,
+                                    const std::string &keyPath);
+
+BlossomItem* createAptLatesBlossom(const std::string &address,
+                                   const int port,
+                                   const std::string &userName,
+                                   const std::string &keyPath);
+
 BlossomItem* createScpBlossom(const std::string &address,
                               const int port,
                               const std::string &userName,
                               const std::string &keyPath,
                               const std::string &sakaraTreePath,
                               const std::string &targetPath);
+
+BlossomItem* createSshBlossom(const std::string &address,
+                              const int port,
+                              const std::string &userName,
+                              const std::string &keyPath);
 
 BlossomItem* createCopySubtreeBlossom(const std::string &address,
                                       const std::string &subtree);

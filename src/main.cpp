@@ -51,6 +51,16 @@ int main(int argc, char *argv[])
             argParser::value<std::string>(),
             "set the path to the initial seed-file"
         )
+        (
+            "server-address",
+            argParser::value<std::string>(),
+            "address of the server"
+        )
+        (
+            "server-port",
+            argParser::value<int>(),
+            "address of the server"
+        )
     ;
 
     argParser::variables_map vm;
@@ -72,7 +82,17 @@ int main(int argc, char *argv[])
                   << std::endl;
         SakuraTree::SakuraRoot* root = new SakuraTree::SakuraRoot(std::string(argv[0]));
         const std::string seedPath = vm["seed-path"].as<std::string>();
-        root->startProcess(seedPath, vm["seed-name"].as<std::string>());
+        const std::string seedName = vm["seed-name"].as<std::string>();
+
+        root->startProcess(seedPath, seedName);
+    }
+    else if(vm.count("server-address") && vm.count("server-port"))
+    {
+        SakuraTree::SakuraRoot* root = new SakuraTree::SakuraRoot(std::string(argv[0]));
+        const std::string address = vm["server-address"].as<std::string>();
+        const int port = vm["server-port"].as<int>();
+
+
     }
     else
     {

@@ -28,9 +28,11 @@
 
 namespace Kitsunemimi
 {
-namespace Jinja2
-{
+namespace Jinja2 {
 class Jinja2Converter;
+}
+namespace Sakura {
+class SakuraHostHandler;
 }
 }
 
@@ -50,8 +52,9 @@ public:
     ~SakuraRoot();
 
     bool startProcess(const std::string &rootPath,
-                     std::string seedName="");
-
+                      std::string seedName="");
+    bool startClientConnection(const std::string &address,
+                               const int port);
     void addMessage(const BlossomItem &blossomItem);
 
     static SakuraTree::SakuraRoot* m_root;
@@ -59,6 +62,7 @@ public:
     static std::string m_executablePath;
 
 private:
+    Kitsunemimi::Sakura::SakuraHostHandler* m_controller = nullptr;
     SakuraThread* m_rootThread = nullptr;
 
     std::mutex m_mutex;

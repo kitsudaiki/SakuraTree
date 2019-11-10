@@ -48,6 +48,17 @@ createProvisionBranch(const std::string &address,
 {
     BranchItem* item = new BranchItem();
 
+    BlossomItem* updateBlossom = createAptUpdateBlossom(address,
+                                                        port,
+                                                        userName,
+                                                        keyPath);
+    item->childs.push_back(updateBlossom);
+    BlossomItem* installBlossom = createAptLatesBlossom(address,
+                                                        port,
+                                                        userName,
+                                                        keyPath);
+    item->childs.push_back(installBlossom);
+
     BlossomItem* scpBlossom = createScpBlossom(address,
                                                port,
                                                userName,
@@ -56,11 +67,74 @@ createProvisionBranch(const std::string &address,
                                                targetPath);
     item->childs.push_back(scpBlossom);
 
+    BlossomItem* sshBlossom = createSshBlossom(address,
+                                               port,
+                                               userName,
+                                               keyPath);
+    item->childs.push_back(sshBlossom);
+
     BlossomItem* copySubtreeBlossom = createCopySubtreeBlossom(address, subtree);
     item->childs.push_back(copySubtreeBlossom);
 
     return item;
 }
+
+/**
+ * @brief createAptUpdateBlossom
+ * @param address
+ * @param port
+ * @param userName
+ * @param keyPath
+ * @return
+ */
+BlossomItem*
+createAptUpdateBlossom(const std::string &address,
+                       const int port,
+                       const std::string &userName,
+                       const std::string &keyPath)
+{
+    BlossomItem* item = new BlossomItem();
+
+    item->blossomType = "ssh";
+    item->blossomSubTypes.push_back("cmd");
+
+    item->values.insert("address", new DataValue(address));
+    item->values.insert("user", new DataValue(userName));
+    item->values.insert("port", new DataValue(port));
+    item->values.insert("ssh_key", new DataValue(keyPath));
+    item->values.insert("command", new DataValue("sudo apt-get update"));
+
+    return item;
+}
+
+/**
+ * @brief createAptLatesBlossom
+ * @param address
+ * @param port
+ * @param userName
+ * @param keyPath
+ * @return
+ */
+BlossomItem*
+createAptLatesBlossom(const std::string &address,
+                      const int port,
+                      const std::string &userName,
+                      const std::string &keyPath)
+{
+    BlossomItem* item = new BlossomItem();
+
+    item->blossomType = "ssh";
+    item->blossomSubTypes.push_back("cmd");
+
+    item->values.insert("address", new DataValue(address));
+    item->values.insert("user", new DataValue(userName));
+    item->values.insert("port", new DataValue(port));
+    item->values.insert("ssh_key", new DataValue(keyPath));
+    item->values.insert("command", new DataValue("sudo apt-get install -y libboost-filesystem-dev libsqlite3-dev libboost-program-options-dev"));
+
+    return item;
+}
+
 
 /**
  * @brief createScpBlossom
@@ -91,6 +165,34 @@ createScpBlossom(const std::string &address,
     item->values.insert("ssh_key", new DataValue(keyPath));
     item->values.insert("source_path", new DataValue(sakaraTreePath));
     item->values.insert("target_path", new DataValue(targetPath));
+
+    return item;
+}
+
+/**
+ * @brief createSshBlossom
+ * @param address
+ * @param port
+ * @param userName
+ * @param keyPath
+ * @return
+ */
+BlossomItem*
+createSshBlossom(const std::string &address,
+                 const int port,
+                 const std::string &userName,
+                 const std::string &keyPath)
+{
+    BlossomItem* item = new BlossomItem();
+
+    item->blossomType = "ssh";
+    item->blossomSubTypes.push_back("cmd");
+
+    item->values.insert("address", new DataValue(address));
+    item->values.insert("user", new DataValue(userName));
+    item->values.insert("port", new DataValue(port));
+    item->values.insert("ssh_key", new DataValue(keyPath));
+    item->values.insert("command", new DataValue("~/SakuraTree --server-address 127.0.0.1 --server-port 1337 &"));
 
     return item;
 }

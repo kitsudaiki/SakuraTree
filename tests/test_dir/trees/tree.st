@@ -3,9 +3,9 @@
 
 {
 	seed(sakura)
-	- address: "192.168.56.101"
+	- address: "127.0.0.1"
 	- port: 1337
-	- ssh_user: sakura
+	- ssh_user: neptune
 	- ssh_port: 22
 	- ssh_key: "~/.ssh/sakura_test" 
 	{

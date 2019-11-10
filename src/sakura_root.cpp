@@ -26,6 +26,7 @@
 #include <initializing/sakura_compiler.h>
 #include <items/item_methods.h>
 #include <processing/sakura_thread.h>
+#include <libKitsunemimiSakuraNetwork/sakura_host_handler.h>
 
 namespace SakuraTree
 {
@@ -33,6 +34,20 @@ namespace SakuraTree
 SakuraRoot* SakuraRoot::m_root = nullptr;
 Jinja2Converter* SakuraRoot::m_jinja2Converter = nullptr;
 std::string SakuraRoot::m_executablePath = "";
+
+void dataCallback(void* target,
+                  const std::string address,
+                  const std::string plan)
+{
+    SakuraRoot* rootClass = static_cast<SakuraRoot*>(target);
+
+}
+
+void sessionCallback(void* target,
+                     const std::string)
+{
+    SakuraRoot* rootClass = static_cast<SakuraRoot*>(target);
+}
 
 /**
  * constructor
@@ -42,6 +57,10 @@ SakuraRoot::SakuraRoot(const std::string &executablePath)
     m_root = this;
     m_jinja2Converter = new Kitsunemimi::Jinja2::Jinja2Converter;
     m_executablePath = executablePath;
+
+    m_controller = new Kitsunemimi::Sakura::SakuraHostHandler(this,
+                                                              &sessionCallback,
+                                                              &dataCallback);
 }
 
 /**
@@ -66,6 +85,8 @@ bool
 SakuraRoot::startProcess(const std::string &rootPath,
                          std::string seedName)
 {
+    m_controller->createServer(1337);
+
     // parsing
     SakuraConverter* sakuraParser = new SakuraConverter(DEBUG);
     SakuraCompiler compiler(sakuraParser);
@@ -83,6 +104,19 @@ SakuraRoot::startProcess(const std::string &rootPath,
     std::cout<<"finish"<<std::endl;
 
     return true;
+}
+
+/**
+ * @brief SakuraRoot::startClientConnection
+ * @param address
+ * @param port
+ * @return
+ */
+bool
+SakuraRoot::startClientConnection(const std::string &address,
+                                  const int port)
+{
+    return m_controller->startTcpSession(address, static_cast<uint16_t>(port));
 }
 
 /**

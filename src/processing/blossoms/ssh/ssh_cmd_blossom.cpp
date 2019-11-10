@@ -38,7 +38,8 @@ void
 SshCmdBlossom::initTask(BlossomItem &blossomItem)
 {
     if(blossomItem.values.contains("user") == false
-            || blossomItem.values.contains("address") == false)
+            || blossomItem.values.contains("address") == false
+            || blossomItem.values.contains("command") == false)
     {
         blossomItem.success = false;
         blossomItem.outputMessage = "missing connection informations";
@@ -71,10 +72,14 @@ SshCmdBlossom::runTask(BlossomItem &blossomItem)
         programm += " -i " + blossomItem.values.getStringByKey("ssh_key");
     }
 
+    programm += " ";
     programm += blossomItem.values.getStringByKey("user");
     programm += "@";
     programm += blossomItem.values.getStringByKey("address");
-    programm += ":";
+    programm += " ";
+    programm += "'";
+    programm += blossomItem.values.getStringByKey("command");
+    programm += "'";
 
     runSyncProcess(blossomItem, programm);
 }
