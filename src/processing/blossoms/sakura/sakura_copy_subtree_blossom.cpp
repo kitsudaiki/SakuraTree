@@ -57,7 +57,12 @@ SakuraCopySubtreeBlossom::runTask(BlossomItem &blossomItem)
     const std::string address = blossomItem.values.getStringByKey("address");
     const std::string plan = blossomItem.values.getStringByKey("subtree");
 
-    SakuraRoot::m_root->sendPlan(address, plan);
+    sleep(2);
+
+    SakuraRoot::m_root->sendPlan(address, plan, blossomItem.values.getStringByKey("values"));
+
+    sleep(2);
+
 }
 
 /**

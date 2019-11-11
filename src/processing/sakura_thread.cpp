@@ -142,7 +142,7 @@ SakuraThread::grow(SakuraItem* growPlan,
     {
         SeedItem* forestItem = dynamic_cast<SeedItem*>(growPlan);
         BranchItem* branchItem = dynamic_cast<BranchItem*>(forestItem->child);
-        processBranch(branchItem, &branchItem->values, hirarchie);
+        processBranch(branchItem, values, hirarchie);
     }
 
     return;

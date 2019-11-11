@@ -105,7 +105,6 @@ SakuraCompiler::compileSubtree(const std::string subtree)
     json.parse(subtree);
 
     DataMap* completePlan = json.getItemContent()->copy()->toMap();
-    preProcessObject(completePlan);
 
     // debug-output
     if(DEBUG)
@@ -148,6 +147,12 @@ SakuraCompiler::preProcessObject(DataMap* object)
         branch = m_fileCollector->getObject(object->get("id")->toString());
         object->insert("parts", branch->get("parts"));
         object->insert("items", branch->get("items"));
+    }
+
+    if(object->get("btype")->toString() == "seed")
+    {
+        branch = m_fileCollector->getObject(object->get("id")->toString());
+        preProcessObject(object->get("subtree")->toMap());
     }
 
     if(object->contains("parts")) {
@@ -215,19 +220,21 @@ SakuraItem*
 SakuraCompiler::convertBlossom(DataMap* growPlan)
 {
     BlossomItem* blossomItem =  new BlossomItem();
-    blossomItem->id = growPlan->getStringByKey("id");
+    blossomItem->id = growPlan->getStringByKey("name");
     blossomItem->blossomType = growPlan->getStringByKey("blossom-type");
 
-    if(growPlan->contains("items-input"))
-    {
-        DataMap* itemsInput = dynamic_cast<DataMap*>(growPlan->get("items-input"));
-        blossomItem->values = *itemsInput;
-    }
-
-    DataArray* subTypeArray = dynamic_cast<DataArray*>(growPlan->get("blossom-subtype"));
+    DataArray* subTypeArray = dynamic_cast<DataArray*>(growPlan->get("blossom-leafs"));
     for(uint64_t i = 0; i < subTypeArray->size(); i++)
     {
-        blossomItem->blossomSubTypes.push_back(subTypeArray->get(i)->toString());
+        if(subTypeArray->get(i)->toMap()->contains("items-input"))
+        {
+            DataMap* itemsInput = dynamic_cast<DataMap*>(
+                        subTypeArray->get(i)->toMap()->get("items-input"));
+            blossomItem->values = *itemsInput;
+        }
+
+        blossomItem->blossomSubTypes.push_back(
+                    subTypeArray->get(i)->toMap()->get("blossom-subtype")->toString());
     }
 
     return blossomItem;
@@ -252,7 +259,7 @@ SakuraCompiler::convertBranch(DataMap* growPlan)
         overrideItems(branchItem->values, *itemsInput);
     }
 
-    DataItem* parts = growPlan->get("parts")->toMap();
+    DataItem* parts = growPlan->get("parts");
     assert(parts != nullptr);
 
     for(uint32_t i = 0; i < parts->size(); i++)

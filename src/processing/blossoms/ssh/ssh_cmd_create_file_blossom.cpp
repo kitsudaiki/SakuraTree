@@ -1,5 +1,5 @@
 /**
- * @file        ssh_cmd_blossom.cpp
+ * @file        ssh_cmd_create_file_blossom.cpp
  *
  * @author      Tobias Anker <tobias.anker@kitsunemimi.moe>
  *
@@ -20,13 +20,13 @@
  *      limitations under the License.
  */
 
-#include "ssh_cmd_blossom.h"
+#include "ssh_cmd_create_file_blossom.h"
 #include <processing/process_methods.h>
 
 namespace SakuraTree
 {
 
-SshCmdBlossom::SshCmdBlossom()
+SshCmdCreateFileBlossom::SshCmdCreateFileBlossom()
 {
 
 }
@@ -35,11 +35,12 @@ SshCmdBlossom::SshCmdBlossom()
  * initTask
  */
 void
-SshCmdBlossom::initTask(BlossomItem &blossomItem)
+SshCmdCreateFileBlossom::initTask(BlossomItem &blossomItem)
 {
     if(blossomItem.values.contains("user") == false
             || blossomItem.values.contains("address") == false
-            || blossomItem.values.contains("command") == false)
+            || blossomItem.values.contains("file_path") == false
+            || blossomItem.values.contains("file_content") == false)
     {
         blossomItem.success = false;
         blossomItem.outputMessage = "missing connection informations";
@@ -52,7 +53,7 @@ SshCmdBlossom::initTask(BlossomItem &blossomItem)
  * preCheck
  */
 void
-SshCmdBlossom::preCheck(BlossomItem &blossomItem)
+SshCmdCreateFileBlossom::preCheck(BlossomItem &blossomItem)
 {
     //TODO: check per ssh if file already exist
     blossomItem.success = true;
@@ -62,9 +63,11 @@ SshCmdBlossom::preCheck(BlossomItem &blossomItem)
  * runTask
  */
 void
-SshCmdBlossom::runTask(BlossomItem &blossomItem)
+SshCmdCreateFileBlossom::runTask(BlossomItem &blossomItem)
 {
-    std::string programm = "ssh ";
+    std::string programm = "";
+
+    programm += "ssh ";
     if(blossomItem.values.contains("port")) {
         programm += " -p " + blossomItem.values.getStringByKey("port");
     }
@@ -76,20 +79,44 @@ SshCmdBlossom::runTask(BlossomItem &blossomItem)
     programm += blossomItem.values.getStringByKey("user");
     programm += "@";
     programm += blossomItem.values.getStringByKey("address");
-    programm += " -T ";
-    programm += "\"";
-    programm += blossomItem.values.getStringByKey("command");
+    programm += " -T \"sudo rm ";
+    programm += blossomItem.values.getStringByKey("file_path");
     programm += "\"";
 
     runSyncProcess(blossomItem, programm);
-    sleep(1);
+
+
+    programm = "";
+
+    programm += "echo \"";
+    programm += blossomItem.values.getStringByKey("file_content");
+    programm += "\" | ";
+
+    programm += "ssh ";
+    if(blossomItem.values.contains("port")) {
+        programm += " -p " + blossomItem.values.getStringByKey("port");
+    }
+    if(blossomItem.values.contains("ssh_key")) {
+        programm += " -i " + blossomItem.values.getStringByKey("ssh_key");
+    }
+
+    programm += " ";
+    programm += blossomItem.values.getStringByKey("user");
+    programm += "@";
+    programm += blossomItem.values.getStringByKey("address");
+    // with "cat" instead of "tee" it doesn't work for files in root-context
+    programm += " -T \"sudo tee -a ";
+    programm += blossomItem.values.getStringByKey("file_path");
+    programm += "\"";
+
+    runSyncProcess(blossomItem, programm);
 }
 
 /**
  * postCheck
  */
 void
-SshCmdBlossom::postCheck(BlossomItem &blossomItem)
+SshCmdCreateFileBlossom::postCheck(BlossomItem &blossomItem)
 {
     blossomItem.success = true;
 }
@@ -98,7 +125,7 @@ SshCmdBlossom::postCheck(BlossomItem &blossomItem)
  * closeTask
  */
 void
-SshCmdBlossom::closeTask(BlossomItem &blossomItem)
+SshCmdCreateFileBlossom::closeTask(BlossomItem &blossomItem)
 {
     blossomItem.success = true;
 }

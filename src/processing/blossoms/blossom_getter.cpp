@@ -31,6 +31,7 @@
 
 #include <processing/blossoms/ssh/ssh_cmd_blossom.h>
 #include <processing/blossoms/ssh/ssh_scp_blossom.h>
+#include <processing/blossoms/ssh/ssh_cmd_create_file_blossom.h>
 
 #include <processing/blossoms/sakura/sakura_copy_subtree_blossom.h>
 
@@ -72,6 +73,9 @@ getBlossom(const std::string type,
         }
         if(subType == "scp") {
             return new SshScpBlossom();
+        }
+        if(subType == "file_create") {
+            return new SshCmdCreateFileBlossom();
         }
     }
 

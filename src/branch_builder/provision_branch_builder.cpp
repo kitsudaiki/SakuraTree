@@ -67,14 +67,22 @@ createProvisionBranch(const std::string &address,
                                                targetPath);
     item->childs.push_back(scpBlossom);
 
-    BlossomItem* sshBlossom = createSshBlossom(address,
-                                               port,
-                                               userName,
-                                               keyPath);
-    item->childs.push_back(sshBlossom);
+    BlossomItem* fileCreateBlossom = createSshServiceFileBlossom(address,
+                                                                 port,
+                                                                 userName,
+                                                                 keyPath);
+    item->childs.push_back(fileCreateBlossom);
+
+    BlossomItem* serviceStartBlossom = createServiceStartBlossom(address,
+                                                                 port,
+                                                                 userName,
+                                                                 keyPath);
+    item->childs.push_back(serviceStartBlossom);
 
     BlossomItem* copySubtreeBlossom = createCopySubtreeBlossom(address, subtree);
     item->childs.push_back(copySubtreeBlossom);
+
+
 
     return item;
 }
@@ -170,35 +178,6 @@ createScpBlossom(const std::string &address,
 }
 
 /**
- * @brief createSshBlossom
- * @param address
- * @param port
- * @param userName
- * @param keyPath
- * @return
- */
-BlossomItem*
-createSshBlossom(const std::string &address,
-                 const int port,
-                 const std::string &userName,
-                 const std::string &keyPath)
-{
-    BlossomItem* item = new BlossomItem();
-
-    item->blossomType = "ssh";
-    item->blossomSubTypes.push_back("cmd");
-
-    item->values.insert("address", new DataValue(address));
-    item->values.insert("user", new DataValue(userName));
-    item->values.insert("port", new DataValue(port));
-    item->values.insert("ssh_key", new DataValue(keyPath));
-    item->values.insert("async", new DataValue(true));
-    item->values.insert("command", new DataValue("sudo ~/SakuraTree --server-address 127.0.0.1 --server-port 1337"));
-
-    return item;
-}
-
-/**
  * @brief createCopySubtreeBlossom
  * @param address
  * @param subtree
@@ -218,5 +197,70 @@ createCopySubtreeBlossom(const std::string &address,
 
     return item;
 }
+
+BlossomItem*
+createSshServiceFileBlossom(const std::string &address,
+                            const int port,
+                            const std::string &userName,
+                            const std::string &keyPath)
+{
+    std::string fileContent = "[Unit]\n"
+                              "Description=SakuraTree-Test\n"
+                              "StartLimitIntervalSec=0\n"
+                              "\n"
+                              "[Service]\n"
+                              "Type=simple\n"
+                              "Restart=always\n"
+                              "RestartSec=1\n"
+                              "User=neptune\n"
+                              "ExecStart=/home/neptune/SakuraTree --server-address 127.0.0.1 --server-port 1337\n"
+                              "\n"
+                              "[Install]\n"
+                              "WantedBy=multi-user.target\n";
+
+    BlossomItem* item = new BlossomItem();
+
+    item->blossomType = "ssh";
+    item->blossomSubTypes.push_back("file_create");
+
+    item->values.insert("address", new DataValue(address));
+    item->values.insert("user", new DataValue(userName));
+    item->values.insert("port", new DataValue(port));
+    item->values.insert("ssh_key", new DataValue(keyPath));
+    item->values.insert("file_content", new DataValue(fileContent));
+    item->values.insert("file_path", new DataValue("/etc/systemd/system/sakura_tree.service"));
+
+    return item;
+}
+
+/**
+ * @brief createServiceStartBlossom
+ * @param address
+ * @param port
+ * @param userName
+ * @param keyPath
+ * @return
+ */
+BlossomItem*
+createServiceStartBlossom(const std::string &address,
+                          const int port,
+                          const std::string &userName,
+                          const std::string &keyPath)
+{
+    BlossomItem* item = new BlossomItem();
+
+    item->blossomType = "ssh";
+    item->blossomSubTypes.push_back("cmd");
+
+    item->values.insert("address", new DataValue(address));
+    item->values.insert("user", new DataValue(userName));
+    item->values.insert("port", new DataValue(port));
+    item->values.insert("ssh_key", new DataValue(keyPath));
+    item->values.insert("async", new DataValue(true));
+    item->values.insert("command", new DataValue("sudo systemctl start sakura_tree"));
+
+    return item;
+}
+
 
 }

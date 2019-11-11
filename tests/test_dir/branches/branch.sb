@@ -2,7 +2,6 @@
 - packages: {{}}
 
 apt(apt_blossomX)  
--> update
 -> present:
 	-names: "{{packages}}"
 

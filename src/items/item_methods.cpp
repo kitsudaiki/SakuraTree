@@ -63,7 +63,9 @@ fillItems(DataMap &items,
     for(uint32_t i = 0; i < keys.size(); i++)
     {
         // TODO: make better
-        if(keys.at(i) == "subtree") {
+        if(keys.at(i) == "subtree")
+        {
+            items.insert("values", new DataValue(insertValues.toString()));
             continue;
         }
 
@@ -173,6 +175,8 @@ convertBlossomOutput(const BlossomItem &blossom)
 
     output += "-------------------------------------------------\n";
     output += "\n";
+
+    return output;
 }
 
 }

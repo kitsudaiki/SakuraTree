@@ -71,7 +71,8 @@ SOURCES += \
     src/branch_builder/provision_branch_builder.cpp \
     src/processing/blossoms/ssh/ssh_scp_blossom.cpp \
     src/processing/blossoms/ssh/ssh_cmd_blossom.cpp \
-    src/processing/blossoms/sakura/sakura_copy_subtree_blossom.cpp
+    src/processing/blossoms/sakura/sakura_copy_subtree_blossom.cpp \
+    src/processing/blossoms/ssh/ssh_cmd_create_file_blossom.cpp
 
 
 HEADERS += \
@@ -100,6 +101,7 @@ HEADERS += \
     src/branch_builder/provision_branch_builder.h \
     src/processing/blossoms/ssh/ssh_scp_blossom.h \
     src/processing/blossoms/ssh/ssh_cmd_blossom.h \
-    src/processing/blossoms/sakura/sakura_copy_subtree_blossom.h
+    src/processing/blossoms/sakura/sakura_copy_subtree_blossom.h \
+    src/processing/blossoms/ssh/ssh_cmd_create_file_blossom.h
 
 

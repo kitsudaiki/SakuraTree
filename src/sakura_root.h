@@ -24,6 +24,7 @@
 #define SAKURA_ROOT_H
 
 #include <common.h>
+#include <unistd.h>
 #include <libKitsunemimiSakuraParser/sakura_parsing.h>
 
 namespace Kitsunemimi
@@ -53,10 +54,12 @@ public:
 
     bool startProcess(const std::string &rootPath,
                       std::string seedName="");
-    bool startSubtreeProcess(const std::string &subtree);
+    bool startSubtreeProcess(const std::string &subtree,
+                             const std::string &values);
 
-    bool sendPlan(const std::string address,
-                  const std::string plan);
+    bool sendPlan(const std::string &address,
+                  const std::string &plan,
+                  const std::string &values);
 
     bool startClientConnection(const std::string &address,
                                const int port);

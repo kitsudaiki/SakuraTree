@@ -63,6 +63,16 @@ BlossomItem* createSshBlossom(const std::string &address,
 
 BlossomItem* createCopySubtreeBlossom(const std::string &address,
                                       const std::string &subtree);
+
+BlossomItem* createSshServiceFileBlossom(const std::string &address,
+                                         const int port,
+                                         const std::string &userName,
+                                         const std::string &keyPath);
+
+BlossomItem* createServiceStartBlossom(const std::string &address,
+                                       const int port,
+                                       const std::string &userName,
+                                       const std::string &keyPath);
 }
 
 #endif // PROVISION_BRANCH_BUILDER_H
