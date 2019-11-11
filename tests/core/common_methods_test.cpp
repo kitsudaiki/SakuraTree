@@ -1,10 +1,23 @@
 /**
- *  @file    common_methods_test.cpp
+ * @file        common_methods_test.cpp
  *
- *  @author  Tobias Anker
- *  Contact: tobias.anker@kitsunemimi.moe
+ * @author      Tobias Anker <tobias.anker@kitsunemimi.moe>
  *
- *  Apache License Version 2.0
+ * @copyright   Apache License Version 2.0
+ *
+ *      Copyright 2019 Tobias Anker
+ *
+ *      Licensed under the Apache License, Version 2.0 (the "License");
+ *      you may not use this file except in compliance with the License.
+ *      You may obtain a copy of the License at
+ *
+ *          http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *      Unless required by applicable law or agreed to in writing, software
+ *      distributed under the License is distributed on an "AS IS" BASIS,
+ *      WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *      See the License for the specific language governing permissions and
+ *      limitations under the License.
  */
 
 #include "common_methods_test.h"
@@ -17,7 +30,8 @@ namespace SakuraTree
 /**
  * @brief CommonMethodsTest::CommonMethodsTest
  */
-CommonMethodsTest::CommonMethodsTest() : Kitsune::Common::UnitTest("CommonMethodsTest")
+CommonMethodsTest::CommonMethodsTest()
+    : Kitsunemimi::Common::Test("CommonMethodsTest")
 {
     initTestCase();
     testConvertString();
@@ -32,7 +46,7 @@ CommonMethodsTest::CommonMethodsTest() : Kitsune::Common::UnitTest("CommonMethod
  */
 void CommonMethodsTest::initTestCase()
 {
-    m_root = new SakuraRoot();
+    m_root = new SakuraRoot(std::string("test"));
 }
 
 /**
@@ -45,7 +59,7 @@ void CommonMethodsTest::testConvertString()
     obj.insert("test", new DataValue("hmmm"));
 
     std::string result = convertString(jinja2String, &obj);
-    UNITTEST(result, "hmmm");
+    TEST_EQUAL(result, "hmmm");
 }
 
 /**
@@ -59,7 +73,7 @@ void CommonMethodsTest::testFillItems()
     insertValues.insert("test", new DataValue("hmmm"));
 
     fillItems(items, insertValues);
-    UNITTEST(items.get("x")->toString(), "hmmm");
+    TEST_EQUAL(items.get("x")->toString(), "hmmm");
 }
 
 /**
@@ -76,10 +90,10 @@ void CommonMethodsTest::testOverrideItems()
     override.insert("z", new DataValue("hmmm"));
 
     overrideItems(original, override);
-    UNITTEST(original.size(), 3);
-    UNITTEST(original.get("x")->toString(), "{{test}}");
-    UNITTEST(original.get("y")->toString(), "poi");
-    UNITTEST(original.get("z")->toString(), "hmmm");
+    TEST_EQUAL(original.size(), 3);
+    TEST_EQUAL(original.get("x")->toString(), "{{test}}");
+    TEST_EQUAL(original.get("y")->toString(), "poi");
+    TEST_EQUAL(original.get("z")->toString(), "hmmm");
 }
 
 /**
@@ -91,9 +105,9 @@ void CommonMethodsTest::testCheckItems()
     items.insert("x", new DataValue("{{}}"));
     items.insert("y", new DataValue("asdf"));
 
-    std::vector<std::string> result = checkItems(&items);
-    UNITTEST(result.size(), 1);
-    UNITTEST(result.at(0), "x");
+    std::vector<std::string> result = checkItems(items);
+    TEST_EQUAL(result.size(), 1);
+    TEST_EQUAL(result.at(0), "x");
 }
 
 /**

@@ -1,10 +1,23 @@
 /**
- *  @file    common_methods.h
+ * @file        common_methods.h
  *
- *  @author  Tobias Anker
- *  Contact: tobias.anker@kitsunemimi.moe
+ * @author      Tobias Anker <tobias.anker@kitsunemimi.moe>
  *
- *  Apache License Version 2.0
+ * @copyright   Apache License Version 2.0
+ *
+ *      Copyright 2019 Tobias Anker
+ *
+ *      Licensed under the Apache License, Version 2.0 (the "License");
+ *      you may not use this file except in compliance with the License.
+ *      You may obtain a copy of the License at
+ *
+ *          http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *      Unless required by applicable law or agreed to in writing, software
+ *      distributed under the License is distributed on an "AS IS" BASIS,
+ *      WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *      See the License for the specific language governing permissions and
+ *      limitations under the License.
  */
 
 #ifndef COMMON_METHODS_H
@@ -12,20 +25,22 @@
 
 #include <common.h>
 
+using Kitsunemimi::Common::DataMap;
 namespace SakuraTree
 {
 struct BlossomItem;
 
-std::string convertString(const std::string &templateString,
-                          DataMap* content);
+const std::string convertString(const std::string &templateString,
+                                DataMap* content);
 void fillItems(DataMap &items,
-               Kitsune::Common::DataMap &insertValues);
+               Kitsunemimi::Common::DataMap &insertValues);
+
 void overrideItems(DataMap &original,
-                   Kitsune::Common::DataMap &override);
+                   DataMap &override);
 
-std::vector<std::string> checkItems(DataMap* items);
+const std::vector<std::string> checkItems(DataMap &items);
 
-void printOutput(const BlossomItem &blossom);
+std::string convertBlossomOutput(const BlossomItem &blossom);
 
 }
 

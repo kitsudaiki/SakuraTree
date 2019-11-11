@@ -1,19 +1,32 @@
 /**
- *  @file    common_methods.cpp
+ * @file        common_methods.cpp
  *
- *  @author  Tobias Anker
- *  Contact: tobias.anker@kitsunemimi.moe
+ * @author      Tobias Anker <tobias.anker@kitsunemimi.moe>
  *
- *  Apache License Version 2.0
+ * @copyright   Apache License Version 2.0
+ *
+ *      Copyright 2019 Tobias Anker
+ *
+ *      Licensed under the Apache License, Version 2.0 (the "License");
+ *      you may not use this file except in compliance with the License.
+ *      You may obtain a copy of the License at
+ *
+ *          http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *      Unless required by applicable law or agreed to in writing, software
+ *      distributed under the License is distributed on an "AS IS" BASIS,
+ *      WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *      See the License for the specific language governing permissions and
+ *      limitations under the License.
  */
 
 #include "item_methods.h"
 
-#include <jinja2_converter.h>
+#include <libKitsunemimiJinja2/jinja2_converter.h>
 #include <sakura_root.h>
 #include <processing/blossoms/blossom.h>
 
-using Kitsune::Jinja2::Jinja2Converter;
+using Kitsunemimi::Jinja2::Jinja2Converter;
 
 namespace SakuraTree
 {
@@ -23,7 +36,7 @@ namespace SakuraTree
  *
  * @return
  */
-std::string
+const std::string
 convertString(const std::string &templateString,
               DataMap *content)
 {
@@ -49,6 +62,13 @@ fillItems(DataMap &items,
 
     for(uint32_t i = 0; i < keys.size(); i++)
     {
+        // TODO: make better
+        if(keys.at(i) == "subtree")
+        {
+            items.insert("values", new DataValue(insertValues.toString()));
+            continue;
+        }
+
         DataItem* obj = items.get(keys.at(i));
         if(obj->isValue())
         {
@@ -79,16 +99,16 @@ void overrideItems(DataMap &original,
  *
  * @return list of not initialized values
  */
-std::vector<std::string>
-checkItems(DataMap* items)
+const std::vector<std::string>
+checkItems(DataMap &items)
 {
     std::vector<std::string> result;
 
-    const std::vector<std::string> keys = items->getKeys();
+    const std::vector<std::string> keys = items.getKeys();
 
     for(uint32_t i = 0; i < keys.size(); i++)
     {
-        if(items->get(keys.at(i))->getString() == "{{}}") {
+        if(items.get(keys.at(i))->getString() == "{{}}") {
             result.push_back(keys.at(i));
         }
     }
@@ -100,34 +120,36 @@ checkItems(DataMap* items)
  * @brief printOutput
  * @param blossom
  */
-void
-printOutput(const BlossomItem &blossom)
+std::string
+convertBlossomOutput(const BlossomItem &blossom)
 {
-    std::cout<<"+++++++++++++++++++++++++++++++++++++++++++++++++"<<std::endl;
+    std::string output = "";
+    output += "+++++++++++++++++++++++++++++++++++++++++++++++++\n";
 
     // print executeion-state
     switch(blossom.resultState)
     {
         case BlossomItem::SKIPPED_STATE:
-            std::cout<<"SKIPPED"<<std::endl;
+            output += "SKIPPED\n";
             break;
         case BlossomItem::CHANGED_STATE:
-            std::cout<<"CHANGED"<<std::endl;
+            output += "CHANGED\n";
             break;
         case BlossomItem::ERROR_INIT_STATE:
-            std::cout<<"ERROR in init-state"<<std::endl;
+            output += "ERROR in init-state\n";
             break;
         case BlossomItem::ERROR_PRECHECK_STATE:
-            std::cout<<"ERROR in pre-check-state"<<std::endl;
+            output += "ERROR in pre-check-state\n";
             break;
         case BlossomItem::ERROR_EXEC_STATE:
-            std::cout<<"ERROR in exec-state with error-code: "<<blossom.execState<<std::endl;
+            output += "ERROR in exec-state with error-code: "
+                    + std::to_string(blossom.execState) + "\n";
             break;
         case BlossomItem::ERROR_POSTCHECK_STATE:
-            std::cout<<"ERROR in post-check-state"<<std::endl;
+            output += "ERROR in post-check-state\n";
             break;
         case BlossomItem::ERROR_CLOSE_STATE:
-            std::cout<<"ERROR in error-state"<<std::endl;
+            output += "ERROR in error-state\n";
             break;
         default:
             break;
@@ -138,21 +160,23 @@ printOutput(const BlossomItem &blossom)
     {
         for(uint32_t j = 0; j < i; j++)
         {
-            std::cout<<"   ";
+            output += "   ";
         }
-        std::cout<<blossom.nameHirarchie.at(i)<<std::endl;
+        output += blossom.nameHirarchie.at(i) + "\n";
     }
 
     // print process-output
     if(blossom.outputMessage.size() > 0
             && blossom.resultState >= 3)
     {
-        std::cout<<std::endl;
-        std::cout<<blossom.outputMessage<<std::endl;
+        output += "\n";
+        output += blossom.outputMessage + "\n";
     }
 
-    std::cout<<"-------------------------------------------------"<<std::endl;
-    std::cout<<std::endl;
+    output += "-------------------------------------------------\n";
+    output += "\n";
+
+    return output;
 }
 
 }

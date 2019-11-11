@@ -1,6 +1,5 @@
-[BRANCH: install_branch2]
+[install_branch2]
 
-[pip_blossomU]
-- pip:
-	action: update
+pip (pip_blossomU)
+-> update
 

@@ -1,28 +1,44 @@
 /**
- *  @file    sakura_root.h
+ * @file        sakura_root.h
  *
- *  @author  Tobias Anker
- *  Contact: tobias.anker@kitsunemimi.moe
+ * @author      Tobias Anker <tobias.anker@kitsunemimi.moe>
  *
- *  Apache License Version 2.0
+ * @copyright   Apache License Version 2.0
+ *
+ *      Copyright 2019 Tobias Anker
+ *
+ *      Licensed under the Apache License, Version 2.0 (the "License");
+ *      you may not use this file except in compliance with the License.
+ *      You may obtain a copy of the License at
+ *
+ *          http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *      Unless required by applicable law or agreed to in writing, software
+ *      distributed under the License is distributed on an "AS IS" BASIS,
+ *      WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *      See the License for the specific language governing permissions and
+ *      limitations under the License.
  */
 
 #ifndef SAKURA_ROOT_H
 #define SAKURA_ROOT_H
 
 #include <common.h>
-#include <sakura_converter.h>
+#include <unistd.h>
+#include <libKitsunemimiSakuraParser/sakura_parsing.h>
 
-namespace Kitsune
+namespace Kitsunemimi
 {
-namespace Jinja2
-{
+namespace Jinja2 {
 class Jinja2Converter;
 }
+namespace Sakura {
+class SakuraHostHandler;
+}
 }
 
-using Kitsune::Sakura::SakuraConverter;
-using Kitsune::Jinja2::Jinja2Converter;
+using Kitsunemimi::Sakura::SakuraParsing;
+using Kitsunemimi::Jinja2::Jinja2Converter;
 
 namespace SakuraTree
 {
@@ -33,18 +49,29 @@ class SakuraRoot
 {
 
 public:
-    SakuraRoot();
+    SakuraRoot(const std::string &executablePath);
     ~SakuraRoot();
 
     bool startProcess(const std::string &rootPath,
-                     std::string seedName="");
+                      std::string seedName="");
+    bool startSubtreeProcess(const std::string &subtree,
+                             const std::string &values);
 
-    void addMessage(const BlossomItem &blossomItem);
+    bool sendPlan(const std::string &address,
+                  const std::string &plan,
+                  const std::string &values);
+
+    bool startClientConnection(const std::string &address,
+                               const int port);
+    void printOutput(const BlossomItem &blossomItem);
+    void printOutput(const std::string &output);
 
     static SakuraTree::SakuraRoot* m_root;
     static Jinja2Converter* m_jinja2Converter;
+    static std::string m_executablePath;
 
 private:
+    Kitsunemimi::Sakura::SakuraHostHandler* m_controller = nullptr;
     SakuraThread* m_rootThread = nullptr;
 
     std::mutex m_mutex;

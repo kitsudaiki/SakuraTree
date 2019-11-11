@@ -1,5 +1,5 @@
 /**
- * @file        apt_update_blossom.cpp
+ * @file        sakura_copy_subtree_blossom.cpp
  *
  * @author      Tobias Anker <tobias.anker@kitsunemimi.moe>
  *
@@ -20,21 +20,21 @@
  *      limitations under the License.
  */
 
-#include "apt_update_blossom.h"
-#include <processing/blossoms/install/apt/apt_methods.h>
+#include "sakura_copy_subtree_blossom.h"
 #include <processing/process_methods.h>
+#include <sakura_root.h>
 
 namespace SakuraTree
 {
 
-AptUdateBlossom::AptUdateBlossom() :
+SakuraCopySubtreeBlossom::SakuraCopySubtreeBlossom() :
     Blossom() {}
 
 /**
  * initTask
  */
 void
-AptUdateBlossom::initTask(BlossomItem &blossomItem)
+SakuraCopySubtreeBlossom::initTask(BlossomItem &blossomItem)
 {
     blossomItem.success = true;
 }
@@ -43,7 +43,7 @@ AptUdateBlossom::initTask(BlossomItem &blossomItem)
  * preCheck
  */
 void
-AptUdateBlossom::preCheck(BlossomItem &blossomItem)
+SakuraCopySubtreeBlossom::preCheck(BlossomItem &blossomItem)
 {
     blossomItem.success = true;
 }
@@ -52,17 +52,24 @@ AptUdateBlossom::preCheck(BlossomItem &blossomItem)
  * runTask
  */
 void
-AptUdateBlossom::runTask(BlossomItem &blossomItem)
+SakuraCopySubtreeBlossom::runTask(BlossomItem &blossomItem)
 {
-    std::string programm = "sudo apt-get update";
-    runSyncProcess(blossomItem, programm);
+    const std::string address = blossomItem.values.getStringByKey("address");
+    const std::string plan = blossomItem.values.getStringByKey("subtree");
+
+    sleep(2);
+
+    SakuraRoot::m_root->sendPlan(address, plan, blossomItem.values.getStringByKey("values"));
+
+    sleep(2);
+
 }
 
 /**
  * postCheck
  */
 void
-AptUdateBlossom::postCheck(BlossomItem &blossomItem)
+SakuraCopySubtreeBlossom::postCheck(BlossomItem &blossomItem)
 {
     blossomItem.success = true;
 }
@@ -71,7 +78,7 @@ AptUdateBlossom::postCheck(BlossomItem &blossomItem)
  * closeTask
  */
 void
-AptUdateBlossom::closeTask(BlossomItem &blossomItem)
+SakuraCopySubtreeBlossom::closeTask(BlossomItem &blossomItem)
 {
     blossomItem.success = true;
 }

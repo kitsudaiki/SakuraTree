@@ -1,22 +1,35 @@
 /**
- *  @file    sakura_items.h
+ * @file        sakura_items.h
  *
- *  @author  Tobias Anker
- *  Contact: tobias.anker@kitsunemimi.moe
+ * @author      Tobias Anker <tobias.anker@kitsunemimi.moe>
  *
- *  Apache License Version 2.0
+ * @copyright   Apache License Version 2.0
+ *
+ *      Copyright 2019 Tobias Anker
+ *
+ *      Licensed under the Apache License, Version 2.0 (the "License");
+ *      you may not use this file except in compliance with the License.
+ *      You may obtain a copy of the License at
+ *
+ *          http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *      Unless required by applicable law or agreed to in writing, software
+ *      distributed under the License is distributed on an "AS IS" BASIS,
+ *      WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *      See the License for the specific language governing permissions and
+ *      limitations under the License.
  */
 
 #ifndef SAKURA_ITEMS_H
 #define SAKURA_ITEMS_H
 
 #include <iostream>
-#include <common_items/data_items.h>
+#include <libKitsunemimiCommon/common_items/data_items.h>
 
-using Kitsune::Common::DataItem;
-using Kitsune::Common::DataMap;
-using Kitsune::Common::DataArray;
-using Kitsune::Common::DataValue;
+using Kitsunemimi::Common::DataItem;
+using Kitsunemimi::Common::DataMap;
+using Kitsunemimi::Common::DataArray;
+using Kitsunemimi::Common::DataValue;
 
 namespace SakuraTree
 {
@@ -33,10 +46,11 @@ public:
         BLOSSOM_ITEM = 1,
         BRANCH_ITEM = 2,
         TREE_ITEM = 3,
-        SEQUENTIELL_ITEM = 4,
-        PARALLEL_ITEM = 5,
-        IF_ITEM = 6,
-        FOR_ITEM = 7
+        SEED_ITEM = 5,
+        SEQUENTIELL_ITEM = 6,
+        PARALLEL_ITEM = 7,
+        IF_ITEM = 8,
+        FOR_ITEM = 9
     };
 
     SakuraItem();
@@ -71,8 +85,7 @@ public:
     BlossomItem();
     ~BlossomItem();
 
-    std::string name = "";
-    DataMap settings;
+    std::string id = "";
     DataMap values;
 
     std::string blossomType = "";
@@ -85,6 +98,25 @@ public:
     bool success = true;
     int execState = 0;
     std::string outputMessage = "";
+};
+
+//===================================================================
+// SeedItem
+//===================================================================
+class SeedItem : public SakuraItem
+{
+public:
+    SeedItem();
+    ~SeedItem();
+
+    std::string name = "";
+    std::string address = "";
+    int sshPort = 0;
+    std::string sshUser = "";
+    std::string sshKey = "";
+    std::string content = "";
+
+    SakuraItem* child = nullptr;
 };
 
 //===================================================================

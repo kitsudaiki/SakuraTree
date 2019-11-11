@@ -1,32 +1,79 @@
 /**
- *  @file    sakura_root.cpp
+ * @file        sakura_root.cpp
  *
- *  @author  Tobias Anker
- *  Contact: tobias.anker@kitsunemimi.moe
+ * @author      Tobias Anker <tobias.anker@kitsunemimi.moe>
  *
- *  Apache License Version 2.0
+ * @copyright   Apache License Version 2.0
+ *
+ *      Copyright 2019 Tobias Anker
+ *
+ *      Licensed under the Apache License, Version 2.0 (the "License");
+ *      you may not use this file except in compliance with the License.
+ *      You may obtain a copy of the License at
+ *
+ *          http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *      Unless required by applicable law or agreed to in writing, software
+ *      distributed under the License is distributed on an "AS IS" BASIS,
+ *      WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *      See the License for the specific language governing permissions and
+ *      limitations under the License.
  */
 
 #include "sakura_root.h"
-#include <jinja2_converter.h>
+#include <libKitsunemimiJinja2/jinja2_converter.h>
 
 #include <initializing/sakura_compiler.h>
 #include <items/item_methods.h>
 #include <processing/sakura_thread.h>
+#include <libKitsunemimiSakuraNetwork/sakura_host_handler.h>
+#include <libKitsunemimiJson/json_item.h>
 
 namespace SakuraTree
 {
 
 SakuraRoot* SakuraRoot::m_root = nullptr;
 Jinja2Converter* SakuraRoot::m_jinja2Converter = nullptr;
+std::string SakuraRoot::m_executablePath = "";
+
+void dataCallback(void* target,
+                  const std::string address,
+                  const std::string plan,
+                  const std::string values)
+{
+    std::cout<<"dataCallback: "<<plan<<std::endl;
+    SakuraRoot* rootClass = static_cast<SakuraRoot*>(target);
+    rootClass->startSubtreeProcess(plan, values);
+}
+
+void blossomOutputCallback(void* target,
+                           const std::string address,
+                           const std::string output)
+{
+    SakuraRoot* rootClass = static_cast<SakuraRoot*>(target);
+    rootClass->printOutput(output);
+}
+
+
+void sessionCallback(void* target,
+                     const std::string)
+{
+    SakuraRoot* rootClass = static_cast<SakuraRoot*>(target);
+}
 
 /**
  * constructor
  */
-SakuraRoot::SakuraRoot()
+SakuraRoot::SakuraRoot(const std::string &executablePath)
 {
     m_root = this;
-    m_jinja2Converter = new Kitsune::Jinja2::Jinja2Converter;
+    m_jinja2Converter = new Kitsunemimi::Jinja2::Jinja2Converter;
+    m_executablePath = executablePath;
+
+    m_controller = new Kitsunemimi::Sakura::SakuraHostHandler(this,
+                                                              &sessionCallback,
+                                                              &dataCallback,
+                                                              &blossomOutputCallback);
 }
 
 /**
@@ -36,7 +83,7 @@ SakuraRoot::~SakuraRoot()
 {
     if(m_rootThread != nullptr)
     {
-        m_rootThread->stop();
+        m_rootThread->stopThread();
         delete m_rootThread;
         m_rootThread = nullptr;
     }
@@ -51,17 +98,23 @@ bool
 SakuraRoot::startProcess(const std::string &rootPath,
                          std::string seedName)
 {
+    m_controller->createServer(1337);
+
     // parsing
-    SakuraConverter* sakuraParser = new SakuraConverter(DEBUG);
+    SakuraParsing* sakuraParser = new SakuraParsing(DEBUG);
     SakuraCompiler compiler(sakuraParser);
     SakuraItem* processPlan = compiler.compile(rootPath, seedName);
+
+    assert(processPlan != nullptr);
 
     // run process
     DataMap* dummyObj = new DataMap();
     m_rootThread = new SakuraThread(processPlan, dummyObj, std::vector<std::string>());
-    m_rootThread->start();
+    m_rootThread->startThread();
     m_rootThread->waitUntilStarted();
     m_rootThread->waitForFinish();
+
+    sleep(1000);
 
     std::cout<<"finish"<<std::endl;
 
@@ -69,14 +122,90 @@ SakuraRoot::startProcess(const std::string &rootPath,
 }
 
 /**
- * @brief SakuraRoot::addMessage
+ * @brief SakuraRoot::startSubtreeProcess
+ * @param subtree
+ * @return
+ */
+bool
+SakuraRoot::startSubtreeProcess(const std::string &subtree,
+                                const std::string &values)
+{
+    std::cout<<"startSubtreeProcess"<<std::endl;
+    // parsing
+    SakuraParsing* sakuraParser = new SakuraParsing(DEBUG);
+    SakuraCompiler compiler(sakuraParser);
+    SakuraItem* processPlan = compiler.compileSubtree(subtree);
+
+    assert(processPlan != nullptr);
+
+    // run process
+    Kitsunemimi::Json::JsonItem valuesJson;
+    valuesJson.parse(values);
+    DataMap* tempMap = valuesJson.getItemContent()->toMap();
+    m_rootThread = new SakuraThread(processPlan,
+                                    tempMap->copy()->toMap(),
+                                    std::vector<std::string>());
+    m_rootThread->startThread();
+    m_rootThread->waitUntilStarted();
+
+    std::cout<<"finish"<<std::endl;
+
+    return true;
+}
+
+/**
+ * @brief SakuraRoot::sendPlan
+ * @param address
+ * @param plan
+ * @return
+ */
+bool
+SakuraRoot::sendPlan(const std::string &address,
+                     const std::string &plan,
+                     const std::string &values)
+{
+    return m_controller->sendGrowPlan(address, plan, values);
+}
+
+
+/**
+ * @brief SakuraRoot::startClientConnection
+ * @param address
+ * @param port
+ * @return
+ */
+bool
+SakuraRoot::startClientConnection(const std::string &address,
+                                  const int port)
+{
+    return m_controller->startTcpSession(address, static_cast<uint16_t>(port));
+}
+
+/**
+ * @brief SakuraRoot::pringOutpue
  */
 void
-SakuraRoot::addMessage(const BlossomItem &blossomItem)
+SakuraRoot::printOutput(const BlossomItem &blossomItem)
 {
     m_mutex.lock();
     std::cout<<" "<<std::endl;
-    printOutput(blossomItem);
+    std::string output = convertBlossomOutput(blossomItem);
+    m_controller->sendBlossomOuput("127.0.0.1", output);
+
+    std::cout<<output<<std::endl;
+
+    m_mutex.unlock();
+}
+
+/**
+ * @brief SakuraRoot::pringOutput
+ * @param output
+ */
+void
+SakuraRoot::printOutput(const std::string &output)
+{
+    m_mutex.lock();
+    std::cout<<output<<std::endl;
     m_mutex.unlock();
 }
 

@@ -1,21 +1,34 @@
 /**
- *  @file    file_collector.cpp
+ * @file        file_collector.cpp
  *
- *  @author  Tobias Anker
- *  Contact: tobias.anker@kitsunemimi.moe
+ * @author      Tobias Anker <tobias.anker@kitsunemimi.moe>
  *
- *  Apache License Version 2.0
+ * @copyright   Apache License Version 2.0
+ *
+ *      Copyright 2019 Tobias Anker
+ *
+ *      Licensed under the Apache License, Version 2.0 (the "License");
+ *      you may not use this file except in compliance with the License.
+ *      You may obtain a copy of the License at
+ *
+ *          http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *      Unless required by applicable law or agreed to in writing, software
+ *      distributed under the License is distributed on an "AS IS" BASIS,
+ *      WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *      See the License for the specific language governing permissions and
+ *      limitations under the License.
  */
 
 #include <initializing/file_collector.h>
 
-#include <sakura_converter.h>
-#include <common_methods/string_methods.h>
+#include <libKitsunemimiSakuraParser/sakura_parsing.h>
+#include <libKitsunemimiCommon/common_methods/string_methods.h>
 
 namespace SakuraTree
 {
 
-FileCollector::FileCollector(SakuraConverter *driver)
+FileCollector::FileCollector(SakuraParsing *driver)
 {
     m_driver = driver;
 }
@@ -55,7 +68,7 @@ FileCollector::initFileCollector(const std::string &rootPath)
     for(uint32_t i = 0; i < m_fileContents.size(); i++)
     {
         const std::string filePath = m_fileContents.at(i).first;
-        std::pair<Kitsune::Common::DataItem*, bool> result = m_driver->parse(readFile(filePath));
+        std::pair<Kitsunemimi::Common::DataItem*, bool> result = m_driver->parse(readFile(filePath));
 
         if(result.second == false)
         {
@@ -79,7 +92,7 @@ FileCollector::initFileCollector(const std::string &rootPath)
  * @param type
  * @return
  */
-Kitsune::Common::DataMap*
+Kitsunemimi::Common::DataMap*
 FileCollector::getObject(const std::string &name,
                          const std::string &type)
 {
@@ -94,7 +107,7 @@ FileCollector::getObject(const std::string &name,
         it != m_fileContents.end();
         it++)
     {
-        if(it->second->get("name")->toString() == name)
+        if(it->second->get("id")->toString() == name)
         {
             if(type != ""
                     && it->second->get("type")->toString() == type)

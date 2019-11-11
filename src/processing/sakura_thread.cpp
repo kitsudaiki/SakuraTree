@@ -1,10 +1,23 @@
 ﻿/**
- *  @file    sakura_thread.cpp
+ * @file        sakura_thread.cpp
  *
- *  @author  Tobias Anker
- *  Contact: tobias.anker@kitsunemimi.moe
+ * @author      Tobias Anker <tobias.anker@kitsunemimi.moe>
  *
- *  Apache License Version 2.0
+ * @copyright   Apache License Version 2.0
+ *
+ *      Copyright 2019 Tobias Anker
+ *
+ *      Licensed under the Apache License, Version 2.0 (the "License");
+ *      you may not use this file except in compliance with the License.
+ *      You may obtain a copy of the License at
+ *
+ *          http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *      Unless required by applicable law or agreed to in writing, software
+ *      distributed under the License is distributed on an "AS IS" BASIS,
+ *      WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *      See the License for the specific language governing permissions and
+ *      limitations under the License.
  */
 
 #include "sakura_thread.h"
@@ -92,7 +105,7 @@ SakuraThread::grow(SakuraItem* growPlan,
         BlossomItem* blossomItem = dynamic_cast<BlossomItem*>(growPlan);
         fillItems(blossomItem->values, *values);
         std::vector<std::string> newHirarchie = hirarchie;
-        newHirarchie.push_back("BLOSSOM: " + blossomItem->name);
+        newHirarchie.push_back("BLOSSOM: " + blossomItem->id);
         processBlossom(*blossomItem, &blossomItem->values, newHirarchie);
         return;
     }
@@ -125,6 +138,13 @@ SakuraThread::grow(SakuraItem* growPlan,
         return;
     }
 
+    if(growPlan->getType() == SakuraItem::SEED_ITEM)
+    {
+        SeedItem* forestItem = dynamic_cast<SeedItem*>(growPlan);
+        BranchItem* branchItem = dynamic_cast<BranchItem*>(forestItem->child);
+        processBranch(branchItem, values, hirarchie);
+    }
+
     return;
 }
 
@@ -154,11 +174,11 @@ SakuraThread::processBlossom(BlossomItem &growPlan,
     {
         m_abort = true;
         std::string output = "ABORT after ERROR";
-        SakuraRoot::m_root->addMessage(growPlan);
+        SakuraRoot::m_root->printOutput(growPlan);
     }
 
     // send result to root
-    SakuraRoot::m_root->addMessage(growPlan);
+    SakuraRoot::m_root->printOutput(growPlan);
 
     return;
 }
@@ -196,7 +216,7 @@ SakuraThread::processTree(TreeItem* growPlan,
                                                values,
                                                hirarchie);
         m_childs.push_back(child);
-        child->start();
+        child->startThread();
     }
 
     // wait for the end of all threads
@@ -252,7 +272,7 @@ SakuraThread::processParallelPart(ParallelBranching* growPlan,
                                                values,
                                                hirarchie);
         m_childs.push_back(child);
-        child->start();
+        child->startThread();
     }
 
     // wait for the end of all threads
@@ -283,7 +303,7 @@ SakuraThread::clearChilds()
 {
     for(uint32_t i = 0; i < m_childs.size(); i++)
     {
-        m_childs.at(i)->stop();
+        m_childs.at(i)->stopThread();
         delete m_childs[i];
     }
     m_childs.clear();

@@ -1,10 +1,23 @@
 /**
- *  @file    blossom_getter.cpp
+ * @file        blossom_getter.cpp
  *
- *  @author  Tobias Anker
- *  Contact: tobias.anker@kitsunemimi.moe
+ * @author      Tobias Anker <tobias.anker@kitsunemimi.moe>
  *
- *  Apache License Version 2.0
+ * @copyright   Apache License Version 2.0
+ *
+ *      Copyright 2019 Tobias Anker
+ *
+ *      Licensed under the Apache License, Version 2.0 (the "License");
+ *      you may not use this file except in compliance with the License.
+ *      You may obtain a copy of the License at
+ *
+ *          http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *      Unless required by applicable law or agreed to in writing, software
+ *      distributed under the License is distributed on an "AS IS" BASIS,
+ *      WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *      See the License for the specific language governing permissions and
+ *      limitations under the License.
  */
 
 #include "blossom_getter.h"
@@ -15,6 +28,12 @@
 #include <processing/blossoms/install/apt/apt_present_blossom.h>
 #include <processing/blossoms/install/apt/apt_update_blossom.h>
 #include <processing/blossoms/install/apt/apt_upgrade_blossom.h>
+
+#include <processing/blossoms/ssh/ssh_cmd_blossom.h>
+#include <processing/blossoms/ssh/ssh_scp_blossom.h>
+#include <processing/blossoms/ssh/ssh_cmd_create_file_blossom.h>
+
+#include <processing/blossoms/sakura/sakura_copy_subtree_blossom.h>
 
 namespace SakuraTree
 {
@@ -46,6 +65,28 @@ getBlossom(const std::string type,
             return new AptUpgradeBlossom();
         }
     }
+
+    if(type == "ssh")
+    {
+        if(subType == "cmd") {
+            return new SshCmdBlossom();
+        }
+        if(subType == "scp") {
+            return new SshScpBlossom();
+        }
+        if(subType == "file_create") {
+            return new SshCmdCreateFileBlossom();
+        }
+    }
+
+    if(type == "sakura-connection")
+    {
+        if(subType == "copy-subtree") {
+            return new SakuraCopySubtreeBlossom();
+        }
+    }
+
+    assert(false);
 
     return nullptr;
 }

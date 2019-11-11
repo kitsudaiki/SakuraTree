@@ -1,16 +1,29 @@
 /**
- *  @file    apt_methods.cpp
+ * @file        apt_methods.cpp
  *
- *  @author  Tobias Anker
- *  Contact: tobias.anker@kitsunemimi.moe
+ * @author      Tobias Anker <tobias.anker@kitsunemimi.moe>
  *
- *  Apache License Version 2.0
+ * @copyright   Apache License Version 2.0
+ *
+ *      Copyright 2019 Tobias Anker
+ *
+ *      Licensed under the Apache License, Version 2.0 (the "License");
+ *      you may not use this file except in compliance with the License.
+ *      You may obtain a copy of the License at
+ *
+ *          http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *      Unless required by applicable law or agreed to in writing, software
+ *      distributed under the License is distributed on an "AS IS" BASIS,
+ *      WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *      See the License for the specific language governing permissions and
+ *      limitations under the License.
  */
 
 #include "apt_methods.h"
 
-#include <common_methods/string_methods.h>
-#include <common_items/data_items.h>
+#include <libKitsunemimiCommon/common_methods/string_methods.h>
+#include <libKitsunemimiCommon/common_items/data_items.h>
 #include <processing/process_methods.h>
 
 namespace SakuraTree
@@ -65,7 +78,7 @@ fillPackageNames(BlossomItem &blossomItem,
  * @brief AptBlossom::createPackageList
  * @return
  */
-std::string
+const std::string
 createPackageList(const std::vector<std::string> &packageList)
 {
     std::string result = "";
@@ -82,7 +95,7 @@ createPackageList(const std::vector<std::string> &packageList)
  * @param packageList
  * @return
  */
-std::vector<std::string>
+const std::vector<std::string>
 getInstalledPackages(BlossomItem &blossomItem,
                      const std::vector<std::string> &packageList)
 {
@@ -109,7 +122,7 @@ getInstalledPackages(BlossomItem &blossomItem,
  * @param packageList
  * @return
  */
-std::vector<std::string>
+const std::vector<std::string>
 getAbsendPackages(BlossomItem &blossomItem,
                   const std::vector<std::string> &packageList)
 {
@@ -141,13 +154,13 @@ getAbsendPackages(BlossomItem &blossomItem,
  * @brief AptBlossom::getInstalledPackages
  * @return
  */
-std::vector<std::string>
+const std::vector<std::string>
 getInstalledPackages(BlossomItem &blossomItem)
 {
     std::string command = "dpkg --list | grep ^ii  | awk ' {print \\$2} '";
     runSyncProcess(blossomItem, command);
     const std::string output(blossomItem.outputMessage);
-    return Kitsune::Common::splitStringByDelimiter(output, '\n');
+    return Kitsunemimi::Common::splitStringByDelimiter(output, '\n');
 }
 
 }

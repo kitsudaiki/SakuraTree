@@ -1,9 +1,0 @@
-[FOREST: test_forest]
-
-[test_vm]
-address: "127.0.0.1"
-user: neptune
-port: 22
-ssh_key: "~/.ssh/sakura_test"
-- TREE test_tree:
-

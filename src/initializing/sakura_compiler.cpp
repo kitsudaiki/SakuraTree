@@ -1,17 +1,39 @@
 /**
- *  @file    sakura_compiler.cpp
+ * @file        sakura_compiler.cpp
  *
- *  @author  Tobias Anker
- *  Contact: tobias.anker@kitsunemimi.moe
+ * @author      Tobias Anker <tobias.anker@kitsunemimi.moe>
  *
- *  Apache License Version 2.0
+ * @copyright   Apache License Version 2.0
+ *
+ *      Copyright 2019 Tobias Anker
+ *
+ *      Licensed under the Apache License, Version 2.0 (the "License");
+ *      you may not use this file except in compliance with the License.
+ *      You may obtain a copy of the License at
+ *
+ *          http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *      Unless required by applicable law or agreed to in writing, software
+ *      distributed under the License is distributed on an "AS IS" BASIS,
+ *      WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *      See the License for the specific language governing permissions and
+ *      limitations under the License.
  */
 
 #include "sakura_compiler.h"
-#include <sakura_converter.h>
+
+#include <libKitsunemimiSakuraParser/sakura_parsing.h>
+
+#include <libKitsunemimiJson/json_item.h>
+
 #include <initializing/file_collector.h>
+#include <sakura_root.h>
 #include <items/sakura_items.h>
 #include <items/item_methods.h>
+
+#include <branch_builder/provision_branch_builder.h>
+
+using Kitsunemimi::Json::JsonItem;
 
 namespace SakuraTree
 {
@@ -20,7 +42,7 @@ namespace SakuraTree
  * @brief SakuraCompiler::SakuraCompiler
  * @param driver
  */
-SakuraCompiler::SakuraCompiler(Kitsune::Sakura::SakuraConverter* driver)
+SakuraCompiler::SakuraCompiler(Kitsunemimi::Sakura::SakuraParsing* driver)
 {
     m_driver = driver;
     m_fileCollector = new FileCollector(m_driver);
@@ -33,8 +55,8 @@ SakuraCompiler::~SakuraCompiler()
 
 /**
  * @brief SakuraCompiler::compile
- * @param type
- * @param name
+ * @param rootPath
+ * @param seedName
  * @return
  */
 SakuraItem*
@@ -72,35 +94,70 @@ SakuraCompiler::compile(const std::string &rootPath,
 }
 
 /**
+ * @brief SakuraCompiler::compileSubtree
+ * @param subtree
+ * @return
+ */
+SakuraItem*
+SakuraCompiler::compileSubtree(const std::string subtree)
+{
+    JsonItem json;
+    json.parse(subtree);
+
+    DataMap* completePlan = json.getItemContent()->copy()->toMap();
+
+    // debug-output
+    if(DEBUG)
+    {
+        std::cout<<"+++++++++++++++++++++++++++++++++++++++++++++++++++++"<<std::endl;
+        std::string output = completePlan->toString(true);
+        std::cout<<output<<std::endl;
+        std::cout<<"-----------------------------------------------------"<<std::endl;
+    }
+
+    SakuraItem* result = convert(completePlan);
+
+    return result;
+}
+
+/**
  * @brief SakuraCompiler::processObject
  * @param value
  * @return
  */
 void
-SakuraCompiler::preProcessObject(DataMap* value)
+SakuraCompiler::preProcessObject(DataMap* object)
 {
     // precheck
-    if(value == nullptr) {
+    if(object == nullptr) {
         return;
     }
 
     // end of tree
-    if(value->get("type")->toString() == "blossom") {
+    if(object->get("btype")->toString() == "blossom") {
         return;
     }
 
     // continue building
-    DataMap* branch = value;
+    DataMap* branch = object;
 
-    if(value->get("type")->toString() != "parallel"
-            && value->get("type")->toString() != "sequentiell")
+    if(object->get("btype")->toString() == "tree"
+            || object->get("btype")->toString() == "branch")
     {
-        branch = m_fileCollector->getObject(value->get("name")->toString());
-        value->insert("parts", branch->get("parts"));
-        value->insert("items", branch->get("items"));
+        branch = m_fileCollector->getObject(object->get("id")->toString());
+        object->insert("parts", branch->get("parts"));
+        object->insert("items", branch->get("items"));
     }
 
-    preProcessArray(value->get("parts")->toArray());
+    if(object->get("btype")->toString() == "seed")
+    {
+        branch = m_fileCollector->getObject(object->get("id")->toString());
+        preProcessObject(object->get("subtree")->toMap());
+    }
+
+    if(object->contains("parts")) {
+        preProcessArray(object->get("parts")->toArray());
+    }
 }
 
 /**
@@ -109,11 +166,11 @@ SakuraCompiler::preProcessObject(DataMap* value)
  * @return
  */
 void
-SakuraCompiler::preProcessArray(DataArray* value)
+SakuraCompiler::preProcessArray(DataArray* object)
 {
-    for(uint32_t i = 0; i < value->size(); i++)
+    for(uint32_t i = 0; i < object->size(); i++)
     {
-        preProcessObject(value->get(i)->toMap());
+        preProcessObject(object->get(i)->toMap());
     }
 }
 
@@ -125,25 +182,31 @@ SakuraCompiler::preProcessArray(DataArray* value)
 SakuraItem*
 SakuraCompiler::convert(DataMap* growPlan)
 {
-    if(growPlan->getStringByKey("type") == "blossom") {
+    if(growPlan->getStringByKey("btype") == "blossom") {
         return convertBlossom(growPlan);
     }
 
-    if(growPlan->getStringByKey("type") == "branch") {
+    if(growPlan->getStringByKey("btype") == "branch") {
         return convertBranch(growPlan);
     }
 
-    if(growPlan->getStringByKey("type") == "tree") {
+    if(growPlan->getStringByKey("btype") == "tree") {
         return convertTree(growPlan);
     }
 
-    if(growPlan->getStringByKey("type") == "sequentiell") {
+    if(growPlan->getStringByKey("btype") == "sequentiell") {
         return convertSequeniellPart(growPlan);
     }
 
-    if(growPlan->getStringByKey("type") == "parallel") {
+    if(growPlan->getStringByKey("btype") == "parallel") {
         return convertParallelPart(growPlan);
     }
+
+    if(growPlan->getStringByKey("btype") == "seed") {
+        return convertSeed(growPlan);
+    }
+
+    assert(false);
 
     return nullptr;
 }
@@ -156,24 +219,25 @@ SakuraCompiler::convert(DataMap* growPlan)
 SakuraItem*
 SakuraCompiler::convertBlossom(DataMap* growPlan)
 {
-    BlossomItem* newItem =  new BlossomItem();
-    newItem->name = growPlan->getStringByKey("name");
-    newItem->settings = *dynamic_cast<DataMap*>(growPlan->get("common-settings"));
-    newItem->blossomType = growPlan->getStringByKey("blossom-type");
+    BlossomItem* blossomItem =  new BlossomItem();
+    blossomItem->id = growPlan->getStringByKey("name");
+    blossomItem->blossomType = growPlan->getStringByKey("blossom-type");
 
-    if(growPlan->contains("items-input"))
-    {
-        DataMap* itemsInput = dynamic_cast<DataMap*>(growPlan->get("items-input"));
-        newItem->values = *itemsInput;
-    }
-
-    DataArray* subTypeArray = dynamic_cast<DataArray*>(growPlan->get("blossom-subtypes"));
+    DataArray* subTypeArray = dynamic_cast<DataArray*>(growPlan->get("blossom-leafs"));
     for(uint64_t i = 0; i < subTypeArray->size(); i++)
     {
-        newItem->blossomSubTypes.push_back(subTypeArray->get(i)->toString());
+        if(subTypeArray->get(i)->toMap()->contains("items-input"))
+        {
+            DataMap* itemsInput = dynamic_cast<DataMap*>(
+                        subTypeArray->get(i)->toMap()->get("items-input"));
+            blossomItem->values = *itemsInput;
+        }
+
+        blossomItem->blossomSubTypes.push_back(
+                    subTypeArray->get(i)->toMap()->get("blossom-subtype")->toString());
     }
 
-    return newItem;
+    return blossomItem;
 }
 
 /**
@@ -184,15 +248,15 @@ SakuraCompiler::convertBlossom(DataMap* growPlan)
 SakuraItem*
 SakuraCompiler::convertBranch(DataMap* growPlan)
 {
-    BranchItem* newItem = new BranchItem();
+    BranchItem* branchItem = new BranchItem();
 
-    DataMap* items = dynamic_cast<DataMap*>(growPlan->get("items"));
-    newItem->values = *items;
+    DataMap* items = growPlan->get("items")->toMap();
+    branchItem->values = *items;
 
     if(growPlan->contains("items-input"))
     {
         DataMap* itemsInput = dynamic_cast<DataMap*>(growPlan->get("items-input"));
-        overrideItems(newItem->values, *itemsInput);
+        overrideItems(branchItem->values, *itemsInput);
     }
 
     DataItem* parts = growPlan->get("parts");
@@ -201,10 +265,10 @@ SakuraCompiler::convertBranch(DataMap* growPlan)
     for(uint32_t i = 0; i < parts->size(); i++)
     {
         DataMap* newMap = dynamic_cast<DataMap*>(parts->get(i));
-        newItem->childs.push_back(convert(newMap));
+        branchItem->childs.push_back(convert(newMap));
     }
 
-    return newItem;
+    return branchItem;
 }
 
 /**
@@ -215,15 +279,15 @@ SakuraCompiler::convertBranch(DataMap* growPlan)
 SakuraItem*
 SakuraCompiler::convertTree(DataMap* growPlan)
 {
-    TreeItem* newItem = new TreeItem();
+    TreeItem* treeItem = new TreeItem();
 
     DataMap* items = dynamic_cast<DataMap*>(growPlan->get("items"));
-    newItem->values = *items;
+    treeItem->values = *items;
 
     if(growPlan->contains("items-input"))
     {
         DataMap* itemsInput = dynamic_cast<DataMap*>(growPlan->get("items-input"));
-        overrideItems(newItem->values, *itemsInput);
+        overrideItems(treeItem->values, *itemsInput);
     }
 
     DataItem* parts = growPlan->get("parts");
@@ -232,10 +296,39 @@ SakuraCompiler::convertTree(DataMap* growPlan)
     for(uint32_t i = 0; i < parts->size(); i++)
     {
         DataMap* newMap = dynamic_cast<DataMap*>(parts->get(i));
-        newItem->childs.push_back(convert(newMap));
+        treeItem->childs.push_back(convert(newMap));
     }
 
-    return newItem;
+    return treeItem;
+}
+
+/**
+ * @brief SakuraCompiler::convertForest
+ * @param growPlan
+ * @return
+ */
+SakuraItem*
+SakuraCompiler::convertSeed(DataMap* growPlan)
+{
+    SeedItem* seedItem = new SeedItem();
+    DataMap* items = dynamic_cast<DataMap*>(growPlan);
+
+    seedItem->name = items->get("id")->toValue()->getString();
+
+    BranchItem* provisioningBranch = createProvisionBranch
+            (
+                growPlan->get("connection")->get("address")->toString(),
+                growPlan->get("connection")->get("ssh_port")->toValue()->getInt(),
+                growPlan->get("connection")->get("ssh_user")->toString(),
+                growPlan->get("connection")->get("ssh_key")->toString(),
+                SakuraRoot::m_executablePath,
+                "",
+                growPlan->get("subtree")->toString()
+            );
+
+    seedItem->child = provisioningBranch;
+
+    return seedItem;
 }
 
 /**

@@ -1,10 +1,23 @@
 /**
- *  @file    sakura_compiler.h
+ * @file        sakura_compiler.h
  *
- *  @author  Tobias Anker
- *  Contact: tobias.anker@kitsunemimi.moe
+ * @author      Tobias Anker <tobias.anker@kitsunemimi.moe>
  *
- *  Apache License Version 2.0
+ * @copyright   Apache License Version 2.0
+ *
+ *      Copyright 2019 Tobias Anker
+ *
+ *      Licensed under the Apache License, Version 2.0 (the "License");
+ *      you may not use this file except in compliance with the License.
+ *      You may obtain a copy of the License at
+ *
+ *          http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *      Unless required by applicable law or agreed to in writing, software
+ *      distributed under the License is distributed on an "AS IS" BASIS,
+ *      WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *      See the License for the specific language governing permissions and
+ *      limitations under the License.
  */
 
 #ifndef SAKURA_COMPILER_H
@@ -17,11 +30,11 @@
 #include <vector>
 #include <iostream>
 
-namespace Kitsune
+namespace Kitsunemimi
 {
 namespace Sakura
 {
-class SakuraConverter;
+class SakuraParsing;
 }
 }
 
@@ -33,23 +46,26 @@ class SakuraItem;
 class SakuraCompiler
 {
 public:
-    SakuraCompiler(Kitsune::Sakura::SakuraConverter* driver);
+    SakuraCompiler(Kitsunemimi::Sakura::SakuraParsing* driver);
     ~SakuraCompiler();
 
     SakuraItem* compile(const std::string &rootPath,
                         std::string &seedName);
 
+    SakuraItem* compileSubtree(const std::string subtree);
+
 private:
-    Kitsune::Sakura::SakuraConverter* m_driver = nullptr;
+    Kitsunemimi::Sakura::SakuraParsing* m_driver = nullptr;
     FileCollector* m_fileCollector = nullptr;
 
-    void preProcessObject(DataMap* value);
-    void preProcessArray(DataArray* value);
+    void preProcessObject(DataMap* object);
+    void preProcessArray(DataArray* object);
 
     SakuraItem* convert(DataMap* growPlan);
     SakuraItem* convertBlossom(DataMap* growPlan);
     SakuraItem* convertBranch(DataMap* growPlan);
     SakuraItem* convertTree(DataMap* growPlan);
+    SakuraItem* convertSeed(DataMap* growPlan);
 
     SakuraItem* convertSequeniellPart(DataMap* growPlan);
     SakuraItem* convertParallelPart(DataMap* growPlan);
