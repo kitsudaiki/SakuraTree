@@ -21,13 +21,15 @@
  */
 
 #include "sakura_root.h"
-#include <libKitsunemimiJinja2/jinja2_converter.h>
 
 #include <initializing/sakura_compiler.h>
 #include <items/item_methods.h>
 #include <processing/sakura_thread.h>
+#include <processing/sakura_tree_callbacks.h>
+
 #include <libKitsunemimiSakuraNetwork/sakura_host_handler.h>
 #include <libKitsunemimiJson/json_item.h>
+#include <libKitsunemimiJinja2/jinja2_converter.h>
 
 namespace SakuraTree
 {
@@ -35,31 +37,6 @@ namespace SakuraTree
 SakuraRoot* SakuraRoot::m_root = nullptr;
 Jinja2Converter* SakuraRoot::m_jinja2Converter = nullptr;
 std::string SakuraRoot::m_executablePath = "";
-
-void dataCallback(void* target,
-                  const std::string address,
-                  const std::string plan,
-                  const std::string values)
-{
-    std::cout<<"dataCallback: "<<plan<<std::endl;
-    SakuraRoot* rootClass = static_cast<SakuraRoot*>(target);
-    rootClass->startSubtreeProcess(plan, values);
-}
-
-void blossomOutputCallback(void* target,
-                           const std::string address,
-                           const std::string output)
-{
-    SakuraRoot* rootClass = static_cast<SakuraRoot*>(target);
-    rootClass->printOutput(output);
-}
-
-
-void sessionCallback(void* target,
-                     const std::string)
-{
-    SakuraRoot* rootClass = static_cast<SakuraRoot*>(target);
-}
 
 /**
  * constructor

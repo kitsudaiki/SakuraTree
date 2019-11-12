@@ -102,6 +102,7 @@ HEADERS += \
     src/processing/blossoms/ssh/ssh_scp_blossom.h \
     src/processing/blossoms/ssh/ssh_cmd_blossom.h \
     src/processing/blossoms/sakura/sakura_copy_subtree_blossom.h \
-    src/processing/blossoms/ssh/ssh_cmd_create_file_blossom.h
+    src/processing/blossoms/ssh/ssh_cmd_create_file_blossom.h \
+    src/processing/sakura_tree_callbacks.h
 
 
