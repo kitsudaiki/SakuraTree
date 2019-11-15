@@ -4,6 +4,8 @@
 
 WIP: This is/should become a simple-to-use and fast automation tool to deploy tools and files multiple nodes.
 
+If you are interested in this project, then keep an eye on it or feel free to help me.
+
 ### Current state
 
 It still at the beginning and there is much to do, so its not very stable and useful now. At the moment only the very basic structure exist. I wanted to bring it open-source as fast as possible, but for this I want to make sure that the core-functions works and is very flexible for the next updates. This results in some quick-and-dirty parts in the source code, which will be fixed in the next days.
