@@ -4,6 +4,12 @@
 
 WIP: This is/should become a simple-to-use and fast automation tool to deploy tools and files multiple nodes.
 
+Primary goals are:
+
+- easy to use
+- fast execution
+- fast debugging
+
 If you are interested in this project, then keep an eye on it or feel free to help me.
 
 ### Current state
@@ -14,7 +20,7 @@ It still at the beginning and there is much to do, so its not very stable and us
 
 My main-project (still private) consist of multiple components and is hard to test and debug without an automized deploy process. At work I had already to do with the tools Ansible and Chef, but I don't like any of them. They use, with Yaml in Ansible and Ruby in Chef, way too much generic languages, which makes it, at least for me, sometimes hard to understand. Beside this, the debugging is sooo horrible slow and I miss some basic features in both of them.
 
- So I decided to create my own tool to try to make it better. Maybe there already exist some other tools like Ansible or Chef with better handling, but I don't have the motivation to test all existing tools. Beside this, this here is a good side-project for me, to work at this when ever I need some distance from my main-project to solve a problem. 
+So I decided to create my own tool to try to make it better. Maybe there already exist some other tools like Ansible or Chef with better handling, but I don't have the motivation to test all existing tools. Beside this, this here is a good side-project for me, to work at this when ever I need some distance from my main-project to solve a problem. 
 
 ### Why I named it SakuraTree
 
@@ -167,18 +173,18 @@ Example-Tree:
 
 ```cpp
 [test_tree]
-    packages = nano
+- packages = nano
 
 {
     seed(sakura)
-        address = "127.0.0.1"
-        port = 1337
-        ssh_user = neptune
-        ssh_port = 22
-        ssh_key = "~/.ssh/sakura_test" 
+    - address = "127.0.0.1"
+    - port = 1337
+    - ssh_user = neptune
+    - ssh_port = 22
+    - ssh_key = "~/.ssh/sakura_test" 
     {
         branch(install_branch)
-            packages = "{{packages}}"
+        - packages = "{{packages}}"
     }
 }
 
@@ -188,32 +194,32 @@ Example-Branch, which is called by the Tree.
 
 ```cpp
 [install_branch]
-    packages = {{}}
+- packages = {{}}
 
 apt(apt_blossomX) 
 -> update 
 -> present:
-    names = "{{packages}}"
+   - names = "{{packages}}"
 
 apt(apt_blossom1)
 -> absent:
-    names = "{{packages}}"
+   - names = "{{packages}}"
 
 apt(apt_blossom2)
 -> absent:
-    names = "{{packages}}"
+   - names = "{{packages}}"
 
 apt(apt_blossom3)
 -> present:
-    names = "{{packages}}"
+   - names = "{{packages}}"
 
 apt(apt_blossom4)
 -> latest:
-    names = "{{packages}}"
+   - names = "{{packages}}"
 
 apt(apt_blossom5)
 -> present:
-    names = "{{packages}}"
+   - names = "{{packages}}"
 ```
 
 
