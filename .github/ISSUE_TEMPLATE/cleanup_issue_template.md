@@ -1,5 +1,5 @@
 ---
-name: cleanup-cleanup template
+name: cleanup-issue template
 about: Use this template to request cleanup and code restructuring
 labels: code cleanup / QA
 ---
@@ -8,4 +8,5 @@ labels: code cleanup / QA
 
 ### Description
 
+### Possible Implementation
 
