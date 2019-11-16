@@ -143,6 +143,7 @@ public:
     TreeItem();
     ~TreeItem();
 
+    std::string id = "";
     DataMap values;
     std::vector<SakuraItem*> childs;
 };
@@ -156,6 +157,7 @@ public:
     BranchItem();
     ~BranchItem();
 
+    std::string id = "";
     DataMap values;
     std::vector<SakuraItem*> childs;
 };

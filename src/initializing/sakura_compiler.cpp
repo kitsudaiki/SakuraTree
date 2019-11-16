@@ -260,6 +260,7 @@ SakuraCompiler::convertBranch(DataMap* growPlan)
     BranchItem* branchItem = new BranchItem();
 
     DataMap* items = growPlan->get("items")->toMap();
+    branchItem->id = growPlan->getStringByKey("id");
     branchItem->values = *items;
 
     if(growPlan->contains("items-input"))
@@ -291,6 +292,7 @@ SakuraCompiler::convertTree(DataMap* growPlan)
     TreeItem* treeItem = new TreeItem();
 
     DataMap* items = dynamic_cast<DataMap*>(growPlan->get("items"));
+    treeItem->id = growPlan->getStringByKey("id");
     treeItem->values = *items;
 
     if(growPlan->contains("items-input"))

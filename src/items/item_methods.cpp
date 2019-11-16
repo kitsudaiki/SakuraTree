@@ -155,7 +155,7 @@ convertBlossomOutput(const BlossomItem &blossom)
             break;
     }
 
-    // print call-hirarchie
+    // print call-hierarchy
     for(uint32_t i = 0; i < blossom.nameHirarchie.size(); i++)
     {
         for(uint32_t j = 0; j < i; j++)

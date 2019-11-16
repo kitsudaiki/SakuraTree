@@ -25,7 +25,7 @@
 
 #include <common/includes.h>
 
-#define DEBUG true
+#define DEBUG false
 //#define RUN_UNIT_TEST
 
 #endif // DEFINES_H
