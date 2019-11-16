@@ -39,7 +39,7 @@ class SakuraThread
 public:
     SakuraThread(SakuraItem* growPlan,
                  DataMap *values,
-                 const std::vector<std::string> &hirarchie);
+                 const std::vector<std::string> &hierarchy);
     ~SakuraThread();
 
     void waitUntilStarted();
@@ -58,31 +58,31 @@ private:
 
     void grow(SakuraItem* growPlan,
               DataMap* values,
-              const std::vector<std::string> &hirarchie);
+              const std::vector<std::string> &hierarchy);
 
     void processBlossom(BlossomItem &growPlan,
                         DataMap* values,
-                        const std::vector<std::string> &hirarchie);
+                        const std::vector<std::string> &hierarchy);
 
     void processBlossomGroup(BlossomGroupItem &growPlan,
                              DataMap* values,
-                             const std::vector<std::string> &hirarchie);
+                             const std::vector<std::string> &hierarchy);
 
     void processBranch(BranchItem* growPlan,
                        DataMap* values,
-                       const std::vector<std::string> &hirarchie);
+                       const std::vector<std::string> &hierarchy);
 
     void processTree(TreeItem* growPlan,
                      DataMap* values,
-                     const std::vector<std::string> &hirarchie);
+                     const std::vector<std::string> &hierarchy);
 
     void processSequeniellPart(SequeniellBranching* growPlan,
                                DataMap* values,
-                               const std::vector<std::string> &hirarchie);
+                               const std::vector<std::string> &hierarchy);
 
     void processParallelPart(ParallelBranching* growPlan,
                              DataMap* values,
-                             const std::vector<std::string> &hirarchie);
+                             const std::vector<std::string> &hierarchy);
 
     void clearChilds();
 };

@@ -90,12 +90,15 @@ runSyncProcess(BlossomItem &blossomItem,
         return false;
     }
 
-    std::cout<<"+++++++++++++++++++++++++++++++++++++++ exit status: "
-             <<blossomItem.execState
-             <<std::endl;
+    if(DEBUG)
+    {
+        std::cout<<"+++++++++++++++++++++++++++++++++++++++ exit status: "
+                 <<blossomItem.execState
+                 <<std::endl;
 
-    if(data.size() < 10000){
-        std::cout<<data<<std::endl;
+        if(data.size() < 10000){
+            std::cout<<data<<std::endl;
+        }
     }
 
     blossomItem.outputMessage = data;
