@@ -37,10 +37,10 @@ SshCmdCreateFileBlossom::SshCmdCreateFileBlossom()
 void
 SshCmdCreateFileBlossom::initTask(BlossomItem &blossomItem)
 {
-    if(blossomItem.values.contains("user") == false
-            || blossomItem.values.contains("address") == false
-            || blossomItem.values.contains("file_path") == false
-            || blossomItem.values.contains("file_content") == false)
+    if(blossomItem.values->contains("user") == false
+            || blossomItem.values->contains("address") == false
+            || blossomItem.values->contains("file_path") == false
+            || blossomItem.values->contains("file_content") == false)
     {
         blossomItem.success = false;
         blossomItem.outputMessage = "missing connection informations";
@@ -68,19 +68,19 @@ SshCmdCreateFileBlossom::runTask(BlossomItem &blossomItem)
     std::string programm = "";
 
     programm += "ssh ";
-    if(blossomItem.values.contains("port")) {
-        programm += " -p " + blossomItem.values.getStringByKey("port");
+    if(blossomItem.values->contains("port")) {
+        programm += " -p " + blossomItem.values->get("port")->getString();
     }
-    if(blossomItem.values.contains("ssh_key")) {
-        programm += " -i " + blossomItem.values.getStringByKey("ssh_key");
+    if(blossomItem.values->contains("ssh_key")) {
+        programm += " -i " + blossomItem.values->get("ssh_key")->getString();
     }
 
     programm += " ";
-    programm += blossomItem.values.getStringByKey("user");
+    programm += blossomItem.values->get("user")->getString();
     programm += "@";
-    programm += blossomItem.values.getStringByKey("address");
+    programm += blossomItem.values->get("address")->getString();
     programm += " -T \"sudo rm ";
-    programm += blossomItem.values.getStringByKey("file_path");
+    programm += blossomItem.values->get("file_path")->getString();
     programm += "\"";
 
     runSyncProcess(blossomItem, programm);
@@ -89,24 +89,24 @@ SshCmdCreateFileBlossom::runTask(BlossomItem &blossomItem)
     programm = "";
 
     programm += "echo \"";
-    programm += blossomItem.values.getStringByKey("file_content");
+    programm += blossomItem.values->get("file_content")->getString();
     programm += "\" | ";
 
     programm += "ssh ";
-    if(blossomItem.values.contains("port")) {
-        programm += " -p " + blossomItem.values.getStringByKey("port");
+    if(blossomItem.values->contains("port")) {
+        programm += " -p " + blossomItem.values->get("port")->getString();
     }
-    if(blossomItem.values.contains("ssh_key")) {
-        programm += " -i " + blossomItem.values.getStringByKey("ssh_key");
+    if(blossomItem.values->contains("ssh_key")) {
+        programm += " -i " + blossomItem.values->get("ssh_key")->getString();
     }
 
     programm += " ";
-    programm += blossomItem.values.getStringByKey("user");
+    programm += blossomItem.values->get("user")->getString();
     programm += "@";
-    programm += blossomItem.values.getStringByKey("address");
+    programm += blossomItem.values->get("address")->getString();
     // with "cat" instead of "tee" it doesn't work for files in root-context
     programm += " -T \"sudo tee -a ";
-    programm += blossomItem.values.getStringByKey("file_path");
+    programm += blossomItem.values->get("file_path")->getString();
     programm += "\"";
 
     runSyncProcess(blossomItem, programm);

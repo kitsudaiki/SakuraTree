@@ -85,7 +85,7 @@ SakuraRoot::startProcess(const std::string &rootPath,
     assert(processPlan != nullptr);
 
     // run process
-    DataMap* dummyObj = new DataMap();
+    DataMap dummyObj;
     m_rootThread = new SakuraThread(processPlan, dummyObj, std::vector<std::string>());
     m_rootThread->startThread();
     m_rootThread->waitUntilStarted();
@@ -118,9 +118,8 @@ SakuraRoot::startSubtreeProcess(const std::string &subtree,
     // run process
     Kitsunemimi::Json::JsonItem valuesJson;
     valuesJson.parse(values);
-    DataMap* tempMap = valuesJson.getItemContent()->toMap();
     m_rootThread = new SakuraThread(processPlan,
-                                    tempMap->copy()->toMap(),
+                                    *valuesJson.getItemContent()->copy()->toMap(),
                                     std::vector<std::string>());
     m_rootThread->startThread();
     m_rootThread->waitUntilStarted();

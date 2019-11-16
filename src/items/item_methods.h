@@ -31,14 +31,14 @@ namespace SakuraTree
 struct BlossomItem;
 
 const std::string convertString(const std::string &templateString,
-                                DataMap* content);
+                                Kitsunemimi::Common::DataMap &content);
 void fillItems(DataMap &items,
-               Kitsunemimi::Common::DataMap &insertValues);
+               DataMap &insertValues);
 
 void overrideItems(DataMap &original,
-                   DataMap &override);
+                   Kitsunemimi::Json::JsonItem &override);
 
-const std::vector<std::string> checkItems(DataMap &items);
+const std::vector<std::string> checkItems(Kitsunemimi::Common::DataMap &items);
 
 std::string convertBlossomOutput(const BlossomItem &blossom);
 

@@ -74,8 +74,8 @@ SakuraCompiler::compile(const std::string &rootPath,
         seedName = m_fileCollector->getSeedName(0);
     }
 
-    DataMap* completePlan = m_fileCollector->getObject(seedName);
-    assert(completePlan != nullptr);
+    JsonItem completePlan = m_fileCollector->getObject(seedName);
+    assert(completePlan.isValid());
 
     preProcessObject(completePlan);
 
@@ -83,7 +83,7 @@ SakuraCompiler::compile(const std::string &rootPath,
     if(DEBUG)
     {
         std::cout<<"+++++++++++++++++++++++++++++++++++++++++++++++++++++"<<std::endl;
-        std::string output = completePlan->toString(true);
+        std::string output = completePlan.toString(true);
         std::cout<<output<<std::endl;
         std::cout<<"-----------------------------------------------------"<<std::endl;
     }
@@ -101,16 +101,14 @@ SakuraCompiler::compile(const std::string &rootPath,
 SakuraItem*
 SakuraCompiler::compileSubtree(const std::string subtree)
 {
-    JsonItem json;
-    json.parse(subtree);
-
-    DataMap* completePlan = json.getItemContent()->copy()->toMap();
+    JsonItem completePlan;
+    completePlan.parse(subtree);
 
     // debug-output
     if(DEBUG)
     {
         std::cout<<"+++++++++++++++++++++++++++++++++++++++++++++++++++++"<<std::endl;
-        std::string output = completePlan->toString(true);
+        std::string output = completePlan.toString(true);
         std::cout<<output<<std::endl;
         std::cout<<"-----------------------------------------------------"<<std::endl;
     }
@@ -126,37 +124,39 @@ SakuraCompiler::compileSubtree(const std::string subtree)
  * @return
  */
 void
-SakuraCompiler::preProcessObject(DataMap* object)
+SakuraCompiler::preProcessObject(JsonItem &object)
 {
     // precheck
-    if(object == nullptr) {
+    if(object.isValid() == false) {
         return;
     }
 
     // end of tree
-    if(object->get("btype")->toString() == "blossom") {
+    if(object.get("btype").toString() == "blossom") {
         return;
     }
 
     // continue building
-    DataMap* branch = object;
+    JsonItem branch = object;
 
-    if(object->get("btype")->toString() == "tree"
-            || object->get("btype")->toString() == "branch")
+    if(object.get("btype").toString() == "tree"
+            || object.get("btype").toString() == "branch")
     {
-        branch = m_fileCollector->getObject(object->get("id")->toString());
-        object->insert("parts", branch->get("parts"));
-        object->insert("items", branch->get("items"));
+        branch = m_fileCollector->getObject(object.get("id").toString());
+        object.insert("parts", branch.get("parts"));
+        object.insert("items", branch.get("items"));
     }
 
-    if(object->get("btype")->toString() == "seed")
+    if(object.get("btype").toString() == "seed")
     {
-        branch = m_fileCollector->getObject(object->get("id")->toString());
-        preProcessObject(object->get("subtree")->toMap());
+        JsonItem subtree = object.get("subtree");
+        preProcessObject(subtree);
     }
 
-    if(object->contains("parts")) {
-        preProcessArray(object->get("parts")->toArray());
+    if(object.contains("parts"))
+    {
+        JsonItem parts = object.get("parts");
+        preProcessArray(parts);
     }
 }
 
@@ -166,11 +166,12 @@ SakuraCompiler::preProcessObject(DataMap* object)
  * @return
  */
 void
-SakuraCompiler::preProcessArray(DataArray* object)
+SakuraCompiler::preProcessArray(JsonItem &object)
 {
-    for(uint32_t i = 0; i < object->size(); i++)
+    for(uint32_t i = 0; i < object.getSize(); i++)
     {
-        preProcessObject(object->get(i)->toMap());
+        JsonItem item = object.get(i);
+        preProcessObject(item);
     }
 }
 
@@ -180,32 +181,35 @@ SakuraCompiler::preProcessArray(DataArray* object)
  * @return
  */
 SakuraItem*
-SakuraCompiler::convert(DataMap* growPlan)
+SakuraCompiler::convert(JsonItem &growPlan)
 {
-    if(growPlan->getStringByKey("btype") == "blossom_group") {
+    const std::string typeName = growPlan.get("btype").toString();
+
+    if(typeName == "blossom_group") {
         return convertBlossomGroup(growPlan);
     }
 
-    if(growPlan->getStringByKey("btype") == "branch") {
+    if(typeName == "branch") {
         return convertBranch(growPlan);
     }
 
-    if(growPlan->getStringByKey("btype") == "tree") {
+    if(typeName == "tree") {
         return convertTree(growPlan);
     }
 
-    if(growPlan->getStringByKey("btype") == "sequentiell") {
+    if(typeName == "sequentiell") {
         return convertSequeniellPart(growPlan);
     }
 
-    if(growPlan->getStringByKey("btype") == "parallel") {
+    if(typeName == "parallel") {
         return convertParallelPart(growPlan);
     }
 
-    if(growPlan->getStringByKey("btype") == "seed") {
+    if(typeName == "seed") {
         return convertSeed(growPlan);
     }
 
+    // it must everytime match one of the names
     assert(false);
 
     return nullptr;
@@ -217,13 +221,12 @@ SakuraCompiler::convert(DataMap* growPlan)
  * @return
  */
 BlossomItem*
-SakuraCompiler::convertBlossom(DataMap* growPlan)
+SakuraCompiler::convertBlossom(JsonItem &growPlan)
 {
     BlossomItem* blossomItem =  new BlossomItem();
-    blossomItem->blossomType = growPlan->getStringByKey("blossom-type");
 
-    DataMap* itemsInput = dynamic_cast<DataMap*>(growPlan->get("items-input"));
-    blossomItem->values = *itemsInput;
+    blossomItem->blossomType = growPlan.get("blossom-type").toString();
+    blossomItem->values = growPlan.get("items-input").getItemContent()->copy()->toMap();
 
     return blossomItem;
 }
@@ -234,16 +237,17 @@ SakuraCompiler::convertBlossom(DataMap* growPlan)
  * @return
  */
 SakuraItem*
-SakuraCompiler::convertBlossomGroup(DataMap* growPlan)
+SakuraCompiler::convertBlossomGroup(JsonItem &growPlan)
 {
     BlossomGroupItem* blossomGroupItem =  new BlossomGroupItem();
-    blossomGroupItem->id = growPlan->getStringByKey("name");
-    blossomGroupItem->blossomGroupType = growPlan->getStringByKey("blossom-group-type");
+    blossomGroupItem->id = growPlan.get("name").toString();
+    blossomGroupItem->blossomGroupType = growPlan.get("blossom-group-type").toString();
 
-    DataArray* subTypeArray = dynamic_cast<DataArray*>(growPlan->get("blossoms"));
-    for(uint64_t i = 0; i < subTypeArray->size(); i++)
+    JsonItem subTypeArray = growPlan.get("blossoms");
+    for(uint32_t i = 0; i < subTypeArray.getSize(); i++)
     {
-        blossomGroupItem->blossoms.push_back(convertBlossom(subTypeArray->get(i)->toMap()));
+        JsonItem item = subTypeArray.get(i);
+        blossomGroupItem->blossoms.push_back(convertBlossom(item));
     }
 
     return blossomGroupItem;
@@ -255,26 +259,26 @@ SakuraCompiler::convertBlossomGroup(DataMap* growPlan)
  * @return
  */
 SakuraItem*
-SakuraCompiler::convertBranch(DataMap* growPlan)
+SakuraCompiler::convertBranch(JsonItem &growPlan)
 {
     BranchItem* branchItem = new BranchItem();
 
-    DataMap* items = growPlan->get("items")->toMap();
-    branchItem->id = growPlan->getStringByKey("id");
-    branchItem->values = *items;
+    JsonItem items = growPlan.get("items");
+    branchItem->id = growPlan.get("id").toString();
+    branchItem->values = growPlan.get("items").getItemContent()->copy()->toMap();
 
-    if(growPlan->contains("items-input"))
+    if(growPlan.contains("items-input"))
     {
-        DataMap* itemsInput = dynamic_cast<DataMap*>(growPlan->get("items-input"));
-        overrideItems(branchItem->values, *itemsInput);
+        JsonItem itemInput = growPlan.get("items-input");
+        overrideItems(*branchItem->values, itemInput);
     }
 
-    DataItem* parts = growPlan->get("parts");
-    assert(parts != nullptr);
+    JsonItem parts = growPlan.get("parts");
+    assert(parts.isValid());
 
-    for(uint32_t i = 0; i < parts->size(); i++)
+    for(uint32_t i = 0; i < parts.getSize(); i++)
     {
-        DataMap* newMap = dynamic_cast<DataMap*>(parts->get(i));
+        JsonItem newMap = parts.get(i);
         branchItem->childs.push_back(convert(newMap));
     }
 
@@ -287,26 +291,25 @@ SakuraCompiler::convertBranch(DataMap* growPlan)
  * @return
  */
 SakuraItem*
-SakuraCompiler::convertTree(DataMap* growPlan)
+SakuraCompiler::convertTree(JsonItem &growPlan)
 {
     TreeItem* treeItem = new TreeItem();
 
-    DataMap* items = dynamic_cast<DataMap*>(growPlan->get("items"));
-    treeItem->id = growPlan->getStringByKey("id");
-    treeItem->values = *items;
+    treeItem->id = growPlan.get("id").toString();
+    treeItem->values = growPlan.get("items").getItemContent()->copy()->toMap();
 
-    if(growPlan->contains("items-input"))
+    if(growPlan.contains("items-input"))
     {
-        DataMap* itemsInput = dynamic_cast<DataMap*>(growPlan->get("items-input"));
-        overrideItems(treeItem->values, *itemsInput);
+        JsonItem itemInput = growPlan.get("items-input");
+        overrideItems(*treeItem->values, itemInput);
     }
 
-    DataItem* parts = growPlan->get("parts");
-    assert(parts != nullptr);
+    JsonItem parts = growPlan.get("parts");
+    assert(parts.isValid());
 
-    for(uint32_t i = 0; i < parts->size(); i++)
+    for(uint32_t i = 0; i < parts.getSize(); i++)
     {
-        DataMap* newMap = dynamic_cast<DataMap*>(parts->get(i));
+        JsonItem newMap = parts.get(i);
         treeItem->childs.push_back(convert(newMap));
     }
 
@@ -319,22 +322,22 @@ SakuraCompiler::convertTree(DataMap* growPlan)
  * @return
  */
 SakuraItem*
-SakuraCompiler::convertSeed(DataMap* growPlan)
+SakuraCompiler::convertSeed(JsonItem &growPlan)
 {
     SeedItem* seedItem = new SeedItem();
-    DataMap* items = dynamic_cast<DataMap*>(growPlan);
 
-    seedItem->name = items->get("id")->toValue()->getString();
+    seedItem->name = growPlan.get("id").toString();
+    JsonItem connectionInfos = growPlan.get("connection");
 
     BranchItem* provisioningBranch = createProvisionBranch
             (
-                growPlan->get("connection")->get("address")->toString(),
-                growPlan->get("connection")->get("ssh_port")->toValue()->getInt(),
-                growPlan->get("connection")->get("ssh_user")->toString(),
-                growPlan->get("connection")->get("ssh_key")->toString(),
+                connectionInfos.get("address").getString(),
+                connectionInfos.get("ssh_port").getInt(),
+                connectionInfos.get("ssh_user").getString(),
+                connectionInfos.get("ssh_key").getString(),
                 SakuraRoot::m_executablePath,
                 "",
-                growPlan->get("subtree")->toString()
+                growPlan.get("subtree").getString()
             );
 
     seedItem->child = provisioningBranch;
@@ -348,16 +351,16 @@ SakuraCompiler::convertSeed(DataMap* growPlan)
  * @return
  */
 SakuraItem*
-SakuraCompiler::convertSequeniellPart(DataMap* growPlan)
+SakuraCompiler::convertSequeniellPart(JsonItem &growPlan)
 {
     SequeniellBranching* newItem = new SequeniellBranching();
 
-    DataItem* parts = growPlan->get("parts");
-    assert(parts != nullptr);
+    JsonItem parts = growPlan.get("parts");
+    assert(parts.isValid());
 
-    for(uint32_t i = 0; i < parts->size(); i++)
+    for(uint32_t i = 0; i < parts.getSize(); i++)
     {
-        DataMap* newMap = dynamic_cast<DataMap*>(parts->get(i));
+        JsonItem newMap = parts.get(i);
         newItem->childs.push_back(convert(newMap));
     }
 
@@ -370,22 +373,20 @@ SakuraCompiler::convertSequeniellPart(DataMap* growPlan)
  * @return
  */
 SakuraItem*
-SakuraCompiler::convertParallelPart(DataMap* growPlan)
+SakuraCompiler::convertParallelPart(JsonItem &growPlan)
 {
     ParallelBranching* newItem = new ParallelBranching();
 
-    DataItem* parts = growPlan->get("parts");
-    assert(parts != nullptr);
+    JsonItem parts = growPlan.get("parts");
+    assert(parts.isValid());
 
-    for(uint32_t i = 0; i < parts->size(); i++)
+    for(uint32_t i = 0; i < parts.getSize(); i++)
     {
-        DataMap* newMap = dynamic_cast<DataMap*>(parts->get(i));
+        JsonItem newMap = parts.get(i);
         newItem->childs.push_back(convert(newMap));
     }
 
     return newItem;
 }
-
-
 
 }

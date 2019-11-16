@@ -58,7 +58,7 @@ void CommonMethodsTest::testConvertString()
     DataMap obj;
     obj.insert("test", new DataValue("hmmm"));
 
-    std::string result = convertString(jinja2String, &obj);
+    std::string result = convertString(jinja2String, obj);
     TEST_EQUAL(result, "hmmm");
 }
 
@@ -85,7 +85,7 @@ void CommonMethodsTest::testOverrideItems()
     original.insert("x", new DataValue("{{test}}"));
     original.insert("y", new DataValue("asdf"));
 
-    DataMap override;
+    JsonItem override;
     override.insert("y", new DataValue("poi"));
     override.insert("z", new DataValue("hmmm"));
 

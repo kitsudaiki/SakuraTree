@@ -38,7 +38,8 @@ Blossom::~Blossom() {}
 void
 Blossom::growBlossom(BlossomItem &blossomItem)
 {
-    const std::vector<std::string> uninitItems = checkItems(blossomItem.values);
+    const std::vector<std::string> uninitItems = checkItems(*blossomItem.values);
+
     if(uninitItems.size() > 0)
     {
         std::string output = "The following items are not initialized: \n";

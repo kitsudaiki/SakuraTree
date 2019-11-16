@@ -24,11 +24,6 @@
 #define SAKURA_COMPILER_H
 
 #include <common.h>
-#include <string>
-#include <map>
-#include <utility>
-#include <vector>
-#include <iostream>
 
 namespace Kitsunemimi
 {
@@ -59,19 +54,19 @@ private:
     Kitsunemimi::Sakura::SakuraParsing* m_driver = nullptr;
     FileCollector* m_fileCollector = nullptr;
 
-    void preProcessObject(DataMap* object);
-    void preProcessArray(DataArray* object);
+    void preProcessObject(JsonItem &object);
+    void preProcessArray(JsonItem &object);
 
-    SakuraItem* convert(DataMap* growPlan);
+    SakuraItem* convert(JsonItem &growPlan);
 
-    BlossomItem* convertBlossom(DataMap* growPlan);
-    SakuraItem* convertBlossomGroup(DataMap* growPlan);
-    SakuraItem* convertBranch(DataMap* growPlan);
-    SakuraItem* convertTree(DataMap* growPlan);
-    SakuraItem* convertSeed(DataMap* growPlan);
+    BlossomItem* convertBlossom(JsonItem &growPlan);
+    SakuraItem* convertBlossomGroup(JsonItem &growPlan);
+    SakuraItem* convertBranch(JsonItem &growPlan);
+    SakuraItem* convertTree(JsonItem &growPlan);
+    SakuraItem* convertSeed(JsonItem &growPlan);
 
-    SakuraItem* convertSequeniellPart(DataMap* growPlan);
-    SakuraItem* convertParallelPart(DataMap* growPlan);
+    SakuraItem* convertSequeniellPart(JsonItem &growPlan);
+    SakuraItem* convertParallelPart(JsonItem &growPlan);
 };
 
 }

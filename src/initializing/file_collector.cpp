@@ -54,7 +54,7 @@ FileCollector::initFileCollector(const std::string &rootPath)
     if(is_directory(rootPathObj)) {
         getFilesInDir(rootPathObj);
     } else {
-        m_fileContents.push_back(std::make_pair(rootPath, nullptr));
+        m_fileContents.push_back(std::make_pair(rootPath, JsonItem()));
     }
 
     // check result
@@ -79,7 +79,7 @@ FileCollector::initFileCollector(const std::string &rootPath)
         }
 
         m_fileContents[i].second = result.first->toMap();
-        std::string output = m_fileContents[i].second->toString(true);
+        std::string output = m_fileContents[i].second.toString(true);
         std::cout<<output<<std::endl;
     }
 
@@ -92,25 +92,25 @@ FileCollector::initFileCollector(const std::string &rootPath)
  * @param type
  * @return
  */
-Kitsunemimi::Common::DataMap*
+JsonItem
 FileCollector::getObject(const std::string &name,
                          const std::string &type)
 {
     // precheck
     if(name == "") {
-        return nullptr;
+        return JsonItem();
     }
 
     // search
-    std::vector<std::pair<std::string, DataMap*>>::iterator it;
+    std::vector<std::pair<std::string, JsonItem>>::iterator it;
     for(it = m_fileContents.begin();
         it != m_fileContents.end();
         it++)
     {
-        if(it->second->get("id")->toString() == name)
+        if(it->second.get("id").toString() == name)
         {
             if(type != ""
-                    && it->second->get("type")->toString() == type)
+                    && it->second.get("type").toString() == type)
             {
                 return it->second;
             }
@@ -121,7 +121,7 @@ FileCollector::getObject(const std::string &name,
         }
     }
 
-    return nullptr;
+    return JsonItem();
 }
 
 /**
@@ -136,7 +136,7 @@ FileCollector::getSeedName(const uint32_t index)
         return std::string("");
     }
 
-    return m_fileContents.at(index).second->get("name")->toString();
+    return m_fileContents.at(index).second.get("name").toString();
 }
 
 /**
@@ -163,12 +163,15 @@ FileCollector::getFilesInDir(const boost::filesystem::path &directory)
         itr != end_itr;
         ++itr)
     {
-        if(is_directory(itr->path())) {
+        if(is_directory(itr->path()))
+        {
             getFilesInDir(itr->path());
-        } else {
+        }
+        else
+        {
             //TODO: delete output
             std::cout<<"file: "<<itr->path().string()<<std::endl;
-            m_fileContents.push_back(std::make_pair(itr->path().string(), nullptr));
+            m_fileContents.push_back(std::make_pair(itr->path().string(), JsonItem()));
         }
     }
 }

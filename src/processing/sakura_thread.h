@@ -38,7 +38,7 @@ class SakuraThread
 
 public:
     SakuraThread(SakuraItem* growPlan,
-                 DataMap *values,
+                 DataMap &values,
                  const std::vector<std::string> &hierarchy);
     ~SakuraThread();
 
@@ -51,37 +51,37 @@ private:
     std::vector<SakuraThread*> m_childs;
 
     SakuraItem* m_growPlan;
-    DataMap* m_values;
+    DataMap m_values;
     std::vector<std::string> m_hirarchie;
 
     void run();
 
     void grow(SakuraItem* growPlan,
-              DataMap* values,
+              DataMap &values,
               const std::vector<std::string> &hierarchy);
 
     void processBlossom(BlossomItem &growPlan,
-                        DataMap* values,
+                        DataMap &values,
                         const std::vector<std::string> &hierarchy);
 
     void processBlossomGroup(BlossomGroupItem &growPlan,
-                             DataMap* values,
+                             DataMap &values,
                              const std::vector<std::string> &hierarchy);
 
     void processBranch(BranchItem* growPlan,
-                       DataMap* values,
+                       DataMap &values,
                        const std::vector<std::string> &hierarchy);
 
     void processTree(TreeItem* growPlan,
-                     DataMap* values,
+                     DataMap &values,
                      const std::vector<std::string> &hierarchy);
 
     void processSequeniellPart(SequeniellBranching* growPlan,
-                               DataMap* values,
+                               DataMap &values,
                                const std::vector<std::string> &hierarchy);
 
     void processParallelPart(ParallelBranching* growPlan,
-                             DataMap* values,
+                             DataMap &values,
                              const std::vector<std::string> &hierarchy);
 
     void clearChilds();
