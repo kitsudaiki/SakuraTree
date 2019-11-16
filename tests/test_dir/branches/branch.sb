@@ -2,26 +2,40 @@
 - packages = nano
 
 apt(apt_blossomX)  
+-> update
 -> present:
 	-names = "{{packages}}"
 
-apt(apt_blossom1)
--> absent:
-	- names = "{{packages}}"
+if(packages == nano)
+{
+	apt(apt_blossom1)
+	-> absent:
+		- names = "{{packages}}"
 
-apt(apt_blossom2)
--> absent:
-	- names = "{{packages}}"
+	apt(apt_blossom2)
+	-> absent:
+		- names = "{{packages}}"
 
-apt(apt_blossom3)
--> present:
-	- names = "{{packages}}"
+	apt(apt_blossom3)
+	-> present:
+		- names = "{{packages}}"
 
-apt(apt_blossom4)
--> latest:
-	- names = "{{packages}}"
+	apt(apt_blossom4)
+	-> latest:
+		- names = "{{packages}}"
 
-apt(apt_blossom5)
--> present:
-	- names = "{{packages}}"
+	apt(apt_blossom5)
+	-> present:
+		- names = "{{packages}}"
 
+}
+else
+{
+        apt(apt1_in_else)
+        -> absent:
+                - names = "{{packages}}"
+
+        apt(apt2_in_else)
+        -> present:
+                - names = "{{packages}}"
+}

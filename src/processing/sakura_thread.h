@@ -76,6 +76,11 @@ private:
                      DataMap &values,
                      const std::vector<std::string> &hierarchy);
 
+    void processIf(IfBranching* growPlan,
+                   DataMap &values,
+                   const std::vector<std::string> &hierarchy);
+
+
     void processSequeniellPart(SequeniellBranching* growPlan,
                                DataMap &values,
                                const std::vector<std::string> &hierarchy);

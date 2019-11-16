@@ -64,6 +64,7 @@ private:
     SakuraItem* convertBranch(JsonItem &growPlan);
     SakuraItem* convertTree(JsonItem &growPlan);
     SakuraItem* convertSeed(JsonItem &growPlan);
+    SakuraItem* convertIf(JsonItem &growPlan);
 
     SakuraItem* convertSequeniellPart(JsonItem &growPlan);
     SakuraItem* convertParallelPart(JsonItem &growPlan);

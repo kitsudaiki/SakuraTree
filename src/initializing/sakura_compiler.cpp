@@ -158,6 +158,18 @@ SakuraCompiler::preProcessObject(JsonItem &object)
         JsonItem parts = object.get("parts");
         preProcessArray(parts);
     }
+
+    if(object.contains("if_parts"))
+    {
+        JsonItem parts = object.get("if_parts");
+        preProcessArray(parts);
+    }
+
+    if(object.contains("else_parts"))
+    {
+        JsonItem parts = object.get("else_parts");
+        preProcessArray(parts);
+    }
 }
 
 /**
@@ -207,6 +219,10 @@ SakuraCompiler::convert(JsonItem &growPlan)
 
     if(typeName == "seed") {
         return convertSeed(growPlan);
+    }
+
+    if(typeName == "if") {
+        return convertIf(growPlan);
     }
 
     // it must everytime match one of the names
@@ -343,6 +359,57 @@ SakuraCompiler::convertSeed(JsonItem &growPlan)
     seedItem->child = provisioningBranch;
 
     return seedItem;
+}
+
+/**
+ * @brief SakuraCompiler::convertIf
+ * @param growPlan
+ * @return
+ */
+SakuraItem*
+SakuraCompiler::convertIf(JsonItem &growPlan)
+{
+    IfBranching* newItem = new IfBranching();
+
+    if(growPlan.get("if_type").getString() == "==") {
+        newItem->ifType = IfBranching::EQUAL;
+    }
+    if(growPlan.get("if_type").getString() == ">=") {
+        newItem->ifType = IfBranching::GREATER_EQUAL;
+    }
+    if(growPlan.get("if_type").getString() == ">") {
+        newItem->ifType = IfBranching::GREATER;
+    }
+    if(growPlan.get("if_type").getString() == "<=") {
+        newItem->ifType = IfBranching::SMALLER_EQUAL;
+    }
+    if(growPlan.get("if_type").getString() == "<") {
+        newItem->ifType = IfBranching::SMALLER;
+    }
+    if(growPlan.get("if_type").getString() == "!=") {
+        newItem->ifType = IfBranching::UNEQUAL;
+    }
+
+    newItem->leftSide = growPlan.get("left").getItemContent()->copy()->toArray();
+    newItem->rightSide = growPlan.get("right").getItemContent()->copy()->toValue();
+
+    JsonItem if_parts = growPlan.get("if_parts");
+    assert(if_parts.isValid());
+    for(uint32_t i = 0; i < if_parts.size(); i++)
+    {
+        JsonItem newMap = if_parts.get(i);
+        newItem->ifChilds.push_back(convert(newMap));
+    }
+
+    JsonItem else_parts = growPlan.get("else_parts");
+    assert(else_parts.isValid());
+    for(uint32_t i = 0; i < else_parts.size(); i++)
+    {
+        JsonItem newMap = else_parts.get(i);
+        newItem->elseChilds.push_back(convert(newMap));
+    }
+
+    return newItem;
 }
 
 /**
