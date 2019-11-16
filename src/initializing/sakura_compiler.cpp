@@ -168,7 +168,7 @@ SakuraCompiler::preProcessObject(JsonItem &object)
 void
 SakuraCompiler::preProcessArray(JsonItem &object)
 {
-    for(uint32_t i = 0; i < object.getSize(); i++)
+    for(uint32_t i = 0; i < object.size(); i++)
     {
         JsonItem item = object.get(i);
         preProcessObject(item);
@@ -244,7 +244,7 @@ SakuraCompiler::convertBlossomGroup(JsonItem &growPlan)
     blossomGroupItem->blossomGroupType = growPlan.get("blossom-group-type").toString();
 
     JsonItem subTypeArray = growPlan.get("blossoms");
-    for(uint32_t i = 0; i < subTypeArray.getSize(); i++)
+    for(uint32_t i = 0; i < subTypeArray.size(); i++)
     {
         JsonItem item = subTypeArray.get(i);
         blossomGroupItem->blossoms.push_back(convertBlossom(item));
@@ -276,7 +276,7 @@ SakuraCompiler::convertBranch(JsonItem &growPlan)
     JsonItem parts = growPlan.get("parts");
     assert(parts.isValid());
 
-    for(uint32_t i = 0; i < parts.getSize(); i++)
+    for(uint32_t i = 0; i < parts.size(); i++)
     {
         JsonItem newMap = parts.get(i);
         branchItem->childs.push_back(convert(newMap));
@@ -307,7 +307,7 @@ SakuraCompiler::convertTree(JsonItem &growPlan)
     JsonItem parts = growPlan.get("parts");
     assert(parts.isValid());
 
-    for(uint32_t i = 0; i < parts.getSize(); i++)
+    for(uint32_t i = 0; i < parts.size(); i++)
     {
         JsonItem newMap = parts.get(i);
         treeItem->childs.push_back(convert(newMap));
@@ -358,7 +358,7 @@ SakuraCompiler::convertSequeniellPart(JsonItem &growPlan)
     JsonItem parts = growPlan.get("parts");
     assert(parts.isValid());
 
-    for(uint32_t i = 0; i < parts.getSize(); i++)
+    for(uint32_t i = 0; i < parts.size(); i++)
     {
         JsonItem newMap = parts.get(i);
         newItem->childs.push_back(convert(newMap));
@@ -380,7 +380,7 @@ SakuraCompiler::convertParallelPart(JsonItem &growPlan)
     JsonItem parts = growPlan.get("parts");
     assert(parts.isValid());
 
-    for(uint32_t i = 0; i < parts.getSize(); i++)
+    for(uint32_t i = 0; i < parts.size(); i++)
     {
         JsonItem newMap = parts.get(i);
         newItem->childs.push_back(convert(newMap));
