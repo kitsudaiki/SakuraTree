@@ -64,6 +64,10 @@ private:
                         DataMap* values,
                         const std::vector<std::string> &hirarchie);
 
+    void processBlossomGroup(BlossomGroupItem &growPlan,
+                             DataMap* values,
+                             const std::vector<std::string> &hirarchie);
+
     void processBranch(BranchItem* growPlan,
                        DataMap* values,
                        const std::vector<std::string> &hirarchie);

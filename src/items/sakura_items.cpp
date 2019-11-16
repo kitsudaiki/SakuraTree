@@ -45,6 +45,14 @@ BlossomItem::BlossomItem() {type = BLOSSOM_ITEM;}
 BlossomItem::~BlossomItem() {}
 
 //===================================================================
+// BlossomGroupItem
+//===================================================================
+BlossomGroupItem::BlossomGroupItem() {type = BLOSSOM_GROUP_ITEM;}
+
+BlossomGroupItem::~BlossomGroupItem() {}
+
+
+//===================================================================
 // BranchItem
 //===================================================================
 BranchItem::BranchItem() {type = BRANCH_ITEM;}

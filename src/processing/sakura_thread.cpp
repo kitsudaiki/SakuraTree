@@ -105,8 +105,16 @@ SakuraThread::grow(SakuraItem* growPlan,
         BlossomItem* blossomItem = dynamic_cast<BlossomItem*>(growPlan);
         fillItems(blossomItem->values, *values);
         std::vector<std::string> newHirarchie = hirarchie;
-        newHirarchie.push_back("BLOSSOM: " + blossomItem->id);
         processBlossom(*blossomItem, &blossomItem->values, newHirarchie);
+        return;
+    }
+
+    if(growPlan->getType() == SakuraItem::BLOSSOM_GROUP_ITEM)
+    {
+        BlossomGroupItem* blossomGroupItem = dynamic_cast<BlossomGroupItem*>(growPlan);
+        std::vector<std::string> newHirarchie = hirarchie;
+        newHirarchie.push_back("BLOSSOM: " + blossomGroupItem->id);
+        processBlossomGroup(*blossomGroupItem, values, newHirarchie);
         return;
     }
 
@@ -160,14 +168,9 @@ SakuraThread::processBlossom(BlossomItem &growPlan,
     growPlan.values = *dynamic_cast<DataMap*>(values->copy());
     growPlan.nameHirarchie = hirarchie;
 
-    // iterate over all subtypes and execute each as separate blossom
-    for(uint32_t i = 0; i < growPlan.blossomSubTypes.size(); i++)
-    {
-        std::string subtype = growPlan.blossomSubTypes.at(i);
-        Blossom* blossom = getBlossom(growPlan.blossomType, subtype);
-        blossom->growBlossom(growPlan);
-        delete blossom;
-    }
+    Blossom* blossom = getBlossom(growPlan.blossomGroupType, growPlan.blossomType);
+    blossom->growBlossom(growPlan);
+    delete blossom;
 
     // abort if blossom-result was an error
     if(growPlan.success == false)
@@ -179,6 +182,29 @@ SakuraThread::processBlossom(BlossomItem &growPlan,
 
     // send result to root
     SakuraRoot::m_root->printOutput(growPlan);
+
+    return;
+}
+
+/**
+ * @brief SakuraThread::processBlossomGroup
+ * @param growPlan
+ * @param values
+ * @param hirarchie
+ */
+void
+SakuraThread::processBlossomGroup(BlossomGroupItem &growPlan,
+                                  DataMap* values,
+                                  const std::vector<std::string> &hirarchie)
+{
+    for(uint32_t i = 0; i < growPlan.blossoms.size(); i++)
+    {
+        BlossomItem* blossomItem = growPlan.blossoms.at(i);
+        blossomItem->blossomGroupType = growPlan.blossomGroupType;
+        grow(blossomItem,
+             values,
+             hirarchie);
+    }
 
     return;
 }
