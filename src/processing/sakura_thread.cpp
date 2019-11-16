@@ -105,8 +105,16 @@ SakuraThread::grow(SakuraItem* growPlan,
         BlossomItem* blossomItem = dynamic_cast<BlossomItem*>(growPlan);
         fillItems(blossomItem->values, *values);
         std::vector<std::string> newHirarchie = hirarchie;
-        newHirarchie.push_back("BLOSSOM: " + blossomItem->id);
         processBlossom(*blossomItem, &blossomItem->values, newHirarchie);
+        return;
+    }
+
+    if(growPlan->getType() == SakuraItem::BLOSSOM_GROUP_ITEM)
+    {
+        BlossomGroupItem* blossomGroupItem = dynamic_cast<BlossomGroupItem*>(growPlan);
+        std::vector<std::string> newHirarchie = hirarchie;
+        newHirarchie.push_back("BLOSSOM: " + blossomGroupItem->id);
+        processBlossomGroup(*blossomGroupItem, values, newHirarchie);
         return;
     }
 
@@ -179,6 +187,27 @@ SakuraThread::processBlossom(BlossomItem &growPlan,
 
     // send result to root
     SakuraRoot::m_root->printOutput(growPlan);
+
+    return;
+}
+
+/**
+ * @brief SakuraThread::processBlossomGroup
+ * @param growPlan
+ * @param values
+ * @param hirarchie
+ */
+void
+SakuraThread::processBlossomGroup(BlossomGroupItem &growPlan,
+                                  DataMap* values,
+                                  const std::vector<std::string> &hirarchie)
+{
+    for(uint32_t i = 0; i < growPlan.blossoms.size(); i++)
+    {
+        grow(growPlan.blossoms.at(i),
+             values,
+             hirarchie);
+    }
 
     return;
 }

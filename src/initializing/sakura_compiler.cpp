@@ -182,8 +182,8 @@ SakuraCompiler::preProcessArray(DataArray* object)
 SakuraItem*
 SakuraCompiler::convert(DataMap* growPlan)
 {
-    if(growPlan->getStringByKey("btype") == "blossom") {
-        return convertBlossom(growPlan);
+    if(growPlan->getStringByKey("btype") == "blossom_group") {
+        return convertBlossomGroup(growPlan);
     }
 
     if(growPlan->getStringByKey("btype") == "branch") {
@@ -212,32 +212,41 @@ SakuraCompiler::convert(DataMap* growPlan)
 }
 
 /**
- * @brief SakuraCompiler::processBlossom
+ * @brief SakuraCompiler::convertBlossom
+ * @param growPlan
+ * @return
+ */
+BlossomItem*
+SakuraCompiler::convertBlossom(DataMap* growPlan)
+{
+    BlossomItem* blossomItem =  new BlossomItem();
+    blossomItem->blossomType = growPlan->getStringByKey("blossom-type");
+
+    DataMap* itemsInput = dynamic_cast<DataMap*>(growPlan->get("items-input"));
+    blossomItem->values = *itemsInput;
+
+    return blossomItem;
+}
+
+/**
+ * @brief SakuraCompiler::convertBlossomGroup
  * @param growPlan
  * @return
  */
 SakuraItem*
-SakuraCompiler::convertBlossom(DataMap* growPlan)
+SakuraCompiler::convertBlossomGroup(DataMap* growPlan)
 {
-    BlossomItem* blossomItem =  new BlossomItem();
-    blossomItem->id = growPlan->getStringByKey("name");
-    blossomItem->blossomType = growPlan->getStringByKey("blossom-type");
+    BlossomGroupItem* blossomGroupItem =  new BlossomGroupItem();
+    blossomGroupItem->id = growPlan->getStringByKey("name");
+    blossomGroupItem->blossomGroupType = growPlan->getStringByKey("blossom-group-type");
 
-    DataArray* subTypeArray = dynamic_cast<DataArray*>(growPlan->get("blossom-leafs"));
+    DataArray* subTypeArray = dynamic_cast<DataArray*>(growPlan->get("blossoms"));
     for(uint64_t i = 0; i < subTypeArray->size(); i++)
     {
-        if(subTypeArray->get(i)->toMap()->contains("items-input"))
-        {
-            DataMap* itemsInput = dynamic_cast<DataMap*>(
-                        subTypeArray->get(i)->toMap()->get("items-input"));
-            blossomItem->values = *itemsInput;
-        }
-
-        blossomItem->blossomSubTypes.push_back(
-                    subTypeArray->get(i)->toMap()->get("blossom-subtype")->toString());
+        blossomGroupItem->blossoms.push_back(convertBlossom(subTypeArray->get(i)->toMap()));
     }
 
-    return blossomItem;
+    return blossomGroupItem;
 }
 
 /**

@@ -42,6 +42,7 @@ namespace SakuraTree
 {
 class FileCollector;
 class SakuraItem;
+class BlossomItem;
 
 class SakuraCompiler
 {
@@ -62,7 +63,9 @@ private:
     void preProcessArray(DataArray* object);
 
     SakuraItem* convert(DataMap* growPlan);
-    SakuraItem* convertBlossom(DataMap* growPlan);
+
+    BlossomItem* convertBlossom(DataMap* growPlan);
+    SakuraItem* convertBlossomGroup(DataMap* growPlan);
     SakuraItem* convertBranch(DataMap* growPlan);
     SakuraItem* convertTree(DataMap* growPlan);
     SakuraItem* convertSeed(DataMap* growPlan);

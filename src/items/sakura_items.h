@@ -44,8 +44,9 @@ public:
     {
         UNDEFINED_ITEM = 0,
         BLOSSOM_ITEM = 1,
-        BRANCH_ITEM = 2,
-        TREE_ITEM = 3,
+        BLOSSOM_GROUP_ITEM = 2,
+        BRANCH_ITEM = 3,
+        TREE_ITEM = 4,
         SEED_ITEM = 5,
         SEQUENTIELL_ITEM = 6,
         PARALLEL_ITEM = 7,
@@ -85,7 +86,6 @@ public:
     BlossomItem();
     ~BlossomItem();
 
-    std::string id = "";
     DataMap values;
 
     std::string blossomType = "";
@@ -98,6 +98,21 @@ public:
     bool success = true;
     int execState = 0;
     std::string outputMessage = "";
+};
+
+//===================================================================
+// BlossomGroupItem
+//===================================================================
+class BlossomGroupItem : public SakuraItem
+{
+public:
+    BlossomGroupItem();
+    ~BlossomGroupItem();
+
+    std::string id = "";
+    std::string blossomGroupType = "";
+
+    std::vector<BlossomItem*> blossoms;
 };
 
 //===================================================================

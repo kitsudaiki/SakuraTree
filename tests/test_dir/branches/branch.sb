@@ -11,7 +11,7 @@ apt(apt_blossom1)
 
 apt(apt_blossom2)
 -> absent:
- 	- names = "{{packages}}"
+	- names = "{{packages}}"
 
 apt(apt_blossom3)
 -> present:
