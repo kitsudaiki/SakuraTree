@@ -103,8 +103,8 @@ createAptUpdateBlossom(const std::string &address,
 {
     BlossomItem* item = new BlossomItem();
 
-    item->blossomType = "ssh";
-    item->blossomSubTypes.push_back("cmd");
+    item->blossomGroupType = "ssh";
+    item->blossomType = "cmd";
 
     item->values.insert("address", new DataValue(address));
     item->values.insert("user", new DataValue(userName));
@@ -131,8 +131,8 @@ createAptLatesBlossom(const std::string &address,
 {
     BlossomItem* item = new BlossomItem();
 
-    item->blossomType = "ssh";
-    item->blossomSubTypes.push_back("cmd");
+    item->blossomGroupType = "ssh";
+    item->blossomType = "cmd";
 
     item->values.insert("address", new DataValue(address));
     item->values.insert("user", new DataValue(userName));
@@ -164,8 +164,8 @@ createScpBlossom(const std::string &address,
 {
     BlossomItem* item = new BlossomItem();
 
-    item->blossomType = "ssh";
-    item->blossomSubTypes.push_back("scp");
+    item->blossomGroupType = "ssh";
+    item->blossomType = "scp";
 
     item->values.insert("address", new DataValue(address));
     item->values.insert("user", new DataValue(userName));
@@ -189,8 +189,8 @@ createCopySubtreeBlossom(const std::string &address,
 {
     BlossomItem* item = new BlossomItem();
 
-    item->blossomType = "sakura-connection";
-    item->blossomSubTypes.push_back("copy-subtree");
+    item->blossomGroupType = "sakura-connection";
+    item->blossomType = "copy-subtree";
 
     item->values.insert("address", new DataValue(address));
     item->values.insert("subtree", new DataValue(subtree));
@@ -220,8 +220,8 @@ createSshServiceFileBlossom(const std::string &address,
 
     BlossomItem* item = new BlossomItem();
 
-    item->blossomType = "ssh";
-    item->blossomSubTypes.push_back("file_create");
+    item->blossomGroupType = "ssh";
+    item->blossomType = "file_create";
 
     item->values.insert("address", new DataValue(address));
     item->values.insert("user", new DataValue(userName));
@@ -249,8 +249,9 @@ createServiceStartBlossom(const std::string &address,
 {
     BlossomItem* item = new BlossomItem();
 
-    item->blossomType = "ssh";
-    item->blossomSubTypes.push_back("cmd");
+
+    item->blossomGroupType = "ssh";
+    item->blossomType = "cmd";
 
     item->values.insert("address", new DataValue(address));
     item->values.insert("user", new DataValue(userName));

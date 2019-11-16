@@ -88,8 +88,8 @@ public:
 
     DataMap values;
 
+    std::string blossomGroupType = "";
     std::string blossomType = "";
-    std::vector<std::string> blossomSubTypes;
 
     // result
     BlossomStates resultState = UNDEFINED_STATE;

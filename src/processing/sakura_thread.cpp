@@ -168,14 +168,9 @@ SakuraThread::processBlossom(BlossomItem &growPlan,
     growPlan.values = *dynamic_cast<DataMap*>(values->copy());
     growPlan.nameHirarchie = hirarchie;
 
-    // iterate over all subtypes and execute each as separate blossom
-    for(uint32_t i = 0; i < growPlan.blossomSubTypes.size(); i++)
-    {
-        std::string subtype = growPlan.blossomSubTypes.at(i);
-        Blossom* blossom = getBlossom(growPlan.blossomType, subtype);
-        blossom->growBlossom(growPlan);
-        delete blossom;
-    }
+    Blossom* blossom = getBlossom(growPlan.blossomGroupType, growPlan.blossomType);
+    blossom->growBlossom(growPlan);
+    delete blossom;
 
     // abort if blossom-result was an error
     if(growPlan.success == false)
@@ -204,7 +199,9 @@ SakuraThread::processBlossomGroup(BlossomGroupItem &growPlan,
 {
     for(uint32_t i = 0; i < growPlan.blossoms.size(); i++)
     {
-        grow(growPlan.blossoms.at(i),
+        BlossomItem* blossomItem = growPlan.blossoms.at(i);
+        blossomItem->blossomGroupType = growPlan.blossomGroupType;
+        grow(blossomItem,
              values,
              hirarchie);
     }

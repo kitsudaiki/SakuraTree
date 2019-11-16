@@ -1,5 +1,5 @@
 [install_branch]
-- packages = {{}}
+- packages = nano
 
 apt(apt_blossomX)  
 -> present:
