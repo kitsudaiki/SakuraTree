@@ -135,6 +135,12 @@ SakuraThread::grow(SakuraItem* growPlan,
         return;
     }
 
+    if(growPlan->getType() == SakuraItem::IF_ITEM)
+    {
+        processIf(dynamic_cast<IfBranching*>(growPlan), values, hierarchy);
+        return;
+    }
+
     if(growPlan->getType() == SakuraItem::SEQUENTIELL_ITEM)
     {
         processSequeniellPart(dynamic_cast<SequeniellBranching*>(growPlan), values, hierarchy);
@@ -264,6 +270,59 @@ SakuraThread::processTree(TreeItem* growPlan,
     clearChilds();
 
     return;
+}
+
+/**
+ * @brief SakuraThread::processIf
+ * @param growPlan
+ * @param values
+ * @param hierarchy
+ */
+void
+SakuraThread::processIf(IfBranching* growPlan,
+                        DataMap &values,
+                        const std::vector<std::string> &hierarchy)
+{
+    bool ifMatch = false;
+
+    switch(growPlan->ifType)
+    {
+        case IfBranching::EQUAL:
+            {
+                const std::string key = growPlan->leftSide->get(0)->toString();
+                ifMatch = values.get(key)->toString() == growPlan->rightSide->toString();
+                break;
+            }
+        case IfBranching::UNEQUAL:
+            {
+                const std::string key = growPlan->leftSide->get(0)->toString();
+                ifMatch = values.get(key)->toString() != growPlan->rightSide->toString();
+                break;
+            }
+        default:
+            // not implemented
+            assert(false);
+            break;
+    }
+
+    if(ifMatch)
+    {
+        for(uint32_t i = 0; i < growPlan->ifChilds.size(); i++)
+        {
+            grow(growPlan->ifChilds.at(i),
+                 values,
+                 hierarchy);
+        }
+    }
+    else
+    {
+        for(uint32_t i = 0; i < growPlan->elseChilds.size(); i++)
+        {
+            grow(growPlan->elseChilds.at(i),
+                 values,
+                 hierarchy);
+        }
+    }
 }
 
 /**

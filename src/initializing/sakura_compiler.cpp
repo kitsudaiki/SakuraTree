@@ -158,6 +158,18 @@ SakuraCompiler::preProcessObject(JsonItem &object)
         JsonItem parts = object.get("parts");
         preProcessArray(parts);
     }
+
+    if(object.contains("if_parts"))
+    {
+        JsonItem parts = object.get("if_parts");
+        preProcessArray(parts);
+    }
+
+    if(object.contains("else_parts"))
+    {
+        JsonItem parts = object.get("else_parts");
+        preProcessArray(parts);
+    }
 }
 
 /**
@@ -168,7 +180,7 @@ SakuraCompiler::preProcessObject(JsonItem &object)
 void
 SakuraCompiler::preProcessArray(JsonItem &object)
 {
-    for(uint32_t i = 0; i < object.getSize(); i++)
+    for(uint32_t i = 0; i < object.size(); i++)
     {
         JsonItem item = object.get(i);
         preProcessObject(item);
@@ -209,6 +221,10 @@ SakuraCompiler::convert(JsonItem &growPlan)
         return convertSeed(growPlan);
     }
 
+    if(typeName == "if") {
+        return convertIf(growPlan);
+    }
+
     // it must everytime match one of the names
     assert(false);
 
@@ -244,7 +260,7 @@ SakuraCompiler::convertBlossomGroup(JsonItem &growPlan)
     blossomGroupItem->blossomGroupType = growPlan.get("blossom-group-type").toString();
 
     JsonItem subTypeArray = growPlan.get("blossoms");
-    for(uint32_t i = 0; i < subTypeArray.getSize(); i++)
+    for(uint32_t i = 0; i < subTypeArray.size(); i++)
     {
         JsonItem item = subTypeArray.get(i);
         blossomGroupItem->blossoms.push_back(convertBlossom(item));
@@ -276,7 +292,7 @@ SakuraCompiler::convertBranch(JsonItem &growPlan)
     JsonItem parts = growPlan.get("parts");
     assert(parts.isValid());
 
-    for(uint32_t i = 0; i < parts.getSize(); i++)
+    for(uint32_t i = 0; i < parts.size(); i++)
     {
         JsonItem newMap = parts.get(i);
         branchItem->childs.push_back(convert(newMap));
@@ -307,7 +323,7 @@ SakuraCompiler::convertTree(JsonItem &growPlan)
     JsonItem parts = growPlan.get("parts");
     assert(parts.isValid());
 
-    for(uint32_t i = 0; i < parts.getSize(); i++)
+    for(uint32_t i = 0; i < parts.size(); i++)
     {
         JsonItem newMap = parts.get(i);
         treeItem->childs.push_back(convert(newMap));
@@ -346,6 +362,57 @@ SakuraCompiler::convertSeed(JsonItem &growPlan)
 }
 
 /**
+ * @brief SakuraCompiler::convertIf
+ * @param growPlan
+ * @return
+ */
+SakuraItem*
+SakuraCompiler::convertIf(JsonItem &growPlan)
+{
+    IfBranching* newItem = new IfBranching();
+
+    if(growPlan.get("if_type").getString() == "==") {
+        newItem->ifType = IfBranching::EQUAL;
+    }
+    if(growPlan.get("if_type").getString() == ">=") {
+        newItem->ifType = IfBranching::GREATER_EQUAL;
+    }
+    if(growPlan.get("if_type").getString() == ">") {
+        newItem->ifType = IfBranching::GREATER;
+    }
+    if(growPlan.get("if_type").getString() == "<=") {
+        newItem->ifType = IfBranching::SMALLER_EQUAL;
+    }
+    if(growPlan.get("if_type").getString() == "<") {
+        newItem->ifType = IfBranching::SMALLER;
+    }
+    if(growPlan.get("if_type").getString() == "!=") {
+        newItem->ifType = IfBranching::UNEQUAL;
+    }
+
+    newItem->leftSide = growPlan.get("left").getItemContent()->copy()->toArray();
+    newItem->rightSide = growPlan.get("right").getItemContent()->copy()->toValue();
+
+    JsonItem if_parts = growPlan.get("if_parts");
+    assert(if_parts.isValid());
+    for(uint32_t i = 0; i < if_parts.size(); i++)
+    {
+        JsonItem newMap = if_parts.get(i);
+        newItem->ifChilds.push_back(convert(newMap));
+    }
+
+    JsonItem else_parts = growPlan.get("else_parts");
+    assert(else_parts.isValid());
+    for(uint32_t i = 0; i < else_parts.size(); i++)
+    {
+        JsonItem newMap = else_parts.get(i);
+        newItem->elseChilds.push_back(convert(newMap));
+    }
+
+    return newItem;
+}
+
+/**
  * @brief SakuraCompiler::processSequeniellPart
  * @param growPlan
  * @return
@@ -358,7 +425,7 @@ SakuraCompiler::convertSequeniellPart(JsonItem &growPlan)
     JsonItem parts = growPlan.get("parts");
     assert(parts.isValid());
 
-    for(uint32_t i = 0; i < parts.getSize(); i++)
+    for(uint32_t i = 0; i < parts.size(); i++)
     {
         JsonItem newMap = parts.get(i);
         newItem->childs.push_back(convert(newMap));
@@ -380,7 +447,7 @@ SakuraCompiler::convertParallelPart(JsonItem &growPlan)
     JsonItem parts = growPlan.get("parts");
     assert(parts.isValid());
 
-    for(uint32_t i = 0; i < parts.getSize(); i++)
+    for(uint32_t i = 0; i < parts.size(); i++)
     {
         JsonItem newMap = parts.get(i);
         newItem->childs.push_back(convert(newMap));

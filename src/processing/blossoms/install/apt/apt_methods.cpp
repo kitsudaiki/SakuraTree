@@ -67,7 +67,7 @@ fillPackageNames(BlossomItem &blossomItem,
     if(blossomItem.values->get("names")->isArray())
     {
         JsonItem tempItem = blossomItem.values->get("names");
-        for(uint32_t i = 0; i < tempItem.getSize(); i++)
+        for(uint32_t i = 0; i < tempItem.size(); i++)
         {
             packageList.push_back(tempItem.get(i).toString());
         }

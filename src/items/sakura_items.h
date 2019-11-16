@@ -208,12 +208,12 @@ public:
     IfBranching();
     ~IfBranching();
 
-    std::string leftSide = "";
+    DataArray* leftSide = nullptr;
     compareTypes ifType = EQUAL;
-    DataValue rightSide;
+    DataValue* rightSide = nullptr;
 
-    SakuraItem* ifChild = nullptr;
-    SakuraItem* elseChild = nullptr;
+    std::vector<SakuraItem*> ifChilds;
+    std::vector<SakuraItem*> elseChilds;
 };
 
 //===================================================================
