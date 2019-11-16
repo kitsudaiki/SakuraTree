@@ -54,12 +54,12 @@ SakuraCopySubtreeBlossom::preCheck(BlossomItem &blossomItem)
 void
 SakuraCopySubtreeBlossom::runTask(BlossomItem &blossomItem)
 {
-    const std::string address = blossomItem.values.getStringByKey("address");
-    const std::string plan = blossomItem.values.getStringByKey("subtree");
+    const std::string address = blossomItem.values->get("address")->getString();
+    const std::string plan = blossomItem.values->get("subtree")->getString();
 
     sleep(2);
 
-    SakuraRoot::m_root->sendPlan(address, plan, blossomItem.values.getStringByKey("values"));
+    SakuraRoot::m_root->sendPlan(address, plan, blossomItem.values->get("values")->getString());
 
     sleep(2);
 

@@ -60,16 +60,16 @@ void
 fillPackageNames(BlossomItem &blossomItem,
                  std::vector<std::string> &packageList)
 {
-    if(blossomItem.values.get("names")->isValue()) {
-        packageList.push_back(blossomItem.values.getStringByKey("names"));
+    if(blossomItem.values->get("names")->isValue()) {
+        packageList.push_back(blossomItem.values->get("names")->getString());
     }
 
-    if(blossomItem.values.get("names")->isArray())
+    if(blossomItem.values->get("names")->isArray())
     {
-        DataArray* tempItem = dynamic_cast<DataArray*>(blossomItem.values.get("names"));
-        for(uint32_t i = 0; i < tempItem->size(); i++)
+        JsonItem tempItem = blossomItem.values->get("names");
+        for(uint32_t i = 0; i < tempItem.getSize(); i++)
         {
-            packageList.push_back(tempItem->get(i)->toString());
+            packageList.push_back(tempItem.get(i).toString());
         }
     }
 }

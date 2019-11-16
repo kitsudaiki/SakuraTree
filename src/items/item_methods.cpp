@@ -38,14 +38,10 @@ namespace SakuraTree
  */
 const std::string
 convertString(const std::string &templateString,
-              DataMap *content)
+              DataMap &content)
 {
-    if(content->isMap() == false) {
-        return std::string("");
-    }
-
     Jinja2Converter* converter = SakuraRoot::m_root->m_jinja2Converter;
-    std::pair<bool, std::string> result = converter->convert(templateString, content);
+    std::pair<bool, std::string> result = converter->convert(templateString, &content);
     // TODO: handle false return value
 
     return result.second;
@@ -69,11 +65,11 @@ fillItems(DataMap &items,
             continue;
         }
 
-        DataItem* obj = items.get(keys.at(i));
-        if(obj->isValue())
+        JsonItem obj = items.get(keys.at(i));
+        if(obj.isValue())
         {
-            const std::string tempItem = obj->toString();
-            DataValue* value = new DataValue(convertString(tempItem, &insertValues));
+            const std::string tempItem = obj.toString();
+            DataValue* value = new DataValue(convertString(tempItem, insertValues));
             items.insert(keys.at(i), value, true);
         }
     }
@@ -83,13 +79,13 @@ fillItems(DataMap &items,
  * @brief overrideItems
  */
 void overrideItems(DataMap &original,
-                   DataMap &override)
+                   JsonItem &override)
 {
     const std::vector<std::string> keys = override.getKeys();
     for(uint32_t i = 0; i < keys.size(); i++)
     {
         original.insert(keys.at(i),
-                        override.get(keys.at(i))->copy(),
+                        override.get(keys.at(i)).getItemContent()->copy(),
                         true);
     }
 }

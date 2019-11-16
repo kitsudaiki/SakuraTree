@@ -36,12 +36,18 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <mutex>
+#include <streambuf>
+#include <istream>
+#include <iterator>
 
 #include <libKitsunemimiCommon/common_items/data_items.h>
+#include <libKitsunemimiJson/json_item.h>
 
 using Kitsunemimi::Common::DataItem;
 using Kitsunemimi::Common::DataArray;
 using Kitsunemimi::Common::DataValue;
 using Kitsunemimi::Common::DataMap;
+
+using Kitsunemimi::Json::JsonItem;
 
 #endif // INCLUDES_H
