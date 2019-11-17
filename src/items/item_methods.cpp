@@ -161,9 +161,20 @@ convertBlossomOutput(const BlossomItem &blossom)
         output += blossom.nameHirarchie.at(i) + "\n";
     }
 
-    // print process-output
-    if(blossom.outputMessage.size() > 0
+    // print error-output
+    if(blossom.errorMessage.size() > 0
             && blossom.resultState >= 3)
+    {
+        // TODO: red error output
+        output += "\n";
+        output += blossom.errorMessage + "\n";
+    }
+
+    // print error-output
+    const bool success = blossom.resultState == BlossomItem::CHANGED_STATE
+                         || blossom.resultState == BlossomItem::SKIPPED_STATE;
+    if(blossom.outputMessage.size() > 0
+            && success)
     {
         output += "\n";
         output += blossom.outputMessage + "\n";

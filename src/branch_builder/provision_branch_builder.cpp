@@ -189,7 +189,7 @@ createCopySubtreeBlossom(const std::string &address,
 {
     BlossomItem* item = new BlossomItem();
 
-    item->blossomGroupType = "sakura-connection";
+    item->blossomGroupType = "special";
     item->blossomType = "copy-subtree";
 
     item->values->insert("address", new DataValue(address));

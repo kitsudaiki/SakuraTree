@@ -84,7 +84,7 @@ runSyncProcess(BlossomItem &blossomItem,
     }
     else
     {
-        blossomItem.outputMessage = "can not execute programm: " + programm;
+        blossomItem.errorMessage = "can not execute programm: " + programm;
         blossomItem.success = false;
 
         return false;
@@ -101,7 +101,7 @@ runSyncProcess(BlossomItem &blossomItem,
         }
     }
 
-    blossomItem.outputMessage = data;
+    blossomItem.errorMessage = data;
     if(blossomItem.execState != 0)
     {
         blossomItem.success = false;
