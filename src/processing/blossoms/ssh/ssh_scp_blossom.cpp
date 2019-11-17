@@ -43,7 +43,7 @@ SshScpBlossom::initTask(BlossomItem &blossomItem)
             || blossomItem.values->contains("source_path") == false)
     {
         blossomItem.success = false;
-        blossomItem.outputMessage = "missing connection informations";
+        blossomItem.errorMessage = "missing connection informations";
     }
 
     blossomItem.success = true;

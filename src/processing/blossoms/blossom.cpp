@@ -47,7 +47,7 @@ Blossom::growBlossom(BlossomItem &blossomItem)
         {
             output += uninitItems.at(i) + "\n";
         }
-        blossomItem.outputMessage = output;
+        blossomItem.errorMessage = output;
         blossomItem.success = false;
         return;
     }

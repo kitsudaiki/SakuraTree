@@ -91,7 +91,7 @@ SakuraRoot::startProcess(const std::string &rootPath,
     m_rootThread->waitUntilStarted();
     m_rootThread->waitForFinish();
 
-    sleep(1000);
+    // sleep(1000);
 
     std::cout<<"finish"<<std::endl;
 

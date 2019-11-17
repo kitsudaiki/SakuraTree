@@ -34,6 +34,7 @@
 #include <processing/blossoms/ssh/ssh_cmd_create_file_blossom.h>
 
 #include <processing/blossoms/sakura/sakura_copy_subtree_blossom.h>
+#include <processing/blossoms/sakura/print_blossom.h>
 
 namespace SakuraTree
 {
@@ -79,10 +80,13 @@ getBlossom(const std::string type,
         }
     }
 
-    if(type == "sakura-connection")
+    if(type == "special")
     {
         if(subType == "copy-subtree") {
             return new SakuraCopySubtreeBlossom();
+        }
+        if(subType == "print") {
+            return new PrintBlossom();
         }
     }
 

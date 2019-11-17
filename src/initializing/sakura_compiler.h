@@ -59,7 +59,6 @@ private:
 
     SakuraItem* convert(JsonItem &growPlan);
 
-    BlossomItem* convertBlossom(JsonItem &growPlan);
     SakuraItem* convertBlossomGroup(JsonItem &growPlan);
     SakuraItem* convertBranch(JsonItem &growPlan);
     SakuraItem* convertTree(JsonItem &growPlan);

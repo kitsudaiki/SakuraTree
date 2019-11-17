@@ -101,6 +101,7 @@ public:
     bool skip = false;
     bool success = true;
     int execState = 0;
+    std::string errorMessage = "";
     std::string outputMessage = "";
 };
 

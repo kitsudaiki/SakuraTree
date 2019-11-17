@@ -232,22 +232,6 @@ SakuraCompiler::convert(JsonItem &growPlan)
 }
 
 /**
- * @brief SakuraCompiler::convertBlossom
- * @param growPlan
- * @return
- */
-BlossomItem*
-SakuraCompiler::convertBlossom(JsonItem &growPlan)
-{
-    BlossomItem* blossomItem =  new BlossomItem();
-
-    blossomItem->blossomType = growPlan.get("blossom-type").toString();
-    blossomItem->values = growPlan.get("items-input").getItemContent()->copy()->toMap();
-
-    return blossomItem;
-}
-
-/**
  * @brief SakuraCompiler::convertBlossomGroup
  * @param growPlan
  * @return
@@ -259,11 +243,32 @@ SakuraCompiler::convertBlossomGroup(JsonItem &growPlan)
     blossomGroupItem->id = growPlan.get("name").toString();
     blossomGroupItem->blossomGroupType = growPlan.get("blossom-group-type").toString();
 
-    JsonItem subTypeArray = growPlan.get("blossoms");
-    for(uint32_t i = 0; i < subTypeArray.size(); i++)
+    const JsonItem subTypeArray = growPlan.get("blossoms");
+    if(subTypeArray.size() > 0)
     {
-        JsonItem item = subTypeArray.get(i);
-        blossomGroupItem->blossoms.push_back(convertBlossom(item));
+        for(uint32_t i = 0; i < subTypeArray.size(); i++)
+        {
+            BlossomItem* blossomItem =  new BlossomItem();
+
+            const JsonItem item = subTypeArray.get(i);
+            blossomItem->blossomType = item.get("blossom-type").toString();
+            blossomItem->values = item.get("items-input").getItemContent()->copy()->toMap();
+
+            JsonItem itemInput = growPlan.get("items-input");
+            overrideItems(*blossomItem->values, itemInput);
+
+            blossomGroupItem->blossoms.push_back(blossomItem);
+        }
+    }
+    else
+    {
+        BlossomItem* blossomItem =  new BlossomItem();
+
+        blossomGroupItem->blossomGroupType = "special";
+        blossomItem->blossomType = growPlan.get("blossom-group-type").toString();
+        blossomItem->values = growPlan.get("items-input").getItemContent()->copy()->toMap();
+
+        blossomGroupItem->blossoms.push_back(blossomItem);
     }
 
     return blossomGroupItem;
