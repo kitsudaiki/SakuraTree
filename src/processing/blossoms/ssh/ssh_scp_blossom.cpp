@@ -21,7 +21,7 @@
  */
 
 #include "ssh_scp_blossom.h"
-#include <processing/process_methods.h>
+#include <processing/process_execution.h>
 
 namespace SakuraTree
 {
@@ -37,10 +37,10 @@ SshScpBlossom::SshScpBlossom()
 void
 SshScpBlossom::initTask(BlossomItem &blossomItem)
 {
-    if(blossomItem.values->contains("user") == false
-            || blossomItem.values->contains("address") == false
-            || blossomItem.values->contains("target_path") == false
-            || blossomItem.values->contains("source_path") == false)
+    if(blossomItem.inputValues->contains("user") == false
+            || blossomItem.inputValues->contains("address") == false
+            || blossomItem.inputValues->contains("target_path") == false
+            || blossomItem.inputValues->contains("source_path") == false)
     {
         blossomItem.success = false;
         blossomItem.errorMessage = "missing connection informations";
@@ -66,21 +66,21 @@ void
 SshScpBlossom::runTask(BlossomItem &blossomItem)
 {
     std::string programm = "scp ";
-    if(blossomItem.values->contains("port")) {
-        programm += " -P " + blossomItem.values->get("port")->getString();
+    if(blossomItem.inputValues->contains("port")) {
+        programm += " -P " + blossomItem.inputValues->get("port")->getString();
     }
-    if(blossomItem.values->contains("ssh_key")) {
-        programm += " -i " + blossomItem.values->get("ssh_key")->getString();
+    if(blossomItem.inputValues->contains("ssh_key")) {
+        programm += " -i " + blossomItem.inputValues->get("ssh_key")->getString();
     }
 
     programm += " ";
-    programm += blossomItem.values->get("source_path")->getString();
+    programm += blossomItem.inputValues->get("source_path")->getString();
     programm += " ";
-    programm += blossomItem.values->get("user")->getString();
+    programm += blossomItem.inputValues->get("user")->getString();
     programm += "@";
-    programm += blossomItem.values->get("address")->getString();
+    programm += blossomItem.inputValues->get("address")->getString();
     programm += ":";
-    programm += blossomItem.values->get("target_path")->getString();
+    programm += blossomItem.inputValues->get("target_path")->getString();
 
     runSyncProcess(blossomItem, programm);
 }

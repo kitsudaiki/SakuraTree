@@ -106,11 +106,11 @@ createAptUpdateBlossom(const std::string &address,
     item->blossomGroupType = "ssh";
     item->blossomType = "cmd";
 
-    item->values->insert("address", new DataValue(address));
-    item->values->insert("user", new DataValue(userName));
-    item->values->insert("port", new DataValue(port));
-    item->values->insert("ssh_key", new DataValue(keyPath));
-    item->values->insert("command", new DataValue("sudo apt-get update"));
+    item->inputValues->insert("address", new DataValue(address));
+    item->inputValues->insert("user", new DataValue(userName));
+    item->inputValues->insert("port", new DataValue(port));
+    item->inputValues->insert("ssh_key", new DataValue(keyPath));
+    item->inputValues->insert("command", new DataValue("sudo apt-get update"));
 
     return item;
 }
@@ -134,11 +134,11 @@ createAptLatesBlossom(const std::string &address,
     item->blossomGroupType = "ssh";
     item->blossomType = "cmd";
 
-    item->values->insert("address", new DataValue(address));
-    item->values->insert("user", new DataValue(userName));
-    item->values->insert("port", new DataValue(port));
-    item->values->insert("ssh_key", new DataValue(keyPath));
-    item->values->insert("command", new DataValue("sudo apt-get install -y libboost-filesystem-dev libsqlite3-dev libboost-program-options-dev"));
+    item->inputValues->insert("address", new DataValue(address));
+    item->inputValues->insert("user", new DataValue(userName));
+    item->inputValues->insert("port", new DataValue(port));
+    item->inputValues->insert("ssh_key", new DataValue(keyPath));
+    item->inputValues->insert("command", new DataValue("sudo apt-get install -y libboost-filesystem-dev libsqlite3-dev libboost-program-options-dev"));
 
     return item;
 }
@@ -167,12 +167,12 @@ createScpBlossom(const std::string &address,
     item->blossomGroupType = "ssh";
     item->blossomType = "scp";
 
-    item->values->insert("address", new DataValue(address));
-    item->values->insert("user", new DataValue(userName));
-    item->values->insert("port", new DataValue(port));
-    item->values->insert("ssh_key", new DataValue(keyPath));
-    item->values->insert("source_path", new DataValue(sakaraTreePath));
-    item->values->insert("target_path", new DataValue(targetPath));
+    item->inputValues->insert("address", new DataValue(address));
+    item->inputValues->insert("user", new DataValue(userName));
+    item->inputValues->insert("port", new DataValue(port));
+    item->inputValues->insert("ssh_key", new DataValue(keyPath));
+    item->inputValues->insert("source_path", new DataValue(sakaraTreePath));
+    item->inputValues->insert("target_path", new DataValue(targetPath));
 
     return item;
 }
@@ -192,8 +192,8 @@ createCopySubtreeBlossom(const std::string &address,
     item->blossomGroupType = "special";
     item->blossomType = "copy-subtree";
 
-    item->values->insert("address", new DataValue(address));
-    item->values->insert("subtree", new DataValue(subtree));
+    item->inputValues->insert("address", new DataValue(address));
+    item->inputValues->insert("subtree", new DataValue(subtree));
 
     return item;
 }
@@ -223,12 +223,12 @@ createSshServiceFileBlossom(const std::string &address,
     item->blossomGroupType = "ssh";
     item->blossomType = "file_create";
 
-    item->values->insert("address", new DataValue(address));
-    item->values->insert("user", new DataValue(userName));
-    item->values->insert("port", new DataValue(port));
-    item->values->insert("ssh_key", new DataValue(keyPath));
-    item->values->insert("file_content", new DataValue(fileContent));
-    item->values->insert("file_path", new DataValue("/etc/systemd/system/sakura_tree.service"));
+    item->inputValues->insert("address", new DataValue(address));
+    item->inputValues->insert("user", new DataValue(userName));
+    item->inputValues->insert("port", new DataValue(port));
+    item->inputValues->insert("ssh_key", new DataValue(keyPath));
+    item->inputValues->insert("file_content", new DataValue(fileContent));
+    item->inputValues->insert("file_path", new DataValue("/etc/systemd/system/sakura_tree.service"));
 
     return item;
 }
@@ -253,12 +253,12 @@ createServiceStartBlossom(const std::string &address,
     item->blossomGroupType = "ssh";
     item->blossomType = "cmd";
 
-    item->values->insert("address", new DataValue(address));
-    item->values->insert("user", new DataValue(userName));
-    item->values->insert("port", new DataValue(port));
-    item->values->insert("ssh_key", new DataValue(keyPath));
-    item->values->insert("async", new DataValue(true));
-    item->values->insert("command", new DataValue("sudo systemctl start sakura_tree"));
+    item->inputValues->insert("address", new DataValue(address));
+    item->inputValues->insert("user", new DataValue(userName));
+    item->inputValues->insert("port", new DataValue(port));
+    item->inputValues->insert("ssh_key", new DataValue(keyPath));
+    item->inputValues->insert("async", new DataValue(true));
+    item->inputValues->insert("command", new DataValue("sudo systemctl start sakura_tree"));
 
     return item;
 }

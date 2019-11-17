@@ -22,7 +22,7 @@
 
 #include "apt_present_blossom.h"
 #include <processing/blossoms/install/apt/apt_methods.h>
-#include <processing/process_methods.h>
+#include <processing/process_execution.h>
 
 namespace SakuraTree
 {
@@ -41,7 +41,7 @@ AptPresentBlossom::AptPresentBlossom() :
 void
 AptPresentBlossom::initTask(BlossomItem &blossomItem)
 {
-    if(blossomItem.values->contains("names") == false)
+    if(blossomItem.inputValues->contains("names") == false)
     {
         blossomItem.success = false;
         blossomItem.errorMessage = "no packages to defined";

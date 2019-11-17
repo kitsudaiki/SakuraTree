@@ -1,5 +1,5 @@
 /**
- * @file        process_methods.cpp
+ * @file        process_execution.cpp
  *
  * @author      Tobias Anker <tobias.anker@kitsunemimi.moe>
  *
@@ -20,7 +20,7 @@
  *      limitations under the License.
  */
 
-#include "process_methods.h"
+#include "process_execution.h"
 #include <boost/algorithm/string/replace.hpp>
 
 namespace SakuraTree
@@ -101,7 +101,7 @@ runSyncProcess(BlossomItem &blossomItem,
         }
     }
 
-    blossomItem.errorMessage = data;
+    blossomItem.outputMessage = data;
     if(blossomItem.execState != 0)
     {
         blossomItem.success = false;

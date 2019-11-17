@@ -67,13 +67,13 @@ SOURCES += \
     tests/run_unit_tests.cpp \
     src/items/sakura_items.cpp \
     src/processing/blossoms/install/apt/apt_methods.cpp \
-    src/processing/process_methods.cpp \
     src/branch_builder/provision_branch_builder.cpp \
     src/processing/blossoms/ssh/ssh_scp_blossom.cpp \
     src/processing/blossoms/ssh/ssh_cmd_blossom.cpp \
     src/processing/blossoms/sakura/sakura_copy_subtree_blossom.cpp \
     src/processing/blossoms/ssh/ssh_cmd_create_file_blossom.cpp \
-    src/processing/blossoms/sakura/print_blossom.cpp
+    src/processing/blossoms/sakura/print_blossom.cpp \
+    src/processing/process_execution.cpp
 
 
 HEADERS += \
@@ -98,13 +98,13 @@ HEADERS += \
     tests/run_unit_tests.h \
     src/items/sakura_items.h \
     src/processing/blossoms/install/apt/apt_methods.h \
-    src/processing/process_methods.h \
     src/branch_builder/provision_branch_builder.h \
     src/processing/blossoms/ssh/ssh_scp_blossom.h \
     src/processing/blossoms/ssh/ssh_cmd_blossom.h \
     src/processing/blossoms/sakura/sakura_copy_subtree_blossom.h \
     src/processing/blossoms/ssh/ssh_cmd_create_file_blossom.h \
     src/processing/sakura_tree_callbacks.h \
-    src/processing/blossoms/sakura/print_blossom.h
+    src/processing/blossoms/sakura/print_blossom.h \
+    src/processing/process_execution.h
 
 

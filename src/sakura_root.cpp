@@ -164,10 +164,12 @@ void
 SakuraRoot::printOutput(const BlossomItem &blossomItem)
 {
     m_mutex.lock();
+
     std::cout<<" "<<std::endl;
     std::string output = convertBlossomOutput(blossomItem);
-    m_controller->sendBlossomOuput("127.0.0.1", output);
 
+    // only for prototyping hardcoded
+    m_controller->sendBlossomOuput("127.0.0.1", output);
     std::cout<<output<<std::endl;
 
     m_mutex.unlock();

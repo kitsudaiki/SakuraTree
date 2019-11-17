@@ -90,7 +90,8 @@ public:
     BlossomItem();
     ~BlossomItem();
 
-    DataMap* values = nullptr;
+    DataMap* inputValues = nullptr;
+    DataMap* outputValue = nullptr;
 
     std::string blossomGroupType = "";
     std::string blossomType = "";
