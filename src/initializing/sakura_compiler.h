@@ -42,20 +42,19 @@ class BlossomItem;
 class SakuraCompiler
 {
 public:
-    SakuraCompiler(Kitsunemimi::Sakura::SakuraParsing* driver);
+    SakuraCompiler();
     ~SakuraCompiler();
 
-    SakuraItem* compile(const std::string &rootPath,
+    JsonItem parseFiles(const std::string &rootPath,
                         std::string &seedName);
 
-    SakuraItem* compileSubtree(const std::string subtree);
+    SakuraItem* compile(JsonItem &tree);
 
 private:
-    Kitsunemimi::Sakura::SakuraParsing* m_driver = nullptr;
-    FileCollector* m_fileCollector = nullptr;
-
-    void preProcessObject(JsonItem &object);
-    void preProcessArray(JsonItem &object);
+    void preProcessObject(JsonItem &object,
+                          FileCollector*fileCollector);
+    void preProcessArray(JsonItem &object,
+                         FileCollector* fileCollector);
 
     SakuraItem* convert(JsonItem &growPlan);
 
