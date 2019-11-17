@@ -1,5 +1,5 @@
 /**
- * @file        file_collector.h
+ * @file        sakura_compiler.h
  *
  * @author      Tobias Anker <tobias.anker@kitsunemimi.moe>
  *
@@ -20,54 +20,47 @@
  *      limitations under the License.
  */
 
-#ifndef FILE_COLLECTOR_H
-#define FILE_COLLECTOR_H
+#ifndef SAKURA_COMPILER_H
+#define SAKURA_COMPILER_H
 
 #include <common.h>
 
-#include <boost/filesystem.hpp>
-
 namespace Kitsunemimi
 {
-namespace Common
-{
-class DataItem;
-class DataMap;
-}
 namespace Sakura
 {
 class SakuraParsing;
 }
 }
 
-using namespace boost::filesystem;
-using Kitsunemimi::Sakura::SakuraParsing;
-
 namespace SakuraTree
 {
+class FileCollector;
+class SakuraItem;
+class BlossomItem;
 
-class FileCollector
+class SakuraCompiler
 {
 public:
-    FileCollector(SakuraParsing* driver);
+    SakuraCompiler();
+    ~SakuraCompiler();
 
-    bool initFileCollector(const std::string &rootPath);
-
-    JsonItem getObject(const std::string &name,
-                       const std::string &type="");
-    const std::string getSeedName(const uint32_t index);
-    const std::string getErrorMessage() const;
+    SakuraItem* compile(JsonItem &tree);
 
 private:
-    SakuraParsing* m_driver = nullptr;
+    SakuraItem* convert(JsonItem &growPlan);
 
-    void getFilesInDir(const path &directory);
-    const std::string readFile(const std::string &filePath);
+    BlossomItem* convertBlossom(JsonItem &growPlan);
+    SakuraItem* convertBlossomGroup(JsonItem &growPlan);
+    SakuraItem* convertBranch(JsonItem &growPlan);
+    SakuraItem* convertTree(JsonItem &growPlan);
+    SakuraItem* convertSeed(JsonItem &growPlan);
+    SakuraItem* convertIf(JsonItem &growPlan);
 
-    std::vector<std::pair<std::string, JsonItem>> m_fileContents;
-    std::string m_errorMessage = "";
+    SakuraItem* convertSequeniellPart(JsonItem &growPlan);
+    SakuraItem* convertParallelPart(JsonItem &growPlan);
 };
 
 }
 
-#endif // FILE_COLLECTOR_H
+#endif // SAKURA_COMPILER_H
