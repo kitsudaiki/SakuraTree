@@ -91,6 +91,26 @@ void overrideItems(DataMap &original,
 }
 
 /**
+ * @brief overrideItems
+ */
+void overrideItems(DataMap &original,
+                   DataMap &override)
+{
+    const std::vector<std::string> keys = override.getKeys();
+    for(uint32_t i = 0; i < keys.size(); i++)
+    {
+        DataItem* value = override.get(keys.at(i));
+        if(value == nullptr) {
+            continue;
+        }
+
+        original.insert(keys.at(i),
+                        value->copy(),
+                        true);
+    }
+}
+
+/**
  * @brief checkItems
  *
  * @return list of not initialized values

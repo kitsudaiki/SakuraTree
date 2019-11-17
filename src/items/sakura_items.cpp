@@ -42,7 +42,7 @@ SakuraItem::ItemType SakuraItem::getType() const
 //===================================================================
 BlossomItem::BlossomItem() {type = BLOSSOM_ITEM;}
 
-BlossomItem::~BlossomItem() {delete values;}
+BlossomItem::~BlossomItem() {delete inputValues;}
 
 //===================================================================
 // BlossomGroupItem

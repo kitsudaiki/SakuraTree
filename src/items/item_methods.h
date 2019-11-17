@@ -36,7 +36,9 @@ void fillItems(DataMap &items,
                DataMap &insertValues);
 
 void overrideItems(DataMap &original,
-                   Kitsunemimi::Json::JsonItem &override);
+                   JsonItem &override);
+void overrideItems(DataMap &original,
+                   DataMap &override);
 
 const std::vector<std::string> checkItems(Kitsunemimi::Common::DataMap &items);
 

@@ -21,7 +21,7 @@
  */
 
 #include "ssh_cmd_blossom.h"
-#include <processing/process_methods.h>
+#include <processing/process_execution.h>
 
 namespace SakuraTree
 {
@@ -37,9 +37,9 @@ SshCmdBlossom::SshCmdBlossom()
 void
 SshCmdBlossom::initTask(BlossomItem &blossomItem)
 {
-    if(blossomItem.values->contains("user") == false
-            || blossomItem.values->contains("address") == false
-            || blossomItem.values->contains("command") == false)
+    if(blossomItem.inputValues->contains("user") == false
+            || blossomItem.inputValues->contains("address") == false
+            || blossomItem.inputValues->contains("command") == false)
     {
         blossomItem.success = false;
         blossomItem.errorMessage = "missing connection informations";
@@ -65,20 +65,20 @@ void
 SshCmdBlossom::runTask(BlossomItem &blossomItem)
 {
     std::string programm = "ssh ";
-    if(blossomItem.values->contains("port")) {
-        programm += " -p " + blossomItem.values->get("port")->getString();
+    if(blossomItem.inputValues->contains("port")) {
+        programm += " -p " + blossomItem.inputValues->get("port")->getString();
     }
-    if(blossomItem.values->contains("ssh_key")) {
-        programm += " -i " + blossomItem.values->get("ssh_key")->getString();
+    if(blossomItem.inputValues->contains("ssh_key")) {
+        programm += " -i " + blossomItem.inputValues->get("ssh_key")->getString();
     }
 
     programm += " ";
-    programm += blossomItem.values->get("user")->getString();
+    programm += blossomItem.inputValues->get("user")->getString();
     programm += "@";
-    programm += blossomItem.values->get("address")->getString();
+    programm += blossomItem.inputValues->get("address")->getString();
     programm += " -T ";
     programm += "\"";
-    programm += blossomItem.values->get("command")->getString();
+    programm += blossomItem.inputValues->get("command")->getString();
     programm += "\"";
 
     runSyncProcess(blossomItem, programm);

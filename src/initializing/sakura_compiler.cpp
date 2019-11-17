@@ -232,6 +232,28 @@ SakuraCompiler::convert(JsonItem &growPlan)
 }
 
 /**
+ * @brief SakuraCompiler::convertBlossom
+ * @param growPlan
+ * @return
+ */
+BlossomItem*
+SakuraCompiler::convertBlossom(JsonItem &growPlan)
+{
+    BlossomItem* blossomItem =  new BlossomItem();
+
+    blossomItem->blossomType = growPlan.get("blossom-type").toString();
+    blossomItem->inputValues = growPlan.get("items-input").getItemContent()->copy()->toMap();
+
+    const std::string outKey = growPlan.get("output").getItemContent()->toValue()->toString();
+    blossomItem->outputValue = new DataMap();
+    if(outKey.size() > 0) {
+        blossomItem->outputValue->insert(outKey, nullptr);
+    }
+
+    return blossomItem;
+}
+
+/**
  * @brief SakuraCompiler::convertBlossomGroup
  * @param growPlan
  * @return
@@ -248,14 +270,11 @@ SakuraCompiler::convertBlossomGroup(JsonItem &growPlan)
     {
         for(uint32_t i = 0; i < subTypeArray.size(); i++)
         {
-            BlossomItem* blossomItem =  new BlossomItem();
-
-            const JsonItem item = subTypeArray.get(i);
-            blossomItem->blossomType = item.get("blossom-type").toString();
-            blossomItem->values = item.get("items-input").getItemContent()->copy()->toMap();
+            JsonItem item = subTypeArray.get(i);
+            BlossomItem* blossomItem = convertBlossom(item);
 
             JsonItem itemInput = growPlan.get("items-input");
-            overrideItems(*blossomItem->values, itemInput);
+            overrideItems(*blossomItem->inputValues, itemInput);
 
             blossomGroupItem->blossoms.push_back(blossomItem);
         }
@@ -266,7 +285,8 @@ SakuraCompiler::convertBlossomGroup(JsonItem &growPlan)
 
         blossomGroupItem->blossomGroupType = "special";
         blossomItem->blossomType = growPlan.get("blossom-group-type").toString();
-        blossomItem->values = growPlan.get("items-input").getItemContent()->copy()->toMap();
+        blossomItem->inputValues = growPlan.get("items-input").getItemContent()->copy()->toMap();
+        blossomItem->outputValue = new DataMap();
 
         blossomGroupItem->blossoms.push_back(blossomItem);
     }

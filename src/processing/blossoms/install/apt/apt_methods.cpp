@@ -24,7 +24,7 @@
 
 #include <libKitsunemimiCommon/common_methods/string_methods.h>
 #include <libKitsunemimiCommon/common_items/data_items.h>
-#include <processing/process_methods.h>
+#include <processing/process_execution.h>
 
 namespace SakuraTree
 {
@@ -60,13 +60,13 @@ void
 fillPackageNames(BlossomItem &blossomItem,
                  std::vector<std::string> &packageList)
 {
-    if(blossomItem.values->get("names")->isValue()) {
-        packageList.push_back(blossomItem.values->get("names")->getString());
+    if(blossomItem.inputValues->get("names")->isValue()) {
+        packageList.push_back(blossomItem.inputValues->get("names")->getString());
     }
 
-    if(blossomItem.values->get("names")->isArray())
+    if(blossomItem.inputValues->get("names")->isArray())
     {
-        JsonItem tempItem = blossomItem.values->get("names");
+        JsonItem tempItem = blossomItem.inputValues->get("names");
         for(uint32_t i = 0; i < tempItem.size(); i++)
         {
             packageList.push_back(tempItem.get(i).toString());
@@ -158,8 +158,9 @@ const std::vector<std::string>
 getInstalledPackages(BlossomItem &blossomItem)
 {
     std::string command = "dpkg --list | grep ^ii  | awk ' {print \\$2} '";
-    runSyncProcess(blossomItem, command);
-    const std::string output(blossomItem.errorMessage);
+    BlossomItem tempItem;
+    runSyncProcess(tempItem, command);
+    const std::string output(tempItem.outputMessage);
     return Kitsunemimi::Common::splitStringByDelimiter(output, '\n');
 }
 
