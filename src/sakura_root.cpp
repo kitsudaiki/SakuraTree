@@ -21,8 +21,8 @@
  */
 
 #include "sakura_root.h"
+#include <sakura_compiler.h>
 
-#include <initializing/sakura_compiler.h>
 #include <items/item_methods.h>
 #include <processing/sakura_thread.h>
 #include <processing/sakura_tree_callbacks.h>

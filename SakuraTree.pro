@@ -52,8 +52,7 @@ INCLUDEPATH += $$PWD \
 SOURCES += \
     src/main.cpp \
     src/processing/blossoms/blossom.cpp \
-    src/initializing/file_collector.cpp \
-    src/initializing/sakura_compiler.cpp \
+    src/sakura_compiler.cpp \
     src/processing/blossoms/install/apt/apt_absent_blossom.cpp \
     src/processing/blossoms/install/apt/apt_latest_bossom.cpp \
     src/processing/blossoms/install/apt/apt_present_bossom.cpp \
@@ -83,8 +82,7 @@ HEADERS += \
     src/common/includes.h \
     src/common/typedefs.h \
     src/processing/blossoms/blossom.h \
-    src/initializing/file_collector.h \
-    src/initializing/sakura_compiler.h \
+    src/sakura_compiler.h \
     src/processing/blossoms/install/apt/apt_absent_blossom.h \
     src/processing/blossoms/install/apt/apt_latest_blossom.h \
     src/processing/blossoms/install/apt/apt_update_blossom.h \

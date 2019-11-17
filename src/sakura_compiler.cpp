@@ -23,10 +23,10 @@
 #include "sakura_compiler.h"
 
 #include <libKitsunemimiSakuraParser/sakura_parsing.h>
+#include <libKitsunemimiSakuraParser/file_collector.h>
 
 #include <libKitsunemimiJson/json_item.h>
 
-#include <initializing/file_collector.h>
 #include <sakura_root.h>
 #include <items/sakura_items.h>
 #include <items/item_methods.h>
