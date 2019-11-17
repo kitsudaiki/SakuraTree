@@ -194,32 +194,40 @@ Example-Branch, which is called by the Tree.
 
 ```cpp
 [install_branch]
-- packages = {{}}
+- packages = nano
 
-apt(apt_blossomX) 
--> update 
+apt("update and install")  
+-> update
 -> present:
-   - names = "{{packages}}"
+	- names = "{{packages}}"
 
-apt(apt_blossom1)
--> absent:
-   - names = "{{packages}}"
+if(packages == nano)
+{
+	apt("try to delete")
+	-> absent:
+		- names = "{{packages}}"
 
-apt(apt_blossom2)
--> absent:
-   - names = "{{packages}}"
+	apt("try to delete again")
+	-> absent:
+		- names = "{{packages}}"
 
-apt(apt_blossom3)
--> present:
-   - names = "{{packages}}"
+	apt("install via apt")
+	-> present >> test_output:
+		- names = "{{packages}}"
 
-apt(apt_blossom4)
--> latest:
-   - names = "{{packages}}"
+	print("test output")
+	- output = "{{test_output}}"
+}
+else
+{
+    apt(apt1_in_else)
+    -> absent:
+            - names = "{{packages}}"
 
-apt(apt_blossom5)
--> present:
-   - names = "{{packages}}"
+    apt(apt2_in_else)
+    -> present:
+            - names = "{{packages}}"
+}
 ```
 
 
