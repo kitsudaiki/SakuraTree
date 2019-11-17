@@ -75,12 +75,12 @@ bool
 SakuraRoot::startProcess(const std::string &rootPath,
                          std::string seedName)
 {
-    m_controller->createServer(1337);
+    // m_controller->createServer(1337);
 
     // parsing
-    SakuraParsing* sakuraParser = new SakuraParsing(DEBUG);
-    SakuraCompiler compiler(sakuraParser);
-    SakuraItem* processPlan = compiler.compile(rootPath, seedName);
+    SakuraCompiler compiler;
+    JsonItem tree = compiler.parseFiles(rootPath, seedName);
+    SakuraItem* processPlan = compiler.compile(tree);
 
     assert(processPlan != nullptr);
 
@@ -92,7 +92,6 @@ SakuraRoot::startProcess(const std::string &rootPath,
     m_rootThread->waitForFinish();
 
     // sleep(1000);
-
     std::cout<<"finish"<<std::endl;
 
     return true;
@@ -109,14 +108,16 @@ SakuraRoot::startSubtreeProcess(const std::string &subtree,
 {
     std::cout<<"startSubtreeProcess"<<std::endl;
     // parsing
-    SakuraParsing* sakuraParser = new SakuraParsing(DEBUG);
-    SakuraCompiler compiler(sakuraParser);
-    SakuraItem* processPlan = compiler.compileSubtree(subtree);
+    JsonItem completePlan;
+    completePlan.parse(subtree);
+
+    SakuraCompiler compiler;
+    SakuraItem* processPlan = compiler.compile(completePlan);
 
     assert(processPlan != nullptr);
 
     // run process
-    Kitsunemimi::Json::JsonItem valuesJson;
+    JsonItem valuesJson;
     valuesJson.parse(values);
     m_rootThread = new SakuraThread(processPlan,
                                     *valuesJson.getItemContent()->copy()->toMap(),
