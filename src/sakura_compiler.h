@@ -45,17 +45,9 @@ public:
     SakuraCompiler();
     ~SakuraCompiler();
 
-    JsonItem parseFiles(const std::string &rootPath,
-                        std::string &seedName);
-
     SakuraItem* compile(JsonItem &tree);
 
 private:
-    void preProcessObject(JsonItem &object,
-                          FileCollector*fileCollector);
-    void preProcessArray(JsonItem &object,
-                         FileCollector* fileCollector);
-
     SakuraItem* convert(JsonItem &growPlan);
 
     BlossomItem* convertBlossom(JsonItem &growPlan);

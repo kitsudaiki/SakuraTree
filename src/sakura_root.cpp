@@ -28,6 +28,8 @@
 #include <processing/sakura_tree_callbacks.h>
 
 #include <libKitsunemimiSakuraNetwork/sakura_host_handler.h>
+#include <libKitsunemimiSakuraParser/file_collector.h>
+
 #include <libKitsunemimiJson/json_item.h>
 #include <libKitsunemimiJinja2/jinja2_converter.h>
 
@@ -78,8 +80,9 @@ SakuraRoot::startProcess(const std::string &rootPath,
     // m_controller->createServer(1337);
 
     // parsing
+    FileCollector fileCollector;
     SakuraCompiler compiler;
-    JsonItem tree = compiler.parseFiles(rootPath, seedName);
+    JsonItem tree = fileCollector.parseFiles(rootPath, seedName, DEBUG);
     SakuraItem* processPlan = compiler.compile(tree);
 
     assert(processPlan != nullptr);
