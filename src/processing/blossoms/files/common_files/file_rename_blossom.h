@@ -1,5 +1,5 @@
 /**
- * @file        blossom.h
+ * @file        file_rename_blossom.h
  *
  * @author      Tobias Anker <tobias.anker@kitsunemimi.moe>
  *
@@ -20,34 +20,31 @@
  *      limitations under the License.
  */
 
-#ifndef BLOSSOM_H
-#define BLOSSOM_H
+#ifndef FILE_RENAME_BLOSSOM_H
+#define FILE_RENAME_BLOSSOM_H
 
-#include <common.h>
-#include <items/sakura_items.h>
-#include <processing/process_execution.h>
-
-using Kitsunemimi::Common::DataMap;
+#include <processing/blossoms/blossom.h>
 
 namespace SakuraTree
 {
 
-class Blossom
+class FileRenameBlossom : public Blossom
 {
 public:
-    Blossom();
-    virtual ~Blossom();
-
-    void growBlossom(BlossomItem &blossomItem);
+    FileRenameBlossom();
 
 protected:
-    virtual void initTask(BlossomItem &blossomItem) = 0;
-    virtual void preCheck(BlossomItem &blossomItem) = 0;
-    virtual void runTask(BlossomItem &blossomItem) = 0;
-    virtual void postCheck(BlossomItem &blossomItem) = 0;
-    virtual void closeTask(BlossomItem &blossomItem) = 0;
+    void initTask(BlossomItem &blossomItem);
+    void preCheck(BlossomItem &blossomItem);
+    void runTask(BlossomItem &blossomItem);
+    void postCheck(BlossomItem &blossomItem);
+    void closeTask(BlossomItem &blossomItem);
+
+private:
+    std::string m_filePath = "";
+    std::string m_newFilePath = "";
 };
 
 }
 
-#endif // BLOSSOM_H
+#endif // FILE_RENAME_BLOSSOM_H

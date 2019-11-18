@@ -40,6 +40,10 @@
 #include <istream>
 #include <iterator>
 
+#include <boost/filesystem.hpp>
+
+using namespace boost::filesystem;
+
 #include <libKitsunemimiCommon/common_items/data_items.h>
 #include <libKitsunemimiJson/json_item.h>
 

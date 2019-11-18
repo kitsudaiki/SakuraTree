@@ -1,5 +1,5 @@
 /**
- * @file        blossom.h
+ * @file        file_methods.h
  *
  * @author      Tobias Anker <tobias.anker@kitsunemimi.moe>
  *
@@ -20,34 +20,18 @@
  *      limitations under the License.
  */
 
-#ifndef BLOSSOM_H
-#define BLOSSOM_H
+#ifndef FILE_METHODS_H
+#define FILE_METHODS_H
 
 #include <common.h>
-#include <items/sakura_items.h>
-#include <processing/process_execution.h>
-
-using Kitsunemimi::Common::DataMap;
 
 namespace SakuraTree
 {
 
-class Blossom
-{
-public:
-    Blossom();
-    virtual ~Blossom();
-
-    void growBlossom(BlossomItem &blossomItem);
-
-protected:
-    virtual void initTask(BlossomItem &blossomItem) = 0;
-    virtual void preCheck(BlossomItem &blossomItem) = 0;
-    virtual void runTask(BlossomItem &blossomItem) = 0;
-    virtual void postCheck(BlossomItem &blossomItem) = 0;
-    virtual void closeTask(BlossomItem &blossomItem) = 0;
-};
+std::pair<bool, std::string> doesPathExist(const std::string path);
+std::pair<bool, std::string> doesFileExist(const std::string filePath);
+std::pair<bool, std::string> doesDirExist(const std::string dirPath);
 
 }
 
-#endif // BLOSSOM_H
+#endif // FILE_METHODS_H

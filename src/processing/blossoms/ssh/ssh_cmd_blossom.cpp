@@ -21,7 +21,6 @@
  */
 
 #include "ssh_cmd_blossom.h"
-#include <processing/process_execution.h>
 
 namespace SakuraTree
 {
@@ -43,6 +42,7 @@ SshCmdBlossom::initTask(BlossomItem &blossomItem)
     {
         blossomItem.success = false;
         blossomItem.errorMessage = "missing connection informations";
+        return;
     }
 
     blossomItem.success = true;
@@ -82,7 +82,6 @@ SshCmdBlossom::runTask(BlossomItem &blossomItem)
     programm += "\"";
 
     runSyncProcess(blossomItem, programm);
-    sleep(1);
 }
 
 /**
