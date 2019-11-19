@@ -22,7 +22,8 @@
 
 #include "run_unit_tests.h"
 
-#include <tests/core/common_methods_test.h>
+#include <tests/items/item_methods_test.h>
+#include <tests/processing/blossoms/files/file_methods_test.h>
 
 namespace SakuraTree
 {
@@ -36,7 +37,8 @@ void
 RunUnitTests::run()
 {
     #ifdef RUN_UNIT_TEST
-    SakuraTree::CommonMethodsTest();
+    SakuraTree::ItemMethods_Test();
+    SakuraTree::FileMethods_Test();
     #endif
 }
 

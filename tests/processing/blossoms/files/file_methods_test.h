@@ -1,5 +1,5 @@
 /**
- * @file        defines.h
+ * @file        file_methods_test.h
  *
  * @author      Tobias Anker <tobias.anker@kitsunemimi.moe>
  *
@@ -20,12 +20,30 @@
  *      limitations under the License.
  */
 
-#ifndef DEFINES_H
-#define DEFINES_H
+#ifndef FILE_METHODS_TEST_H
+#define FILE_METHODS_TEST_H
 
-#include <common/includes.h>
+#include <common.h>
+#include <libKitsunemimiCommon/test.h>
 
-#define DEBUG false
-#define RUN_UNIT_TEST
+namespace SakuraTree
+{
 
-#endif // DEFINES_H
+class FileMethods_Test
+        : public Kitsunemimi::Common::Test
+{
+public:
+    FileMethods_Test();
+
+private:
+    void doesPathExist_test();
+    void doesFileExist_test();
+    void doesDirExist_test();
+    void renameFileOrDir_test();
+    void copyFile_test();
+    void deleteFileOrDis_test();
+};
+
+}
+
+#endif // FILE_METHODS_TEST_H

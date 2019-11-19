@@ -45,7 +45,7 @@ bool
 doesFileExist(const std::string filePath)
 {
     if(exists(filePath) == false
-            && is_directory(filePath))
+            || is_directory(filePath))
     {
         return false;
     }
@@ -61,8 +61,8 @@ doesFileExist(const std::string filePath)
 bool
 doesDirExist(const std::string dirPath)
 {
-    if(exists(dirPath)
-            && is_directory(dirPath))
+    if(exists(dirPath) == false
+            || is_directory(dirPath) == false)
     {
         return false;
     }

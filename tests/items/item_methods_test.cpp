@@ -28,7 +28,7 @@ namespace SakuraTree
 {
 
 /**
- * @brief CommonMethodsTest::CommonMethodsTest
+ * @brief constructor
  */
 ItemMethods_Test::ItemMethods_Test()
     : Kitsunemimi::Common::Test("ItemMethods_Test")
@@ -46,7 +46,8 @@ ItemMethods_Test::ItemMethods_Test()
 /**
  * @brief initTestCase
  */
-void ItemMethods_Test::initTestCase()
+void
+ItemMethods_Test::initTestCase()
 {
     m_root = new SakuraRoot(std::string("test"));
 }
@@ -54,20 +55,23 @@ void ItemMethods_Test::initTestCase()
 /**
  * @brief convertString_test
  */
-void ItemMethods_Test::convertString_test()
+void
+ItemMethods_Test::convertString_test()
 {
     std::string jinja2String = "{{test}}";
     DataMap obj;
     obj.insert("test", new DataValue("hmmm"));
 
     std::string result = convertString(jinja2String, obj);
+
     TEST_EQUAL(result, "hmmm");
 }
 
 /**
  * @brief fillItems_test
  */
-void ItemMethods_Test::fillItems_test()
+void
+ItemMethods_Test::fillItems_test()
 {
     DataMap items;
     items.insert("x", new DataValue("{{test}}"));
@@ -75,13 +79,15 @@ void ItemMethods_Test::fillItems_test()
     insertValues.insert("test", new DataValue("hmmm"));
 
     fillItems(items, insertValues);
+
     TEST_EQUAL(items.get("x")->toString(), "hmmm");
 }
 
 /**
  * @brief overrideItems_test
  */
-void ItemMethods_Test::overrideItems_test()
+void
+ItemMethods_Test::overrideItems_test()
 {
     DataMap original;
     original.insert("x", new DataValue("{{test}}"));
@@ -92,6 +98,7 @@ void ItemMethods_Test::overrideItems_test()
     override.insert("z", new DataValue("hmmm"));
 
     overrideItems(original, override);
+
     TEST_EQUAL(original.size(), 3);
     TEST_EQUAL(original.get("x")->toString(), "{{test}}");
     TEST_EQUAL(original.get("y")->toString(), "poi");
@@ -101,13 +108,15 @@ void ItemMethods_Test::overrideItems_test()
 /**
  * @brief checkItems_test
  */
-void ItemMethods_Test::checkItems_test()
+void
+ItemMethods_Test::checkItems_test()
 {
     DataMap items;
     items.insert("x", new DataValue("{{}}"));
     items.insert("y", new DataValue("asdf"));
 
     std::vector<std::string> result = checkItems(items);
+
     TEST_EQUAL(result.size(), 1);
     TEST_EQUAL(result.at(0), "x");
 }
@@ -115,7 +124,8 @@ void ItemMethods_Test::checkItems_test()
 /**
  * @brief cleanupTestCase
  */
-void ItemMethods_Test::cleanupTestCase()
+void
+ItemMethods_Test::cleanupTestCase()
 {
     delete m_root;
 }
