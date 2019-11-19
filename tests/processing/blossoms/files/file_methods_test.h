@@ -40,7 +40,7 @@ private:
     void doesFileExist_test();
     void doesDirExist_test();
     void renameFileOrDir_test();
-    void copyFile_test();
+    void copyPath_test();
     void deleteFileOrDis_test();
 };
 

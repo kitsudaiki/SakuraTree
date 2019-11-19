@@ -1,5 +1,5 @@
 /**
- * @file        includes.h
+ * @file        file_delete_blossom_test.h
  *
  * @author      Tobias Anker <tobias.anker@kitsunemimi.moe>
  *
@@ -20,36 +20,32 @@
  *      limitations under the License.
  */
 
-#ifndef INCLUDES_H
-#define INCLUDES_H
+#ifndef FILE_DELETE_BLOSSOM_TEST_H
+#define FILE_DELETE_BLOSSOM_TEST_H
 
-#include <assert.h>
-#include <map>
-#include <utility>
-#include <vector>
-#include <algorithm>
-#include <iostream>
-#include <sstream>
-#include <string>
-#include <cstdlib>
-#include <fstream>
-#include <stdio.h>
-#include <stdlib.h>
-#include <mutex>
-#include <streambuf>
-#include <istream>
-#include <iterator>
+#include <common.h>
+#include <libKitsunemimiCommon/test.h>
 
-#include <boost/filesystem.hpp>
+namespace SakuraTree
+{
 
-#include <libKitsunemimiCommon/common_items/data_items.h>
-#include <libKitsunemimiJson/json_item.h>
+class FileDeleteBlossom_Test
+        : public Kitsunemimi::Common::Test
+{
+public:
+    FileDeleteBlossom_Test();
 
-using Kitsunemimi::Common::DataItem;
-using Kitsunemimi::Common::DataArray;
-using Kitsunemimi::Common::DataValue;
-using Kitsunemimi::Common::DataMap;
+private:
+    void initTestCase();
+    void initTask_test();
+    void preCheck_test();
+    void runTask_test();
+    void postCheck_test();
+    void closeTask_test();
 
-using Kitsunemimi::Json::JsonItem;
+    std::string m_path = "";
+};
 
-#endif // INCLUDES_H
+}
+
+#endif // FILE_DELETE_BLOSSOM_TEST_H

@@ -27,6 +27,7 @@
 
 namespace SakuraTree
 {
+class FileCopyBlossom_Test;
 
 class FileCopyBlossom : public Blossom
 {
@@ -41,6 +42,8 @@ protected:
     void closeTask(BlossomItem &blossomItem);
 
 private:
+    friend FileCopyBlossom_Test;
+
     std::string m_sourcePath = "";
     std::string m_destinationPath = "";
 };

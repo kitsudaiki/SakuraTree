@@ -27,6 +27,7 @@
 
 namespace SakuraTree
 {
+class FileRenameBlossom_Test;
 
 class FileRenameBlossom : public Blossom
 {
@@ -41,7 +42,10 @@ protected:
     void closeTask(BlossomItem &blossomItem);
 
 private:
+    friend FileRenameBlossom_Test;
+
     std::string m_filePath = "";
+    std::string m_newFileName = "";
     std::string m_newFilePath = "";
 };
 

@@ -37,21 +37,15 @@ FileCopyBlossom::FileCopyBlossom() :
 void
 FileCopyBlossom::initTask(BlossomItem &blossomItem)
 {
-    if(blossomItem.inputValues->contains("file_path") == false
-            || blossomItem.inputValues->contains("new_name") == false)
+    if(blossomItem.inputValues->contains("source_path") == false
+            || blossomItem.inputValues->contains("dest_path") == false)
     {
         blossomItem.success = false;
+        return;
     }
 
-    m_sourcePath = blossomItem.inputValues->getStringByKey("file_path");
-    std::vector<std::string> stringParts = splitStringByDelimiter(m_sourcePath, '/');
-    stringParts[stringParts.size()-1] = blossomItem.inputValues->getStringByKey("new_name");
-
-    for(uint32_t i = 0; i < stringParts.size(); i++)
-    {
-        m_destinationPath += "/";
-        m_destinationPath += stringParts.at(i);
-    }
+    m_sourcePath = blossomItem.inputValues->getStringByKey("source_path");
+    m_destinationPath = blossomItem.inputValues->getStringByKey("dest_path");
 
     blossomItem.success = true;
 }
@@ -62,19 +56,25 @@ FileCopyBlossom::initTask(BlossomItem &blossomItem)
 void
 FileCopyBlossom::preCheck(BlossomItem &blossomItem)
 {
-    if(doesFileExist(m_sourcePath) == false)
+    if(doesPathExist(m_sourcePath) == false)
     {
         blossomItem.success = false;
-        blossomItem.errorMessage = "source-file doesn't exist: " + m_sourcePath;
+        blossomItem.errorMessage = "COPY FAILED: source-path "
+                                   + m_sourcePath
+                                   + " doesn't exist";
         return;
     }
 
     if(doesPathExist(m_destinationPath))
     {
         blossomItem.success = false;
-        blossomItem.errorMessage = "path already exist: " + m_destinationPath;
+        blossomItem.errorMessage = "COPY FAILED: destination-path "
+                                   + m_sourcePath
+                                   + " already exist";
         return;
     }
+
+    blossomItem.success = true;
 }
 
 /**
@@ -83,13 +83,16 @@ FileCopyBlossom::preCheck(BlossomItem &blossomItem)
 void
 FileCopyBlossom::runTask(BlossomItem &blossomItem)
 {
-    std::pair<bool, std::string> renameResult = copyFile(m_sourcePath, m_destinationPath);
+    const std::pair<bool, std::string> copyResult = copyPath(m_sourcePath, m_destinationPath);
 
-    if(renameResult.first == false)
+    if(copyResult.first == false)
     {
         blossomItem.success = false;
-        blossomItem.errorMessage = renameResult.second;
+        blossomItem.errorMessage = "COPY FAILED: " + copyResult.second;
+        return;
     }
+
+    blossomItem.success = true;
 }
 
 /**
@@ -101,7 +104,10 @@ FileCopyBlossom::postCheck(BlossomItem &blossomItem)
     if(doesPathExist(m_destinationPath) == false)
     {
         blossomItem.success = false;
-        blossomItem.errorMessage = "was not able to rename to: " + m_destinationPath;
+        blossomItem.errorMessage = "COPY FAILED: was not able to copy from "
+                                   + m_sourcePath
+                                   + " to "
+                                   + m_destinationPath;
         return;
     }
 

@@ -33,7 +33,7 @@ namespace SakuraTree
 bool
 doesPathExist(const std::string path)
 {
-    return exists(path);
+    return boost::filesystem::exists(path);
 }
 
 /**
@@ -44,8 +44,8 @@ doesPathExist(const std::string path)
 bool
 doesFileExist(const std::string filePath)
 {
-    if(exists(filePath) == false
-            || is_directory(filePath))
+    if(boost::filesystem::exists(filePath) == false
+            || boost::filesystem::is_directory(filePath))
     {
         return false;
     }
@@ -61,8 +61,8 @@ doesFileExist(const std::string filePath)
 bool
 doesDirExist(const std::string dirPath)
 {
-    if(exists(dirPath) == false
-            || is_directory(dirPath) == false)
+    if(boost::filesystem::exists(dirPath) == false
+            || boost::filesystem::is_directory(dirPath) == false)
     {
         return false;
     }
@@ -76,7 +76,7 @@ doesDirExist(const std::string dirPath)
  * @param newPath
  * @return
  */
-std::pair<bool, std::string>
+const std::pair<bool, std::string>
 renameFileOrDir(const std::string oldPath,
                 const std::string newPath)
 {
@@ -85,7 +85,7 @@ renameFileOrDir(const std::string oldPath,
     boost::system::error_code error;
     error.clear();
 
-    rename(oldPath, newPath, error);
+    boost::filesystem::rename(oldPath, newPath, error);
 
     if(error.value() != 0)
     {
@@ -100,20 +100,20 @@ renameFileOrDir(const std::string oldPath,
 }
 
 /**
- * @brief copyFile
+ * @brief copyPath
  * @param sourcePath
  * @param targetPath
  * @return
  */
-std::pair<bool, std::string>
-copyFile(const std::string sourcePath, const std::string targetPath)
+const std::pair<bool, std::string>
+copyPath(const std::string sourcePath, const std::string targetPath)
 {
     std::pair<bool, std::string> result;
 
     boost::system::error_code error;
     error.clear();
 
-    copy_file(sourcePath, targetPath, error);
+    boost::filesystem::copy(sourcePath, targetPath, error);
 
     if(error.value() != 0)
     {
@@ -133,9 +133,9 @@ copyFile(const std::string sourcePath, const std::string targetPath)
  * @return
  */
 bool
-deleteFileOrDis(const std::string path)
+deleteFileOrDir(const std::string path)
 {
-    return remove(path);
+    return boost::filesystem::remove(path);
 }
 
 }

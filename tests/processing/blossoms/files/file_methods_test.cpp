@@ -37,7 +37,7 @@ FileMethods_Test::FileMethods_Test()
     doesFileExist_test();
     doesDirExist_test();
     renameFileOrDir_test();
-    copyFile_test();
+    copyPath_test();
     deleteFileOrDis_test();
 }
 
@@ -62,7 +62,7 @@ FileMethods_Test::doesPathExist_test()
 }
 
 /**
- * @brief doesPathExist_test
+ * @brief doesFileExist_test
  */
 void
 FileMethods_Test::doesFileExist_test()
@@ -88,7 +88,7 @@ FileMethods_Test::doesFileExist_test()
 }
 
 /**
- * @brief doesPathExist_test
+ * @brief doesDirExist_test
  */
 void
 FileMethods_Test::doesDirExist_test()
@@ -114,7 +114,7 @@ FileMethods_Test::doesDirExist_test()
 }
 
 /**
- * @brief doesPathExist_test
+ * @brief renameFileOrDir_test
  */
 void
 FileMethods_Test::renameFileOrDir_test()
@@ -142,10 +142,10 @@ FileMethods_Test::renameFileOrDir_test()
 }
 
 /**
- * @brief doesPathExist_test
+ * @brief copyPath_test
  */
 void
-FileMethods_Test::copyFile_test()
+FileMethods_Test::copyPath_test()
 {
     BlossomItem fakeBlossom;
     std::pair<bool, std::string> result;
@@ -156,10 +156,10 @@ FileMethods_Test::copyFile_test()
     runSyncProcess(fakeBlossom, "touch " + oldFilePath);
     runSyncProcess(fakeBlossom, "rm " + newFileName);
 
-    result = copyFile(oldFilePath, newFileName);
+    result = copyPath(oldFilePath, newFileName);
     TEST_EQUAL(result.first, true);
 
-    result = copyFile(oldFilePath, newFileName);
+    result = copyPath(oldFilePath, newFileName);
     TEST_EQUAL(result.first, false);
 
     TEST_EQUAL(doesPathExist(oldFilePath), true);
@@ -178,12 +178,12 @@ FileMethods_Test::deleteFileOrDis_test()
     BlossomItem fakeBlossom;
     const std::string testPath = "/tmp/deleteFileOrDis_test_testfile";
 
-    TEST_EQUAL(deleteFileOrDis(testPath), false);
+    TEST_EQUAL(deleteFileOrDir(testPath), false);
 
     runSyncProcess(fakeBlossom, "touch " + testPath);
 
-    TEST_EQUAL(deleteFileOrDis(testPath), true);
-    TEST_EQUAL(deleteFileOrDis(testPath), false);
+    TEST_EQUAL(deleteFileOrDir(testPath), true);
+    TEST_EQUAL(deleteFileOrDir(testPath), false);
 
     TEST_EQUAL(doesPathExist(testPath), false);
 }

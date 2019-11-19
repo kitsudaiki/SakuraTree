@@ -1,5 +1,5 @@
 /**
- * @file        includes.h
+ * @file        file_chmod_blossom_test.cpp
  *
  * @author      Tobias Anker <tobias.anker@kitsunemimi.moe>
  *
@@ -20,36 +20,64 @@
  *      limitations under the License.
  */
 
-#ifndef INCLUDES_H
-#define INCLUDES_H
+#include "file_chmod_blossom_test.h"
 
-#include <assert.h>
-#include <map>
-#include <utility>
-#include <vector>
-#include <algorithm>
-#include <iostream>
-#include <sstream>
-#include <string>
-#include <cstdlib>
-#include <fstream>
-#include <stdio.h>
-#include <stdlib.h>
-#include <mutex>
-#include <streambuf>
-#include <istream>
-#include <iterator>
+namespace SakuraTree
+{
 
-#include <boost/filesystem.hpp>
+FileChmodBlossom_Test::FileChmodBlossom_Test()
+    : Kitsunemimi::Common::Test("FileChmodBlossom_Test")
+{
+    initTask_test();
+    preCheck_test();
+    runTask_test();
+    postCheck_test();
+    closeTask_test();
+}
 
-#include <libKitsunemimiCommon/common_items/data_items.h>
-#include <libKitsunemimiJson/json_item.h>
+/**
+ * @brief initTask_test
+ */
+void
+FileChmodBlossom_Test::initTask_test()
+{
 
-using Kitsunemimi::Common::DataItem;
-using Kitsunemimi::Common::DataArray;
-using Kitsunemimi::Common::DataValue;
-using Kitsunemimi::Common::DataMap;
+}
 
-using Kitsunemimi::Json::JsonItem;
+/**
+ * @brief preCheck_test
+ */
+void
+FileChmodBlossom_Test::preCheck_test()
+{
 
-#endif // INCLUDES_H
+}
+
+/**
+ * @brief runTask_test
+ */
+void
+FileChmodBlossom_Test::runTask_test()
+{
+
+}
+
+/**
+ * @brief postCheck_test
+ */
+void
+FileChmodBlossom_Test::postCheck_test()
+{
+
+}
+
+/**
+ * @brief closeTask_test
+ */
+void
+FileChmodBlossom_Test::closeTask_test()
+{
+
+}
+
+}

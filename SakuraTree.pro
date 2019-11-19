@@ -79,7 +79,12 @@ SOURCES += \
     src/processing/blossoms/files/common_files/file_chmod_blossom.cpp \
     src/processing/blossoms/files/common_files/file_chown_blossom.cpp \
     tests/items/item_methods_test.cpp \
-    tests/processing/blossoms/files/file_methods_test.cpp
+    tests/processing/blossoms/files/file_methods_test.cpp \
+    tests/processing/blossoms/files/common_files/file_chmod_blossom_test.cpp \
+    tests/processing/blossoms/files/common_files/file_chown_blossom_test.cpp \
+    tests/processing/blossoms/files/common_files/file_copy_blossom_test.cpp \
+    tests/processing/blossoms/files/common_files/file_delete_blossom_test.cpp \
+    tests/processing/blossoms/files/common_files/file_rename_blossom_test.cpp
 
 
 HEADERS += \
@@ -117,6 +122,11 @@ HEADERS += \
     src/processing/blossoms/files/common_files/file_chmod_blossom.h \
     src/processing/blossoms/files/common_files/file_chown_blossom.h \
     tests/items/item_methods_test.h \
-    tests/processing/blossoms/files/file_methods_test.h
+    tests/processing/blossoms/files/file_methods_test.h \
+    tests/processing/blossoms/files/common_files/file_chmod_blossom_test.h \
+    tests/processing/blossoms/files/common_files/file_chown_blossom_test.h \
+    tests/processing/blossoms/files/common_files/file_copy_blossom_test.h \
+    tests/processing/blossoms/files/common_files/file_delete_blossom_test.h \
+    tests/processing/blossoms/files/common_files/file_rename_blossom_test.h
 
 

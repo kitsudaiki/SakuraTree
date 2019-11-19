@@ -31,11 +31,11 @@ namespace SakuraTree
 bool doesPathExist(const std::string path);
 bool doesFileExist(const std::string filePath);
 bool doesDirExist(const std::string dirPath);
-std::pair<bool, std::string> renameFileOrDir(const std::string oldPath,
-                                             const std::string newPath);
-std::pair<bool, std::string> copyFile(const std::string sourcePath,
-                                      const std::string targetPath);
-bool deleteFileOrDis(const std::string path);
+const std::pair<bool, std::string> renameFileOrDir(const std::string oldPath,
+                                                   const std::string newPath);
+const std::pair<bool, std::string> copyPath(const std::string sourcePath,
+                                            const std::string targetPath);
+bool deleteFileOrDir(const std::string path);
 
 }
 

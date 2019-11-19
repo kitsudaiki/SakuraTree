@@ -27,6 +27,7 @@
 
 namespace SakuraTree
 {
+class FileDeleteBlossom_Test;
 
 class FileDeleteBlossom : public Blossom
 {
@@ -41,6 +42,8 @@ protected:
     void closeTask(BlossomItem &blossomItem);
 
 private:
+    friend FileDeleteBlossom_Test;
+
     std::string m_filePath = "";
 };
 
