@@ -1,5 +1,5 @@
 /**
- * @file        common_methods_test.h
+ * @file        item_methods_test.h
  *
  * @author      Tobias Anker <tobias.anker@kitsunemimi.moe>
  *
@@ -31,17 +31,18 @@ namespace SakuraTree
 {
 class SakuraRoot;
 
-class CommonMethodsTest : public Kitsunemimi::Common::Test
+class ItemMethods_Test
+        : public Kitsunemimi::Common::Test
 {
 public:
-    CommonMethodsTest();
+    ItemMethods_Test();
 
 private:
     void initTestCase();
-    void testConvertString();
-    void testFillItems();
-    void testOverrideItems();
-    void testCheckItems();
+    void convertString_test();
+    void fillItems_test();
+    void overrideItems_test();
+    void checkItems_test();
     void cleanupTestCase();
 
     SakuraRoot* m_root = nullptr;

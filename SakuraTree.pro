@@ -62,7 +62,6 @@ SOURCES += \
     src/processing/sakura_thread.cpp \
     src/items/item_methods.cpp \
     src/sakura_root.cpp \
-    tests/core/common_methods_test.cpp \
     tests/run_unit_tests.cpp \
     src/items/sakura_items.cpp \
     src/processing/blossoms/install/apt/apt_methods.cpp \
@@ -78,7 +77,8 @@ SOURCES += \
     src/processing/blossoms/files/common_files/file_delete_blossom.cpp \
     src/processing/blossoms/files/common_files/file_rename_blossom.cpp \
     src/processing/blossoms/files/common_files/file_chmod_blossom.cpp \
-    src/processing/blossoms/files/common_files/file_chown_blossom.cpp
+    src/processing/blossoms/files/common_files/file_chown_blossom.cpp \
+    tests/items/item_methods_test.cpp
 
 
 HEADERS += \
@@ -98,7 +98,6 @@ HEADERS += \
     src/processing/sakura_thread.h \
     src/items/item_methods.h \
     src/sakura_root.h \
-    tests/core/common_methods_test.h \
     tests/run_unit_tests.h \
     src/items/sakura_items.h \
     src/processing/blossoms/install/apt/apt_methods.h \
@@ -115,6 +114,7 @@ HEADERS += \
     src/processing/blossoms/files/common_files/file_delete_blossom.h \
     src/processing/blossoms/files/common_files/file_rename_blossom.h \
     src/processing/blossoms/files/common_files/file_chmod_blossom.h \
-    src/processing/blossoms/files/common_files/file_chown_blossom.h
+    src/processing/blossoms/files/common_files/file_chown_blossom.h \
+    tests/items/item_methods_test.h
 
 
