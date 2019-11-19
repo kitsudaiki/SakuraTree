@@ -50,11 +50,10 @@ FileDeleteBlossom::initTask(BlossomItem &blossomItem)
 void
 FileDeleteBlossom::preCheck(BlossomItem &blossomItem)
 {
-    const std::pair<bool, std::string> check = doesFileExist(m_filePath);
-    if(check.first == false)
+    if(doesFileExist(m_filePath) == false)
     {
         blossomItem.success = false;
-        blossomItem.errorMessage = check.second;
+        blossomItem.errorMessage = "file doesn't exist: " + m_filePath;
         return;
     }
 
@@ -67,11 +66,13 @@ FileDeleteBlossom::preCheck(BlossomItem &blossomItem)
 void
 FileDeleteBlossom::runTask(BlossomItem &blossomItem)
 {
-    std::string programm = "rm ";
+    const bool result = deleteFileOrDis(m_filePath);
 
-    programm += m_filePath;
-
-    runSyncProcess(blossomItem, programm);
+    if(result == false)
+    {
+        blossomItem.success = false;
+        blossomItem.errorMessage = "wasn't able to delete file: " + m_filePath;
+    }
 }
 
 /**
@@ -80,15 +81,12 @@ FileDeleteBlossom::runTask(BlossomItem &blossomItem)
 void
 FileDeleteBlossom::postCheck(BlossomItem &blossomItem)
 {
-    const std::pair<bool, std::string> check = doesFileExist(m_filePath);
-    if(check.first == true)
+    if(doesFileExist(m_filePath))
     {
         blossomItem.success = false;
-        blossomItem.errorMessage = check.second;
+        blossomItem.errorMessage = "file still exist: " + m_filePath;
         return;
     }
-
-    blossomItem.success = true;
 }
 
 /**

@@ -62,23 +62,19 @@ FileCopyBlossom::initTask(BlossomItem &blossomItem)
 void
 FileCopyBlossom::preCheck(BlossomItem &blossomItem)
 {
-    const std::pair<bool, std::string> checkOld = doesFileExist(m_sourcePath);
-    if(checkOld.first == false)
+    if(doesFileExist(m_sourcePath) == false)
     {
         blossomItem.success = false;
-        blossomItem.errorMessage = checkOld.second;
+        blossomItem.errorMessage = "source-file doesn't exist: " + m_sourcePath;
         return;
     }
 
-    const std::pair<bool, std::string> checkNew = doesPathExist(m_destinationPath);
-    if(checkNew.first == true)
+    if(doesPathExist(m_destinationPath))
     {
         blossomItem.success = false;
         blossomItem.errorMessage = "path already exist: " + m_destinationPath;
         return;
     }
-
-    blossomItem.success = true;
 }
 
 /**
@@ -87,13 +83,13 @@ FileCopyBlossom::preCheck(BlossomItem &blossomItem)
 void
 FileCopyBlossom::runTask(BlossomItem &blossomItem)
 {
-    std::string programm = "cp ";
+    std::pair<bool, std::string> renameResult = copyFile(m_sourcePath, m_destinationPath);
 
-    programm += m_sourcePath;
-    programm += " ";
-    programm += m_destinationPath;
-
-    runSyncProcess(blossomItem, programm);
+    if(renameResult.first == false)
+    {
+        blossomItem.success = false;
+        blossomItem.errorMessage = renameResult.second;
+    }
 }
 
 /**
@@ -102,8 +98,7 @@ FileCopyBlossom::runTask(BlossomItem &blossomItem)
 void
 FileCopyBlossom::postCheck(BlossomItem &blossomItem)
 {
-    const std::pair<bool, std::string> checkNew = doesPathExist(m_destinationPath);
-    if(checkNew.first == false)
+    if(doesPathExist(m_destinationPath) == false)
     {
         blossomItem.success = false;
         blossomItem.errorMessage = "was not able to rename to: " + m_destinationPath;

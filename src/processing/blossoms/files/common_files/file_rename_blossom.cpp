@@ -52,8 +52,6 @@ FileRenameBlossom::initTask(BlossomItem &blossomItem)
         m_newFilePath += "/";
         m_newFilePath += stringParts.at(i);
     }
-
-    blossomItem.success = true;
 }
 
 /**
@@ -62,23 +60,19 @@ FileRenameBlossom::initTask(BlossomItem &blossomItem)
 void
 FileRenameBlossom::preCheck(BlossomItem &blossomItem)
 {
-    const std::pair<bool, std::string> checkOld = doesFileExist(m_filePath);
-    if(checkOld.first == false)
+    if(doesFileExist(m_filePath) == false)
     {
         blossomItem.success = false;
-        blossomItem.errorMessage = checkOld.second;
+        blossomItem.errorMessage = "source-file doesn't exist: " + m_filePath;
         return;
     }
 
-    const std::pair<bool, std::string> checkNew = doesPathExist(m_newFilePath);
-    if(checkNew.first == true)
+    if(doesPathExist(m_newFilePath))
     {
         blossomItem.success = false;
         blossomItem.errorMessage = "path already exist: " + m_newFilePath;
         return;
     }
-
-    blossomItem.success = true;
 }
 
 /**
@@ -87,13 +81,13 @@ FileRenameBlossom::preCheck(BlossomItem &blossomItem)
 void
 FileRenameBlossom::runTask(BlossomItem &blossomItem)
 {
-    std::string programm = "mv ";
+    std::pair<bool, std::string> renameResult = renameFileOrDir(m_filePath, m_newFilePath);
 
-    programm += m_filePath;
-    programm += " ";
-    programm += m_newFilePath;
-
-    runSyncProcess(blossomItem, programm);
+    if(renameResult.first == false)
+    {
+        blossomItem.success = false;
+        blossomItem.errorMessage = renameResult.second;
+    }
 }
 
 /**
@@ -102,23 +96,19 @@ FileRenameBlossom::runTask(BlossomItem &blossomItem)
 void
 FileRenameBlossom::postCheck(BlossomItem &blossomItem)
 {
-    const std::pair<bool, std::string> checkOld = doesFileExist(m_filePath);
-    if(checkOld.first == true)
+    if(doesFileExist(m_filePath))
     {
         blossomItem.success = false;
         blossomItem.errorMessage = "old file still exist";
         return;
     }
 
-    const std::pair<bool, std::string> checkNew = doesPathExist(m_newFilePath);
-    if(checkNew.first == false)
+    if(doesPathExist(m_newFilePath) == false)
     {
         blossomItem.success = false;
         blossomItem.errorMessage = "was not able to rename to: " + m_newFilePath;
         return;
     }
-
-    blossomItem.success = true;
 }
 
 /**

@@ -30,22 +30,10 @@ namespace SakuraTree
  * @param path
  * @return
  */
-std::pair<bool, std::string>
+bool
 doesPathExist(const std::string path)
 {
-    std::pair<bool, std::string> result;
-    boost::filesystem::path filePathObj(path);
-
-    if(exists(path) == false)
-    {
-        result.first = false;
-        result.second = "path doesn't exist: " + path;
-        return result;
-    }
-
-    result.first = true;
-    result.second = "";
-    return result;
+    return exists(path);
 }
 
 /**
@@ -53,23 +41,56 @@ doesPathExist(const std::string path)
  * @param filePath
  * @return
  */
-std::pair<bool, std::string>
+bool
 doesFileExist(const std::string filePath)
 {
-    std::pair<bool, std::string> result;
-    boost::filesystem::path filePathObj(filePath);
-
-    if(exists(filePath) == false)
+    if(exists(filePath) == false
+            && is_directory(filePath))
     {
-        result.first = false;
-        result.second = "path doesn't exist: " + filePath;
-        return result;
+        return false;
     }
 
-    if(is_directory(filePath))
+    return true;
+}
+
+/**
+ * @brief doesDirExist
+ * @param dirPath
+ * @return
+ */
+bool
+doesDirExist(const std::string dirPath)
+{
+    if(exists(dirPath)
+            && is_directory(dirPath))
+    {
+        return false;
+    }
+
+    return true;
+}
+
+/**
+ * @brief renameFileOrDir
+ * @param oldPath
+ * @param newPath
+ * @return
+ */
+std::pair<bool, std::string>
+renameFileOrDir(const std::string oldPath,
+                const std::string newPath)
+{
+    std::pair<bool, std::string> result;
+
+    boost::system::error_code error;
+    error.clear();
+
+    rename(oldPath, newPath, error);
+
+    if(error.value() != 0)
     {
         result.first = false;
-        result.second = "path exist, but is a directory: " + filePath;
+        result.second = error.message();
         return result;
     }
 
@@ -79,33 +100,42 @@ doesFileExist(const std::string filePath)
 }
 
 /**
- * @brief doesDirExist
- * @param dirPath
+ * @brief copyFile
+ * @param sourcePath
+ * @param targetPath
  * @return
  */
 std::pair<bool, std::string>
-doesDirExist(const std::string dirPath)
+copyFile(const std::string sourcePath, const std::string targetPath)
 {
     std::pair<bool, std::string> result;
-    boost::filesystem::path filePathObj(dirPath);
 
-    if(exists(dirPath) == false)
+    boost::system::error_code error;
+    error.clear();
+
+    copy_file(sourcePath, targetPath, error);
+
+    if(error.value() != 0)
     {
         result.first = false;
-        result.second = "path doesn't exist: " + dirPath;
-        return result;
-    }
-
-    if(is_directory(dirPath))
-    {
-        result.first = false;
-        result.second = "path exist, but is a file: " + dirPath;
+        result.second = error.message();
         return result;
     }
 
     result.first = true;
     result.second = "";
     return result;
+}
+
+/**
+ * @brief deleteFileOrDis
+ * @param path
+ * @return
+ */
+bool
+deleteFileOrDis(const std::string path)
+{
+    return remove(path);
 }
 
 }
