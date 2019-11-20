@@ -97,15 +97,23 @@ FileRenameBlossom_Test::preCheck_test()
     fakeRenameBlossom.initTask(fakeItem);
     fakeRenameBlossom.preCheck(fakeItem);
     TEST_EQUAL(fakeItem.success, false);
+    TEST_EQUAL(fakeItem.skip, false);
 
     runSyncProcess(fakeItem, "touch " + m_sourceFile);
 
     fakeRenameBlossom.preCheck(fakeItem);
     TEST_EQUAL(fakeItem.success, true);
+    TEST_EQUAL(fakeItem.skip, false);
 
     runSyncProcess(fakeItem, "touch " + m_destinationFile);
     fakeRenameBlossom.preCheck(fakeItem);
-    TEST_EQUAL(fakeItem.success, false);
+    TEST_EQUAL(fakeItem.success, true);
+    TEST_EQUAL(fakeItem.skip, false);
+
+    runSyncProcess(fakeItem, "rm " + m_sourceFile);
+    fakeRenameBlossom.preCheck(fakeItem);
+    TEST_EQUAL(fakeItem.success, true);
+    TEST_EQUAL(fakeItem.skip, true);
 
     runSyncProcess(fakeItem, "rm " + m_destinationFile);
 }
@@ -122,6 +130,9 @@ FileRenameBlossom_Test::runTask_test()
     fakeItem.inputValues->insert("new_name", new DataValue(m_destinationFileName));
 
     FileRenameBlossom fakeRenameBlossom;
+
+    runSyncProcess(fakeItem, "touch " + m_sourceFile);
+    runSyncProcess(fakeItem, "rm " + m_destinationFile);
 
     fakeRenameBlossom.initTask(fakeItem);
     fakeRenameBlossom.runTask(fakeItem);

@@ -114,8 +114,6 @@ FileDeleteBlossom_Test::runTask_test()
     fakeDeleteBlossom.runTask(fakeItem);
     TEST_EQUAL(fakeItem.success, true);
 
-    runSyncProcess(fakeItem, "rm " + m_path);
-
     fakeDeleteBlossom.runTask(fakeItem);
     TEST_EQUAL(fakeItem.success, false);
 }

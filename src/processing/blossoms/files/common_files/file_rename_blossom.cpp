@@ -67,21 +67,20 @@ FileRenameBlossom::initTask(BlossomItem &blossomItem)
 void
 FileRenameBlossom::preCheck(BlossomItem &blossomItem)
 {
+    if(doesPathExist(m_filePath) == false
+            && doesPathExist(m_newFilePath))
+    {
+        blossomItem.skip = true;
+        blossomItem.success = true;
+        return;
+    }
+
     if(doesPathExist(m_filePath) == false)
     {
         blossomItem.success = false;
         blossomItem.errorMessage = "RENAME FAILED: source-path "
                                    + m_filePath
                                    + " doesn't exist";
-        return;
-    }
-
-    if(doesPathExist(m_newFilePath))
-    {
-        blossomItem.success = false;
-        blossomItem.errorMessage = "RENAME FAILED: destination-path "
-                                   + m_newFilePath
-                                   + " already exist";
         return;
     }
 
