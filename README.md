@@ -1,5 +1,11 @@
 # SakuraTree
 
+![Gitlab pipeline status](https://img.shields.io/gitlab/pipeline/tobiasanker/SakuraTree?label=build%20and%20test&style=flat-square)
+![GitHub tag (latest SemVer)](https://img.shields.io/github/v/tag/tobiasanker/SakuraTree?label=version&style=flat-square)
+![GitHub](https://img.shields.io/github/license/tobiasanker/SakuraTree?style=flat-square)
+![C++Version](https://img.shields.io/badge/c%2B%2B-14-blue?style=flat-square)
+![Platform](https://img.shields.io/badge/platform-Linux--x64-lightgrey?style=flat-square)
+
 ## Description
 
 WIP: This is/should become a simple-to-use and fast automation tool to deploy tools and files multiple nodes.
@@ -199,34 +205,34 @@ Example-Branch, which is called by the Tree.
 apt("update and install")  
 -> update
 -> present:
-	- names = "{{packages}}"
+    - names = "{{packages}}"
 
 if(packages == nano)
 {
-	apt("try to delete")
-	-> absent:
-		- names = "{{packages}}"
+    apt("try to delete")
+    -> absent:
+       - names = "{{packages}}"
 
-	apt("try to delete again")
-	-> absent:
-		- names = "{{packages}}"
+    apt("try to delete again")
+    -> absent:
+       - names = "{{packages}}"
 
-	apt("install via apt")
-	-> present >> test_output:
-		- names = "{{packages}}"
+    apt("install via apt")
+    -> present >> test_output:
+       - names = "{{packages}}"
 
-	print("test output")
-	- output = "{{test_output}}"
+    print("test output")
+    - output = "{{test_output}}"
 }
 else
 {
     apt(apt1_in_else)
     -> absent:
-            - names = "{{packages}}"
+       - names = "{{packages}}"
 
     apt(apt2_in_else)
     -> present:
-            - names = "{{packages}}"
+       - names = "{{packages}}"
 }
 ```
 
