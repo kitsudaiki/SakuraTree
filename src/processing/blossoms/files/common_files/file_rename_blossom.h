@@ -1,5 +1,5 @@
 /**
- * @file        includes.h
+ * @file        file_rename_blossom.h
  *
  * @author      Tobias Anker <tobias.anker@kitsunemimi.moe>
  *
@@ -20,36 +20,35 @@
  *      limitations under the License.
  */
 
-#ifndef INCLUDES_H
-#define INCLUDES_H
+#ifndef FILE_RENAME_BLOSSOM_H
+#define FILE_RENAME_BLOSSOM_H
 
-#include <assert.h>
-#include <map>
-#include <utility>
-#include <vector>
-#include <algorithm>
-#include <iostream>
-#include <sstream>
-#include <string>
-#include <cstdlib>
-#include <fstream>
-#include <stdio.h>
-#include <stdlib.h>
-#include <mutex>
-#include <streambuf>
-#include <istream>
-#include <iterator>
+#include <processing/blossoms/blossom.h>
 
-#include <boost/filesystem.hpp>
+namespace SakuraTree
+{
+class FileRenameBlossom_Test;
 
-#include <libKitsunemimiCommon/common_items/data_items.h>
-#include <libKitsunemimiJson/json_item.h>
+class FileRenameBlossom : public Blossom
+{
+public:
+    FileRenameBlossom();
 
-using Kitsunemimi::Common::DataItem;
-using Kitsunemimi::Common::DataArray;
-using Kitsunemimi::Common::DataValue;
-using Kitsunemimi::Common::DataMap;
+protected:
+    void initTask(BlossomItem &blossomItem);
+    void preCheck(BlossomItem &blossomItem);
+    void runTask(BlossomItem &blossomItem);
+    void postCheck(BlossomItem &blossomItem);
+    void closeTask(BlossomItem &blossomItem);
 
-using Kitsunemimi::Json::JsonItem;
+private:
+    friend FileRenameBlossom_Test;
 
-#endif // INCLUDES_H
+    std::string m_filePath = "";
+    std::string m_newFileName = "";
+    std::string m_newFilePath = "";
+};
+
+}
+
+#endif // FILE_RENAME_BLOSSOM_H

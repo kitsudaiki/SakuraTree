@@ -1,5 +1,5 @@
 /**
- * @file        includes.h
+ * @file        item_methods_test.h
  *
  * @author      Tobias Anker <tobias.anker@kitsunemimi.moe>
  *
@@ -20,36 +20,34 @@
  *      limitations under the License.
  */
 
-#ifndef INCLUDES_H
-#define INCLUDES_H
+#ifndef COMMON_METHODS_TEST_H
+#define COMMON_METHODS_TEST_H
 
-#include <assert.h>
-#include <map>
-#include <utility>
-#include <vector>
-#include <algorithm>
-#include <iostream>
-#include <sstream>
-#include <string>
-#include <cstdlib>
-#include <fstream>
-#include <stdio.h>
-#include <stdlib.h>
-#include <mutex>
-#include <streambuf>
-#include <istream>
-#include <iterator>
+#include <common.h>
+#include <libKitsunemimiCommon/test.h>
+#include <items/item_methods.h>
 
-#include <boost/filesystem.hpp>
+namespace SakuraTree
+{
+class SakuraRoot;
 
-#include <libKitsunemimiCommon/common_items/data_items.h>
-#include <libKitsunemimiJson/json_item.h>
+class ItemMethods_Test
+        : public Kitsunemimi::Common::Test
+{
+public:
+    ItemMethods_Test();
 
-using Kitsunemimi::Common::DataItem;
-using Kitsunemimi::Common::DataArray;
-using Kitsunemimi::Common::DataValue;
-using Kitsunemimi::Common::DataMap;
+private:
+    void initTestCase();
+    void convertString_test();
+    void fillItems_test();
+    void overrideItems_test();
+    void checkItems_test();
+    void cleanupTestCase();
 
-using Kitsunemimi::Json::JsonItem;
+    SakuraRoot* m_root = nullptr;
+};
 
-#endif // INCLUDES_H
+}
+
+#endif // COMMON_METHODS_TEST_H

@@ -36,6 +36,10 @@
 #include <processing/blossoms/sakura/sakura_copy_subtree_blossom.h>
 #include <processing/blossoms/sakura/print_blossom.h>
 
+#include <processing/blossoms/files/common_files/file_copy_blossom.h>
+#include <processing/blossoms/files/common_files/file_delete_blossom.h>
+#include <processing/blossoms/files/common_files/file_rename_blossom.h>
+
 namespace SakuraTree
 {
 
@@ -89,6 +93,20 @@ getBlossom(const std::string type,
             return new PrintBlossom();
         }
     }
+
+    if(type == "file")
+    {
+        if(subType == "copy") {
+            return new FileCopyBlossom();
+        }
+        if(subType == "move") {
+            return new FileRenameBlossom();
+        }
+        if(subType == "delete") {
+            return new FileDeleteBlossom();
+        }
+    }
+
 
     assert(false);
 

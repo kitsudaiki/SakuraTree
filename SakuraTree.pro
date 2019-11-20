@@ -62,7 +62,6 @@ SOURCES += \
     src/processing/sakura_thread.cpp \
     src/items/item_methods.cpp \
     src/sakura_root.cpp \
-    tests/core/common_methods_test.cpp \
     tests/run_unit_tests.cpp \
     src/items/sakura_items.cpp \
     src/processing/blossoms/install/apt/apt_methods.cpp \
@@ -72,7 +71,20 @@ SOURCES += \
     src/processing/blossoms/sakura/sakura_copy_subtree_blossom.cpp \
     src/processing/blossoms/ssh/ssh_cmd_create_file_blossom.cpp \
     src/processing/blossoms/sakura/print_blossom.cpp \
-    src/processing/process_execution.cpp
+    src/processing/process_execution.cpp \
+    src/processing/blossoms/files/file_methods.cpp \
+    src/processing/blossoms/files/common_files/file_copy_blossom.cpp \
+    src/processing/blossoms/files/common_files/file_delete_blossom.cpp \
+    src/processing/blossoms/files/common_files/file_rename_blossom.cpp \
+    src/processing/blossoms/files/common_files/file_chmod_blossom.cpp \
+    src/processing/blossoms/files/common_files/file_chown_blossom.cpp \
+    tests/items/item_methods_test.cpp \
+    tests/processing/blossoms/files/file_methods_test.cpp \
+    tests/processing/blossoms/files/common_files/file_chmod_blossom_test.cpp \
+    tests/processing/blossoms/files/common_files/file_chown_blossom_test.cpp \
+    tests/processing/blossoms/files/common_files/file_copy_blossom_test.cpp \
+    tests/processing/blossoms/files/common_files/file_delete_blossom_test.cpp \
+    tests/processing/blossoms/files/common_files/file_rename_blossom_test.cpp
 
 
 HEADERS += \
@@ -92,7 +104,6 @@ HEADERS += \
     src/processing/sakura_thread.h \
     src/items/item_methods.h \
     src/sakura_root.h \
-    tests/core/common_methods_test.h \
     tests/run_unit_tests.h \
     src/items/sakura_items.h \
     src/processing/blossoms/install/apt/apt_methods.h \
@@ -103,6 +114,19 @@ HEADERS += \
     src/processing/blossoms/ssh/ssh_cmd_create_file_blossom.h \
     src/processing/sakura_tree_callbacks.h \
     src/processing/blossoms/sakura/print_blossom.h \
-    src/processing/process_execution.h
+    src/processing/process_execution.h \
+    src/processing/blossoms/files/file_methods.h \
+    src/processing/blossoms/files/common_files/file_copy_blossom.h \
+    src/processing/blossoms/files/common_files/file_delete_blossom.h \
+    src/processing/blossoms/files/common_files/file_rename_blossom.h \
+    src/processing/blossoms/files/common_files/file_chmod_blossom.h \
+    src/processing/blossoms/files/common_files/file_chown_blossom.h \
+    tests/items/item_methods_test.h \
+    tests/processing/blossoms/files/file_methods_test.h \
+    tests/processing/blossoms/files/common_files/file_chmod_blossom_test.h \
+    tests/processing/blossoms/files/common_files/file_chown_blossom_test.h \
+    tests/processing/blossoms/files/common_files/file_copy_blossom_test.h \
+    tests/processing/blossoms/files/common_files/file_delete_blossom_test.h \
+    tests/processing/blossoms/files/common_files/file_rename_blossom_test.h
 
 

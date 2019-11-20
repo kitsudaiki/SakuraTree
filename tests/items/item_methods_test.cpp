@@ -1,5 +1,5 @@
 /**
- * @file        common_methods_test.cpp
+ * @file        item_methods_test.cpp
  *
  * @author      Tobias Anker <tobias.anker@kitsunemimi.moe>
  *
@@ -20,7 +20,7 @@
  *      limitations under the License.
  */
 
-#include "common_methods_test.h"
+#include "item_methods_test.h"
 
 #include <sakura_root.h>
 
@@ -28,44 +28,50 @@ namespace SakuraTree
 {
 
 /**
- * @brief CommonMethodsTest::CommonMethodsTest
+ * @brief constructor
  */
-CommonMethodsTest::CommonMethodsTest()
-    : Kitsunemimi::Common::Test("CommonMethodsTest")
+ItemMethods_Test::ItemMethods_Test()
+    : Kitsunemimi::Common::Test("ItemMethods_Test")
 {
     initTestCase();
-    testConvertString();
-    testFillItems();
-    testOverrideItems();
-    testCheckItems();
+
+    convertString_test();
+    fillItems_test();
+    overrideItems_test();
+    checkItems_test();
+
     cleanupTestCase();
 }
 
 /**
- * @brief CommonMethodsTest::initTestCase
+ * @brief initTestCase
  */
-void CommonMethodsTest::initTestCase()
+void
+ItemMethods_Test::initTestCase()
 {
     m_root = new SakuraRoot(std::string("test"));
 }
 
 /**
- * @brief CommonMethodsTest::testConvertString
+ * @brief convertString_test
  */
-void CommonMethodsTest::testConvertString()
+void
+ItemMethods_Test::convertString_test()
 {
     std::string jinja2String = "{{test}}";
     DataMap obj;
     obj.insert("test", new DataValue("hmmm"));
 
     std::string result = convertString(jinja2String, obj);
+
     TEST_EQUAL(result, "hmmm");
 }
 
 /**
- * @brief CommonMethodsTest::testFillItems
+ * @brief fillItems_test
  */
-void CommonMethodsTest::testFillItems()
+void
+ItemMethods_Test::fillItems_test()
 {
     DataMap items;
     items.insert("x", new DataValue("{{test}}"));
@@ -73,13 +79,15 @@ void CommonMethodsTest::testFillItems()
     insertValues.insert("test", new DataValue("hmmm"));
 
     fillItems(items, insertValues);
+
     TEST_EQUAL(items.get("x")->toString(), "hmmm");
 }
 
 /**
- * @brief CommonMethodsTest::testOverrideItems
+ * @brief overrideItems_test
  */
-void CommonMethodsTest::testOverrideItems()
+void
+ItemMethods_Test::overrideItems_test()
 {
     DataMap original;
     original.insert("x", new DataValue("{{test}}"));
@@ -90,6 +98,7 @@ void CommonMethodsTest::testOverrideItems()
     override.insert("z", new DataValue("hmmm"));
 
     overrideItems(original, override);
+
     TEST_EQUAL(original.size(), 3);
     TEST_EQUAL(original.get("x")->toString(), "{{test}}");
     TEST_EQUAL(original.get("y")->toString(), "poi");
@@ -97,23 +106,26 @@ void CommonMethodsTest::testOverrideItems()
 }
 
 /**
- * @brief CommonMethodsTest::testCheckItems
+ * @brief checkItems_test
  */
-void CommonMethodsTest::testCheckItems()
+void
+ItemMethods_Test::checkItems_test()
 {
     DataMap items;
     items.insert("x", new DataValue("{{}}"));
     items.insert("y", new DataValue("asdf"));
 
     std::vector<std::string> result = checkItems(items);
+
     TEST_EQUAL(result.size(), 1);
     TEST_EQUAL(result.at(0), "x");
 }
 
 /**
- * @brief CommonMethodsTest::cleanupTestCase
+ * @brief cleanupTestCase
  */
-void CommonMethodsTest::cleanupTestCase()
+void
+ItemMethods_Test::cleanupTestCase()
 {
     delete m_root;
 }

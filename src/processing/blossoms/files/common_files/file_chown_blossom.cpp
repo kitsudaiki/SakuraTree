@@ -1,5 +1,5 @@
 /**
- * @file        apt_upgrade_blossom.cpp
+ * @file        file_chown_blossom.cpp
  *
  * @author      Tobias Anker <tobias.anker@kitsunemimi.moe>
  *
@@ -20,57 +20,56 @@
  *      limitations under the License.
  */
 
-#include "apt_upgrade_blossom.h"
-#include <processing/blossoms/install/apt/apt_methods.h>
+#include "file_chown_blossom.h"
+#include <processing/blossoms/files/file_methods.h>
 
 namespace SakuraTree
 {
 
-AptUpgradeBlossom::AptUpgradeBlossom() :
+FileChownBlossom::FileChownBlossom() :
     Blossom() {}
 
 /**
- * initTask
+ * @brief initTask
  */
 void
-AptUpgradeBlossom::initTask(BlossomItem &blossomItem)
+FileChownBlossom::initTask(BlossomItem &blossomItem)
 {
     blossomItem.success = true;
 }
 
 /**
- * preCheck
+ * @brief preCheck
  */
 void
-AptUpgradeBlossom::preCheck(BlossomItem &blossomItem)
+FileChownBlossom::preCheck(BlossomItem &blossomItem)
 {
     blossomItem.success = true;
 }
 
 /**
- * runTask
+ * @brief runTask
  */
 void
-AptUpgradeBlossom::runTask(BlossomItem &blossomItem)
-{
-    std::string programm = "sudo apt-get -y upgrade";
-    runSyncProcess(blossomItem, programm);
-}
-
-/**
- * postCheck
- */
-void
-AptUpgradeBlossom::postCheck(BlossomItem &blossomItem)
+FileChownBlossom::runTask(BlossomItem &blossomItem)
 {
     blossomItem.success = true;
 }
 
 /**
- * closeTask
+ * @brief postCheck
  */
 void
-AptUpgradeBlossom::closeTask(BlossomItem &blossomItem)
+FileChownBlossom::postCheck(BlossomItem &blossomItem)
+{
+    blossomItem.success = true;
+}
+
+/**
+ * @brief closeTask
+ */
+void
+FileChownBlossom::closeTask(BlossomItem &blossomItem)
 {
     blossomItem.success = true;
 }

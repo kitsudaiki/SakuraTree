@@ -1,5 +1,5 @@
 /**
- * @file        includes.h
+ * @file        file_methods.h
  *
  * @author      Tobias Anker <tobias.anker@kitsunemimi.moe>
  *
@@ -20,36 +20,23 @@
  *      limitations under the License.
  */
 
-#ifndef INCLUDES_H
-#define INCLUDES_H
+#ifndef FILE_METHODS_H
+#define FILE_METHODS_H
 
-#include <assert.h>
-#include <map>
-#include <utility>
-#include <vector>
-#include <algorithm>
-#include <iostream>
-#include <sstream>
-#include <string>
-#include <cstdlib>
-#include <fstream>
-#include <stdio.h>
-#include <stdlib.h>
-#include <mutex>
-#include <streambuf>
-#include <istream>
-#include <iterator>
+#include <common.h>
 
-#include <boost/filesystem.hpp>
+namespace SakuraTree
+{
 
-#include <libKitsunemimiCommon/common_items/data_items.h>
-#include <libKitsunemimiJson/json_item.h>
+bool doesPathExist(const std::string path);
+bool doesFileExist(const std::string filePath);
+bool doesDirExist(const std::string dirPath);
+const std::pair<bool, std::string> renameFileOrDir(const std::string oldPath,
+                                                   const std::string newPath);
+const std::pair<bool, std::string> copyPath(const std::string sourcePath,
+                                            const std::string targetPath);
+bool deleteFileOrDir(const std::string path);
 
-using Kitsunemimi::Common::DataItem;
-using Kitsunemimi::Common::DataArray;
-using Kitsunemimi::Common::DataValue;
-using Kitsunemimi::Common::DataMap;
+}
 
-using Kitsunemimi::Json::JsonItem;
-
-#endif // INCLUDES_H
+#endif // FILE_METHODS_H
