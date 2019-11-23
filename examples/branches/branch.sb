@@ -27,6 +27,13 @@ if(packages == nano)
     -> copy:
        - source_path = "test_file"
        - dest_path = "/tmp/test_file"
+
+    template("create a template")
+    - source_path = "test_template.j2"
+    - dest_path = "/tmp/test_template"
+    - checker = 42
+    - name = "test-template"
+
 }
 else
 {

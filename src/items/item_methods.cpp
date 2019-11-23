@@ -50,10 +50,10 @@ fillItems(DataMap &items,
             continue;
         }
 
-        JsonItem obj = items.get(keys.at(i));
-        if(obj.isValue())
+        JsonItem value = items.get(keys.at(i));
+        if(value.isString())
         {
-            const std::string tempItem = obj.toString();
+            const std::string tempItem = value.toString();
 
             Jinja2Converter* converter = SakuraRoot::m_root->m_jinja2Converter;
             const std::pair<bool, std::string> convertResult = converter->convert(tempItem,
