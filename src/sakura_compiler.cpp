@@ -79,7 +79,7 @@ SakuraCompiler::compile(JsonItem &tree)
 SakuraItem*
 SakuraCompiler::convert(JsonItem &growPlan)
 {
-    const std::string typeName = growPlan.get("btype").toString();
+    const std::string typeName = growPlan.get("b_type").toString();
 
     if(typeName == "blossom_group") {
         return convertBlossomGroup(growPlan);
@@ -155,6 +155,7 @@ SakuraCompiler::convertBlossomGroup(JsonItem &growPlan)
         {
             JsonItem item = subTypeArray.get(i);
             BlossomItem* blossomItem = convertBlossom(item);
+            blossomItem->blossomPath = growPlan.get("b_path").toString();
 
             JsonItem itemInput = growPlan.get("items-input");
             overrideItems(blossomItem->inputValues, itemInput);
@@ -167,6 +168,7 @@ SakuraCompiler::convertBlossomGroup(JsonItem &growPlan)
         BlossomItem* blossomItem =  new BlossomItem();
 
         blossomGroupItem->blossomGroupType = "special";
+        blossomItem->blossomPath = growPlan.get("b_path").toString();
         blossomItem->blossomType = growPlan.get("blossom-group-type").toString();
         blossomItem->inputValues = *(growPlan.get("items-input").getItemContent()->copy()->toMap());
 
@@ -202,6 +204,7 @@ SakuraCompiler::convertBranch(JsonItem &growPlan)
     for(uint32_t i = 0; i < parts.size(); i++)
     {
         JsonItem newMap = parts.get(i);
+        newMap.insert("b_path", growPlan.get("b_path"));
         branchItem->childs.push_back(convert(newMap));
     }
 
@@ -305,6 +308,7 @@ SakuraCompiler::convertIf(JsonItem &growPlan)
     for(uint32_t i = 0; i < if_parts.size(); i++)
     {
         JsonItem newMap = if_parts.get(i);
+        newMap.insert("b_path", growPlan.get("b_path"));
         newItem->ifChilds.push_back(convert(newMap));
     }
 
@@ -313,6 +317,7 @@ SakuraCompiler::convertIf(JsonItem &growPlan)
     for(uint32_t i = 0; i < else_parts.size(); i++)
     {
         JsonItem newMap = else_parts.get(i);
+        newMap.insert("b_path", growPlan.get("b_path"));
         newItem->elseChilds.push_back(convert(newMap));
     }
 

@@ -30,19 +30,17 @@ namespace SakuraTree
 {
 struct BlossomItem;
 
-const std::string convertString(const std::string &templateString,
-                                Kitsunemimi::Common::DataMap &content);
-void fillItems(DataMap &items,
-               DataMap &insertValues);
+const std::pair<bool, std::string> fillItems(DataMap &items,
+                                             DataMap &insertValues);
 
 void overrideItems(DataMap &original,
                    JsonItem &override);
 void overrideItems(DataMap &original,
                    DataMap &override);
 
-const std::vector<std::string> checkItems(Kitsunemimi::Common::DataMap &items);
+const std::vector<std::string> checkItems(DataMap &items);
 
-std::string convertBlossomOutput(const BlossomItem &blossom);
+const std::string convertBlossomOutput(const BlossomItem &blossom);
 
 }
 

@@ -32,29 +32,14 @@ namespace SakuraTree
 {
 
 /**
- * @brief convertString
- *
- * @return
- */
-const std::string
-convertString(const std::string &templateString,
-              DataMap &content)
-{
-    Jinja2Converter* converter = SakuraRoot::m_root->m_jinja2Converter;
-    std::pair<bool, std::string> result = converter->convert(templateString, &content);
-    // TODO: handle false return value
-
-    return result.second;
-}
-
-/**
  * replace the jinja2-converted values of the items-object with the stuff of the insertValues-object
  */
-void
+const std::pair<bool, std::string>
 fillItems(DataMap &items,
           DataMap &insertValues)
 {
     const std::vector<std::string> keys = items.getKeys();
+    std::pair<bool, std::string> result;
 
     for(uint32_t i = 0; i < keys.size(); i++)
     {
@@ -69,10 +54,25 @@ fillItems(DataMap &items,
         if(obj.isValue())
         {
             const std::string tempItem = obj.toString();
-            DataValue* value = new DataValue(convertString(tempItem, insertValues));
+
+            Jinja2Converter* converter = SakuraRoot::m_root->m_jinja2Converter;
+            const std::pair<bool, std::string> convertResult = converter->convert(tempItem,
+                                                                                  &insertValues);
+
+            if(convertResult.first == false)
+            {
+                result.first = false;
+                result.second = "failed to fill value of: " + keys.at(i);
+                return result;
+            }
+
+            DataValue* value = new DataValue(convertResult.second);
             items.insert(keys.at(i), value, true);
         }
     }
+
+    result.first = true;
+    return result;
 }
 
 /**
@@ -136,7 +136,7 @@ checkItems(DataMap &items)
  * @brief printOutput
  * @param blossom
  */
-std::string
+const std::string
 convertBlossomOutput(const BlossomItem &blossom)
 {
     std::string output = "";

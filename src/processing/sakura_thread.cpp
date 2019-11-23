@@ -102,9 +102,18 @@ SakuraThread::grow(SakuraItem* growPlan,
     if(growPlan->getType() == SakuraItem::BLOSSOM_ITEM)
     {
         BlossomItem* blossomItem = dynamic_cast<BlossomItem*>(growPlan);
-        overrideItems(values, returnValues);
-        fillItems(blossomItem->inputValues, values);
         std::vector<std::string> newHierarchy = hierarchy;
+        overrideItems(values, returnValues);
+
+        std::pair<bool, std::string> result = fillItems(blossomItem->inputValues, values);
+        if(result.first == false)
+        {
+            blossomItem->errorMessage = result.second;
+            blossomItem->success = false;
+            m_abort = true;
+            return;
+        }
+
         processBlossom(*blossomItem,
                        blossomItem->inputValues,
                        newHierarchy,
@@ -127,9 +136,17 @@ SakuraThread::grow(SakuraItem* growPlan,
     if(growPlan->getType() == SakuraItem::BRANCH_ITEM)
     {
         BranchItem* branchItem = dynamic_cast<BranchItem*>(growPlan);
-        fillItems(branchItem->values, values);
         std::vector<std::string> newHierarchy = hierarchy;
         newHierarchy.push_back("BRANCH: " + branchItem->id);
+
+        std::pair<bool, std::string> result = fillItems(branchItem->values, values);
+        if(result.first == false)
+        {
+            // TODO: error-output
+            m_abort = true;
+            return;
+        }
+
         processBranch(branchItem,
                       branchItem->values,
                       newHierarchy,
@@ -140,9 +157,17 @@ SakuraThread::grow(SakuraItem* growPlan,
     if(growPlan->getType() == SakuraItem::TREE_ITEM)
     {
         TreeItem* treeItem = dynamic_cast<TreeItem*>(growPlan);
-        fillItems(treeItem->values, values);
         std::vector<std::string> newHierarchy = hierarchy;
-        newHierarchy.push_back("BRANCH: " + treeItem->id);
+        newHierarchy.push_back("TREE: " + treeItem->id);
+
+        std::pair<bool, std::string> result = fillItems(treeItem->values, values);
+        if(result.first == false)
+        {
+            // TODO: error-output
+            m_abort = true;
+            return;
+        }
+
         processTree(treeItem,
                     treeItem->values,
                     newHierarchy,

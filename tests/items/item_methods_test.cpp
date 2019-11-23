@@ -35,7 +35,6 @@ ItemMethods_Test::ItemMethods_Test()
 {
     initTestCase();
 
-    convertString_test();
     fillItems_test();
     overrideItems_test();
     checkItems_test();
@@ -53,21 +52,6 @@ ItemMethods_Test::initTestCase()
 }
 
 /**
- * @brief convertString_test
- */
-void
-ItemMethods_Test::convertString_test()
-{
-    std::string jinja2String = "{{test}}";
-    DataMap obj;
-    obj.insert("test", new DataValue("hmmm"));
-
-    std::string result = convertString(jinja2String, obj);
-
-    TEST_EQUAL(result, "hmmm");
-}
-
-/**
  * @brief fillItems_test
  */
 void
@@ -78,8 +62,10 @@ ItemMethods_Test::fillItems_test()
     DataMap insertValues;
     insertValues.insert("test", new DataValue("hmmm"));
 
-    fillItems(items, insertValues);
+    std::pair<bool, std::string> result;
+    result = fillItems(items, insertValues);
 
+    TEST_EQUAL(result.first, true);
     TEST_EQUAL(items.get("x")->toString(), "hmmm");
 }
 
