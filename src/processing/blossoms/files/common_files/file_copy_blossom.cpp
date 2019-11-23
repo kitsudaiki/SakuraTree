@@ -47,6 +47,10 @@ FileCopyBlossom::initTask(BlossomItem &blossomItem)
     m_sourcePath = blossomItem.inputValues.getStringByKey("source_path");
     m_destinationPath = blossomItem.inputValues.getStringByKey("dest_path");
 
+    if(m_sourcePath.at(0) != '/') {
+        m_sourcePath = blossomItem.blossomPath + "/files/" + m_sourcePath;
+    }
+
     blossomItem.success = true;
 }
 

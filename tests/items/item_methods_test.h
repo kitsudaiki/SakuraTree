@@ -39,7 +39,6 @@ public:
 
 private:
     void initTestCase();
-    void convertString_test();
     void fillItems_test();
     void overrideItems_test();
     void checkItems_test();

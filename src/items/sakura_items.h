@@ -95,6 +95,7 @@ public:
 
     std::string blossomGroupType = "";
     std::string blossomType = "";
+    std::string blossomPath = "";
 
     // result
     BlossomStates resultState = UNDEFINED_STATE;
