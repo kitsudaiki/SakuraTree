@@ -60,13 +60,13 @@ void
 fillPackageNames(BlossomItem &blossomItem,
                  std::vector<std::string> &packageList)
 {
-    if(blossomItem.inputValues->get("names")->isValue()) {
-        packageList.push_back(blossomItem.inputValues->get("names")->getString());
+    if(blossomItem.inputValues.get("names")->isValue()) {
+        packageList.push_back(blossomItem.inputValues.get("names")->getString());
     }
 
-    if(blossomItem.inputValues->get("names")->isArray())
+    if(blossomItem.inputValues.get("names")->isArray())
     {
-        JsonItem tempItem = blossomItem.inputValues->get("names");
+        JsonItem tempItem = blossomItem.inputValues.get("names");
         for(uint32_t i = 0; i < tempItem.size(); i++)
         {
             packageList.push_back(tempItem.get(i).toString());

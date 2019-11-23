@@ -38,18 +38,18 @@ FileRenameBlossom::FileRenameBlossom() :
 void
 FileRenameBlossom::initTask(BlossomItem &blossomItem)
 {
-    if(blossomItem.inputValues->contains("file_path") == false
-            || blossomItem.inputValues->contains("new_name") == false)
+    if(blossomItem.inputValues.contains("file_path") == false
+            || blossomItem.inputValues.contains("new_name") == false)
     {
         blossomItem.success = false;
         return;
     }
 
-    m_filePath = blossomItem.inputValues->getStringByKey("file_path");
-    m_newFileName = blossomItem.inputValues->contains("new_name");
+    m_filePath = blossomItem.inputValues.getStringByKey("file_path");
+    m_newFileName = blossomItem.inputValues.contains("new_name");
 
     std::vector<std::string> stringParts = splitStringByDelimiter(m_filePath, '/');
-    stringParts[stringParts.size()-1] = blossomItem.inputValues->getStringByKey("new_name");
+    stringParts[stringParts.size()-1] = blossomItem.inputValues.getStringByKey("new_name");
 
     Kitsunemimi::Common::removeEmptyStrings(&stringParts);
     for(uint32_t i = 0; i < stringParts.size(); i++)

@@ -53,13 +53,13 @@ void
 PrintBlossom::runTask(BlossomItem &blossomItem)
 {
     std::string output = "";
-    const std::vector<std::string> keys = blossomItem.inputValues->getKeys();
+    const std::vector<std::string> keys = blossomItem.inputValues.getKeys();
 
     for(uint32_t i = 0; i < keys.size(); i++)
     {
         output += keys.at(i)
                 + ": \n"
-                + blossomItem.inputValues->get(keys.at(i))->toString()
+                + blossomItem.inputValues.get(keys.at(i))->toString()
                 + "\n";
     }
 

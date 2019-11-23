@@ -103,10 +103,10 @@ SakuraThread::grow(SakuraItem* growPlan,
     {
         BlossomItem* blossomItem = dynamic_cast<BlossomItem*>(growPlan);
         overrideItems(values, returnValues);
-        fillItems(*blossomItem->inputValues, values);
+        fillItems(blossomItem->inputValues, values);
         std::vector<std::string> newHierarchy = hierarchy;
         processBlossom(*blossomItem,
-                       *blossomItem->inputValues,
+                       blossomItem->inputValues,
                        newHierarchy,
                        returnValues);
         return;
@@ -127,11 +127,11 @@ SakuraThread::grow(SakuraItem* growPlan,
     if(growPlan->getType() == SakuraItem::BRANCH_ITEM)
     {
         BranchItem* branchItem = dynamic_cast<BranchItem*>(growPlan);
-        fillItems(*branchItem->values, values);
+        fillItems(branchItem->values, values);
         std::vector<std::string> newHierarchy = hierarchy;
         newHierarchy.push_back("BRANCH: " + branchItem->id);
         processBranch(branchItem,
-                      *branchItem->values,
+                      branchItem->values,
                       newHierarchy,
                       returnValues);
         return;
@@ -140,11 +140,11 @@ SakuraThread::grow(SakuraItem* growPlan,
     if(growPlan->getType() == SakuraItem::TREE_ITEM)
     {
         TreeItem* treeItem = dynamic_cast<TreeItem*>(growPlan);
-        fillItems(*treeItem->values, values);
+        fillItems(treeItem->values, values);
         std::vector<std::string> newHierarchy = hierarchy;
         newHierarchy.push_back("BRANCH: " + treeItem->id);
         processTree(treeItem,
-                    *treeItem->values,
+                    treeItem->values,
                     newHierarchy,
                     returnValues);
         return;
@@ -200,7 +200,7 @@ SakuraThread::processBlossom(BlossomItem &growPlan,
                              DataMap &returnValues)
 {
     // init
-    growPlan.inputValues = values.copy()->toMap();
+    growPlan.inputValues = *(values.copy()->toMap());
     growPlan.nameHirarchie = hierarchy;
 
     Blossom* blossom = getBlossom(growPlan.blossomGroupType,
@@ -213,7 +213,7 @@ SakuraThread::processBlossom(BlossomItem &growPlan,
         m_abort = true;
     }
 
-    overrideItems(returnValues, *growPlan.outputValue);
+    overrideItems(returnValues, growPlan.outputValue);
 
     // send result to root
     SakuraRoot::m_root->printOutput(growPlan);

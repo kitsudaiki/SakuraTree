@@ -42,7 +42,7 @@ SakuraItem::ItemType SakuraItem::getType() const
 //===================================================================
 BlossomItem::BlossomItem() {type = BLOSSOM_ITEM;}
 
-BlossomItem::~BlossomItem() {delete inputValues;}
+BlossomItem::~BlossomItem() {}
 
 //===================================================================
 // BlossomGroupItem
@@ -57,7 +57,7 @@ BlossomGroupItem::~BlossomGroupItem() {}
 //===================================================================
 BranchItem::BranchItem() {type = BRANCH_ITEM;}
 
-BranchItem::~BranchItem() {delete values;}
+BranchItem::~BranchItem() {}
 
 //===================================================================
 // SeedItem
@@ -71,7 +71,7 @@ SeedItem::~SeedItem() {}
 //===================================================================
 TreeItem::TreeItem() {type = TREE_ITEM;}
 
-TreeItem::~TreeItem() {delete values;}
+TreeItem::~TreeItem() {}
 
 //===================================================================
 // Sequeniell

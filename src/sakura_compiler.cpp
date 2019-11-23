@@ -126,12 +126,11 @@ SakuraCompiler::convertBlossom(JsonItem &growPlan)
     BlossomItem* blossomItem =  new BlossomItem();
 
     blossomItem->blossomType = growPlan.get("blossom-type").toString();
-    blossomItem->inputValues = growPlan.get("items-input").getItemContent()->copy()->toMap();
+    blossomItem->inputValues = *(growPlan.get("items-input").getItemContent()->copy()->toMap());
 
     const std::string outKey = growPlan.get("output").getItemContent()->toValue()->toString();
-    blossomItem->outputValue = new DataMap();
     if(outKey.size() > 0) {
-        blossomItem->outputValue->insert(outKey, nullptr);
+        blossomItem->outputValue.insert(outKey, nullptr);
     }
 
     return blossomItem;
@@ -158,7 +157,7 @@ SakuraCompiler::convertBlossomGroup(JsonItem &growPlan)
             BlossomItem* blossomItem = convertBlossom(item);
 
             JsonItem itemInput = growPlan.get("items-input");
-            overrideItems(*blossomItem->inputValues, itemInput);
+            overrideItems(blossomItem->inputValues, itemInput);
 
             blossomGroupItem->blossoms.push_back(blossomItem);
         }
@@ -169,8 +168,7 @@ SakuraCompiler::convertBlossomGroup(JsonItem &growPlan)
 
         blossomGroupItem->blossomGroupType = "special";
         blossomItem->blossomType = growPlan.get("blossom-group-type").toString();
-        blossomItem->inputValues = growPlan.get("items-input").getItemContent()->copy()->toMap();
-        blossomItem->outputValue = new DataMap();
+        blossomItem->inputValues = *(growPlan.get("items-input").getItemContent()->copy()->toMap());
 
         blossomGroupItem->blossoms.push_back(blossomItem);
     }
@@ -190,12 +188,12 @@ SakuraCompiler::convertBranch(JsonItem &growPlan)
 
     JsonItem items = growPlan.get("items");
     branchItem->id = growPlan.get("id").toString();
-    branchItem->values = growPlan.get("items").getItemContent()->copy()->toMap();
+    branchItem->values = *(growPlan.get("items").getItemContent()->copy()->toMap());
 
     if(growPlan.contains("items-input"))
     {
         JsonItem itemInput = growPlan.get("items-input");
-        overrideItems(*branchItem->values, itemInput);
+        overrideItems(branchItem->values, itemInput);
     }
 
     JsonItem parts = growPlan.get("parts");
@@ -221,12 +219,12 @@ SakuraCompiler::convertTree(JsonItem &growPlan)
     TreeItem* treeItem = new TreeItem();
 
     treeItem->id = growPlan.get("id").toString();
-    treeItem->values = growPlan.get("items").getItemContent()->copy()->toMap();
+    treeItem->values = *(growPlan.get("items").getItemContent()->copy()->toMap());
 
     if(growPlan.contains("items-input"))
     {
         JsonItem itemInput = growPlan.get("items-input");
-        overrideItems(*treeItem->values, itemInput);
+        overrideItems(treeItem->values, itemInput);
     }
 
     JsonItem parts = growPlan.get("parts");

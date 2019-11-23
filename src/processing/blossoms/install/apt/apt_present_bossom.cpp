@@ -40,7 +40,7 @@ AptPresentBlossom::AptPresentBlossom() :
 void
 AptPresentBlossom::initTask(BlossomItem &blossomItem)
 {
-    if(blossomItem.inputValues->contains("names") == false)
+    if(blossomItem.inputValues.contains("names") == false)
     {
         blossomItem.success = false;
         blossomItem.errorMessage = "no packages to defined";

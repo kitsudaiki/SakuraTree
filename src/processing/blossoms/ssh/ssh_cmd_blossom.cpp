@@ -36,9 +36,9 @@ SshCmdBlossom::SshCmdBlossom()
 void
 SshCmdBlossom::initTask(BlossomItem &blossomItem)
 {
-    if(blossomItem.inputValues->contains("user") == false
-            || blossomItem.inputValues->contains("address") == false
-            || blossomItem.inputValues->contains("command") == false)
+    if(blossomItem.inputValues.contains("user") == false
+            || blossomItem.inputValues.contains("address") == false
+            || blossomItem.inputValues.contains("command") == false)
     {
         blossomItem.success = false;
         blossomItem.errorMessage = "missing connection informations";
@@ -65,20 +65,20 @@ void
 SshCmdBlossom::runTask(BlossomItem &blossomItem)
 {
     std::string programm = "ssh ";
-    if(blossomItem.inputValues->contains("port")) {
-        programm += " -p " + blossomItem.inputValues->get("port")->getString();
+    if(blossomItem.inputValues.contains("port")) {
+        programm += " -p " + blossomItem.inputValues.get("port")->getString();
     }
-    if(blossomItem.inputValues->contains("ssh_key")) {
-        programm += " -i " + blossomItem.inputValues->get("ssh_key")->getString();
+    if(blossomItem.inputValues.contains("ssh_key")) {
+        programm += " -i " + blossomItem.inputValues.get("ssh_key")->getString();
     }
 
     programm += " ";
-    programm += blossomItem.inputValues->get("user")->getString();
+    programm += blossomItem.inputValues.get("user")->getString();
     programm += "@";
-    programm += blossomItem.inputValues->get("address")->getString();
+    programm += blossomItem.inputValues.get("address")->getString();
     programm += " -T ";
     programm += "\"";
-    programm += blossomItem.inputValues->get("command")->getString();
+    programm += blossomItem.inputValues.get("command")->getString();
     programm += "\"";
 
     runSyncProcess(blossomItem, programm);
