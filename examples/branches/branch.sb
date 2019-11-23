@@ -1,0 +1,32 @@
+[install_branch]
+- packages = nano
+
+apt("update and install")  
+-> update
+-> present:
+    - names = "{{packages}}"
+
+if(packages == nano)
+{
+    apt("install via apt")
+    -> present >> test_output:
+       - names = "{{packages}}"
+
+    print("test output")
+    - output = "{{test_output}}"
+
+    file("copy a testfile")
+    -> copy:
+       - source_path = "test_file"
+       - dest_path = "/tmp/"
+}
+else
+{
+    apt(apt1_in_else)
+    -> absent:
+            - names = "{{packages}}"
+
+    apt(apt2_in_else)
+    -> present:
+            - names = "{{packages}}"
+}
