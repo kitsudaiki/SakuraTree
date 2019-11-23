@@ -55,13 +55,12 @@ void
 FileDeleteBlossom_Test::initTask_test()
 {
     BlossomItem fakeItem;
-    fakeItem.inputValues = new DataMap();
     FileDeleteBlossom fakeDeleteBlossom;
 
     fakeDeleteBlossom.initTask(fakeItem);
     TEST_EQUAL(fakeItem.success, false);
 
-    fakeItem.inputValues->insert("file_path", new DataValue(m_path));
+    fakeItem.inputValues.insert("file_path", new DataValue(m_path));
 
     fakeDeleteBlossom.initTask(fakeItem);
     TEST_EQUAL(fakeItem.success, true);
@@ -76,8 +75,7 @@ void
 FileDeleteBlossom_Test::preCheck_test()
 {
     BlossomItem fakeItem;
-    fakeItem.inputValues = new DataMap();
-    fakeItem.inputValues->insert("file_path", new DataValue(m_path));
+    fakeItem.inputValues.insert("file_path", new DataValue(m_path));
 
     FileDeleteBlossom fakeDeleteBlossom;
 
@@ -100,8 +98,7 @@ void
 FileDeleteBlossom_Test::runTask_test()
 {
     BlossomItem fakeItem;
-    fakeItem.inputValues = new DataMap();
-    fakeItem.inputValues->insert("file_path", new DataValue(m_path));
+    fakeItem.inputValues.insert("file_path", new DataValue(m_path));
 
     FileDeleteBlossom fakeDeleteBlossom;
 
@@ -125,8 +122,7 @@ void
 FileDeleteBlossom_Test::postCheck_test()
 {
     BlossomItem fakeItem;
-    fakeItem.inputValues = new DataMap();
-    fakeItem.inputValues->insert("file_path", new DataValue(m_path));
+    fakeItem.inputValues.insert("file_path", new DataValue(m_path));
 
     FileDeleteBlossom fakeDeleteBlossom;
 
@@ -148,8 +144,7 @@ void
 FileDeleteBlossom_Test::closeTask_test()
 {
     BlossomItem fakeItem;
-    fakeItem.inputValues = new DataMap();
-    fakeItem.inputValues->insert("file_path", new DataValue(m_path));
+    fakeItem.inputValues.insert("file_path", new DataValue(m_path));
 
     FileDeleteBlossom fakeDeleteBlossom;
 

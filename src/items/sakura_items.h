@@ -90,8 +90,8 @@ public:
     BlossomItem();
     ~BlossomItem();
 
-    DataMap* inputValues = nullptr;
-    DataMap* outputValue = nullptr;
+    DataMap inputValues;
+    DataMap outputValue;
 
     std::string blossomGroupType = "";
     std::string blossomType = "";
@@ -150,7 +150,7 @@ public:
     ~TreeItem();
 
     std::string id = "";
-    DataMap* values = nullptr;
+    DataMap values;
     std::vector<SakuraItem*> childs;
 };
 
@@ -164,7 +164,7 @@ public:
     ~BranchItem();
 
     std::string id = "";
-    DataMap* values = nullptr;
+    DataMap values;
     std::vector<SakuraItem*> childs;
 };
 

@@ -37,15 +37,15 @@ FileCopyBlossom::FileCopyBlossom() :
 void
 FileCopyBlossom::initTask(BlossomItem &blossomItem)
 {
-    if(blossomItem.inputValues->contains("source_path") == false
-            || blossomItem.inputValues->contains("dest_path") == false)
+    if(blossomItem.inputValues.contains("source_path") == false
+            || blossomItem.inputValues.contains("dest_path") == false)
     {
         blossomItem.success = false;
         return;
     }
 
-    m_sourcePath = blossomItem.inputValues->getStringByKey("source_path");
-    m_destinationPath = blossomItem.inputValues->getStringByKey("dest_path");
+    m_sourcePath = blossomItem.inputValues.getStringByKey("source_path");
+    m_destinationPath = blossomItem.inputValues.getStringByKey("dest_path");
 
     blossomItem.success = true;
 }
