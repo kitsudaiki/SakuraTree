@@ -1,5 +1,5 @@
 /**
- * @file        template_blossom.h
+ * @file        template_create_blossom.h
  *
  * @author      Tobias Anker <tobias.anker@kitsunemimi.moe>
  *
@@ -28,11 +28,11 @@
 namespace SakuraTree
 {
 
-class TemplateBlossom : public Blossom
+class TemplateCreateBlossom : public Blossom
 {
 
 public:
-    TemplateBlossom();
+    TemplateCreateBlossom();
 
 protected:
     void initTask(BlossomItem &blossomItem);

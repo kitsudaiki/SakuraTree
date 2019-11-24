@@ -33,9 +33,10 @@
 #include <processing/blossoms/ssh/ssh_scp_blossom.h>
 #include <processing/blossoms/ssh/ssh_cmd_create_file_blossom.h>
 
-#include <processing/blossoms/sakura/sakura_copy_subtree_blossom.h>
-#include <processing/blossoms/sakura/print_blossom.h>
-#include <processing/blossoms/sakura/template_blossom.h>
+#include <processing/blossoms/special/sakura_copy_subtree_blossom.h>
+#include <processing/blossoms/special/print_blossom.h>
+
+#include <processing/blossoms/template/template_create_blossom.h>
 
 #include <processing/blossoms/files/common_files/file_copy_blossom.h>
 #include <processing/blossoms/files/common_files/file_delete_blossom.h>
@@ -94,7 +95,7 @@ getBlossom(const std::string type,
             return new PrintBlossom();
         }
         if(subType == "template") {
-            return new TemplateBlossom();
+            return new TemplateCreateBlossom();
         }
     }
 

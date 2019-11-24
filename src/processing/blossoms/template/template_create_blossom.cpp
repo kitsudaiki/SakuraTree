@@ -1,5 +1,5 @@
 /**
- * @file        template_blossom.cpp
+ * @file        template_create_blossom.cpp
  *
  * @author      Tobias Anker <tobias.anker@kitsunemimi.moe>
  *
@@ -20,7 +20,7 @@
  *      limitations under the License.
  */
 
-#include "template_blossom.h"
+#include "template_create_blossom.h"
 #include <processing/blossoms/files/file_methods.h>
 #include <sakura_root.h>
 #include <libKitsunemimiJinja2/jinja2_converter.h>
@@ -29,14 +29,14 @@
 namespace SakuraTree
 {
 
-TemplateBlossom::TemplateBlossom() :
+TemplateCreateBlossom::TemplateCreateBlossom() :
     Blossom() {}
 
 /**
  * initTask
  */
 void
-TemplateBlossom::initTask(BlossomItem &blossomItem)
+TemplateCreateBlossom::initTask(BlossomItem &blossomItem)
 {
     if(blossomItem.inputValues.contains("source_path") == false
             || blossomItem.inputValues.contains("dest_path") == false)
@@ -56,7 +56,7 @@ TemplateBlossom::initTask(BlossomItem &blossomItem)
  * preCheck
  */
 void
-TemplateBlossom::preCheck(BlossomItem &blossomItem)
+TemplateCreateBlossom::preCheck(BlossomItem &blossomItem)
 {
     std::pair<bool, std::string> results;
 
@@ -112,7 +112,7 @@ TemplateBlossom::preCheck(BlossomItem &blossomItem)
  * runTask
  */
 void
-TemplateBlossom::runTask(BlossomItem &blossomItem)
+TemplateCreateBlossom::runTask(BlossomItem &blossomItem)
 {
     std::pair<bool, std::string> results;
     results = Kitsunemimi::Persistence::writeFile(m_destinationPath,
@@ -135,7 +135,7 @@ TemplateBlossom::runTask(BlossomItem &blossomItem)
  * postCheck
  */
 void
-TemplateBlossom::postCheck(BlossomItem &blossomItem)
+TemplateCreateBlossom::postCheck(BlossomItem &blossomItem)
 {
     std::pair<bool, std::string> readFileContent;
     readFileContent = Kitsunemimi::Persistence::readFile(m_destinationPath);
@@ -153,7 +153,7 @@ TemplateBlossom::postCheck(BlossomItem &blossomItem)
  * closeTask
  */
 void
-TemplateBlossom::closeTask(BlossomItem &blossomItem)
+TemplateCreateBlossom::closeTask(BlossomItem &blossomItem)
 {
     blossomItem.success = true;
 }
