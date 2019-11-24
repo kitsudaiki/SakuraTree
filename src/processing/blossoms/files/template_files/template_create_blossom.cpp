@@ -38,6 +38,7 @@ TemplateCreateBlossom::TemplateCreateBlossom() :
 void
 TemplateCreateBlossom::initTask(BlossomItem &blossomItem)
 {
+    // precheck
     if(blossomItem.groupValues.contains("source_path") == false
             || blossomItem.groupValues.contains("dest_path") == false)
     {
@@ -45,8 +46,13 @@ TemplateCreateBlossom::initTask(BlossomItem &blossomItem)
         return;
     }
 
+    // create source-path
     m_templatePath = blossomItem.groupValues.getStringByKey("source_path");
-    m_templatePath = blossomItem.blossomPath + "/templates/" + m_templatePath;
+    if(blossomItem.blossomPath.at(blossomItem.blossomPath.size()-1) != '/') {
+        blossomItem.blossomPath += "/";
+    }
+    m_templatePath = blossomItem.blossomPath + "templates/" + m_templatePath;
+
     m_destinationPath = blossomItem.groupValues.getStringByKey("dest_path");
 
     blossomItem.success = true;
@@ -60,6 +66,7 @@ TemplateCreateBlossom::preCheck(BlossomItem &blossomItem)
 {
     std::pair<bool, std::string> results;
 
+    // check if path to template is valid
     if(doesPathExist(m_templatePath) == false)
     {
         blossomItem.success = false;
@@ -69,6 +76,7 @@ TemplateCreateBlossom::preCheck(BlossomItem &blossomItem)
         return;
     }
 
+    // read template-file
     results = Kitsunemimi::Persistence::readFile(m_templatePath);
     if(results.first == false)
     {
@@ -80,6 +88,7 @@ TemplateCreateBlossom::preCheck(BlossomItem &blossomItem)
         return;
     }
 
+    // create file-content form template
     results = SakuraRoot::m_jinja2Converter->convert(results.second, &blossomItem.inputValues);
     if(results.first == false)
     {
@@ -90,11 +99,12 @@ TemplateCreateBlossom::preCheck(BlossomItem &blossomItem)
                                    + results.second;
         return;
     }
-
     m_fileContent = results.second;
 
+    // check if template-file already exist
     if(doesPathExist(m_destinationPath))
     {
+        // read the already existing file and compare it the current file-content
         results = Kitsunemimi::Persistence::readFile(m_destinationPath);
         if(results.first == true
                 && m_fileContent == results.second)

@@ -1,5 +1,5 @@
 /**
- * @file        template_create_blossom.h
+ * @file        template_create_blossom_test.h
  *
  * @author      Tobias Anker <tobias.anker@kitsunemimi.moe>
  *
@@ -20,37 +20,40 @@
  *      limitations under the License.
  */
 
-#ifndef TEMPLATE_BLOSSOM_H
-#define TEMPLATE_BLOSSOM_H
+#ifndef TEMPLATE_CREATE_BLOSSOM_TEST_H
+#define TEMPLATE_CREATE_BLOSSOM_TEST_H
 
-#include <processing/blossoms/blossom.h>
+#include <common.h>
+#include <libKitsunemimiCommon/test.h>
+#include <sakura_root.h>
 
 namespace SakuraTree
 {
-class TemplateCreateBlossom_Test;
 
-class TemplateCreateBlossom : public Blossom
+class TemplateCreateBlossom_Test
+        : public Kitsunemimi::Common::Test
 {
-
 public:
-    TemplateCreateBlossom();
-
-protected:
-    void initTask(BlossomItem &blossomItem);
-    void preCheck(BlossomItem &blossomItem);
-    void runTask(BlossomItem &blossomItem);
-    void postCheck(BlossomItem &blossomItem);
-    void closeTask(BlossomItem &blossomItem);
+    TemplateCreateBlossom_Test();
+    ~TemplateCreateBlossom_Test();
 
 private:
-    friend TemplateCreateBlossom_Test;
+    void initTestCase();
+    void initTask_test();
+    void preCheck_test();
+    void runTask_test();
+    void postCheck_test();
+    void closeTask_test();
 
     std::string m_templatePath = "";
-    std::string m_destinationPath = "";
+    std::string m_localTemplatePath = "";
+    std::string m_destinationFile = "";
 
-    std::string m_fileContent = "";
+    std::string m_templateContent = "poi {{asdf}}";
+
+    SakuraRoot* m_root = nullptr;
 };
 
 }
 
-#endif // TEMPLATE_BLOSSOM_H
+#endif // TEMPLATE_CREATE_BLOSSOM_TEST_H
