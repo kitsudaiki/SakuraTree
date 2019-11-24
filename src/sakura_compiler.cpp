@@ -154,11 +154,10 @@ SakuraCompiler::convertBlossomGroup(JsonItem &growPlan)
         for(uint32_t i = 0; i < subTypeArray.size(); i++)
         {
             JsonItem item = subTypeArray.get(i);
+
             BlossomItem* blossomItem = convertBlossom(item);
             blossomItem->blossomPath = growPlan.get("b_path").toString();
-
-            JsonItem itemInput = growPlan.get("items-input");
-            overrideItems(blossomItem->inputValues, itemInput);
+            blossomItem->groupValues = *(growPlan.get("items-input").getItemContent()->toMap());
 
             blossomGroupItem->blossoms.push_back(blossomItem);
         }
@@ -166,12 +165,11 @@ SakuraCompiler::convertBlossomGroup(JsonItem &growPlan)
     else
     {
         BlossomItem* blossomItem =  new BlossomItem();
-
-        blossomGroupItem->blossomGroupType = "special";
         blossomItem->blossomPath = growPlan.get("b_path").toString();
         blossomItem->blossomType = growPlan.get("blossom-group-type").toString();
-        blossomItem->inputValues = *(growPlan.get("items-input").getItemContent()->copy()->toMap());
+        blossomItem->groupValues = *(growPlan.get("items-input").getItemContent()->toMap());
 
+        blossomGroupItem->blossomGroupType = "special";
         blossomGroupItem->blossoms.push_back(blossomItem);
     }
 

@@ -38,16 +38,16 @@ TemplateCreateBlossom::TemplateCreateBlossom() :
 void
 TemplateCreateBlossom::initTask(BlossomItem &blossomItem)
 {
-    if(blossomItem.inputValues.contains("source_path") == false
-            || blossomItem.inputValues.contains("dest_path") == false)
+    if(blossomItem.groupValues.contains("source_path") == false
+            || blossomItem.groupValues.contains("dest_path") == false)
     {
         blossomItem.success = false;
         return;
     }
 
-    m_templatePath = blossomItem.inputValues.getStringByKey("source_path");
+    m_templatePath = blossomItem.groupValues.getStringByKey("source_path");
     m_templatePath = blossomItem.blossomPath + "/templates/" + m_templatePath;
-    m_destinationPath = blossomItem.inputValues.getStringByKey("dest_path");
+    m_destinationPath = blossomItem.groupValues.getStringByKey("dest_path");
 
     blossomItem.success = true;
 }

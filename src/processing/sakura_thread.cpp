@@ -262,6 +262,7 @@ SakuraThread::processBlossomGroup(BlossomGroupItem &growPlan,
     {
         BlossomItem* blossomItem = growPlan.blossoms.at(i);
         blossomItem->blossomGroupType = growPlan.blossomGroupType;
+
         grow(blossomItem,
              values,
              hierarchy,

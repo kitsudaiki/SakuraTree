@@ -94,7 +94,11 @@ getBlossom(const std::string type,
         if(subType == "print") {
             return new PrintBlossom();
         }
-        if(subType == "template") {
+    }
+
+    if(type == "template")
+    {
+        if(subType == "create") {
             return new TemplateCreateBlossom();
         }
     }
