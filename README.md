@@ -223,6 +223,18 @@ if(packages == nano)
 
     print("test output")
     - output = "{{test_output}}"
+
+    file("copy a testfile")
+    -> copy:
+       - source_path = "test_file"
+       - dest_path = "/tmp/test_file"
+
+    template("create a template")
+    - source_path = "test_template.j2"
+    - dest_path = "/tmp/test_template"
+    -> create:
+       - checker = 42
+       - name = "test-template"
 }
 else
 {

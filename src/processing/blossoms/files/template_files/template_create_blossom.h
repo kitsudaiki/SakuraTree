@@ -1,5 +1,5 @@
 /**
- * @file        defines.h
+ * @file        template_create_blossom.h
  *
  * @author      Tobias Anker <tobias.anker@kitsunemimi.moe>
  *
@@ -20,12 +20,37 @@
  *      limitations under the License.
  */
 
-#ifndef DEFINES_H
-#define DEFINES_H
+#ifndef TEMPLATE_BLOSSOM_H
+#define TEMPLATE_BLOSSOM_H
 
-#include <common/includes.h>
+#include <processing/blossoms/blossom.h>
 
-#define DEBUG false
-#define RUN_UNIT_TEST
+namespace SakuraTree
+{
+class TemplateCreateBlossom_Test;
 
-#endif // DEFINES_H
+class TemplateCreateBlossom : public Blossom
+{
+
+public:
+    TemplateCreateBlossom();
+
+protected:
+    void initTask(BlossomItem &blossomItem);
+    void preCheck(BlossomItem &blossomItem);
+    void runTask(BlossomItem &blossomItem);
+    void postCheck(BlossomItem &blossomItem);
+    void closeTask(BlossomItem &blossomItem);
+
+private:
+    friend TemplateCreateBlossom_Test;
+
+    std::string m_templatePath = "";
+    std::string m_destinationPath = "";
+
+    std::string m_fileContent = "";
+};
+
+}
+
+#endif // TEMPLATE_BLOSSOM_H

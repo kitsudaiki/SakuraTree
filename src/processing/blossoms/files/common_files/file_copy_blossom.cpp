@@ -60,20 +60,20 @@ FileCopyBlossom::initTask(BlossomItem &blossomItem)
 void
 FileCopyBlossom::preCheck(BlossomItem &blossomItem)
 {
-    if(doesPathExist(m_sourcePath)
-            && doesPathExist(m_destinationPath))
-    {
-        blossomItem.skip = true;
-        blossomItem.success = true;
-        return;
-    }
-
     if(doesPathExist(m_sourcePath) == false)
     {
         blossomItem.success = false;
         blossomItem.errorMessage = "COPY FAILED: source-path "
                                    + m_sourcePath
                                    + " doesn't exist";
+        return;
+    }
+
+    if(doesPathExist(m_destinationPath))
+    {
+        // TODO: compare files
+        blossomItem.skip = true;
+        blossomItem.success = true;
         return;
     }
 

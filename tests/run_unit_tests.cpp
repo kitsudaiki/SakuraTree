@@ -24,11 +24,14 @@
 
 #include <tests/items/item_methods_test.h>
 #include <tests/processing/blossoms/files/file_methods_test.h>
+
 #include <tests/processing/blossoms/files/common_files/file_chmod_blossom_test.h>
 #include <tests/processing/blossoms/files/common_files/file_chown_blossom_test.h>
 #include <tests/processing/blossoms/files/common_files/file_copy_blossom_test.h>
 #include <tests/processing/blossoms/files/common_files/file_delete_blossom_test.h>
 #include <tests/processing/blossoms/files/common_files/file_rename_blossom_test.h>
+
+#include <tests/processing/blossoms/files/template_files/template_create_blossom_test.h>
 
 namespace SakuraTree
 {
@@ -44,11 +47,12 @@ RunUnitTests::run()
     #ifdef RUN_UNIT_TEST
     SakuraTree::ItemMethods_Test();
     SakuraTree::FileMethods_Test();
-    SakuraTree::FileChmodBlossom_Test();
-    SakuraTree::FileChownBlossom_Test();
+    //SakuraTree::FileChmodBlossom_Test();
+    //SakuraTree::FileChownBlossom_Test();
     SakuraTree::FileCopyBlossom_Test();
     SakuraTree::FileDeleteBlossom_Test();
     SakuraTree::FileRenameBlossom_Test();
+    SakuraTree::TemplateCreateBlossom_Test();
     #endif
 }
 

@@ -90,6 +90,7 @@ public:
     BlossomItem();
     ~BlossomItem();
 
+    DataMap groupValues;
     DataMap inputValues;
     DataMap outputValue;
 

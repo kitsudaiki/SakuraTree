@@ -68,9 +68,9 @@ SOURCES += \
     src/branch_builder/provision_branch_builder.cpp \
     src/processing/blossoms/ssh/ssh_scp_blossom.cpp \
     src/processing/blossoms/ssh/ssh_cmd_blossom.cpp \
-    src/processing/blossoms/sakura/sakura_copy_subtree_blossom.cpp \
+    src/processing/blossoms/special/sakura_copy_subtree_blossom.cpp \
     src/processing/blossoms/ssh/ssh_cmd_create_file_blossom.cpp \
-    src/processing/blossoms/sakura/print_blossom.cpp \
+    src/processing/blossoms/special/print_blossom.cpp \
     src/processing/process_execution.cpp \
     src/processing/blossoms/files/file_methods.cpp \
     src/processing/blossoms/files/common_files/file_copy_blossom.cpp \
@@ -84,7 +84,9 @@ SOURCES += \
     tests/processing/blossoms/files/common_files/file_chown_blossom_test.cpp \
     tests/processing/blossoms/files/common_files/file_copy_blossom_test.cpp \
     tests/processing/blossoms/files/common_files/file_delete_blossom_test.cpp \
-    tests/processing/blossoms/files/common_files/file_rename_blossom_test.cpp
+    tests/processing/blossoms/files/common_files/file_rename_blossom_test.cpp \
+    src/processing/blossoms/files/template_files/template_create_blossom.cpp \
+    tests/processing/blossoms/files/template_files/template_create_blossom_test.cpp
 
 
 HEADERS += \
@@ -110,10 +112,10 @@ HEADERS += \
     src/branch_builder/provision_branch_builder.h \
     src/processing/blossoms/ssh/ssh_scp_blossom.h \
     src/processing/blossoms/ssh/ssh_cmd_blossom.h \
-    src/processing/blossoms/sakura/sakura_copy_subtree_blossom.h \
+    src/processing/blossoms/special/sakura_copy_subtree_blossom.h \
     src/processing/blossoms/ssh/ssh_cmd_create_file_blossom.h \
     src/processing/sakura_tree_callbacks.h \
-    src/processing/blossoms/sakura/print_blossom.h \
+    src/processing/blossoms/special/print_blossom.h \
     src/processing/process_execution.h \
     src/processing/blossoms/files/file_methods.h \
     src/processing/blossoms/files/common_files/file_copy_blossom.h \
@@ -127,6 +129,8 @@ HEADERS += \
     tests/processing/blossoms/files/common_files/file_chown_blossom_test.h \
     tests/processing/blossoms/files/common_files/file_copy_blossom_test.h \
     tests/processing/blossoms/files/common_files/file_delete_blossom_test.h \
-    tests/processing/blossoms/files/common_files/file_rename_blossom_test.h
+    tests/processing/blossoms/files/common_files/file_rename_blossom_test.h \
+    src/processing/blossoms/files/template_files/template_create_blossom.h \
+    tests/processing/blossoms/files/template_files/template_create_blossom_test.h
 
 
