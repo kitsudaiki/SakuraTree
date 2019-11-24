@@ -36,11 +36,11 @@
 #include <processing/blossoms/special/sakura_copy_subtree_blossom.h>
 #include <processing/blossoms/special/print_blossom.h>
 
-#include <processing/blossoms/template/template_create_blossom.h>
-
 #include <processing/blossoms/files/common_files/file_copy_blossom.h>
 #include <processing/blossoms/files/common_files/file_delete_blossom.h>
 #include <processing/blossoms/files/common_files/file_rename_blossom.h>
+
+#include <processing/blossoms/files/template_files/template_create_blossom.h>
 
 namespace SakuraTree
 {

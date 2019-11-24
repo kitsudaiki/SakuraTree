@@ -3,7 +3,7 @@
 
 apt("update and install")  
 -> update
--> present >> test_output:
+-> present:
     - names = "{{packages}}"
 
 if(packages == nano)
@@ -34,7 +34,6 @@ if(packages == nano)
     -> create:
        - checker = 42
        - name = "test-template"
-
 }
 else
 {
