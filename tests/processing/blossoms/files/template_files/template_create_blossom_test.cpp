@@ -58,7 +58,7 @@ TemplateCreateBlossom_Test::initTestCase()
     m_destinationFile = "/tmp/TemplateCreateBlossom_Test_testfile_destination";
 
     BlossomItem fakeItem;
-    runSyncProcess(fakeItem, "mkdir /tmp/template");
+    runSyncProcess(fakeItem, "mkdir /tmp/templates");
     runSyncProcess(fakeItem, "rm " + m_templatePath);
     runSyncProcess(fakeItem, "rm " + m_destinationFile);
 }
