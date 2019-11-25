@@ -43,6 +43,7 @@ PrintBlossom::initTask(BlossomItem &blossomItem)
 void
 PrintBlossom::preCheck(BlossomItem &blossomItem)
 {
+    // TODO: check that at least one item is there to be printed
     blossomItem.success = true;
 }
 
