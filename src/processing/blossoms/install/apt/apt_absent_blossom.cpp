@@ -82,6 +82,7 @@ AptAbsentBlossom::runTask(BlossomItem &blossomItem)
 
     std::string programm = "sudo apt-get remove -y " + appendedList;
     runSyncProcess(blossomItem, programm);
+    blossomItem.outputMessage = "";
 }
 
 /**

@@ -167,7 +167,7 @@ SakuraCompiler::convertBlossomGroup(JsonItem &growPlan)
         BlossomItem* blossomItem =  new BlossomItem();
         blossomItem->blossomPath = growPlan.get("b_path").toString();
         blossomItem->blossomType = growPlan.get("blossom-group-type").toString();
-        blossomItem->groupValues = *(growPlan.get("items-input").getItemContent()->toMap());
+        blossomItem->inputValues = *(growPlan.get("items-input").getItemContent()->toMap());
 
         blossomGroupItem->blossomGroupType = "special";
         blossomGroupItem->blossoms.push_back(blossomItem);

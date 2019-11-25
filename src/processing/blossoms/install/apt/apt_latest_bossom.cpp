@@ -80,6 +80,7 @@ AptLatestBlossom::runTask(BlossomItem &blossomItem)
 
     const std::string programm = "sudo apt-get install -y " + appendedList;
     runSyncProcess(blossomItem, programm);
+    blossomItem.outputMessage = "";
 }
 
 /**

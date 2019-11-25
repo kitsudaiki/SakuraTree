@@ -21,6 +21,8 @@
  */
 
 #include "print_blossom.h"
+#include <libKitsunemimiCommon/common_items/table_item.h>
+#include <libKitsunemimiPersistence/files/text_file.h>
 
 namespace SakuraTree
 {
@@ -56,15 +58,17 @@ PrintBlossom::runTask(BlossomItem &blossomItem)
     std::string output = "";
     const std::vector<std::string> keys = blossomItem.inputValues.getKeys();
 
+    Kitsunemimi::Common::TableItem tableItem;
+    tableItem.addColumn("key", "Item-Name");
+    tableItem.addColumn("value", "Value");
+
     for(uint32_t i = 0; i < keys.size(); i++)
     {
-        output += keys.at(i)
-                + ": \n"
-                + blossomItem.inputValues.get(keys.at(i))->toString()
-                + "\n";
+        const std::string value = blossomItem.inputValues.get(keys.at(i))->toString();
+        tableItem.addRow(std::vector<std::string>{keys.at(i), value});
     }
 
-    blossomItem.outputMessage = output;
+    blossomItem.outputMessage = tableItem.toString(150);
 }
 
 /**

@@ -1,5 +1,6 @@
 [install_branch]
 - packages = nano
+- test_output2 = "this is a test"
 
 apt("update and install")  
 -> update
@@ -21,7 +22,7 @@ if(packages == nano)
        - names = "{{packages}}"
 
     print("test output")
-    - output = "{{test_output}}"
+    - output = "{{test_output2}}"
 
     file("copy a testfile")
     -> copy:
