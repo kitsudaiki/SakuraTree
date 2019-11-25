@@ -32,6 +32,7 @@
 #include <tests/processing/blossoms/files/common_files/file_rename_blossom_test.h>
 
 #include <tests/processing/blossoms/files/template_files/template_create_blossom_test.h>
+#include <tests/processing/blossoms/special/cmd_blossom_test.h>
 
 namespace SakuraTree
 {
@@ -53,6 +54,7 @@ RunUnitTests::run()
     SakuraTree::FileDeleteBlossom_Test();
     SakuraTree::FileRenameBlossom_Test();
     SakuraTree::TemplateCreateBlossom_Test();
+    SakuraTree::CmdBlossom_Test();
     #endif
 }
 

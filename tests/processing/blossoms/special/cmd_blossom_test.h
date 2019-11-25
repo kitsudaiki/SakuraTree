@@ -1,5 +1,5 @@
 /**
- * @file        cmd_blossom.h
+ * @file        template_create_blossom_test.h
  *
  * @author      Tobias Anker <tobias.anker@kitsunemimi.moe>
  *
@@ -20,34 +20,34 @@
  *      limitations under the License.
  */
 
-#ifndef CMD_BLOSSOM_H
-#define CMD_BLOSSOM_H
+#ifndef CMD_BLOSSOM_TEST_H
+#define CMD_BLOSSOM_TEST_H
 
-#include <processing/blossoms/blossom.h>
+#include <common.h>
+#include <libKitsunemimiCommon/test.h>
 
 namespace SakuraTree
 {
-class CmdBlossom_Test;
 
-class CmdBlossom : public Blossom
+class CmdBlossom_Test
+        : public Kitsunemimi::Common::Test
 {
-
 public:
-    CmdBlossom();
-
-protected:
-    void initTask(BlossomItem &blossomItem);
-    void preCheck(BlossomItem &blossomItem);
-    void runTask(BlossomItem &blossomItem);
-    void postCheck(BlossomItem &blossomItem);
-    void closeTask(BlossomItem &blossomItem);
+    CmdBlossom_Test();
+    ~CmdBlossom_Test();
 
 private:
-    friend CmdBlossom_Test;
+    void initTestCase();
+    void initTask_test();
+    void preCheck_test();
+    void runTask_test();
+    void postCheck_test();
+    void closeTask_test();
 
+    std::string m_filePath = "";
     std::string m_command = "";
 };
 
 }
 
-#endif // CMD_BLOSSOM_H
+#endif // CMD_BLOSSOM_TEST_H

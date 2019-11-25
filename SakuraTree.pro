@@ -87,7 +87,8 @@ SOURCES += \
     tests/processing/blossoms/files/common_files/file_rename_blossom_test.cpp \
     src/processing/blossoms/files/template_files/template_create_blossom.cpp \
     tests/processing/blossoms/files/template_files/template_create_blossom_test.cpp \
-    src/processing/blossoms/special/cmd_blossom.cpp
+    src/processing/blossoms/special/cmd_blossom.cpp \
+    tests/processing/blossoms/special/cmd_blossom_test.cpp
 
 
 HEADERS += \
@@ -133,6 +134,7 @@ HEADERS += \
     tests/processing/blossoms/files/common_files/file_rename_blossom_test.h \
     src/processing/blossoms/files/template_files/template_create_blossom.h \
     tests/processing/blossoms/files/template_files/template_create_blossom_test.h \
-    src/processing/blossoms/special/cmd_blossom.h
+    src/processing/blossoms/special/cmd_blossom.h \
+    tests/processing/blossoms/special/cmd_blossom_test.h
 
 
