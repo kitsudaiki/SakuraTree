@@ -78,7 +78,7 @@ AptLatestBlossom::runTask(BlossomItem &blossomItem)
         appendedList += m_packageNames.at(i) + " ";
     }
 
-    std::string programm = "sudo apt-get install -y " + appendedList;
+    const std::string programm = "sudo apt-get install -y " + appendedList;
     runSyncProcess(blossomItem, programm);
 }
 

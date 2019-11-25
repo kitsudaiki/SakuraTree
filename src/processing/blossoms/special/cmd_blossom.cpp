@@ -1,5 +1,5 @@
 /**
- * @file        print_blossom.cpp
+ * @file        cmd_blossom.cpp
  *
  * @author      Tobias Anker <tobias.anker@kitsunemimi.moe>
  *
@@ -20,20 +20,28 @@
  *      limitations under the License.
  */
 
-#include "print_blossom.h"
+#include "cmd_blossom.h"
 
 namespace SakuraTree
 {
 
-PrintBlossom::PrintBlossom() :
+CmdBlossom::CmdBlossom() :
     Blossom() {}
 
 /**
  * initTask
  */
 void
-PrintBlossom::initTask(BlossomItem &blossomItem)
+CmdBlossom::initTask(BlossomItem &blossomItem)
 {
+    if(blossomItem.inputValues.contains("command") == false)
+    {
+        blossomItem.success = false;
+        blossomItem.errorMessage = "no command specified";
+        return;
+    }
+
+    m_command = blossomItem.inputValues.getStringByKey("command");
     blossomItem.success = true;
 }
 
@@ -41,9 +49,8 @@ PrintBlossom::initTask(BlossomItem &blossomItem)
  * preCheck
  */
 void
-PrintBlossom::preCheck(BlossomItem &blossomItem)
+CmdBlossom::preCheck(BlossomItem &blossomItem)
 {
-    // TODO: check that at least one item is there to be printed
     blossomItem.success = true;
 }
 
@@ -51,27 +58,16 @@ PrintBlossom::preCheck(BlossomItem &blossomItem)
  * runTask
  */
 void
-PrintBlossom::runTask(BlossomItem &blossomItem)
+CmdBlossom::runTask(BlossomItem &blossomItem)
 {
-    std::string output = "";
-    const std::vector<std::string> keys = blossomItem.inputValues.getKeys();
-
-    for(uint32_t i = 0; i < keys.size(); i++)
-    {
-        output += keys.at(i)
-                + ": \n"
-                + blossomItem.inputValues.get(keys.at(i))->toString()
-                + "\n";
-    }
-
-    blossomItem.outputMessage = output;
+    runSyncProcess(blossomItem, m_command);
 }
 
 /**
  * postCheck
  */
 void
-PrintBlossom::postCheck(BlossomItem &blossomItem)
+CmdBlossom::postCheck(BlossomItem &blossomItem)
 {
     blossomItem.success = true;
 }
@@ -80,7 +76,7 @@ PrintBlossom::postCheck(BlossomItem &blossomItem)
  * closeTask
  */
 void
-PrintBlossom::closeTask(BlossomItem &blossomItem)
+CmdBlossom::closeTask(BlossomItem &blossomItem)
 {
     blossomItem.success = true;
 }
