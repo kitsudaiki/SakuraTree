@@ -91,9 +91,9 @@ Blossom::growBlossom(BlossomItem &blossomItem)
         return;
     }
 
-    if(blossomItem.outputValue.size() > 0)
+    if(blossomItem.outputValues.size() > 0)
     {
-        const std::string key = blossomItem.outputValue.getKeys()[0];
+        const std::string key = blossomItem.outputValues.getKeys()[0];
 
         if(blossomItem.outputMessage.size() > 0)
         {
@@ -103,14 +103,14 @@ Blossom::growBlossom(BlossomItem &blossomItem)
             // if conversion was successful, the object is json-valid and stored as output-value
             // else the output is added as plain text
             if(convertResult.first) {
-                blossomItem.outputValue.insert(key, jsonConvert.getItemContent()->copy(), true);
+                blossomItem.outputValues.insert(key, jsonConvert.getItemContent()->copy(), true);
             } else {
-                blossomItem.outputValue.insert(key, new DataValue(blossomItem.outputMessage), true);
+                blossomItem.outputValues.insert(key, new DataValue(blossomItem.outputMessage), true);
             }
         }
         else
         {
-            blossomItem.outputValue.insert(key, new DataValue(""), true);
+            blossomItem.outputValues.insert(key, new DataValue(""), true);
         }
     }
 

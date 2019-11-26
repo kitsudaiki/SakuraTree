@@ -126,6 +126,7 @@ SakuraThread::grow(SakuraItem* growPlan,
         BlossomGroupItem* blossomGroupItem = dynamic_cast<BlossomGroupItem*>(growPlan);
         std::vector<std::string> newHierarchy = hierarchy;
         newHierarchy.push_back("BLOSSOM: " + blossomGroupItem->id);
+
         processBlossomGroup(*blossomGroupItem,
                             values,
                             newHierarchy,
@@ -139,7 +140,7 @@ SakuraThread::grow(SakuraItem* growPlan,
         std::vector<std::string> newHierarchy = hierarchy;
         newHierarchy.push_back("BRANCH: " + branchItem->id);
 
-        std::pair<bool, std::string> result = fillItems(branchItem->values, values);
+        std::pair<bool, std::string> result = fillItems(branchItem->inputValues, values);
         if(result.first == false)
         {
             // TODO: error-output
@@ -148,9 +149,14 @@ SakuraThread::grow(SakuraItem* growPlan,
         }
 
         processBranch(branchItem,
-                      branchItem->values,
+                      branchItem->inputValues,
                       newHierarchy,
                       returnValues);
+
+        overrideItems(branchItem->inputValues, returnValues);
+        overrideItems(branchItem->outputValues, returnValues);
+        returnValues = branchItem->outputValues;
+
         return;
     }
 
@@ -160,7 +166,7 @@ SakuraThread::grow(SakuraItem* growPlan,
         std::vector<std::string> newHierarchy = hierarchy;
         newHierarchy.push_back("TREE: " + treeItem->id);
 
-        std::pair<bool, std::string> result = fillItems(treeItem->values, values);
+        std::pair<bool, std::string> result = fillItems(treeItem->inputValues, values);
         if(result.first == false)
         {
             // TODO: error-output
@@ -169,9 +175,14 @@ SakuraThread::grow(SakuraItem* growPlan,
         }
 
         processTree(treeItem,
-                    treeItem->values,
+                    treeItem->inputValues,
                     newHierarchy,
                     returnValues);
+
+        overrideItems(treeItem->inputValues, returnValues);
+        overrideItems(treeItem->outputValues, returnValues);
+        returnValues = treeItem->outputValues;
+
         return;
     }
 
@@ -238,7 +249,7 @@ SakuraThread::processBlossom(BlossomItem &growPlan,
         m_abort = true;
     }
 
-    overrideItems(returnValues, growPlan.outputValue);
+    returnValues = growPlan.outputValues;
 
     // send result to root
     SakuraRoot::m_root->printOutput(growPlan);
