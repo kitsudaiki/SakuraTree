@@ -126,7 +126,13 @@ SakuraCompiler::convertBlossom(JsonItem &growPlan)
     BlossomItem* blossomItem =  new BlossomItem();
 
     blossomItem->blossomType = growPlan.get("blossom-type").toString();
-    blossomItem->inputValues = *(growPlan.get("items-input").getItemContent()->copy()->toMap());
+
+    DataArray* array = growPlan.get("items-input").getItemContent()->toArray();
+    for(uint32_t i = 0; i < array->size(); i++)
+    {
+        blossomItem->inputValues.insert(array->get(i)->get("key")->toString(),
+                                        array->get(i)->get("value")->copy());
+    }
 
     const std::string outKey = growPlan.get("output").getItemContent()->toValue()->toString();
     if(outKey.size() > 0) {
@@ -157,7 +163,13 @@ SakuraCompiler::convertBlossomGroup(JsonItem &growPlan)
 
             BlossomItem* blossomItem = convertBlossom(item);
             blossomItem->blossomPath = growPlan.get("b_path").toString();
-            blossomItem->groupValues = *(growPlan.get("items-input").getItemContent()->toMap());
+
+            DataArray* array = growPlan.get("items-input").getItemContent()->toArray();
+            for(uint32_t i = 0; i < array->size(); i++)
+            {
+                blossomItem->inputValues.insert(array->get(i)->get("key")->toString(),
+                                                array->get(i)->get("value")->copy());
+            }
 
             blossomGroupItem->blossoms.push_back(blossomItem);
         }
@@ -167,7 +179,13 @@ SakuraCompiler::convertBlossomGroup(JsonItem &growPlan)
         BlossomItem* blossomItem =  new BlossomItem();
         blossomItem->blossomPath = growPlan.get("b_path").toString();
         blossomItem->blossomType = growPlan.get("blossom-group-type").toString();
-        blossomItem->inputValues = *(growPlan.get("items-input").getItemContent()->toMap());
+
+        DataArray* array = growPlan.get("items-input").getItemContent()->toArray();
+        for(uint32_t i = 0; i < array->size(); i++)
+        {
+            blossomItem->inputValues.insert(array->get(i)->get("key")->toString(),
+                                            array->get(i)->get("value")->copy());
+        }
 
         blossomGroupItem->blossomGroupType = "special";
         blossomGroupItem->blossoms.push_back(blossomItem);
@@ -188,7 +206,13 @@ SakuraCompiler::convertBranch(JsonItem &growPlan)
 
     JsonItem items = growPlan.get("items");
     branchItem->id = growPlan.get("id").toString();
-    branchItem->values = *(growPlan.get("items").getItemContent()->copy()->toMap());
+
+    DataArray* array = growPlan.get("items").getItemContent()->toArray();
+    for(uint32_t i = 0; i < array->size(); i++)
+    {
+        branchItem->values.insert(array->get(i)->get("key")->toString(),
+                                  array->get(i)->get("value")->copy());
+    }
 
     if(growPlan.contains("items-input"))
     {
@@ -220,7 +244,13 @@ SakuraCompiler::convertTree(JsonItem &growPlan)
     TreeItem* treeItem = new TreeItem();
 
     treeItem->id = growPlan.get("id").toString();
-    treeItem->values = *(growPlan.get("items").getItemContent()->copy()->toMap());
+
+    DataArray* array = growPlan.get("items").getItemContent()->toArray();
+    for(uint32_t i = 0; i < array->size(); i++)
+    {
+        treeItem->values.insert(array->get(i)->get("key")->toString(),
+                                array->get(i)->get("value")->copy());
+    }
 
     if(growPlan.contains("items-input"))
     {
