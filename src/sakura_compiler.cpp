@@ -130,13 +130,17 @@ SakuraCompiler::convertBlossom(JsonItem &growPlan)
     DataArray* array = growPlan.get("items-input").getItemContent()->toArray();
     for(uint32_t i = 0; i < array->size(); i++)
     {
-        blossomItem->inputValues.insert(array->get(i)->get("key")->toString(),
-                                        array->get(i)->get("value")->copy());
-    }
-
-    const std::string outKey = growPlan.get("output").getItemContent()->toValue()->toString();
-    if(outKey.size() > 0) {
-        blossomItem->outputValue.insert(outKey, nullptr);
+        if(array->get(i)->get("type")->toString() == "assign")
+        {
+            blossomItem->inputValues.insert(array->get(i)->get("key")->toString(),
+                                            array->get(i)->get("value")->copy());
+        }
+        if(array->get(i)->get("type")->toString() == "output")
+        {
+            blossomItem->outputValues.insert(array->get(i)->get("key")->toString(),
+                                            array->get(i)->get("value")->copy());
+        }
+        // TODO: check that no compare is allowed here
     }
 
     return blossomItem;
@@ -167,8 +171,12 @@ SakuraCompiler::convertBlossomGroup(JsonItem &growPlan)
             DataArray* array = growPlan.get("items-input").getItemContent()->toArray();
             for(uint32_t i = 0; i < array->size(); i++)
             {
-                blossomItem->inputValues.insert(array->get(i)->get("key")->toString(),
-                                                array->get(i)->get("value")->copy());
+                if(array->get(i)->get("type")->toString() == "assign")
+                {
+                    blossomItem->inputValues.insert(array->get(i)->get("key")->toString(),
+                                                    array->get(i)->get("value")->copy());
+                }
+                // TODO: check that no output or compare is allowed here
             }
 
             blossomGroupItem->blossoms.push_back(blossomItem);
@@ -183,8 +191,17 @@ SakuraCompiler::convertBlossomGroup(JsonItem &growPlan)
         DataArray* array = growPlan.get("items-input").getItemContent()->toArray();
         for(uint32_t i = 0; i < array->size(); i++)
         {
-            blossomItem->inputValues.insert(array->get(i)->get("key")->toString(),
-                                            array->get(i)->get("value")->copy());
+            if(array->get(i)->get("type")->toString() == "assign")
+            {
+                blossomItem->inputValues.insert(array->get(i)->get("key")->toString(),
+                                                array->get(i)->get("value")->copy());
+            }
+            if(array->get(i)->get("type")->toString() == "output")
+            {
+                blossomItem->outputValues.insert(array->get(i)->get("key")->toString(),
+                                                 array->get(i)->get("value")->copy());
+            }
+            // TODO: check that no compare is allowed here
         }
 
         blossomGroupItem->blossomGroupType = "special";
@@ -210,14 +227,14 @@ SakuraCompiler::convertBranch(JsonItem &growPlan)
     DataArray* array = growPlan.get("items").getItemContent()->toArray();
     for(uint32_t i = 0; i < array->size(); i++)
     {
-        branchItem->values.insert(array->get(i)->get("key")->toString(),
-                                  array->get(i)->get("value")->copy());
+        branchItem->inputValues.insert(array->get(i)->get("key")->toString(),
+                                       array->get(i)->get("value")->copy());
     }
 
     if(growPlan.contains("items-input"))
     {
         JsonItem itemInput = growPlan.get("items-input");
-        overrideItems(branchItem->values, itemInput);
+        overrideItems(branchItem->inputValues, itemInput);
     }
 
     JsonItem parts = growPlan.get("parts");
@@ -248,14 +265,14 @@ SakuraCompiler::convertTree(JsonItem &growPlan)
     DataArray* array = growPlan.get("items").getItemContent()->toArray();
     for(uint32_t i = 0; i < array->size(); i++)
     {
-        treeItem->values.insert(array->get(i)->get("key")->toString(),
-                                array->get(i)->get("value")->copy());
+        treeItem->inputValues.insert(array->get(i)->get("key")->toString(),
+                                     array->get(i)->get("value")->copy());
     }
 
     if(growPlan.contains("items-input"))
     {
         JsonItem itemInput = growPlan.get("items-input");
-        overrideItems(treeItem->values, itemInput);
+        overrideItems(treeItem->inputValues, itemInput);
     }
 
     JsonItem parts = growPlan.get("parts");

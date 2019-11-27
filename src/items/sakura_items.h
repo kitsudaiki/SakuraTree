@@ -92,7 +92,7 @@ public:
 
     DataMap groupValues;
     DataMap inputValues;
-    DataMap outputValue;
+    DataMap outputValues;
 
     std::string blossomGroupType = "";
     std::string blossomType = "";
@@ -152,7 +152,9 @@ public:
     ~TreeItem();
 
     std::string id = "";
-    DataMap values;
+    DataMap inputValues;
+    DataMap outputValues;
+
     std::vector<SakuraItem*> childs;
 };
 
@@ -166,7 +168,9 @@ public:
     ~BranchItem();
 
     std::string id = "";
-    DataMap values;
+    DataMap inputValues;
+    DataMap outputValues;
+
     std::vector<SakuraItem*> childs;
 };
 
