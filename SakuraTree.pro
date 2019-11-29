@@ -92,7 +92,11 @@ SOURCES += \
     src/processing/blossoms/files/text_files/text_write_blossom.cpp \
     src/processing/blossoms/files/text_files/text_read_blossom.cpp \
     src/processing/blossoms/files/text_files/text_append_blossom.cpp \
-    src/processing/blossoms/files/text_files/text_replace_blossom.cpp
+    src/processing/blossoms/files/text_files/text_replace_blossom.cpp \
+    tests/processing/blossoms/files/text_files/text_append_blossom_test.cpp \
+    tests/processing/blossoms/files/text_files/text_read_blossom_test.cpp \
+    tests/processing/blossoms/files/text_files/text_write_blossom_test.cpp \
+    tests/processing/blossoms/files/text_files/text_replace_blossom_test.cpp
 
 
 HEADERS += \
@@ -143,6 +147,10 @@ HEADERS += \
     src/processing/blossoms/files/text_files/text_write_blossom.h \
     src/processing/blossoms/files/text_files/text_read_blossom.h \
     src/processing/blossoms/files/text_files/text_append_blossom.h \
-    src/processing/blossoms/files/text_files/text_replace_blossom.h
+    src/processing/blossoms/files/text_files/text_replace_blossom.h \
+    tests/processing/blossoms/files/text_files/text_append_blossom_test.h \
+    tests/processing/blossoms/files/text_files/text_read_blossom_test.h \
+    tests/processing/blossoms/files/text_files/text_write_blossom_test.h \
+    tests/processing/blossoms/files/text_files/text_replace_blossom_test.h
 
 

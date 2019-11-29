@@ -1,5 +1,5 @@
 /**
- * @file        text_write_blossom.h
+ * @file        text_replace_blossom_test.h
  *
  * @author      Tobias Anker <tobias.anker@kitsunemimi.moe>
  *
@@ -20,34 +20,36 @@
  *      limitations under the License.
  */
 
-#ifndef TEXT_WRITE_BLOSSOM_H
-#define TEXT_WRITE_BLOSSOM_H
+#ifndef TEXT_REPLACE_BLOSSOM_TEST_H
+#define TEXT_REPLACE_BLOSSOM_TEST_H
 
-#include <processing/blossoms/blossom.h>
+#include <common.h>
+#include <libKitsunemimiCommon/test.h>
 
 namespace SakuraTree
 {
-class TextWriteBlossom_Test;
 
-class TextWriteBlossom : public Blossom
+class TextReplaceBlossom_Test
+        : public Kitsunemimi::Common::Test
 {
 public:
-    TextWriteBlossom();
-
-protected:
-    void initTask(BlossomItem &blossomItem);
-    void preCheck(BlossomItem &blossomItem);
-    void runTask(BlossomItem &blossomItem);
-    void postCheck(BlossomItem &blossomItem);
-    void closeTask(BlossomItem &blossomItem);
+    TextReplaceBlossom_Test();
 
 private:
-    friend TextWriteBlossom_Test;
+    void initTestCase();
+    void initTask_test();
+    void preCheck_test();
+    void runTask_test();
+    void postCheck_test();
+    void closeTask_test();
 
-    std::string m_filePath = "";
-    std::string m_text = "";
+    std::string m_path = "";
+    std::string m_oldCompleteText = "";
+    std::string m_newCompleteText = "";
+    std::string m_oldText = "";
+    std::string m_newText = "";
 };
 
 }
 
-#endif // TEXT_WRITE_BLOSSOM_H
+#endif // TEXT_REPLACE_BLOSSOM_TEST_H

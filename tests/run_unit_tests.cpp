@@ -34,6 +34,11 @@
 #include <tests/processing/blossoms/files/template_files/template_create_blossom_test.h>
 #include <tests/processing/blossoms/special/cmd_blossom_test.h>
 
+#include <tests/processing/blossoms/files/text_files/text_append_blossom_test.h>
+#include <tests/processing/blossoms/files/text_files/text_read_blossom_test.h>
+#include <tests/processing/blossoms/files/text_files/text_replace_blossom_test.h>
+#include <tests/processing/blossoms/files/text_files/text_write_blossom_test.h>
+
 namespace SakuraTree
 {
 
@@ -46,7 +51,7 @@ void
 RunUnitTests::run()
 {
     #ifdef RUN_UNIT_TEST
-    SakuraTree::ItemMethods_Test();
+    /*SakuraTree::ItemMethods_Test();
     SakuraTree::FileMethods_Test();
     //SakuraTree::FileChmodBlossom_Test();
     //SakuraTree::FileChownBlossom_Test();
@@ -54,7 +59,11 @@ RunUnitTests::run()
     SakuraTree::FileDeleteBlossom_Test();
     SakuraTree::FileRenameBlossom_Test();
     SakuraTree::TemplateCreateBlossom_Test();
-    SakuraTree::CmdBlossom_Test();
+    SakuraTree::CmdBlossom_Test();*/
+    SakuraTree::TextReadBlossom_Test();
+    SakuraTree::TextWriteBlossom_Test();
+    SakuraTree::TextAppendBlossom_Test();
+    SakuraTree::TextReplaceBlossom_Test();
     #endif
 }
 

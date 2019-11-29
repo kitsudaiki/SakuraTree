@@ -27,6 +27,8 @@
 
 namespace SakuraTree
 {
+class TextAppendBlossom_Test;
+
 class TextAppendBlossom : public Blossom
 {
 public:
@@ -40,6 +42,8 @@ protected:
     void closeTask(BlossomItem &blossomItem);
 
 private:
+    friend TextAppendBlossom_Test;
+
     std::string m_filePath = "";
     std::string m_newText = "";
 };

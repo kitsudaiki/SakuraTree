@@ -44,7 +44,7 @@ TextReplaceBlossom::initTask(BlossomItem &blossomItem)
         return;
     }
 
-    m_filePath = blossomItem.inputValues.getStringByKey("file_path");
+    m_filePath = blossomItem.groupValues.getStringByKey("file_path");
     m_oldText = blossomItem.inputValues.getStringByKey("old_text");
     m_newText = blossomItem.inputValues.getStringByKey("new_text");
 

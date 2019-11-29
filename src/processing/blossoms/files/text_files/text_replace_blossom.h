@@ -27,6 +27,8 @@
 
 namespace SakuraTree
 {
+class TextReplaceBlossom_Test;
+
 class TextReplaceBlossom : public Blossom
 {
 public:
@@ -40,6 +42,8 @@ protected:
     void closeTask(BlossomItem &blossomItem);
 
 private:
+    friend TextReplaceBlossom_Test;
+
     std::string m_filePath = "";
     std::string m_oldText = "";
     std::string m_newText = "";
