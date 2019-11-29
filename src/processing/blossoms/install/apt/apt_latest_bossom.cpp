@@ -39,7 +39,7 @@ AptLatestBlossom::initTask(BlossomItem &blossomItem)
     if(blossomItem.inputValues.contains("names") == false)
     {
         blossomItem.success = false;
-        blossomItem.errorMessage = "no packages to defined";
+        blossomItem.outputMessage = "no packages to defined";
         return;
     }
 
@@ -48,7 +48,7 @@ AptLatestBlossom::initTask(BlossomItem &blossomItem)
     if(m_packageNames.size() == 0)
     {
         blossomItem.success = false;
-        blossomItem.errorMessage = "no packages to defined";
+        blossomItem.outputMessage = "no packages to defined";
         return;
     }
 
@@ -100,7 +100,7 @@ AptLatestBlossom::postCheck(BlossomItem &blossomItem)
         }
 
         blossomItem.success = false;
-        blossomItem.errorMessage = output;
+        blossomItem.outputMessage = output;
         return;
     }
 

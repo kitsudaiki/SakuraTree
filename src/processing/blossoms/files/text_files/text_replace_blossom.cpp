@@ -22,6 +22,7 @@
 
 #include "text_replace_blossom.h"
 #include <processing/blossoms/files/file_methods.h>
+#include <libKitsunemimiPersistence/files/text_file.h>
 
 namespace SakuraTree
 {
@@ -35,8 +36,19 @@ TextReplaceBlossom::TextReplaceBlossom()
 void
 TextReplaceBlossom::initTask(BlossomItem &blossomItem)
 {
-    blossomItem.success = true;
-}
+    if(blossomItem.groupValues.contains("file_path") == false
+            || blossomItem.inputValues.contains("old_text") == false
+            || blossomItem.inputValues.contains("new_text") == false)
+    {
+        blossomItem.success = false;
+        return;
+    }
+
+    m_filePath = blossomItem.inputValues.getStringByKey("file_path");
+    m_oldText = blossomItem.inputValues.getStringByKey("old_text");
+    m_newText = blossomItem.inputValues.getStringByKey("new_text");
+
+    blossomItem.success = true;}
 
 /**
  * @brief preCheck
@@ -44,6 +56,24 @@ TextReplaceBlossom::initTask(BlossomItem &blossomItem)
 void
 TextReplaceBlossom::preCheck(BlossomItem &blossomItem)
 {
+    if(doesPathExist(m_filePath) == false)
+    {
+        blossomItem.success = false;
+        blossomItem.outputMessage = "TEXT REPLACE FAILED: path "
+                                   + m_filePath
+                                   + " doesn't exist";
+        return;
+    }
+
+    if(doesFileExist(m_filePath) == false)
+    {
+        blossomItem.success = false;
+        blossomItem.outputMessage = "TEXT REPLACE FAILED: path "
+                                   + m_filePath
+                                   + " is not a file";
+        return;
+    }
+
     blossomItem.success = true;
 }
 
@@ -53,6 +83,16 @@ TextReplaceBlossom::preCheck(BlossomItem &blossomItem)
 void
 TextReplaceBlossom::runTask(BlossomItem &blossomItem)
 {
+    std::pair<bool, std::string> result;
+    result = Kitsunemimi::Persistence::replaceContent(m_filePath, m_oldText, m_newText);
+
+    if(result.first == false)
+    {
+        blossomItem.success = false;
+        blossomItem.outputMessage = "TEXT REPLACE FAILED: " + result.second;
+        return;
+    }
+
     blossomItem.success = true;
 }
 

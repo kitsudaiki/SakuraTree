@@ -54,7 +54,7 @@ FileDeleteBlossom::preCheck(BlossomItem &blossomItem)
     if(doesFileExist(m_filePath) == false)
     {
         blossomItem.success = false;
-        blossomItem.errorMessage = "file doesn't exist: " + m_filePath;
+        blossomItem.outputMessage = "file doesn't exist: " + m_filePath;
         return;
     }
 
@@ -72,7 +72,7 @@ FileDeleteBlossom::runTask(BlossomItem &blossomItem)
     if(result == false)
     {
         blossomItem.success = false;
-        blossomItem.errorMessage = "wasn't able to delete file: " + m_filePath;
+        blossomItem.outputMessage = "wasn't able to delete file: " + m_filePath;
         return;
     }
 
@@ -88,7 +88,7 @@ FileDeleteBlossom::postCheck(BlossomItem &blossomItem)
     if(doesFileExist(m_filePath))
     {
         blossomItem.success = false;
-        blossomItem.errorMessage = "file still exist: " + m_filePath;
+        blossomItem.outputMessage = "file still exist: " + m_filePath;
         return;
     }
 

@@ -64,7 +64,6 @@ runSyncProcess(BlossomItem &blossomItem,
         std::cout<<"call: "<<call<<std::endl;
     }
 
-    std::string data = "";
     FILE* stream = nullptr;
 
     const uint32_t max_buffer = 256;
@@ -77,14 +76,14 @@ runSyncProcess(BlossomItem &blossomItem,
         while(!feof(stream))
         {
             if(fgets(buffer, max_buffer, stream) != nullptr) {
-                data.append(buffer);
+                blossomItem.processOutput.append(buffer);
             }
         }
         blossomItem.execState = pclose(stream);
     }
     else
     {
-        blossomItem.errorMessage = "can not execute programm: " + programm;
+        blossomItem.outputMessage = "can not execute programm: " + programm;
         blossomItem.success = false;
 
         return false;
@@ -96,12 +95,11 @@ runSyncProcess(BlossomItem &blossomItem,
                  <<blossomItem.execState
                  <<std::endl;
 
-        if(data.size() < 10000){
-            std::cout<<data<<std::endl;
+        if(blossomItem.processOutput.size() < 10000){
+            std::cout<<blossomItem.processOutput<<std::endl;
         }
     }
 
-    blossomItem.outputMessage = data;
     if(blossomItem.execState != 0)
     {
         blossomItem.success = false;

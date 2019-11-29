@@ -41,6 +41,8 @@ protected:
 
 private:
     std::string m_filePath = "";
+    std::string m_oldText = "";
+    std::string m_newText = "";
 };
 
 }

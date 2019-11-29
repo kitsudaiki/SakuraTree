@@ -22,6 +22,7 @@
 
 #include "text_read_blossom.h"
 #include <processing/blossoms/files/file_methods.h>
+#include <libKitsunemimiPersistence/files/text_file.h>
 
 namespace SakuraTree
 {
@@ -35,6 +36,14 @@ TextReadBlossom::TextReadBlossom() :
 void
 TextReadBlossom::initTask(BlossomItem &blossomItem)
 {
+    if(blossomItem.groupValues.contains("file_path") == false)
+    {
+        blossomItem.success = false;
+        return;
+    }
+
+    m_filePath = blossomItem.inputValues.getStringByKey("file_path");
+
     blossomItem.success = true;
 }
 
@@ -44,6 +53,24 @@ TextReadBlossom::initTask(BlossomItem &blossomItem)
 void
 TextReadBlossom::preCheck(BlossomItem &blossomItem)
 {
+    if(doesPathExist(m_filePath) == false)
+    {
+        blossomItem.success = false;
+        blossomItem.outputMessage = "TEXT READ FAILED: path "
+                                   + m_filePath
+                                   + " doesn't exist";
+        return;
+    }
+
+    if(doesFileExist(m_filePath) == false)
+    {
+        blossomItem.success = false;
+        blossomItem.outputMessage = "TEXT READ FAILED: path "
+                                   + m_filePath
+                                   + " is not a file";
+        return;
+    }
+
     blossomItem.success = true;
 }
 
@@ -53,6 +80,17 @@ TextReadBlossom::preCheck(BlossomItem &blossomItem)
 void
 TextReadBlossom::runTask(BlossomItem &blossomItem)
 {
+    std::pair<bool, std::string> result;
+    result = Kitsunemimi::Persistence::readFile(m_filePath);
+
+    if(result.first == false)
+    {
+        blossomItem.success = false;
+        blossomItem.outputMessage = "TEXT READ FAILED: " + result.second;
+        return;
+    }
+
+    blossomItem.blossomOutput = new DataValue(result.second);
     blossomItem.success = true;
 }
 

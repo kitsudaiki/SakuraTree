@@ -41,7 +41,7 @@ SshCmdBlossom::initTask(BlossomItem &blossomItem)
             || blossomItem.inputValues.contains("command") == false)
     {
         blossomItem.success = false;
-        blossomItem.errorMessage = "missing connection informations";
+        blossomItem.outputMessage = "missing connection informations";
         return;
     }
 

@@ -41,6 +41,7 @@ protected:
 
 private:
     std::string m_filePath = "";
+    std::string m_text = "";
 };
 
 }
