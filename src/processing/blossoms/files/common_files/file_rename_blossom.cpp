@@ -78,7 +78,7 @@ FileRenameBlossom::preCheck(BlossomItem &blossomItem)
     if(doesPathExist(m_filePath) == false)
     {
         blossomItem.success = false;
-        blossomItem.errorMessage = "RENAME FAILED: source-path "
+        blossomItem.outputMessage = "RENAME FAILED: source-path "
                                    + m_filePath
                                    + " doesn't exist";
         return;
@@ -98,7 +98,7 @@ FileRenameBlossom::runTask(BlossomItem &blossomItem)
     if(renameResult.first == false)
     {
         blossomItem.success = false;
-        blossomItem.errorMessage = "RENAME FAILED: " + renameResult.second;
+        blossomItem.outputMessage = "RENAME FAILED: " + renameResult.second;
         return;
     }
 
@@ -114,14 +114,14 @@ FileRenameBlossom::postCheck(BlossomItem &blossomItem)
     if(doesFileExist(m_filePath))
     {
         blossomItem.success = false;
-        blossomItem.errorMessage = "RENAME FAILED: old object still exist";
+        blossomItem.outputMessage = "RENAME FAILED: old object still exist";
         return;
     }
 
     if(doesPathExist(m_newFilePath) == false)
     {
         blossomItem.success = false;
-        blossomItem.errorMessage = "RENAME FAILED: was not able to rename from "
+        blossomItem.outputMessage = "RENAME FAILED: was not able to rename from "
                                    + m_filePath
                                    + " to "
                                    + m_newFileName;

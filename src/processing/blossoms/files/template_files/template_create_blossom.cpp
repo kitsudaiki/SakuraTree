@@ -70,7 +70,7 @@ TemplateCreateBlossom::preCheck(BlossomItem &blossomItem)
     if(doesPathExist(m_templatePath) == false)
     {
         blossomItem.success = false;
-        blossomItem.errorMessage = "CREATE FROM TEMPLATE FAILED: template-path "
+        blossomItem.outputMessage = "CREATE FROM TEMPLATE FAILED: template-path "
                                    + m_templatePath
                                    + " doesn't exist";
         return;
@@ -81,7 +81,7 @@ TemplateCreateBlossom::preCheck(BlossomItem &blossomItem)
     if(results.first == false)
     {
         blossomItem.success = false;
-        blossomItem.errorMessage = "CREATE FROM TEMPLATE FAILED: couldn't read template-file "
+        blossomItem.outputMessage = "CREATE FROM TEMPLATE FAILED: couldn't read template-file "
                                    + m_templatePath +
                                    " with reason: "
                                    + results.second;
@@ -93,7 +93,7 @@ TemplateCreateBlossom::preCheck(BlossomItem &blossomItem)
     if(results.first == false)
     {
         blossomItem.success = false;
-        blossomItem.errorMessage = "CREATE FROM TEMPLATE FAILED: couldn't convert template-file "
+        blossomItem.outputMessage = "CREATE FROM TEMPLATE FAILED: couldn't convert template-file "
                                    + m_templatePath +
                                    " with reason: "
                                    + results.second;
@@ -131,7 +131,7 @@ TemplateCreateBlossom::runTask(BlossomItem &blossomItem)
     if(results.first == false)
     {
         blossomItem.success = false;
-        blossomItem.errorMessage = "CREATE FROM TEMPLATE FAILED: couldn't write file "
+        blossomItem.outputMessage = "CREATE FROM TEMPLATE FAILED: couldn't write file "
                                    + m_destinationPath +
                                    " with reason: "
                                    + results.second;

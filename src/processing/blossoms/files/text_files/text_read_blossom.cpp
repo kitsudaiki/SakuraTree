@@ -1,5 +1,5 @@
 /**
- * @file        file_delete_blossom.cpp
+ * @file        text_read_blossom.cpp
  *
  * @author      Tobias Anker <tobias.anker@kitsunemimi.moe>
  *
@@ -20,28 +20,30 @@
  *      limitations under the License.
  */
 
-#include "file_delete_blossom.h"
+#include "text_read_blossom.h"
 #include <processing/blossoms/files/file_methods.h>
+#include <libKitsunemimiPersistence/files/text_file.h>
 
 namespace SakuraTree
 {
 
-FileDeleteBlossom::FileDeleteBlossom() :
+TextReadBlossom::TextReadBlossom() :
     Blossom() {}
 
 /**
  * @brief initTask
  */
 void
-FileDeleteBlossom::initTask(BlossomItem &blossomItem)
+TextReadBlossom::initTask(BlossomItem &blossomItem)
 {
-    if(blossomItem.inputValues.contains("file_path") == false)
+    if(blossomItem.groupValues.contains("file_path") == false)
     {
         blossomItem.success = false;
         return;
     }
 
-    m_filePath = blossomItem.inputValues.getStringByKey("file_path");
+    m_filePath = blossomItem.groupValues.getStringByKey("file_path");
+
     blossomItem.success = true;
 }
 
@@ -49,12 +51,23 @@ FileDeleteBlossom::initTask(BlossomItem &blossomItem)
  * @brief preCheck
  */
 void
-FileDeleteBlossom::preCheck(BlossomItem &blossomItem)
+TextReadBlossom::preCheck(BlossomItem &blossomItem)
 {
+    if(doesPathExist(m_filePath) == false)
+    {
+        blossomItem.success = false;
+        blossomItem.outputMessage = "TEXT READ FAILED: path "
+                                   + m_filePath
+                                   + " doesn't exist";
+        return;
+    }
+
     if(doesFileExist(m_filePath) == false)
     {
         blossomItem.success = false;
-        blossomItem.outputMessage = "file doesn't exist: " + m_filePath;
+        blossomItem.outputMessage = "TEXT READ FAILED: path "
+                                   + m_filePath
+                                   + " is not a file";
         return;
     }
 
@@ -65,17 +78,19 @@ FileDeleteBlossom::preCheck(BlossomItem &blossomItem)
  * @brief runTask
  */
 void
-FileDeleteBlossom::runTask(BlossomItem &blossomItem)
+TextReadBlossom::runTask(BlossomItem &blossomItem)
 {
-    const bool result = deleteFileOrDir(m_filePath);
+    std::pair<bool, std::string> result;
+    result = Kitsunemimi::Persistence::readFile(m_filePath);
 
-    if(result == false)
+    if(result.first == false)
     {
         blossomItem.success = false;
-        blossomItem.outputMessage = "wasn't able to delete file: " + m_filePath;
+        blossomItem.outputMessage = "TEXT READ FAILED: " + result.second;
         return;
     }
 
+    blossomItem.blossomOutput = new DataValue(result.second);
     blossomItem.success = true;
 }
 
@@ -83,14 +98,8 @@ FileDeleteBlossom::runTask(BlossomItem &blossomItem)
  * @brief postCheck
  */
 void
-FileDeleteBlossom::postCheck(BlossomItem &blossomItem)
+TextReadBlossom::postCheck(BlossomItem &blossomItem)
 {
-    if(doesFileExist(m_filePath))
-    {
-        blossomItem.success = false;
-        blossomItem.outputMessage = "file still exist: " + m_filePath;
-        return;
-    }
 
     blossomItem.success = true;
 }
@@ -99,7 +108,7 @@ FileDeleteBlossom::postCheck(BlossomItem &blossomItem)
  * @brief closeTask
  */
 void
-FileDeleteBlossom::closeTask(BlossomItem &blossomItem)
+TextReadBlossom::closeTask(BlossomItem &blossomItem)
 {
     blossomItem.success = true;
 }

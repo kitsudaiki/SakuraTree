@@ -90,21 +90,26 @@ public:
     BlossomItem();
     ~BlossomItem();
 
+    std::string blossomGroupType = "";
+    std::string blossomType = "";
+    std::string blossomPath = "";
+
     DataMap groupValues;
     DataMap inputValues;
     DataMap outputValues;
 
-    std::string blossomGroupType = "";
-    std::string blossomType = "";
-    std::string blossomPath = "";
+    DataItem* blossomOutput = nullptr;
+
+    // process
+    int execState = 0;
+    std::string processOutput = "";
+    std::string processError = "";
 
     // result
     BlossomStates resultState = UNDEFINED_STATE;
     std::vector<std::string> nameHirarchie;
     bool skip = false;
     bool success = true;
-    int execState = 0;
-    std::string errorMessage = "";
     std::string outputMessage = "";
 };
 

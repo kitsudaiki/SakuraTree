@@ -1,5 +1,5 @@
 /**
- * @file        defines.h
+ * @file        text_write_blossom.h
  *
  * @author      Tobias Anker <tobias.anker@kitsunemimi.moe>
  *
@@ -20,12 +20,34 @@
  *      limitations under the License.
  */
 
-#ifndef DEFINES_H
-#define DEFINES_H
+#ifndef TEXT_WRITE_BLOSSOM_H
+#define TEXT_WRITE_BLOSSOM_H
 
-#include <common/includes.h>
+#include <processing/blossoms/blossom.h>
 
-#define DEBUG false
-#define RUN_UNIT_TEST
+namespace SakuraTree
+{
+class TextWriteBlossom_Test;
 
-#endif // DEFINES_H
+class TextWriteBlossom : public Blossom
+{
+public:
+    TextWriteBlossom();
+
+protected:
+    void initTask(BlossomItem &blossomItem);
+    void preCheck(BlossomItem &blossomItem);
+    void runTask(BlossomItem &blossomItem);
+    void postCheck(BlossomItem &blossomItem);
+    void closeTask(BlossomItem &blossomItem);
+
+private:
+    friend TextWriteBlossom_Test;
+
+    std::string m_filePath = "";
+    std::string m_text = "";
+};
+
+}
+
+#endif // TEXT_WRITE_BLOSSOM_H

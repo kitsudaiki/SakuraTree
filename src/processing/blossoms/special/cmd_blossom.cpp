@@ -37,7 +37,7 @@ CmdBlossom::initTask(BlossomItem &blossomItem)
     if(blossomItem.inputValues.contains("command") == false)
     {
         blossomItem.success = false;
-        blossomItem.errorMessage = "no command specified";
+        blossomItem.outputMessage = "no command specified";
         return;
     }
 

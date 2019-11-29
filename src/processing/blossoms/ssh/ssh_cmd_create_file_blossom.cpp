@@ -43,7 +43,7 @@ SshCmdCreateFileBlossom::initTask(BlossomItem &blossomItem)
             || blossomItem.inputValues.contains("file_content") == false)
     {
         blossomItem.success = false;
-        blossomItem.errorMessage = "missing connection informations";
+        blossomItem.outputMessage = "missing connection informations";
     }
 
     blossomItem.success = true;

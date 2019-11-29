@@ -43,6 +43,11 @@
 
 #include <processing/blossoms/files/template_files/template_create_blossom.h>
 
+#include <processing/blossoms/files/text_files/text_append_blossom.h>
+#include <processing/blossoms/files/text_files/text_read_blossom.h>
+#include <processing/blossoms/files/text_files/text_replace_blossom.h>
+#include <processing/blossoms/files/text_files/text_write_blossom.h>
+
 namespace SakuraTree
 {
 
@@ -117,6 +122,22 @@ getBlossom(const std::string type,
         }
         if(subType == "delete") {
             return new FileDeleteBlossom();
+        }
+    }
+
+    if(type == "text_file")
+    {
+        if(subType == "read") {
+            return new TextReadBlossom();
+        }
+        if(subType == "write") {
+            return new TextWriteBlossom();
+        }
+        if(subType == "replace") {
+            return new TextReplaceBlossom();
+        }
+        if(subType == "append") {
+            return new TextAppendBlossom();
         }
     }
 

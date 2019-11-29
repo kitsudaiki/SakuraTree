@@ -138,7 +138,7 @@ SakuraCompiler::convertBlossom(JsonItem &growPlan)
         if(array->get(i)->get("type")->toString() == "output")
         {
             blossomItem->outputValues.insert(array->get(i)->get("key")->toString(),
-                                            array->get(i)->get("value")->copy());
+                                             array->get(i)->get("value")->copy());
         }
         // TODO: check that no compare is allowed here
     }

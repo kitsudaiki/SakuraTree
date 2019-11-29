@@ -108,7 +108,7 @@ SakuraThread::grow(SakuraItem* growPlan,
         std::pair<bool, std::string> result = fillItems(blossomItem->inputValues, values);
         if(result.first == false)
         {
-            blossomItem->errorMessage = result.second;
+            blossomItem->outputMessage = result.second;
             blossomItem->success = false;
             m_abort = true;
             return;

@@ -182,12 +182,12 @@ convertBlossomOutput(const BlossomItem &blossom)
     }
 
     // print error-output
-    if(blossom.errorMessage.size() > 0
+    if(blossom.outputMessage.size() > 0
             && blossom.resultState >= 3)
     {
         // TODO: red error output
         output += "\n";
-        output += blossom.errorMessage + "\n";
+        output += blossom.outputMessage + "\n";
     }
 
     // print error-output

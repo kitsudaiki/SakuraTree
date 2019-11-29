@@ -63,7 +63,7 @@ FileCopyBlossom::preCheck(BlossomItem &blossomItem)
     if(doesPathExist(m_sourcePath) == false)
     {
         blossomItem.success = false;
-        blossomItem.errorMessage = "COPY FAILED: source-path "
+        blossomItem.outputMessage = "COPY FAILED: source-path "
                                    + m_sourcePath
                                    + " doesn't exist";
         return;
@@ -91,7 +91,7 @@ FileCopyBlossom::runTask(BlossomItem &blossomItem)
     if(copyResult.first == false)
     {
         blossomItem.success = false;
-        blossomItem.errorMessage = "COPY FAILED: " + copyResult.second;
+        blossomItem.outputMessage = "COPY FAILED: " + copyResult.second;
         return;
     }
 
@@ -107,7 +107,7 @@ FileCopyBlossom::postCheck(BlossomItem &blossomItem)
     if(doesPathExist(m_destinationPath) == false)
     {
         blossomItem.success = false;
-        blossomItem.errorMessage = "COPY FAILED: was not able to copy from "
+        blossomItem.outputMessage = "COPY FAILED: was not able to copy from "
                                    + m_sourcePath
                                    + " to "
                                    + m_destinationPath;

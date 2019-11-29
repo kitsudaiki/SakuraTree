@@ -1,5 +1,5 @@
 /**
- * @file        defines.h
+ * @file        text_read_blossom_test.h
  *
  * @author      Tobias Anker <tobias.anker@kitsunemimi.moe>
  *
@@ -20,12 +20,33 @@
  *      limitations under the License.
  */
 
-#ifndef DEFINES_H
-#define DEFINES_H
+#ifndef TEXT_READ_BLOSSOM_TEST_H
+#define TEXT_READ_BLOSSOM_TEST_H
 
-#include <common/includes.h>
+#include <common.h>
+#include <libKitsunemimiCommon/test.h>
 
-#define DEBUG false
-#define RUN_UNIT_TEST
+namespace SakuraTree
+{
 
-#endif // DEFINES_H
+class TextReadBlossom_Test
+        : public Kitsunemimi::Common::Test
+{
+public:
+    TextReadBlossom_Test();
+
+private:
+    void initTestCase();
+    void initTask_test();
+    void preCheck_test();
+    void runTask_test();
+    void postCheck_test();
+    void closeTask_test();
+
+    std::string m_path = "";
+    std::string m_text = "";
+};
+
+}
+
+#endif // TEXT_READ_BLOSSOM_TEST_H
