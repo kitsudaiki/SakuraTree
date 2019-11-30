@@ -201,6 +201,7 @@ Example-Branch, which is called by the Tree.
 ```cpp
 [install_branch]
 - packages = nano
+- test_output = ""
 
 apt("update and install")  
 -> update
@@ -218,11 +219,8 @@ if(packages == nano)
        - names = "{{packages}}"
 
     apt("install via apt")
-    -> present >> test_output:
+    -> present:
        - names = "{{packages}}"
-
-    print("test output")
-    - output = "{{test_output}}"
 
     file("copy a testfile")
     -> copy:
@@ -235,6 +233,14 @@ if(packages == nano)
     -> create:
        - checker = 42
        - name = "test-template"
+
+    text_file("read template")
+    - file_path = "/tmp/test_template"
+    -> read:
+       - blossom_output >> test_output
+
+    print("test output")
+    - output = "{{test_output}}"
 }
 else
 {
