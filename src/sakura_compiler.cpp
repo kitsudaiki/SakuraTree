@@ -191,11 +191,13 @@ SakuraCompiler::convertBlossomGroup(JsonItem &growPlan,
         BlossomItem* blossomItem =  new BlossomItem();
         blossomItem->blossomPath = growPlan.get("b_path").toString();
         blossomItem->blossomType = growPlan.get("blossom-group-type").toString();
+        blossomItem->parent = parent;
 
         DataArray* array = growPlan.get("items-input").getItemContent()->toArray();
         for(uint32_t i = 0; i < array->size(); i++)
         {
-            if(array->get(i)->get("type")->toString() == "assign")
+            if(array->get(i)->get("type")->toString() == "assign"
+                    || array->get(i)->get("type")->toString() == "compare")
             {
                 blossomItem->inputValues.insert(array->get(i)->get("key")->toString(),
                                                 array->get(i)->get("value")->copy());
@@ -339,6 +341,9 @@ SakuraCompiler::convertIf(JsonItem &growPlan,
     if(growPlan.get("if_type").getString() == "==") {
         newItem->ifType = IfBranching::EQUAL;
     }
+    if(growPlan.get("if_type").getString() == "!=") {
+        newItem->ifType = IfBranching::UNEQUAL;
+    }
     if(growPlan.get("if_type").getString() == ">=") {
         newItem->ifType = IfBranching::GREATER_EQUAL;
     }
@@ -350,9 +355,6 @@ SakuraCompiler::convertIf(JsonItem &growPlan,
     }
     if(growPlan.get("if_type").getString() == "<") {
         newItem->ifType = IfBranching::SMALLER;
-    }
-    if(growPlan.get("if_type").getString() == "!=") {
-        newItem->ifType = IfBranching::UNEQUAL;
     }
 
     JsonItem if_parts = growPlan.get("if_parts");
