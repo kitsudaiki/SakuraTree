@@ -62,6 +62,8 @@ public:
     virtual ~SakuraItem();
 
     SakuraItem* parent = nullptr;
+    DataMap inputValues;
+    DataMap outputValues;
 
     ItemType getType() const;
 
@@ -95,9 +97,6 @@ public:
     std::string blossomPath = "";
 
     DataMap groupValues;
-    DataMap inputValues;
-    DataMap outputValues;
-
     DataItem* blossomOutput = nullptr;
 
     // process
@@ -157,9 +156,6 @@ public:
     ~TreeItem();
 
     std::string id = "";
-    DataMap inputValues;
-    DataMap outputValues;
-
     std::vector<SakuraItem*> childs;
 };
 
@@ -173,9 +169,6 @@ public:
     ~BranchItem();
 
     std::string id = "";
-    DataMap inputValues;
-    DataMap outputValues;
-
     std::vector<SakuraItem*> childs;
 };
 

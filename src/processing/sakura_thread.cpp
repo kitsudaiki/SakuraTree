@@ -42,7 +42,6 @@ SakuraThread::SakuraThread(SakuraItem* growPlan,
     m_values = values;
     m_growPlan = growPlan;
     m_hirarchie = hierarchy;
-    m_returnValues = DataMap();
 }
 
 /**
@@ -83,7 +82,7 @@ void
 SakuraThread::run()
 {
     m_started = true;
-    grow(m_growPlan, m_values, m_hirarchie, m_returnValues);
+    grow(m_growPlan, m_values, m_hirarchie);
 }
 
 /**
@@ -92,8 +91,7 @@ SakuraThread::run()
 void
 SakuraThread::grow(SakuraItem* growPlan,
                    DataMap &values,
-                   const std::vector<std::string> &hierarchy,
-                   DataMap &returnValues)
+                   const std::vector<std::string> &hierarchy)
 {
     if(m_abort) {
         return;
@@ -103,7 +101,6 @@ SakuraThread::grow(SakuraItem* growPlan,
     {
         BlossomItem* blossomItem = dynamic_cast<BlossomItem*>(growPlan);
         std::vector<std::string> newHierarchy = hierarchy;
-        overrideItems(values, returnValues);
 
         std::pair<bool, std::string> result = fillItems(blossomItem->inputValues, values);
         if(result.first == false)
@@ -116,8 +113,11 @@ SakuraThread::grow(SakuraItem* growPlan,
 
         processBlossom(*blossomItem,
                        blossomItem->inputValues,
-                       newHierarchy,
-                       returnValues);
+                       newHierarchy);
+
+        overrideItems(blossomItem->parent->inputValues, blossomItem->outputValues);
+        overrideItems(blossomItem->parent->outputValues, blossomItem->outputValues);
+
         return;
     }
 
@@ -129,8 +129,7 @@ SakuraThread::grow(SakuraItem* growPlan,
 
         processBlossomGroup(*blossomGroupItem,
                             values,
-                            newHierarchy,
-                            returnValues);
+                            newHierarchy);
         return;
     }
 
@@ -150,12 +149,10 @@ SakuraThread::grow(SakuraItem* growPlan,
 
         processBranch(branchItem,
                       branchItem->inputValues,
-                      newHierarchy,
-                      returnValues);
+                      newHierarchy);
 
-        overrideItems(branchItem->inputValues, returnValues);
-        overrideItems(branchItem->outputValues, returnValues);
-        returnValues = branchItem->outputValues;
+        overrideItems(branchItem->parent->inputValues, branchItem->outputValues);
+        overrideItems(branchItem->parent->outputValues, branchItem->outputValues);
 
         return;
     }
@@ -176,12 +173,10 @@ SakuraThread::grow(SakuraItem* growPlan,
 
         processTree(treeItem,
                     treeItem->inputValues,
-                    newHierarchy,
-                    returnValues);
+                    newHierarchy);
 
-        overrideItems(treeItem->inputValues, returnValues);
-        overrideItems(treeItem->outputValues, returnValues);
-        returnValues = treeItem->outputValues;
+        overrideItems(treeItem->parent->inputValues, treeItem->outputValues);
+        overrideItems(treeItem->parent->outputValues, treeItem->outputValues);
 
         return;
     }
@@ -190,8 +185,7 @@ SakuraThread::grow(SakuraItem* growPlan,
     {
         processIf(dynamic_cast<IfBranching*>(growPlan),
                   values,
-                  hierarchy,
-                  returnValues);
+                  hierarchy);
         return;
     }
 
@@ -199,8 +193,7 @@ SakuraThread::grow(SakuraItem* growPlan,
     {
         processSequeniellPart(dynamic_cast<SequeniellBranching*>(growPlan),
                               values,
-                              hierarchy,
-                              returnValues);
+                              hierarchy);
         return;
     }
 
@@ -208,8 +201,7 @@ SakuraThread::grow(SakuraItem* growPlan,
     {
         processParallelPart(dynamic_cast<ParallelBranching*>(growPlan),
                             values,
-                            hierarchy,
-                            returnValues);
+                            hierarchy);
         return;
     }
 
@@ -219,8 +211,7 @@ SakuraThread::grow(SakuraItem* growPlan,
         BranchItem* branchItem = dynamic_cast<BranchItem*>(forestItem->child);
         processBranch(branchItem,
                       values,
-                      hierarchy,
-                      returnValues);
+                      hierarchy);
     }
 
     return;
@@ -232,8 +223,7 @@ SakuraThread::grow(SakuraItem* growPlan,
 void
 SakuraThread::processBlossom(BlossomItem &growPlan,
                              DataMap &values,
-                             const std::vector<std::string> &hierarchy,
-                             DataMap &returnValues)
+                             const std::vector<std::string> &hierarchy)
 {
     // init
     growPlan.inputValues = *(values.copy()->toMap());
@@ -248,8 +238,6 @@ SakuraThread::processBlossom(BlossomItem &growPlan,
     if(growPlan.success == false){
         m_abort = true;
     }
-
-    returnValues = growPlan.outputValues;
 
     // send result to root
     SakuraRoot::m_root->printOutput(growPlan);
@@ -266,8 +254,7 @@ SakuraThread::processBlossom(BlossomItem &growPlan,
 void
 SakuraThread::processBlossomGroup(BlossomGroupItem &growPlan,
                                   DataMap &values,
-                                  const std::vector<std::string> &hierarchy,
-                                  DataMap &returnValues)
+                                  const std::vector<std::string> &hierarchy)
 {
     for(uint32_t i = 0; i < growPlan.blossoms.size(); i++)
     {
@@ -276,8 +263,7 @@ SakuraThread::processBlossomGroup(BlossomGroupItem &growPlan,
 
         grow(blossomItem,
              values,
-             hierarchy,
-             returnValues);
+             hierarchy);
     }
 
     return;
@@ -289,15 +275,13 @@ SakuraThread::processBlossomGroup(BlossomGroupItem &growPlan,
 void
 SakuraThread::processBranch(BranchItem* growPlan,
                             DataMap &values,
-                            const std::vector<std::string> &hierarchy,
-                            DataMap &returnValues)
+                            const std::vector<std::string> &hierarchy)
 {
     for(uint32_t i = 0; i < growPlan->childs.size(); i++)
     {
         grow(growPlan->childs.at(i),
              values,
-             hierarchy,
-             returnValues);
+             hierarchy);
     }
 
     return;
@@ -309,15 +293,13 @@ SakuraThread::processBranch(BranchItem* growPlan,
 void
 SakuraThread::processTree(TreeItem* growPlan,
                           DataMap &values,
-                          const std::vector<std::string> &hierarchy,
-                          DataMap &returnValues)
+                          const std::vector<std::string> &hierarchy)
 {
     for(uint32_t i = 0; i < growPlan->childs.size(); i++)
     {
         grow(growPlan->childs.at(i),
              values,
-             hierarchy,
-             returnValues);
+             hierarchy);
     }
 
     return;
@@ -332,8 +314,7 @@ SakuraThread::processTree(TreeItem* growPlan,
 void
 SakuraThread::processIf(IfBranching* growPlan,
                         DataMap &values,
-                        const std::vector<std::string> &hierarchy,
-                        DataMap &returnValues)
+                        const std::vector<std::string> &hierarchy)
 {
     bool ifMatch = false;
 
@@ -363,8 +344,7 @@ SakuraThread::processIf(IfBranching* growPlan,
         {
             grow(growPlan->ifChilds.at(i),
                  values,
-                 hierarchy,
-                 returnValues);
+                 hierarchy);
         }
     }
     else
@@ -373,8 +353,7 @@ SakuraThread::processIf(IfBranching* growPlan,
         {
             grow(growPlan->elseChilds.at(i),
                  values,
-                 hierarchy,
-                 returnValues);
+                 hierarchy);
         }
     }
 }
@@ -385,15 +364,13 @@ SakuraThread::processIf(IfBranching* growPlan,
 void
 SakuraThread::processSequeniellPart(SequeniellBranching* growPlan,
                                     DataMap &values,
-                                    const std::vector<std::string> &hierarchy,
-                                    DataMap &returnValues)
+                                    const std::vector<std::string> &hierarchy)
 {
     for(uint32_t i = 0; i < growPlan->childs.size(); i++)
     {
         grow(growPlan->childs.at(i),
              values,
-             hierarchy,
-             returnValues);
+             hierarchy);
     }
 
     return;
@@ -405,8 +382,7 @@ SakuraThread::processSequeniellPart(SequeniellBranching* growPlan,
 void
 SakuraThread::processParallelPart(ParallelBranching* growPlan,
                                   DataMap &values,
-                                  const std::vector<std::string> &hierarchy,
-                                  DataMap &returnValues)
+                                  const std::vector<std::string> &hierarchy)
 {
     // create and initialize all threads
     for(uint32_t i = 0; i < growPlan->childs.size(); i++)

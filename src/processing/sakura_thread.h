@@ -52,51 +52,42 @@ private:
 
     SakuraItem* m_growPlan;
     DataMap m_values;
-    DataMap m_returnValues;
     std::vector<std::string> m_hirarchie;
 
     void run();
 
     void grow(SakuraItem* growPlan,
               DataMap &values,
-              const std::vector<std::string> &hierarchy,
-              DataMap &returnValues);
+              const std::vector<std::string> &hierarchy);
 
     void processBlossom(BlossomItem &growPlan,
                         DataMap &values,
-                        const std::vector<std::string> &hierarchy,
-                        DataMap &returnValues);
+                        const std::vector<std::string> &hierarchy);
 
     void processBlossomGroup(BlossomGroupItem &growPlan,
                              DataMap &values,
-                             const std::vector<std::string> &hierarchy,
-                             DataMap &returnValues);
+                             const std::vector<std::string> &hierarchy);
 
     void processBranch(BranchItem* growPlan,
                        DataMap &values,
-                       const std::vector<std::string> &hierarchy,
-                       DataMap &returnValues);
+                       const std::vector<std::string> &hierarchy);
 
     void processTree(TreeItem* growPlan,
                      DataMap &values,
-                     const std::vector<std::string> &hierarchy,
-                     DataMap &returnValues);
+                     const std::vector<std::string> &hierarchy);
 
     void processIf(IfBranching* growPlan,
                    DataMap &values,
-                   const std::vector<std::string> &hierarchy,
-                   DataMap &returnValues);
+                   const std::vector<std::string> &hierarchy);
 
 
     void processSequeniellPart(SequeniellBranching* growPlan,
                                DataMap &values,
-                               const std::vector<std::string> &hierarchy,
-                               DataMap &returnValues);
+                               const std::vector<std::string> &hierarchy);
 
     void processParallelPart(ParallelBranching* growPlan,
                              DataMap &values,
-                             const std::vector<std::string> &hierarchy,
-                             DataMap &returnValues);
+                             const std::vector<std::string> &hierarchy);
 
     void clearChilds();
 };

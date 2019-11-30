@@ -160,7 +160,7 @@ getInstalledPackages(BlossomItem &blossomItem)
     std::string command = "dpkg --list | grep ^ii  | awk ' {print \\$2} '";
     BlossomItem tempItem;
     runSyncProcess(tempItem, command);
-    const std::string output(tempItem.outputMessage);
+    const std::string output(tempItem.processOutput);
     return Kitsunemimi::Common::splitStringByDelimiter(output, '\n');
 }
 

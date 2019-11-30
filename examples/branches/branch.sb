@@ -1,6 +1,6 @@
 [install_branch]
 - packages = nano
-- test_output2 = "this is a test"
+- test_output = ""
 
 apt("update and install")  
 -> update
@@ -20,10 +20,6 @@ if(packages == nano)
     apt("install via apt")
     -> present:
        - names = "{{packages}}"
-       - blossom_output >> test_output
-
-    print("test output")
-    - output = "{{test_output2}}"
 
     file("copy a testfile")
     -> copy:
@@ -36,6 +32,14 @@ if(packages == nano)
     -> create:
        - checker = 42
        - name = "test-template"
+
+    text_file("read template")
+    - file_path = "/tmp/test_template"
+    -> read:
+       - blossom_output >> test_output
+
+    print("test output")
+    - output = "{{test_output}}"
 }
 else
 {

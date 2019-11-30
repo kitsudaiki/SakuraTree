@@ -48,17 +48,26 @@ public:
     SakuraItem* compile(JsonItem &tree);
 
 private:
-    SakuraItem* convert(JsonItem &growPlan);
+    SakuraItem* convert(JsonItem &growPlan,
+                        SakuraItem* parent);
 
-    BlossomItem* convertBlossom(JsonItem &growPlan);
-    SakuraItem* convertBlossomGroup(JsonItem &growPlan);
-    SakuraItem* convertBranch(JsonItem &growPlan);
-    SakuraItem* convertTree(JsonItem &growPlan);
-    SakuraItem* convertSeed(JsonItem &growPlan);
-    SakuraItem* convertIf(JsonItem &growPlan);
+    BlossomItem* convertBlossom(JsonItem &growPlan,
+                                SakuraItem* parent);
+    SakuraItem* convertBlossomGroup(JsonItem &growPlan,
+                                    SakuraItem* parent);
+    SakuraItem* convertBranch(JsonItem &growPlan,
+                              SakuraItem* parent);
+    SakuraItem* convertTree(JsonItem &growPlan,
+                            SakuraItem* parent);
+    SakuraItem* convertSeed(JsonItem &growPlan,
+                            SakuraItem* parent);
+    SakuraItem* convertIf(JsonItem &growPlan,
+                          SakuraItem* parent);
 
-    SakuraItem* convertSequeniellPart(JsonItem &growPlan);
-    SakuraItem* convertParallelPart(JsonItem &growPlan);
+    SakuraItem* convertSequeniellPart(JsonItem &growPlan,
+                                      SakuraItem* parent);
+    SakuraItem* convertParallelPart(JsonItem &growPlan,
+                                    SakuraItem* parent);
 };
 
 }
