@@ -96,7 +96,8 @@ SOURCES += \
     tests/processing/blossoms/files/text_files/text_append_blossom_test.cpp \
     tests/processing/blossoms/files/text_files/text_read_blossom_test.cpp \
     tests/processing/blossoms/files/text_files/text_write_blossom_test.cpp \
-    tests/processing/blossoms/files/text_files/text_replace_blossom_test.cpp
+    tests/processing/blossoms/files/text_files/text_replace_blossom_test.cpp \
+    src/processing/blossoms/special/assert_blossom.cpp
 
 
 HEADERS += \
@@ -151,6 +152,7 @@ HEADERS += \
     tests/processing/blossoms/files/text_files/text_append_blossom_test.h \
     tests/processing/blossoms/files/text_files/text_read_blossom_test.h \
     tests/processing/blossoms/files/text_files/text_write_blossom_test.h \
-    tests/processing/blossoms/files/text_files/text_replace_blossom_test.h
+    tests/processing/blossoms/files/text_files/text_replace_blossom_test.h \
+    src/processing/blossoms/special/assert_blossom.h
 
 
