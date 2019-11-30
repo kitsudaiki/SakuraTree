@@ -210,6 +210,9 @@ apt("update and install")
 
 if(packages == nano)
 {
+    assert("test-assert")
+    - packages == nano
+
     apt("try to delete")
     -> absent:
        - names = "{{packages}}"
@@ -253,8 +256,6 @@ else
        - names = "{{packages}}"
 }
 ```
-
-
 
 
 ## Contributing
