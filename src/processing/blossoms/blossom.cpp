@@ -38,7 +38,7 @@ Blossom::~Blossom() {}
 void
 Blossom::growBlossom(BlossomItem &blossomItem)
 {
-    const std::vector<std::string> uninitItems = checkItems(blossomItem.inputValues);
+    const std::vector<std::string> uninitItems = checkItems(blossomItem.values);
 
     if(uninitItems.size() > 0)
     {
@@ -89,13 +89,6 @@ Blossom::growBlossom(BlossomItem &blossomItem)
     {
         blossomItem.resultState = BlossomItem::ERROR_EXEC_STATE;
         return;
-    }
-
-    // fill output-values
-    const std::vector<std::string> keys = blossomItem.outputValues.getKeys();
-    for(uint32_t i = 0; i < keys.size(); i++)
-    {
-        blossomItem.outputValues.insert(keys.at(i), blossomItem.blossomOutput, true);
     }
 
     //-------------------------------

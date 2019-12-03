@@ -24,21 +24,22 @@
 #define COMMON_METHODS_H
 
 #include <common.h>
+#include <items/sakura_items.h>
 
 using Kitsunemimi::Common::DataMap;
 namespace SakuraTree
 {
-struct BlossomItem;
 
-const std::pair<bool, std::string> fillItems(DataMap &items,
-                                             DataMap &insertValues);
+const std::pair<bool, std::string> fillItems(ValueItemMap &items,
+                                             ValueItemMap &insertValues);
 
-void overrideItems(DataMap &original,
-                   JsonItem &override);
-void overrideItems(DataMap &original,
-                   DataMap &override);
+void overrideItems(ValueItemMap &original,
+                   ValueItemMap &override);
 
-const std::vector<std::string> checkItems(DataMap &items);
+const std::vector<std::string> checkItems(ValueItemMap &items);
+
+void checkForRequiredKeys(BlossomItem &blossomItem,
+                          const std::vector<std::string> &requiredKeys);
 
 const std::string convertBlossomOutput(const BlossomItem &blossom);
 

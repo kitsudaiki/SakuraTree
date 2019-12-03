@@ -76,12 +76,12 @@ TemplateCreateBlossom_Test::initTask_test()
     fakeCreateBlossom.initTask(fakeItem);
     TEST_EQUAL(fakeItem.success, false);
 
-    fakeItem.groupValues.insert("source_path", new DataValue(m_localTemplatePath));
+    fakeItem.values.insert("source_path", new DataValue(m_localTemplatePath));
 
     fakeCreateBlossom.initTask(fakeItem);
     TEST_EQUAL(fakeItem.success, false);
 
-    fakeItem.groupValues.insert("dest_path", new DataValue(m_destinationFile));
+    fakeItem.values.insert("dest_path", new DataValue(m_destinationFile));
 
     fakeCreateBlossom.initTask(fakeItem);
     TEST_EQUAL(fakeItem.success, true);
@@ -101,8 +101,8 @@ TemplateCreateBlossom_Test::preCheck_test()
 {
     BlossomItem fakeItem;
     fakeItem.blossomPath = "/tmp/";
-    fakeItem.groupValues.insert("source_path", new DataValue(m_localTemplatePath));
-    fakeItem.groupValues.insert("dest_path", new DataValue(m_destinationFile));
+    fakeItem.values.insert("source_path", new DataValue(m_localTemplatePath));
+    fakeItem.values.insert("dest_path", new DataValue(m_destinationFile));
     TemplateCreateBlossom fakeCopyBlossom;
 
     fakeCopyBlossom.initTask(fakeItem);
@@ -116,7 +116,7 @@ TemplateCreateBlossom_Test::preCheck_test()
     TEST_EQUAL(fakeItem.success, false);
     TEST_EQUAL(fakeItem.skip, false);
 
-    fakeItem.inputValues.insert("asdf", new DataValue("poi"));
+    fakeItem.values.insert("asdf", new DataValue("poi"));
 
     fakeCopyBlossom.preCheck(fakeItem);
     TEST_EQUAL(fakeItem.success, true);
@@ -145,8 +145,8 @@ TemplateCreateBlossom_Test::runTask_test()
 {
     BlossomItem fakeItem;
     fakeItem.blossomPath = "/tmp/";
-    fakeItem.inputValues.insert("source_path", new DataValue(m_localTemplatePath));
-    fakeItem.inputValues.insert("dest_path", new DataValue(m_destinationFile));
+    fakeItem.values.insert("source_path", new DataValue(m_localTemplatePath));
+    fakeItem.values.insert("dest_path", new DataValue(m_destinationFile));
     TemplateCreateBlossom fakeCopyBlossom;
 
     fakeCopyBlossom.initTask(fakeItem);
@@ -164,8 +164,8 @@ TemplateCreateBlossom_Test::postCheck_test()
 {
     BlossomItem fakeItem;
     fakeItem.blossomPath = "/tmp/";
-    fakeItem.inputValues.insert("source_path", new DataValue(m_localTemplatePath));
-    fakeItem.inputValues.insert("dest_path", new DataValue(m_destinationFile));
+    fakeItem.values.insert("source_path", new DataValue(m_localTemplatePath));
+    fakeItem.values.insert("dest_path", new DataValue(m_destinationFile));
     TemplateCreateBlossom fakeCopyBlossom;
 
     fakeCopyBlossom.initTask(fakeItem);
@@ -186,8 +186,8 @@ TemplateCreateBlossom_Test::closeTask_test()
 {
     BlossomItem fakeItem;
     fakeItem.blossomPath = "/tmp/";
-    fakeItem.inputValues.insert("source_path", new DataValue(m_localTemplatePath));
-    fakeItem.inputValues.insert("dest_path", new DataValue(m_destinationFile));
+    fakeItem.values.insert("source_path", new DataValue(m_localTemplatePath));
+    fakeItem.values.insert("dest_path", new DataValue(m_destinationFile));
     TemplateCreateBlossom fakeCopyBlossom;
 
     fakeCopyBlossom.initTask(fakeItem);

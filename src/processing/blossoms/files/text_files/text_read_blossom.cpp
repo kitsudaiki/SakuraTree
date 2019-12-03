@@ -36,13 +36,14 @@ TextReadBlossom::TextReadBlossom() :
 void
 TextReadBlossom::initTask(BlossomItem &blossomItem)
 {
-    if(blossomItem.groupValues.contains("file_path") == false)
-    {
-        blossomItem.success = false;
+    const std::vector<std::string> requiredKeys = {"file_path"};
+
+    checkForRequiredKeys(blossomItem, requiredKeys);
+    if(blossomItem.success == false) {
         return;
     }
 
-    m_filePath = blossomItem.groupValues.getStringByKey("file_path");
+    m_filePath = blossomItem.values.getValueAsString("file_path");
 
     blossomItem.success = true;
 }

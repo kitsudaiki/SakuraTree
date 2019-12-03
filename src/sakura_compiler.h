@@ -24,6 +24,7 @@
 #define SAKURA_COMPILER_H
 
 #include <common.h>
+#include <items/value_items.h>
 
 namespace Kitsunemimi
 {
@@ -50,6 +51,11 @@ public:
 private:
     SakuraItem* convert(JsonItem &growPlan,
                         SakuraItem* parent);
+
+    void overrideItems(JsonItem &original,
+                       JsonItem &override);
+    bool convertItemPart(JsonItem &itemInput,
+                         ValueItem &itemPart);
 
     BlossomItem* convertBlossom(JsonItem &growPlan,
                                 SakuraItem* parent);

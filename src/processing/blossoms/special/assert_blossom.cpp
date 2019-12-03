@@ -54,24 +54,19 @@ AssertBlossom::preCheck(BlossomItem &blossomItem)
 void
 AssertBlossom::runTask(BlossomItem &blossomItem)
 {
-    const std::vector<std::string> keys = blossomItem.inputValues.getKeys();
-    for(uint32_t i = 0; i < keys.size(); i++)
+    std::map<std::string, ValueItem>::iterator it;
+    for(it = blossomItem.values.valueMap.begin();
+        it != blossomItem.values.valueMap.end();
+        it++)
     {
-        std::string isValue = "";
-        if(blossomItem.parent->inputValues.contains(keys.at(i))) {
-            isValue = blossomItem.parent->inputValues.get(keys.at(i))->toString();
-        }
-        if(blossomItem.parent->outputValues.contains(keys.at(i))) {
-            isValue = blossomItem.parent->outputValues.get(keys.at(i))->toString();
-        }
-
-        const std::string shouldValue = blossomItem.inputValues.get(keys.at(i))->toString();
+        const std::string isValue = blossomItem.parent->values.getValueAsString(it->first);
+        const std::string shouldValue = it->second.item->toString();
 
         if(isValue != shouldValue)
         {
             blossomItem.success = false;
             blossomItem.outputMessage = "ASSERT FAILES: the variable \""
-                                        + keys.at(i)
+                                        + it->first
                                         + "\" has the value \""
                                         + isValue
                                         + "\", but it should have the value \""

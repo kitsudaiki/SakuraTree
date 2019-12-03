@@ -25,6 +25,7 @@
 
 #include <common.h>
 #include <items/sakura_items.h>
+#include <items/item_methods.h>
 #include <processing/process_execution.h>
 
 using Kitsunemimi::Common::DataMap;

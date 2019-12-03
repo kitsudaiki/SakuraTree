@@ -48,7 +48,7 @@ createProvisionBranch(const std::string &address,
 {
     BranchItem* item = new BranchItem();
 
-    BlossomItem* updateBlossom = createAptUpdateBlossom(address,
+    /*BlossomItem* updateBlossom = createAptUpdateBlossom(address,
                                                         port,
                                                         userName,
                                                         keyPath);
@@ -80,7 +80,7 @@ createProvisionBranch(const std::string &address,
     item->childs.push_back(serviceStartBlossom);
 
     BlossomItem* copySubtreeBlossom = createCopySubtreeBlossom(address, subtree);
-    item->childs.push_back(copySubtreeBlossom);
+    item->childs.push_back(copySubtreeBlossom);*/
 
 
 
@@ -95,7 +95,7 @@ createProvisionBranch(const std::string &address,
  * @param keyPath
  * @return
  */
-BlossomItem*
+/*BlossomItem*
 createAptUpdateBlossom(const std::string &address,
                        const int port,
                        const std::string &userName,
@@ -123,7 +123,7 @@ createAptUpdateBlossom(const std::string &address,
  * @param keyPath
  * @return
  */
-BlossomItem*
+/*BlossomItem*
 createAptLatesBlossom(const std::string &address,
                       const int port,
                       const std::string &userName,
@@ -141,7 +141,7 @@ createAptLatesBlossom(const std::string &address,
     item->inputValues.insert("command", new DataValue("sudo apt-get install -y libboost-filesystem-dev libsqlite3-dev libboost-program-options-dev"));
 
     return item;
-}
+}*/
 
 
 /**
@@ -154,7 +154,7 @@ createAptLatesBlossom(const std::string &address,
  * @param targetPath
  * @return
  */
-BlossomItem*
+/*BlossomItem*
 createScpBlossom(const std::string &address,
                  const int port,
                  const std::string &userName,
@@ -175,7 +175,7 @@ createScpBlossom(const std::string &address,
     item->inputValues.insert("target_path", new DataValue(targetPath));
 
     return item;
-}
+}*/
 
 /**
  * @brief createCopySubtreeBlossom
@@ -183,7 +183,7 @@ createScpBlossom(const std::string &address,
  * @param subtree
  * @return
  */
-BlossomItem*
+/*BlossomItem*
 createCopySubtreeBlossom(const std::string &address,
                          const std::string &subtree)
 {
@@ -196,9 +196,9 @@ createCopySubtreeBlossom(const std::string &address,
     item->inputValues.insert("subtree", new DataValue(subtree));
 
     return item;
-}
+}*/
 
-BlossomItem*
+/*BlossomItem*
 createSshServiceFileBlossom(const std::string &address,
                             const int port,
                             const std::string &userName,
@@ -231,7 +231,7 @@ createSshServiceFileBlossom(const std::string &address,
     item->inputValues.insert("file_path", new DataValue("/etc/systemd/system/sakura_tree.service"));
 
     return item;
-}
+}*/
 
 /**
  * @brief createServiceStartBlossom
@@ -241,7 +241,7 @@ createSshServiceFileBlossom(const std::string &address,
  * @param keyPath
  * @return
  */
-BlossomItem*
+/*BlossomItem*
 createServiceStartBlossom(const std::string &address,
                           const int port,
                           const std::string &userName,
@@ -261,7 +261,7 @@ createServiceStartBlossom(const std::string &address,
     item->inputValues.insert("command", new DataValue("sudo systemctl start sakura_tree"));
 
     return item;
-}
+}*/
 
 
 }

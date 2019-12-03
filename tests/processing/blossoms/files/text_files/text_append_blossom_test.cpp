@@ -63,12 +63,12 @@ TextAppendBlossom_Test::initTask_test()
     appendBlossom.initTask(blossomItem);
     TEST_EQUAL(blossomItem.success, false);
 
-    blossomItem.groupValues.insert("file_path", new DataValue(m_path));
+    blossomItem.values.insert("file_path", new DataValue(m_path));
 
     appendBlossom.initTask(blossomItem);
     TEST_EQUAL(blossomItem.success, false);
 
-    blossomItem.inputValues.insert("new_text", new DataValue(m_newText));
+    blossomItem.values.insert("new_text", new DataValue(m_newText));
 
     appendBlossom.initTask(blossomItem);
     TEST_EQUAL(blossomItem.success, true);
@@ -85,8 +85,8 @@ TextAppendBlossom_Test::preCheck_test()
 {
     TextAppendBlossom appendBlossom;
     BlossomItem blossomItem;
-    blossomItem.groupValues.insert("file_path", new DataValue(m_path));
-    blossomItem.inputValues.insert("new_text", new DataValue(m_newText));
+    blossomItem.values.insert("file_path", new DataValue(m_path));
+    blossomItem.values.insert("new_text", new DataValue(m_newText));
 
     appendBlossom.initTask(blossomItem);
     appendBlossom.preCheck(blossomItem);
@@ -117,8 +117,8 @@ TextAppendBlossom_Test::runTask_test()
 {
     TextAppendBlossom appendBlossom;
     BlossomItem blossomItem;
-    blossomItem.groupValues.insert("file_path", new DataValue(m_path));
-    blossomItem.inputValues.insert("new_text", new DataValue(m_newText));
+    blossomItem.values.insert("file_path", new DataValue(m_path));
+    blossomItem.values.insert("new_text", new DataValue(m_newText));
 
     Kitsunemimi::Persistence::writeFile(m_path, m_text, true);
 
@@ -141,8 +141,8 @@ TextAppendBlossom_Test::postCheck_test()
 {
     TextAppendBlossom appendBlossom;
     BlossomItem blossomItem;
-    blossomItem.groupValues.insert("file_path", new DataValue(m_path));
-    blossomItem.inputValues.insert("new_text", new DataValue(m_newText));
+    blossomItem.values.insert("file_path", new DataValue(m_path));
+    blossomItem.values.insert("new_text", new DataValue(m_newText));
 
     appendBlossom.initTask(blossomItem);
     appendBlossom.postCheck(blossomItem);
@@ -157,8 +157,8 @@ TextAppendBlossom_Test::closeTask_test()
 {
     TextAppendBlossom appendBlossom;
     BlossomItem blossomItem;
-    blossomItem.groupValues.insert("file_path", new DataValue(m_path));
-    blossomItem.inputValues.insert("new_text", new DataValue(m_newText));
+    blossomItem.values.insert("file_path", new DataValue(m_path));
+    blossomItem.values.insert("new_text", new DataValue(m_newText));
 
     appendBlossom.initTask(blossomItem);
     appendBlossom.closeTask(blossomItem);

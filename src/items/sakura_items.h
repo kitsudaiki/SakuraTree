@@ -24,16 +24,7 @@
 #define SAKURA_ITEMS_H
 
 #include <common.h>
-
-#include <libKitsunemimiJson/json_item.h>
-#include <libKitsunemimiCommon/common_items/data_items.h>
-
-using Kitsunemimi::Common::DataItem;
-using Kitsunemimi::Common::DataMap;
-using Kitsunemimi::Common::DataArray;
-using Kitsunemimi::Common::DataValue;
-
-using Kitsunemimi::Json::JsonItem;
+#include <items/value_items.h>
 
 namespace SakuraTree
 {
@@ -62,8 +53,7 @@ public:
     virtual ~SakuraItem();
 
     SakuraItem* parent = nullptr;
-    DataMap inputValues;
-    DataMap outputValues;
+    ValueItemMap values;
 
     ItemType getType() const;
 
@@ -96,7 +86,6 @@ public:
     std::string blossomType = "";
     std::string blossomPath = "";
 
-    DataMap groupValues;
     DataItem* blossomOutput = nullptr;
 
     // process
@@ -236,7 +225,6 @@ public:
 
     SakuraItem* forChild = nullptr;
 };
-
 
 }  // namespace SakuraTree
 

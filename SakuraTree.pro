@@ -153,6 +153,7 @@ HEADERS += \
     tests/processing/blossoms/files/text_files/text_read_blossom_test.h \
     tests/processing/blossoms/files/text_files/text_write_blossom_test.h \
     tests/processing/blossoms/files/text_files/text_replace_blossom_test.h \
-    src/processing/blossoms/special/assert_blossom.h
+    src/processing/blossoms/special/assert_blossom.h \
+    src/items/value_items.h
 
 
