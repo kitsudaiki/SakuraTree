@@ -150,7 +150,9 @@ SakuraThread::grow(SakuraItem* growPlan,
                       branchItem->values,
                       newHierarchy);
 
-        overrideItems(branchItem->parent->values, branchItem->values);
+        if(branchItem->parent != nullptr) {
+            overrideItems(branchItem->parent->values, branchItem->values);
+        }
 
         return;
     }
@@ -173,7 +175,9 @@ SakuraThread::grow(SakuraItem* growPlan,
                     treeItem->values,
                     newHierarchy);
 
-        overrideItems(treeItem->parent->values, treeItem->values);
+        if(treeItem->parent != nullptr) {
+            overrideItems(treeItem->parent->values, treeItem->values);
+        }
 
         return;
     }
@@ -320,16 +324,16 @@ SakuraThread::processIf(IfBranching* growPlan,
     {
         case IfBranching::EQUAL:
             {
-                const std::string key = growPlan->leftSide->get(0)->toString();
+                const std::string key = growPlan->leftSide->get("item")->toString();
                 const std::string leftSide = values.getValueAsString(key);
-                ifMatch = leftSide == growPlan->rightSide->toString();
+                ifMatch = leftSide == growPlan->rightSide->get("item")->toString();
                 break;
             }
         case IfBranching::UNEQUAL:
             {
-                const std::string key = growPlan->leftSide->get(0)->toString();
+                const std::string key = growPlan->leftSide->get("item")->toString();
                 const std::string leftSide = values.getValueAsString(key);
-                ifMatch = leftSide != growPlan->rightSide->toString();
+                ifMatch = leftSide != growPlan->rightSide->get("item")->toString();
                 break;
             }
         default:

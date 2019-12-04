@@ -203,9 +203,9 @@ public:
     IfBranching();
     ~IfBranching();
 
-    DataArray* leftSide = nullptr;
+    DataMap* leftSide = nullptr;
     compareTypes ifType = EQUAL;
-    DataValue* rightSide = nullptr;
+    DataMap* rightSide = nullptr;
 
     std::vector<SakuraItem*> ifChilds;
     std::vector<SakuraItem*> elseChilds;

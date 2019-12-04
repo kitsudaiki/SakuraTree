@@ -400,8 +400,8 @@ SakuraCompiler::convertIf(JsonItem &growPlan,
 {
     IfBranching* newItem = new IfBranching();
     newItem->parent = parent;
-    newItem->leftSide = growPlan.get("left").getItemContent()->copy()->toArray();
-    newItem->rightSide = growPlan.get("right").getItemContent()->copy()->toValue();
+    newItem->leftSide = growPlan.get("left").getItemContent()->copy()->toMap();
+    newItem->rightSide = growPlan.get("right").getItemContent()->copy()->toMap();
 
     if(growPlan.get("if_type").getString() == "==") {
         newItem->ifType = IfBranching::EQUAL;

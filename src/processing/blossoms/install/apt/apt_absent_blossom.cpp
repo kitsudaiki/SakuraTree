@@ -43,9 +43,16 @@ AptAbsentBlossom::initTask(BlossomItem &blossomItem)
     }
 
     DataArray* names = blossomItem.values.get("names")->toArray();
-    for(uint32_t i = 0; i < names->size(); i++)
+    if(names != nullptr)
     {
-        m_packageNames.push_back(names->get(i)->toString());
+        for(uint32_t i = 0; i < names->size(); i++)
+        {
+            m_packageNames.push_back(names->get(i)->toString());
+        }
+    }
+    else
+    {
+        m_packageNames.push_back(blossomItem.values.get("names")->toString());
     }
 
     if(m_packageNames.size() == 0)
