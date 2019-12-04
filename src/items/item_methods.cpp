@@ -105,6 +105,10 @@ void overrideItems(ValueItemMap &original,
         if(originalIt != original.valueMap.end()) {
             originalIt->second = overrideIt->second;
         }
+        else
+        {
+            original.insert(overrideIt->first, overrideIt->second);
+        }
     }
 }
 

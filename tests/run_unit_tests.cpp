@@ -51,7 +51,7 @@ void
 RunUnitTests::run()
 {
     #ifdef RUN_UNIT_TEST
-    /*SakuraTree::ItemMethods_Test();
+    SakuraTree::ItemMethods_Test();
     SakuraTree::FileMethods_Test();
     //SakuraTree::FileChmodBlossom_Test();
     //SakuraTree::FileChownBlossom_Test();
@@ -59,7 +59,7 @@ RunUnitTests::run()
     SakuraTree::FileDeleteBlossom_Test();
     SakuraTree::FileRenameBlossom_Test();
     SakuraTree::TemplateCreateBlossom_Test();
-    SakuraTree::CmdBlossom_Test();*/
+    SakuraTree::CmdBlossom_Test();
     SakuraTree::TextReadBlossom_Test();
     SakuraTree::TextWriteBlossom_Test();
     SakuraTree::TextAppendBlossom_Test();

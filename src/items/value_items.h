@@ -57,7 +57,7 @@ struct ValueItem
     };
 
     DataItem* item = nullptr;
-    ValueType type = UNDEFINED_PAIR_TYPE;
+    ValueType type = INPUT_PAIR_TYPE;
     std::vector<FunctionItem> functions;
 
     ValueItem() {}
