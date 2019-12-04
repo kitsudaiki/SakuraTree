@@ -36,17 +36,16 @@ TextReplaceBlossom::TextReplaceBlossom()
 void
 TextReplaceBlossom::initTask(BlossomItem &blossomItem)
 {
-    if(blossomItem.groupValues.contains("file_path") == false
-            || blossomItem.inputValues.contains("old_text") == false
-            || blossomItem.inputValues.contains("new_text") == false)
-    {
-        blossomItem.success = false;
+    const std::vector<std::string> requiredKeys = {"file_path", "old_text", "new_text"};
+
+    checkForRequiredKeys(blossomItem, requiredKeys);
+    if(blossomItem.success == false) {
         return;
     }
 
-    m_filePath = blossomItem.groupValues.getStringByKey("file_path");
-    m_oldText = blossomItem.inputValues.getStringByKey("old_text");
-    m_newText = blossomItem.inputValues.getStringByKey("new_text");
+    m_filePath = blossomItem.values.getValueAsString("file_path");
+    m_oldText = blossomItem.values.getValueAsString("old_text");
+    m_newText = blossomItem.values.getValueAsString("new_text");
 
     blossomItem.success = true;}
 

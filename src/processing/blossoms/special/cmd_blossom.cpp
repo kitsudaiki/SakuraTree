@@ -34,14 +34,15 @@ CmdBlossom::CmdBlossom() :
 void
 CmdBlossom::initTask(BlossomItem &blossomItem)
 {
-    if(blossomItem.inputValues.contains("command") == false)
-    {
-        blossomItem.success = false;
-        blossomItem.outputMessage = "no command specified";
+    const std::vector<std::string> requiredKeys = {"command"};
+
+    checkForRequiredKeys(blossomItem, requiredKeys);
+    if(blossomItem.success == false) {
         return;
     }
 
-    m_command = blossomItem.inputValues.getStringByKey("command");
+    m_command = blossomItem.values.getValueAsString("command");
+
     blossomItem.success = true;
 }
 

@@ -35,39 +35,54 @@ namespace SakuraTree
  * replace the jinja2-converted values of the items-object with the stuff of the insertValues-object
  */
 const std::pair<bool, std::string>
-fillItems(DataMap &items,
-          DataMap &insertValues)
+fillItems(ValueItemMap &items,
+          ValueItemMap &insertValues)
 {
-    const std::vector<std::string> keys = items.getKeys();
     std::pair<bool, std::string> result;
 
-    for(uint32_t i = 0; i < keys.size(); i++)
+    std::map<std::string, ValueItem>::iterator it;
+    for(it = items.valueMap.begin();
+        it != items.valueMap.end();
+        it++)
     {
         // TODO: make better
-        if(keys.at(i) == "subtree")
+        if(it->first == "subtree")
         {
-            items.insert("values", new DataValue(insertValues.toString()));
+            //it->second.item = new DataValue(insertValues.at(0).item->toString());
             continue;
         }
 
-        JsonItem value = items.get(keys.at(i));
-        if(value.isString())
+        if(it->second.type == ValueItem::INPUT_PAIR_TYPE
+                && it->second.item->isStringValue())
         {
-            const std::string tempItem = value.toString();
+            const std::string tempItem = it->second.item->toString();
+
+            DataMap possibleValues;
+            std::map<std::string, ValueItem>::iterator insertIt;
+            for(insertIt = insertValues.valueMap.begin();
+                insertIt != insertValues.valueMap.end();
+                insertIt++)
+            {
+                if(insertIt->second.item->isValue()) {
+                    possibleValues.insert(insertIt->first, insertIt->second.item->copy());
+                }
+            }
 
             Jinja2Converter* converter = SakuraRoot::m_root->m_jinja2Converter;
             const std::pair<bool, std::string> convertResult = converter->convert(tempItem,
-                                                                                  &insertValues);
+                                                                                  &possibleValues);
 
             if(convertResult.first == false)
             {
                 result.first = false;
-                result.second = "failed to fill value of: " + keys.at(i);
+                result.second = "failed to fill value of: " + it->first;
                 return result;
             }
 
-            DataValue* value = new DataValue(convertResult.second);
-            items.insert(keys.at(i), value, true);
+            if(it->second.item != nullptr) {
+                delete it->second.item;
+            }
+            it->second.item = new DataValue(convertResult.second);
         }
     }
 
@@ -78,35 +93,22 @@ fillItems(DataMap &items,
 /**
  * @brief overrideItems
  */
-void overrideItems(DataMap &original,
-                   JsonItem &override)
+void overrideItems(ValueItemMap &original,
+                   ValueItemMap &override)
 {
-    const std::vector<std::string> keys = override.getKeys();
-    for(uint32_t i = 0; i < keys.size(); i++)
+    std::map<std::string, ValueItem>::iterator overrideIt;
+    for(overrideIt = override.valueMap.begin(); overrideIt != override.valueMap.end(); overrideIt++)
     {
-        original.insert(keys.at(i),
-                        override.get(keys.at(i)).getItemContent()->copy(),
-                        true);
-    }
-}
+        std::map<std::string, ValueItem>::iterator originalIt;
+        originalIt = original.valueMap.find(overrideIt->first);
 
-/**
- * @brief overrideItems
- */
-void overrideItems(DataMap &original,
-                   DataMap &override)
-{
-    const std::vector<std::string> keys = override.getKeys();
-    for(uint32_t i = 0; i < keys.size(); i++)
-    {
-        DataItem* value = override.get(keys.at(i));
-        if(value == nullptr) {
-            continue;
+        if(originalIt != original.valueMap.end()) {
+            originalIt->second = overrideIt->second;
         }
-
-        original.insert(keys.at(i),
-                        value->copy(),
-                        true);
+        else
+        {
+            original.insert(overrideIt->first, overrideIt->second);
+        }
     }
 }
 
@@ -116,20 +118,51 @@ void overrideItems(DataMap &original,
  * @return list of not initialized values
  */
 const std::vector<std::string>
-checkItems(DataMap &items)
+checkItems(ValueItemMap &items)
 {
     std::vector<std::string> result;
 
-    const std::vector<std::string> keys = items.getKeys();
-
-    for(uint32_t i = 0; i < keys.size(); i++)
+    std::map<std::string, ValueItem>::iterator it;
+    for(it = items.valueMap.begin(); it != items.valueMap.end(); it++)
     {
-        if(items.get(keys.at(i))->getString() == "{{}}") {
-            result.push_back(keys.at(i));
+        if(it->second.item->getString() == "{{}}") {
+            result.push_back(it->first);
         }
     }
 
     return result;
+}
+
+/**
+ * @brief checkForRequiredKeys
+ * @param values
+ * @param requiredKeys
+ * @return
+ */
+void
+checkForRequiredKeys(BlossomItem &blossomItem,
+                     const std::vector<std::string> &requiredKeys)
+{
+    std::string result = "";
+    blossomItem.success = true;
+
+    for(uint32_t i = 0; i < requiredKeys.size(); i++)
+    {
+        const bool found = blossomItem.values.contains(requiredKeys.at(i));
+        if(found == false)
+        {
+            if(result.size() > 0) {
+                result += ", ";
+            }
+            result += requiredKeys.at(i);
+        }
+    }
+
+    if(result.size() > 0)
+    {
+        blossomItem.success = false;
+        blossomItem.outputMessage = "following keys are not set: " + result;
+    }
 }
 
 /**

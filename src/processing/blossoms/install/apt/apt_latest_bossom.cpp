@@ -36,14 +36,25 @@ AptLatestBlossom::AptLatestBlossom() :
 void
 AptLatestBlossom::initTask(BlossomItem &blossomItem)
 {
-    if(blossomItem.inputValues.contains("names") == false)
-    {
-        blossomItem.success = false;
-        blossomItem.outputMessage = "no packages to defined";
+    const std::vector<std::string> requiredKeys = {"names"};
+
+    checkForRequiredKeys(blossomItem, requiredKeys);
+    if(blossomItem.success == false) {
         return;
     }
 
-    fillPackageNames(blossomItem, m_packageNames);
+    DataArray* names = blossomItem.values.get("names")->toArray();
+    if(names != nullptr)
+    {
+        for(uint32_t i = 0; i < names->size(); i++)
+        {
+            m_packageNames.push_back(names->get(i)->toString());
+        }
+    }
+    else
+    {
+        m_packageNames.push_back(blossomItem.values.get("names")->toString());
+    }
 
     if(m_packageNames.size() == 0)
     {

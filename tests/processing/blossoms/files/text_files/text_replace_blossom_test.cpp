@@ -65,17 +65,17 @@ TextReplaceBlossom_Test::initTask_test()
     replaceBlossom.initTask(blossomItem);
     TEST_EQUAL(blossomItem.success, false);
 
-    blossomItem.groupValues.insert("file_path", new DataValue(m_path));
+    blossomItem.values.insert("file_path", new DataValue(m_path));
 
     replaceBlossom.initTask(blossomItem);
     TEST_EQUAL(blossomItem.success, false);
 
-    blossomItem.inputValues.insert("old_text", new DataValue(m_oldText));
+    blossomItem.values.insert("old_text", new DataValue(m_oldText));
 
     replaceBlossom.initTask(blossomItem);
     TEST_EQUAL(blossomItem.success, false);
 
-    blossomItem.inputValues.insert("new_text", new DataValue(m_newText));
+    blossomItem.values.insert("new_text", new DataValue(m_newText));
 
     replaceBlossom.initTask(blossomItem);
     TEST_EQUAL(blossomItem.success, true);
@@ -93,9 +93,9 @@ TextReplaceBlossom_Test::preCheck_test()
 {
     TextReplaceBlossom replaceBlossom;
     BlossomItem blossomItem;
-    blossomItem.groupValues.insert("file_path", new DataValue(m_path));
-    blossomItem.inputValues.insert("old_text", new DataValue(m_oldText));
-    blossomItem.inputValues.insert("new_text", new DataValue(m_newText));
+    blossomItem.values.insert("file_path", new DataValue(m_path));
+    blossomItem.values.insert("old_text", new DataValue(m_oldText));
+    blossomItem.values.insert("new_text", new DataValue(m_newText));
 
     replaceBlossom.initTask(blossomItem);
     replaceBlossom.preCheck(blossomItem);
@@ -126,9 +126,9 @@ TextReplaceBlossom_Test::runTask_test()
 {
     TextReplaceBlossom replaceBlossom;
     BlossomItem blossomItem;
-    blossomItem.groupValues.insert("file_path", new DataValue(m_path));
-    blossomItem.inputValues.insert("old_text", new DataValue(m_oldText));
-    blossomItem.inputValues.insert("new_text", new DataValue(m_newText));
+    blossomItem.values.insert("file_path", new DataValue(m_path));
+    blossomItem.values.insert("old_text", new DataValue(m_oldText));
+    blossomItem.values.insert("new_text", new DataValue(m_newText));
 
     Kitsunemimi::Persistence::writeFile(m_path, m_oldCompleteText, true);
 
@@ -151,9 +151,9 @@ TextReplaceBlossom_Test::postCheck_test()
 {
     TextReplaceBlossom replaceBlossom;
     BlossomItem blossomItem;
-    blossomItem.groupValues.insert("file_path", new DataValue(m_path));
-    blossomItem.inputValues.insert("old_text", new DataValue(m_oldText));
-    blossomItem.inputValues.insert("new_text", new DataValue(m_newText));
+    blossomItem.values.insert("file_path", new DataValue(m_path));
+    blossomItem.values.insert("old_text", new DataValue(m_oldText));
+    blossomItem.values.insert("new_text", new DataValue(m_newText));
 
     replaceBlossom.initTask(blossomItem);
     replaceBlossom.postCheck(blossomItem);
@@ -168,9 +168,9 @@ TextReplaceBlossom_Test::closeTask_test()
 {
     TextReplaceBlossom replaceBlossom;
     BlossomItem blossomItem;
-    blossomItem.groupValues.insert("file_path", new DataValue(m_path));
-    blossomItem.inputValues.insert("old_text", new DataValue(m_oldText));
-    blossomItem.inputValues.insert("new_text", new DataValue(m_newText));
+    blossomItem.values.insert("file_path", new DataValue(m_path));
+    blossomItem.values.insert("old_text", new DataValue(m_oldText));
+    blossomItem.values.insert("new_text", new DataValue(m_newText));
 
     replaceBlossom.initTask(blossomItem);
     replaceBlossom.closeTask(blossomItem);

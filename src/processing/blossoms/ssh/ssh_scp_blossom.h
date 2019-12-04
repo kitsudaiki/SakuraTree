@@ -39,6 +39,14 @@ protected:
     void runTask(BlossomItem &blossomItem);
     void postCheck(BlossomItem &blossomItem);
     void closeTask(BlossomItem &blossomItem);
+
+private:
+    std::string m_user = "";
+    std::string m_address = "";
+    std::string m_port = "";
+    std::string m_sshKey = "";
+    std::string m_sourcePath = "";
+    std::string m_targetPath = "";
 };
 
 }

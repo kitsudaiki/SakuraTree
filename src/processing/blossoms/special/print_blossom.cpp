@@ -56,16 +56,16 @@ void
 PrintBlossom::runTask(BlossomItem &blossomItem)
 {
     std::string output = "";
-    const std::vector<std::string> keys = blossomItem.inputValues.getKeys();
-
     Kitsunemimi::Common::TableItem tableItem;
     tableItem.addColumn("key", "Item-Name");
     tableItem.addColumn("value", "Value");
 
-    for(uint32_t i = 0; i < keys.size(); i++)
+    std::map<std::string, ValueItem>::iterator it;
+    for(it = blossomItem.values.valueMap.begin();
+        it != blossomItem.values.valueMap.end();
+        it++)
     {
-        const std::string value = blossomItem.inputValues.get(keys.at(i))->toString();
-        tableItem.addRow(std::vector<std::string>{keys.at(i), value});
+        tableItem.addRow(std::vector<std::string>{it->first, it->second.item->toString()});
     }
 
     blossomItem.outputMessage = tableItem.toString(150);

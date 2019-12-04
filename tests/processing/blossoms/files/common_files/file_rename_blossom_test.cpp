@@ -66,12 +66,12 @@ FileRenameBlossom_Test::initTask_test()
     fakeRenameBlossom.initTask(fakeItem);
     TEST_EQUAL(fakeItem.success, false);
 
-    fakeItem.inputValues.insert("file_path", new DataValue(m_sourceFile));
+    fakeItem.values.insert("file_path", new DataValue(m_sourceFile));
 
     fakeRenameBlossom.initTask(fakeItem);
     TEST_EQUAL(fakeItem.success, false);
 
-    fakeItem.inputValues.insert("new_name", new DataValue(m_destinationFileName));
+    fakeItem.values.insert("new_name", new DataValue(m_destinationFileName));
 
     fakeRenameBlossom.initTask(fakeItem);
     TEST_EQUAL(fakeItem.success, true);
@@ -87,8 +87,8 @@ void
 FileRenameBlossom_Test::preCheck_test()
 {
     BlossomItem fakeItem;
-    fakeItem.inputValues.insert("file_path", new DataValue(m_sourceFile));
-    fakeItem.inputValues.insert("new_name", new DataValue(m_destinationFileName));
+    fakeItem.values.insert("file_path", new DataValue(m_sourceFile));
+    fakeItem.values.insert("new_name", new DataValue(m_destinationFileName));
 
     FileRenameBlossom fakeRenameBlossom;
 
@@ -123,8 +123,8 @@ void
 FileRenameBlossom_Test::runTask_test()
 {
     BlossomItem fakeItem;
-    fakeItem.inputValues.insert("file_path", new DataValue(m_sourceFile));
-    fakeItem.inputValues.insert("new_name", new DataValue(m_destinationFileName));
+    fakeItem.values.insert("file_path", new DataValue(m_sourceFile));
+    fakeItem.values.insert("new_name", new DataValue(m_destinationFileName));
 
     FileRenameBlossom fakeRenameBlossom;
 
@@ -148,8 +148,8 @@ void
 FileRenameBlossom_Test::postCheck_test()
 {
     BlossomItem fakeItem;
-    fakeItem.inputValues.insert("file_path", new DataValue(m_sourceFile));
-    fakeItem.inputValues.insert("new_name", new DataValue(m_destinationFileName));
+    fakeItem.values.insert("file_path", new DataValue(m_sourceFile));
+    fakeItem.values.insert("new_name", new DataValue(m_destinationFileName));
 
     FileRenameBlossom fakeRenameBlossom;
 
@@ -175,8 +175,8 @@ void
 FileRenameBlossom_Test::closeTask_test()
 {
     BlossomItem fakeItem;
-    fakeItem.inputValues.insert("file_path", new DataValue(m_sourceFile));
-    fakeItem.inputValues.insert("new_name", new DataValue(m_destinationFileName));
+    fakeItem.values.insert("file_path", new DataValue(m_sourceFile));
+    fakeItem.values.insert("new_name", new DataValue(m_destinationFileName));
 
     FileRenameBlossom fakeRenameBlossom;
 

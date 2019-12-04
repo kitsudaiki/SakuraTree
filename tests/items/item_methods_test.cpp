@@ -57,9 +57,9 @@ ItemMethods_Test::initTestCase()
 void
 ItemMethods_Test::fillItems_test()
 {
-    DataMap items;
+    ValueItemMap items;
     items.insert("x", new DataValue("{{test}}"));
-    DataMap insertValues;
+    ValueItemMap insertValues;
     insertValues.insert("test", new DataValue("hmmm"));
 
     std::pair<bool, std::string> result;
@@ -75,11 +75,11 @@ ItemMethods_Test::fillItems_test()
 void
 ItemMethods_Test::overrideItems_test()
 {
-    DataMap original;
+    ValueItemMap original;
     original.insert("x", new DataValue("{{test}}"));
     original.insert("y", new DataValue("asdf"));
 
-    JsonItem override;
+    ValueItemMap override;
     override.insert("y", new DataValue("poi"));
     override.insert("z", new DataValue("hmmm"));
 
@@ -97,7 +97,7 @@ ItemMethods_Test::overrideItems_test()
 void
 ItemMethods_Test::checkItems_test()
 {
-    DataMap items;
+    ValueItemMap items;
     items.insert("x", new DataValue("{{}}"));
     items.insert("y", new DataValue("asdf"));
 

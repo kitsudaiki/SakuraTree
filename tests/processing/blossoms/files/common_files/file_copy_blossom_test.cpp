@@ -65,12 +65,12 @@ FileCopyBlossom_Test::initTask_test()
     fakeCopyBlossom.initTask(fakeItem);
     TEST_EQUAL(fakeItem.success, false);
 
-    fakeItem.inputValues.insert("source_path", new DataValue(m_sourceFile));
+    fakeItem.values.insert("source_path", new DataValue(m_sourceFile));
 
     fakeCopyBlossom.initTask(fakeItem);
     TEST_EQUAL(fakeItem.success, false);
 
-    fakeItem.inputValues.insert("dest_path", new DataValue(m_destinationFile));
+    fakeItem.values.insert("dest_path", new DataValue(m_destinationFile));
 
     fakeCopyBlossom.initTask(fakeItem);
     TEST_EQUAL(fakeItem.success, true);
@@ -86,8 +86,8 @@ void
 FileCopyBlossom_Test::preCheck_test()
 {
     BlossomItem fakeItem;
-    fakeItem.inputValues.insert("source_path", new DataValue(m_sourceFile));
-    fakeItem.inputValues.insert("dest_path", new DataValue(m_destinationFile));
+    fakeItem.values.insert("source_path", new DataValue(m_sourceFile));
+    fakeItem.values.insert("dest_path", new DataValue(m_destinationFile));
 
     FileCopyBlossom fakeCopyBlossom;
 
@@ -118,8 +118,8 @@ void
 FileCopyBlossom_Test::runTask_test()
 {
     BlossomItem fakeItem;
-    fakeItem.inputValues.insert("source_path", new DataValue(m_sourceFile));
-    fakeItem.inputValues.insert("dest_path", new DataValue(m_destinationFile));
+    fakeItem.values.insert("source_path", new DataValue(m_sourceFile));
+    fakeItem.values.insert("dest_path", new DataValue(m_destinationFile));
 
     FileCopyBlossom fakeCopyBlossom;
 
@@ -140,8 +140,8 @@ void
 FileCopyBlossom_Test::postCheck_test()
 {
     BlossomItem fakeItem;
-    fakeItem.inputValues.insert("source_path", new DataValue(m_sourceFile));
-    fakeItem.inputValues.insert("dest_path", new DataValue(m_destinationFile));
+    fakeItem.values.insert("source_path", new DataValue(m_sourceFile));
+    fakeItem.values.insert("dest_path", new DataValue(m_destinationFile));
 
     FileCopyBlossom fakeCopyBlossom;
 
@@ -162,8 +162,8 @@ void
 FileCopyBlossom_Test::closeTask_test()
 {
     BlossomItem fakeItem;
-    fakeItem.inputValues.insert("source_path", new DataValue(m_sourceFile));
-    fakeItem.inputValues.insert("dest_path", new DataValue(m_destinationFile));
+    fakeItem.values.insert("source_path", new DataValue(m_sourceFile));
+    fakeItem.values.insert("dest_path", new DataValue(m_destinationFile));
 
     FileCopyBlossom fakeCopyBlossom;
 

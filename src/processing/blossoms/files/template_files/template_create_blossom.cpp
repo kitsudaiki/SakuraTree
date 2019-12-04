@@ -38,22 +38,23 @@ TemplateCreateBlossom::TemplateCreateBlossom() :
 void
 TemplateCreateBlossom::initTask(BlossomItem &blossomItem)
 {
-    // precheck
-    if(blossomItem.groupValues.contains("source_path") == false
-            || blossomItem.groupValues.contains("dest_path") == false)
-    {
-        blossomItem.success = false;
+    const std::vector<std::string> requiredKeys = {"source_path", "dest_path"};
+
+    checkForRequiredKeys(blossomItem, requiredKeys);
+    if(blossomItem.success == false) {
         return;
     }
 
+    std::map<std::string, ValueItem>::iterator it;
+
+    m_templatePath = blossomItem.values.getValueAsString("source_path");
+    m_destinationPath = blossomItem.values.getValueAsString("dest_path");
+
     // create source-path
-    m_templatePath = blossomItem.groupValues.getStringByKey("source_path");
     if(blossomItem.blossomPath.at(blossomItem.blossomPath.size()-1) != '/') {
         blossomItem.blossomPath += "/";
     }
     m_templatePath = blossomItem.blossomPath + "templates/" + m_templatePath;
-
-    m_destinationPath = blossomItem.groupValues.getStringByKey("dest_path");
 
     blossomItem.success = true;
 }
@@ -88,8 +89,19 @@ TemplateCreateBlossom::preCheck(BlossomItem &blossomItem)
         return;
     }
 
+    DataMap inputData;
+    std::map<std::string, ValueItem>::iterator it;
+    for(it = blossomItem.values.valueMap.begin();
+        it != blossomItem.values.valueMap.end();
+        it++)
+    {
+        if(it->second.item->isValue()) {
+            inputData.insert(it->first, it->second.item->copy());
+        }
+    }
+
     // create file-content form template
-    results = SakuraRoot::m_jinja2Converter->convert(results.second, &blossomItem.inputValues);
+    results = SakuraRoot::m_jinja2Converter->convert(results.second, &inputData);
     if(results.first == false)
     {
         blossomItem.success = false;

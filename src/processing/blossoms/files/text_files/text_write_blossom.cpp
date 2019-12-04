@@ -36,15 +36,15 @@ TextWriteBlossom::TextWriteBlossom() :
 void
 TextWriteBlossom::initTask(BlossomItem &blossomItem)
 {
-    if(blossomItem.groupValues.contains("file_path") == false
-            || blossomItem.inputValues.contains("text") == false)
-    {
-        blossomItem.success = false;
+    const std::vector<std::string> requiredKeys = {"file_path", "text"};
+
+    checkForRequiredKeys(blossomItem, requiredKeys);
+    if(blossomItem.success == false) {
         return;
     }
 
-    m_filePath = blossomItem.groupValues.getStringByKey("file_path");
-    m_text = blossomItem.inputValues.getStringByKey("text");
+    m_filePath = blossomItem.values.getValueAsString("file_path");
+    m_text = blossomItem.values.getValueAsString("text");
 
     blossomItem.success = true;
 }

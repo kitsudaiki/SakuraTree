@@ -37,15 +37,17 @@ FileCopyBlossom::FileCopyBlossom() :
 void
 FileCopyBlossom::initTask(BlossomItem &blossomItem)
 {
-    if(blossomItem.inputValues.contains("source_path") == false
-            || blossomItem.inputValues.contains("dest_path") == false)
-    {
-        blossomItem.success = false;
+    const std::vector<std::string> requiredKeys = {"source_path", "dest_path"};
+
+    checkForRequiredKeys(blossomItem, requiredKeys);
+    if(blossomItem.success == false) {
         return;
     }
 
-    m_sourcePath = blossomItem.inputValues.getStringByKey("source_path");
-    m_destinationPath = blossomItem.inputValues.getStringByKey("dest_path");
+    std::map<std::string, ValueItem>::iterator it;
+
+    m_sourcePath = blossomItem.values.getValueAsString("source_path");
+    m_destinationPath = blossomItem.values.getValueAsString("dest_path");
 
     if(m_sourcePath.at(0) != '/') {
         m_sourcePath = blossomItem.blossomPath + "/files/" + m_sourcePath;
