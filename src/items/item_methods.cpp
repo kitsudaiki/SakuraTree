@@ -32,7 +32,38 @@ namespace SakuraTree
 {
 
 /**
- * replace the jinja2-converted values of the items-object with the stuff of the insertValues-object
+ * @brief writeOutputBack
+ * @param items
+ * @param output
+ * @return
+ */
+const std::pair<bool, std::string> writeOutputBack(ValueItemMap &items,
+                                                   DataItem *output)
+{
+    std::pair<bool, std::string> result;
+
+    std::map<std::string, ValueItem>::iterator it;
+    for(it = items.valueMap.begin();
+        it != items.valueMap.end();
+        it++)
+    {
+        if(it->second.type == ValueItem::OUTPUT_PAIR_TYPE)
+        {
+            ValueItem valueItem;
+            valueItem.item = output->copy();
+            it->second = valueItem;
+        }
+    }
+
+    result.first = true;
+    return result;
+}
+
+/**
+ * @brief fillItems
+ * @param items
+ * @param insertValues
+ * @return
  */
 const std::pair<bool, std::string>
 fillItems(ValueItemMap &items,
@@ -86,7 +117,8 @@ fillItems(ValueItemMap &items,
             valueItem.item = new DataValue(convertResult.second);
             it->second = valueItem;
         }
-        else if(it->second.isIdentifier)
+        else if(it->second.isIdentifier
+                && it->second.type == ValueItem::INPUT_PAIR_TYPE)
         {
             ValueItem valueItem;
             valueItem.item = insertValues.get(it->second.item->toString())->copy();

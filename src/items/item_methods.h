@@ -30,6 +30,8 @@ using Kitsunemimi::Common::DataMap;
 namespace SakuraTree
 {
 
+const std::pair<bool, std::string> writeOutputBack(ValueItemMap &items,
+                                                   DataItem* output);
 const std::pair<bool, std::string> fillItems(ValueItemMap &items,
                                              ValueItemMap &insertValues);
 
