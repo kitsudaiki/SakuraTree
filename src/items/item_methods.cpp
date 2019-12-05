@@ -32,7 +32,38 @@ namespace SakuraTree
 {
 
 /**
- * replace the jinja2-converted values of the items-object with the stuff of the insertValues-object
+ * @brief writeOutputBack
+ * @param items
+ * @param output
+ * @return
+ */
+const std::pair<bool, std::string> writeOutputBack(ValueItemMap &items,
+                                                   DataItem *output)
+{
+    std::pair<bool, std::string> result;
+
+    std::map<std::string, ValueItem>::iterator it;
+    for(it = items.valueMap.begin();
+        it != items.valueMap.end();
+        it++)
+    {
+        if(it->second.type == ValueItem::OUTPUT_PAIR_TYPE)
+        {
+            ValueItem valueItem;
+            valueItem.item = output->copy();
+            it->second = valueItem;
+        }
+    }
+
+    result.first = true;
+    return result;
+}
+
+/**
+ * @brief fillItems
+ * @param items
+ * @param insertValues
+ * @return
  */
 const std::pair<bool, std::string>
 fillItems(ValueItemMap &items,
@@ -52,11 +83,11 @@ fillItems(ValueItemMap &items,
             continue;
         }
 
-        if(it->second.type == ValueItem::INPUT_PAIR_TYPE
+        if(it->second.isIdentifier == false
+                && it->second.type == ValueItem::INPUT_PAIR_TYPE
                 && it->second.item->isStringValue())
         {
-            const std::string tempItem = it->second.item->toString();
-
+            // prepare map for jinja2-convert
             DataMap possibleValues;
             std::map<std::string, ValueItem>::iterator insertIt;
             for(insertIt = insertValues.valueMap.begin();
@@ -68,10 +99,12 @@ fillItems(ValueItemMap &items,
                 }
             }
 
+            // convert jinja2-string
             Jinja2Converter* converter = SakuraRoot::m_root->m_jinja2Converter;
-            const std::pair<bool, std::string> convertResult = converter->convert(tempItem,
-                                                                                  &possibleValues);
+            std::pair<bool, std::string> convertResult;
+            convertResult = converter->convert(it->second.item->toString(), &possibleValues);
 
+            // process negative result
             if(convertResult.first == false)
             {
                 result.first = false;
@@ -79,10 +112,17 @@ fillItems(ValueItemMap &items,
                 return result;
             }
 
-            if(it->second.item != nullptr) {
-                delete it->second.item;
-            }
-            it->second.item = new DataValue(convertResult.second);
+            // write positive result back to item-list
+            ValueItem valueItem;
+            valueItem.item = new DataValue(convertResult.second);
+            it->second = valueItem;
+        }
+        else if(it->second.isIdentifier
+                && it->second.type == ValueItem::INPUT_PAIR_TYPE)
+        {
+            ValueItem valueItem;
+            valueItem.item = insertValues.get(it->second.item->toString())->copy();
+            it->second = valueItem;
         }
     }
 
@@ -174,6 +214,16 @@ convertBlossomOutput(const BlossomItem &blossom)
 {
     std::string output = "";
     output += "+++++++++++++++++++++++++++++++++++++++++++++++++\n";
+    // print call-hierarchy
+    for(uint32_t i = 0; i < blossom.nameHirarchie.size(); i++)
+    {
+        for(uint32_t j = 0; j < i; j++)
+        {
+            output += "   ";
+        }
+        output += blossom.nameHirarchie.at(i) + "\n";
+    }
+    output += "\n";
 
     // print executeion-state
     switch(blossom.resultState)
@@ -202,16 +252,6 @@ convertBlossomOutput(const BlossomItem &blossom)
             break;
         default:
             break;
-    }
-
-    // print call-hierarchy
-    for(uint32_t i = 0; i < blossom.nameHirarchie.size(); i++)
-    {
-        for(uint32_t j = 0; j < i; j++)
-        {
-            output += "   ";
-        }
-        output += blossom.nameHirarchie.at(i) + "\n";
     }
 
     // print error-output

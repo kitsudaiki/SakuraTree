@@ -79,18 +79,23 @@ SakuraCompiler::compile(JsonItem &tree)
  */
 bool
 SakuraCompiler::convertItemPart(JsonItem &itemInput,
-                                ValueItem &itemPart)
+                                ValueItem &itemPart,
+                                const std::string pairType)
 {
     itemPart.item = itemInput.get("item").getItemContent()->copy()->toValue();
 
-    if(itemInput.get("type").toString() == "assign") {
+    if(pairType == "assign") {
         itemPart.type = ValueItem::INPUT_PAIR_TYPE;
     }
-    if(itemInput.get("type").toString() == "compare") {
+    if(pairType == "compare") {
         itemPart.type = ValueItem::COMPARE_EQUAL_PAIR_TYPE;
     }
-    if(itemInput.get("type").toString() == "output") {
+    if(pairType == "output") {
         itemPart.type = ValueItem::OUTPUT_PAIR_TYPE;
+    }
+
+    if(itemInput.get("type").toString() == "identifier") {
+        itemPart.isIdentifier = true;
     }
 
     JsonItem functions = itemInput.get("functions");
@@ -198,11 +203,12 @@ SakuraCompiler::convertBlossom(JsonItem &growPlan,
     JsonItem array = growPlan.get("items-input");
     for(uint32_t i = 0; i < array.size(); i++)
     {
-        std::string key = array.get(i).get("key").toString();
+        const std::string key = array.get(i).get("key").toString();
+        const std::string pairType = array.get(i).get("type").toString();
         JsonItem value = array.get(i).get("value");
 
         ValueItem itemValue;
-        convertItemPart(value, itemValue);
+        convertItemPart(value, itemValue, pairType);
         blossomItem->values.insert(key, itemValue);
     }
 
@@ -236,11 +242,12 @@ SakuraCompiler::convertBlossomGroup(JsonItem &growPlan,
             JsonItem array = growPlan.get("items-input");
             for(uint32_t i = 0; i < array.size(); i++)
             {
-                std::string key = array.get(i).get("key").toString();
+                const std::string key = array.get(i).get("key").toString();
+                const std::string pairType = array.get(i).get("type").toString();
                 JsonItem value = array.get(i).get("value");
 
                 ValueItem itemValue;
-                convertItemPart(value, itemValue);
+                convertItemPart(value, itemValue, pairType);
                 blossomItem->values.insert(key, itemValue);
             }
 
@@ -257,11 +264,12 @@ SakuraCompiler::convertBlossomGroup(JsonItem &growPlan,
         JsonItem array = growPlan.get("items-input");
         for(uint32_t i = 0; i < array.size(); i++)
         {
-            std::string key = array.get(i).get("key").toString();
+            const std::string key = array.get(i).get("key").toString();
+            const std::string pairType = array.get(i).get("type").toString();
             JsonItem value = array.get(i).get("value");
 
             ValueItem itemValue;
-            convertItemPart(value, itemValue);
+            convertItemPart(value, itemValue, pairType);
             blossomItem->values.insert(key, itemValue);
         }
 
@@ -295,11 +303,12 @@ SakuraCompiler::convertBranch(JsonItem &growPlan,
 
     for(uint32_t i = 0; i < items.size(); i++)
     {
-        std::string key = items.get(i).get("key").toString();
+        const std::string key = items.get(i).get("key").toString();
+        const std::string pairType = items.get(i).get("type").toString();
         JsonItem value = items.get(i).get("value");
 
         ValueItem itemValue;
-        convertItemPart(value, itemValue);
+        convertItemPart(value, itemValue, pairType);
         branchItem->values.insert(key, itemValue);
     }
 
@@ -339,11 +348,12 @@ SakuraCompiler::convertTree(JsonItem &growPlan,
 
     for(uint32_t i = 0; i < items.size(); i++)
     {
-        std::string key = items.get(i).get("key").toString();
+        const std::string key = items.get(i).get("key").toString();
+        const std::string pairType = items.get(i).get("type").toString();
         JsonItem value = items.get(i).get("value");
 
         ValueItem itemValue;
-        convertItemPart(value, itemValue);
+        convertItemPart(value, itemValue, pairType);
         treeItem->values.insert(key, itemValue);
     }
 

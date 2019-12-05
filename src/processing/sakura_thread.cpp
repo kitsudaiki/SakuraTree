@@ -115,6 +115,7 @@ SakuraThread::grow(SakuraItem* growPlan,
                        blossomItem->values,
                        newHierarchy);
 
+        writeOutputBack(blossomItem->values, blossomItem->blossomOutput);
         overrideItems(blossomItem->parent->values, blossomItem->values);
 
         return;

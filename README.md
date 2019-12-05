@@ -171,59 +171,37 @@ Tested on Debian and Ubuntu. If you use Centos, Arch, etc and the build-script f
 
 ## Simple example
 
-This is only a simple first example, which I used for my current tests. It spawns an additional client on the local host and say the client to install and uninstall nano a few times. Basically I am happy with the fundamental structure of the language, but some details will be changed in the near future. 
+This is only a simple first example, which I used for my current tests. Its a bogus-example, which doesn't do anything useful. The parallelization and spawning of new instances are now shown in the example. There features are incomplete and/or broken at the moment. These will be core of milestone 0.3.0. 
 
-**Further syntax description comes, when I have improved the functionallity and stability.**
+**Further syntax description comes, when I have improved the functionallity and stability and is part of milestone 0.2.0.**
 
-Example-Tree:
-
-```cpp
-[test_tree]
-- packages = nano
-
-{
-    seed(sakura)
-    - address = "127.0.0.1"
-    - port = 1337
-    - ssh_user = neptune
-    - ssh_port = 22
-    - ssh_key = "~/.ssh/sakura_test" 
-    {
-        branch(install_branch)
-        - packages = "{{packages}}"
-    }
-}
-
-```
-
-Example-Branch, which is called by the Tree.
 
 ```cpp
 [install_branch]
-- packages = nano
+- packages = "nano"
 - test_output = ""
 
 apt("update and install")  
 -> update
 -> present:
-    - names = "{{packages}}"
+    - names = packages
 
-if(packages == nano)
+if(packages == "nano")
 {
     assert("test-assert")
-    - packages == nano
+    - packages == "nano"
 
     apt("try to delete")
     -> absent:
-       - names = "{{packages}}"
+       - names = packages
 
     apt("try to delete again")
     -> absent:
-       - names = "{{packages}}"
+       - names = packages
 
     apt("install via apt")
     -> present:
-       - names = "{{packages}}"
+       - names = packages
 
     file("copy a testfile")
     -> copy:
@@ -249,12 +227,13 @@ else
 {
     apt(apt1_in_else)
     -> absent:
-       - names = "{{packages}}"
+       - names = packages
 
     apt(apt2_in_else)
     -> present:
-       - names = "{{packages}}"
+       - names = packages
 }
+
 ```
 
 

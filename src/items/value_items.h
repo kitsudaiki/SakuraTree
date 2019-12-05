@@ -58,6 +58,7 @@ struct ValueItem
 
     DataItem* item = nullptr;
     ValueType type = INPUT_PAIR_TYPE;
+    bool isIdentifier = false;
     std::vector<FunctionItem> functions;
 
     ValueItem() {}
@@ -68,6 +69,7 @@ struct ValueItem
         }
         item = other.item->copy();
         type = other.type;
+        isIdentifier = other.isIdentifier;
         functions = other.functions;
     }
     ~ValueItem()
@@ -85,6 +87,7 @@ struct ValueItem
             }
             this->item = other.item->copy();
             this->type = other.type;
+            this->isIdentifier = other.isIdentifier;
             this->functions = other.functions;
         }
         return *this;
@@ -99,14 +102,14 @@ struct ValueItemMap
 {
     std::map<std::string, ValueItem> valueMap;
 
-    bool insert(const std::string& key, DataValue* value, bool force=true)
+    bool insert(const std::string &key, DataValue* value, bool force=true)
     {
         ValueItem valueItem;
         valueItem.item = value->copy();
         return insert(key, valueItem, force);
     }
 
-    bool insert(const std::string& key, ValueItem value, bool force=true)
+    bool insert(const std::string &key, ValueItem &value, bool force=true)
     {
         std::map<std::string, ValueItem>::iterator it;
         it = valueMap.find(key);

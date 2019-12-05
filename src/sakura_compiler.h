@@ -55,7 +55,8 @@ private:
     void overrideItems(JsonItem &original,
                        JsonItem &override);
     bool convertItemPart(JsonItem &itemInput,
-                         ValueItem &itemPart);
+                         ValueItem &itemPart,
+                         const std::string pairType);
 
     BlossomItem* convertBlossom(JsonItem &growPlan,
                                 SakuraItem* parent);
