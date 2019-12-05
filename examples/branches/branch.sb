@@ -1,28 +1,28 @@
 [install_branch]
-- packages = nano
+- packages = "nano"
 - test_output = ""
 
 apt("update and install")  
 -> update
 -> present:
-    - names = "{{packages}}"
+    - names = packages
 
-if(packages == nano)
+if(packages == "nano")
 {
     assert("test-assert")
-    - packages == nano
+    - packages == "nano"
 
     apt("try to delete")
     -> absent:
-       - names = "{{packages}}"
+       - names = packages
 
     apt("try to delete again")
     -> absent:
-       - names = "{{packages}}"
+       - names = packages
 
     apt("install via apt")
     -> present:
-       - names = "{{packages}}"
+       - names = packages
 
     file("copy a testfile")
     -> copy:

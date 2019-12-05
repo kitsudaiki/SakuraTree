@@ -52,11 +52,11 @@ fillItems(ValueItemMap &items,
             continue;
         }
 
-        if(it->second.type == ValueItem::INPUT_PAIR_TYPE
+        if(it->second.isIdentifier == false
+                && it->second.type == ValueItem::INPUT_PAIR_TYPE
                 && it->second.item->isStringValue())
         {
-            const std::string tempItem = it->second.item->toString();
-
+            // prepare map for jinja2-convert
             DataMap possibleValues;
             std::map<std::string, ValueItem>::iterator insertIt;
             for(insertIt = insertValues.valueMap.begin();
@@ -68,10 +68,12 @@ fillItems(ValueItemMap &items,
                 }
             }
 
+            // convert jinja2-string
             Jinja2Converter* converter = SakuraRoot::m_root->m_jinja2Converter;
-            const std::pair<bool, std::string> convertResult = converter->convert(tempItem,
-                                                                                  &possibleValues);
+            std::pair<bool, std::string> convertResult;
+            convertResult = converter->convert(it->second.item->toString(), &possibleValues);
 
+            // process negative result
             if(convertResult.first == false)
             {
                 result.first = false;
@@ -79,10 +81,16 @@ fillItems(ValueItemMap &items,
                 return result;
             }
 
-            if(it->second.item != nullptr) {
-                delete it->second.item;
-            }
-            it->second.item = new DataValue(convertResult.second);
+            // write positive result back to item-list
+            ValueItem valueItem;
+            valueItem.item = new DataValue(convertResult.second);
+            it->second = valueItem;
+        }
+        else if(it->second.isIdentifier)
+        {
+            ValueItem valueItem;
+            valueItem.item = insertValues.get(it->second.item->toString())->copy();
+            it->second = valueItem;
         }
     }
 
@@ -174,6 +182,16 @@ convertBlossomOutput(const BlossomItem &blossom)
 {
     std::string output = "";
     output += "+++++++++++++++++++++++++++++++++++++++++++++++++\n";
+    // print call-hierarchy
+    for(uint32_t i = 0; i < blossom.nameHirarchie.size(); i++)
+    {
+        for(uint32_t j = 0; j < i; j++)
+        {
+            output += "   ";
+        }
+        output += blossom.nameHirarchie.at(i) + "\n";
+    }
+    output += "\n";
 
     // print executeion-state
     switch(blossom.resultState)
@@ -202,16 +220,6 @@ convertBlossomOutput(const BlossomItem &blossom)
             break;
         default:
             break;
-    }
-
-    // print call-hierarchy
-    for(uint32_t i = 0; i < blossom.nameHirarchie.size(); i++)
-    {
-        for(uint32_t j = 0; j < i; j++)
-        {
-            output += "   ";
-        }
-        output += blossom.nameHirarchie.at(i) + "\n";
     }
 
     // print error-output
