@@ -1,16 +1,16 @@
 [install_branch]
-- packages = "nano"
-- test_output = ""
+- packages = [ "nano", "vim" ]
+- test_output = "test"
 
 apt("update and install")  
 -> update
 -> present:
     - names = packages
 
-if(packages == "nano")
+if(test_output == "test")
 {
     assert("test-assert")
-    - packages == "nano"
+    - test_output == "test"
 
     apt("try to delete")
     -> absent:
@@ -46,11 +46,11 @@ if(packages == "nano")
 }
 else
 {
-    apt(apt1_in_else)
+    apt("first apt in else")
     -> absent:
        - names = "{{packages}}"
 
-    apt(apt2_in_else)
+    apt("second apt in else")
     -> present:
        - names = "{{packages}}"
 }

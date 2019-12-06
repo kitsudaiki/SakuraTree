@@ -82,7 +82,19 @@ SakuraCompiler::convertItemPart(JsonItem &itemInput,
                                 ValueItem &itemPart,
                                 const std::string pairType)
 {
-    itemPart.item = itemInput.get("item").getItemContent()->copy()->toValue();
+    if(itemInput.isMap())
+    {
+        itemPart.item = itemInput.get("item").getItemContent()->copy()->toValue();
+    }
+    else if (itemInput.isArray())
+    {
+        DataArray* tempArray = new DataArray();
+        for(uint32_t i = 0; i < itemInput.size(); i++)
+        {
+            tempArray->append(itemInput.get(i).getItemContent()->copy());
+        }
+        itemPart.item = tempArray;
+    }
 
     if(pairType == "assign") {
         itemPart.type = ValueItem::INPUT_PAIR_TYPE;
