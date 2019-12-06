@@ -102,7 +102,7 @@ SakuraThread::grow(SakuraItem* growPlan,
         BlossomItem* blossomItem = dynamic_cast<BlossomItem*>(growPlan);
         std::vector<std::string> newHierarchy = hierarchy;
 
-        std::pair<bool, std::string> result = fillItems(blossomItem->values, values);
+        std::pair<bool, std::string> result = fillInputItems(blossomItem->values, values);
         if(result.first == false)
         {
             blossomItem->outputMessage = result.second;
@@ -115,7 +115,7 @@ SakuraThread::grow(SakuraItem* growPlan,
                        blossomItem->values,
                        newHierarchy);
 
-        writeOutputBack(blossomItem->values, blossomItem->blossomOutput);
+        fillOutputItems(blossomItem->values, blossomItem->blossomOutput);
         overrideItems(blossomItem->parent->values, blossomItem->values);
 
         return;
@@ -139,7 +139,7 @@ SakuraThread::grow(SakuraItem* growPlan,
         std::vector<std::string> newHierarchy = hierarchy;
         newHierarchy.push_back("BRANCH: " + branchItem->id);
 
-        std::pair<bool, std::string> result = fillItems(branchItem->values, values);
+        std::pair<bool, std::string> result = fillInputItems(branchItem->values, values);
         if(result.first == false)
         {
             // TODO: error-output
@@ -164,7 +164,7 @@ SakuraThread::grow(SakuraItem* growPlan,
         std::vector<std::string> newHierarchy = hierarchy;
         newHierarchy.push_back("TREE: " + treeItem->id);
 
-        std::pair<bool, std::string> result = fillItems(treeItem->values, values);
+        std::pair<bool, std::string> result = fillInputItems(treeItem->values, values);
         if(result.first == false)
         {
             // TODO: error-output
@@ -327,14 +327,16 @@ SakuraThread::processIf(IfBranching* growPlan,
             {
                 const std::string key = growPlan->leftSide->get("item")->toString();
                 const std::string leftSide = values.getValueAsString(key);
-                ifMatch = leftSide == growPlan->rightSide->get("item")->toString();
+                const std::string rightSide = growPlan->rightSide->get("item")->toString();
+                ifMatch = leftSide == rightSide;
                 break;
             }
         case IfBranching::UNEQUAL:
             {
                 const std::string key = growPlan->leftSide->get("item")->toString();
                 const std::string leftSide = values.getValueAsString(key);
-                ifMatch = leftSide != growPlan->rightSide->get("item")->toString();
+                const std::string rightSide = growPlan->rightSide->get("item")->toString();
+                ifMatch = leftSide != rightSide;
                 break;
             }
         default:

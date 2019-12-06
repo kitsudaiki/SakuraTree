@@ -30,18 +30,13 @@ using Kitsunemimi::Common::DataMap;
 namespace SakuraTree
 {
 
-const std::pair<bool, std::string> writeOutputBack(ValueItemMap &items,
-                                                   DataItem* output);
-const std::pair<bool, std::string> fillItems(ValueItemMap &items,
-                                             ValueItemMap &insertValues);
+const Result fillJinja2Template(const std::string baseString, ValueItemMap &insertValues);
+const Result fillOutputItems(ValueItemMap &items, DataItem* output);
+const Result fillInputItems(ValueItemMap &items, ValueItemMap &insertValues);
 
-void overrideItems(ValueItemMap &original,
-                   ValueItemMap &override);
-
+void checkForRequiredKeys(BlossomItem &blossomItem, const std::vector<std::string> &requiredKeys);
+void overrideItems(ValueItemMap &original, ValueItemMap &override);
 const std::vector<std::string> checkItems(ValueItemMap &items);
-
-void checkForRequiredKeys(BlossomItem &blossomItem,
-                          const std::vector<std::string> &requiredKeys);
 
 const std::string convertBlossomOutput(const BlossomItem &blossom);
 

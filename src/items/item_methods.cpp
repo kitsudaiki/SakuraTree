@@ -32,13 +32,40 @@ namespace SakuraTree
 {
 
 /**
+ * @brief fillJinja2Template
+ * @param baseString
+ * @param insertValues
+ * @return
+ */
+const Result
+fillJinja2Template(const std::string baseString,
+                   ValueItemMap &insertValues)
+{
+    // prepare map for jinja2-convert
+    DataMap possibleValues;
+    std::map<std::string, ValueItem>::iterator insertIt;
+    for(insertIt = insertValues.valueMap.begin();
+        insertIt != insertValues.valueMap.end();
+        insertIt++)
+    {
+        if(insertIt->second.item->isValue()) {
+            possibleValues.insert(insertIt->first, insertIt->second.item->copy());
+        }
+    }
+
+    // convert jinja2-string
+    Jinja2Converter* converter = SakuraRoot::m_root->m_jinja2Converter;
+    return converter->convert(baseString, &possibleValues);
+}
+
+/**
  * @brief writeOutputBack
  * @param items
  * @param output
  * @return
  */
-const std::pair<bool, std::string> writeOutputBack(ValueItemMap &items,
-                                                   DataItem *output)
+const Result fillOutputItems(ValueItemMap &items,
+                             DataItem *output)
 {
     std::pair<bool, std::string> result;
 
@@ -65,11 +92,11 @@ const std::pair<bool, std::string> writeOutputBack(ValueItemMap &items,
  * @param insertValues
  * @return
  */
-const std::pair<bool, std::string>
-fillItems(ValueItemMap &items,
-          ValueItemMap &insertValues)
+const Result
+fillInputItems(ValueItemMap &items,
+               ValueItemMap &insertValues)
 {
-    std::pair<bool, std::string> result;
+    Result result;
 
     std::map<std::string, ValueItem>::iterator it;
     for(it = items.valueMap.begin();
@@ -87,22 +114,8 @@ fillItems(ValueItemMap &items,
                 && it->second.type == ValueItem::INPUT_PAIR_TYPE
                 && it->second.item->isStringValue())
         {
-            // prepare map for jinja2-convert
-            DataMap possibleValues;
-            std::map<std::string, ValueItem>::iterator insertIt;
-            for(insertIt = insertValues.valueMap.begin();
-                insertIt != insertValues.valueMap.end();
-                insertIt++)
-            {
-                if(insertIt->second.item->isValue()) {
-                    possibleValues.insert(insertIt->first, insertIt->second.item->copy());
-                }
-            }
-
-            // convert jinja2-string
-            Jinja2Converter* converter = SakuraRoot::m_root->m_jinja2Converter;
-            std::pair<bool, std::string> convertResult;
-            convertResult = converter->convert(it->second.item->toString(), &possibleValues);
+            const Result convertResult = fillJinja2Template(it->second.item->toString(),
+                                                            insertValues);
 
             // process negative result
             if(convertResult.first == false)

@@ -171,25 +171,25 @@ Tested on Debian and Ubuntu. If you use Centos, Arch, etc and the build-script f
 
 ## Simple example
 
-This is only a simple first example, which I used for my current tests. Its a bogus-example, which doesn't do anything useful. The parallelization and spawning of new instances are now shown in the example. There features are incomplete and/or broken at the moment. These will be core of milestone 0.3.0. 
+This is only a simple first example, which I used for my current tests. Its a bogus-example, which doesn't do anything useful. The parallelization and spawning of new instances are not shown in the example. There features are incomplete and/or broken at the moment. These will be core of milestone 0.3.0. 
 
 **Further syntax description comes, when I have improved the functionallity and stability and is part of milestone 0.2.0.**
 
 
 ```cpp
 [install_branch]
-- packages = "nano"
-- test_output = ""
+- packages = [ "nano", "vim" ]
+- test_output = "test"
 
 apt("update and install")  
 -> update
 -> present:
     - names = packages
 
-if(packages == "nano")
+if(test_output == "test")
 {
     assert("test-assert")
-    - packages == "nano"
+    - test_output == "test"
 
     apt("try to delete")
     -> absent:
@@ -225,13 +225,13 @@ if(packages == "nano")
 }
 else
 {
-    apt(apt1_in_else)
+    apt("first apt in else")
     -> absent:
-       - names = packages
+       - names = "{{packages}}"
 
-    apt(apt2_in_else)
+    apt("second apt in else")
     -> present:
-       - names = packages
+       - names = "{{packages}}"
 }
 
 ```

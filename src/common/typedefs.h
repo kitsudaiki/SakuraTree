@@ -33,6 +33,7 @@ typedef std::chrono::seconds chronoSec;
 typedef std::chrono::high_resolution_clock::time_point chronoTimePoint;
 typedef std::chrono::high_resolution_clock chronoClock;
 
+typedef std::pair<bool, std::string> Result;
 
 namespace SakuraTree {
 class SakuraBranch;
