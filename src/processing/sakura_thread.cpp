@@ -212,6 +212,15 @@ SakuraThread::grow(SakuraItem* growPlan,
         return;
     }
 
+    if(growPlan->getType() == SakuraItem::FOR_ITEM)
+    {
+        ForBranching* forBranching = dynamic_cast<ForBranching*>(growPlan);
+        processFor(forBranching,
+                   values,
+                   hierarchy);
+        return;
+    }
+
     if(growPlan->getType() == SakuraItem::SEQUENTIELL_ITEM)
     {
         processSequeniellPart(dynamic_cast<SequeniellBranching*>(growPlan),
@@ -402,6 +411,27 @@ SakuraThread::processForEach(ForEachBranching* growPlan,
     for(uint32_t i = 0; i < array->size(); i++)
     {
         tempMap.insert(growPlan->tempVarName, array->get(i), true);
+        grow(growPlan->forChild.front(),
+             tempMap,
+             hierarchy);
+    }
+}
+
+/**
+ * @brief SakuraThread::processFor
+ * @param growPlan
+ * @param values
+ * @param hierarchy
+ */
+void
+SakuraThread::processFor(ForBranching* growPlan,
+                         ValueItemMap &values,
+                         const std::vector<std::string> &hierarchy)
+{
+    ValueItemMap tempMap = values;
+    for(long i = growPlan->start; i < growPlan->end; i++)
+    {
+        tempMap.insert(growPlan->tempVarName, new DataValue(i), true);
         grow(growPlan->forChild.front(),
              tempMap,
              hierarchy);

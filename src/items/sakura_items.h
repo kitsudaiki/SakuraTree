@@ -46,7 +46,8 @@ public:
         SEQUENTIELL_ITEM = 6,
         PARALLEL_ITEM = 7,
         IF_ITEM = 8,
-        FOR_EACH_ITEM = 9
+        FOR_EACH_ITEM = 9,
+        FOR_ITEM = 10
     };
 
     SakuraItem();
@@ -222,6 +223,22 @@ public:
 
     std::string tempVarName = "";
     ValueItemMap iterateArray;
+
+    std::vector<SakuraItem*> forChild;
+};
+
+//===================================================================
+// ForBranching
+//===================================================================
+class ForBranching : public SakuraItem
+{
+public:
+    ForBranching();
+    ~ForBranching();
+
+    std::string tempVarName = "";
+    long start = 0;
+    long end = 0;
 
     std::vector<SakuraItem*> forChild;
 };

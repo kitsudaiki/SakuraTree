@@ -189,4 +189,23 @@ ForEachBranching::~ForEachBranching()
     }
 }
 
+//===================================================================
+// ForBranching
+//===================================================================
+ForBranching::ForBranching()
+{
+    type = FOR_ITEM;
+}
+
+ForBranching::~ForBranching()
+{
+    for(uint32_t i = 0; i < forChild.size(); i++)
+    {
+        SakuraItem* tempItem = forChild.at(i);
+        if(tempItem != nullptr) {
+            delete tempItem;
+        }
+    }
+}
+
 }  // namespace SakuraTree

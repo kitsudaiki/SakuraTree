@@ -72,6 +72,8 @@ private:
                           SakuraItem* parent);
     SakuraItem* convertForEach(JsonItem &growPlan,
                                SakuraItem* parent);
+    SakuraItem* convertFor(JsonItem &growPlan,
+                           SakuraItem* parent);
 
     SakuraItem* convertSequeniellPart(JsonItem &growPlan,
                                       SakuraItem* parent);

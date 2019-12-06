@@ -197,6 +197,10 @@ SakuraCompiler::convert(JsonItem &growPlan,
         return convertForEach(growPlan, parent);
     }
 
+    if(typeName == "for") {
+        return convertFor(growPlan, parent);
+    }
+
     // it must everytime match one of the names
     assert(false);
 
@@ -488,6 +492,34 @@ SakuraCompiler::convertForEach(JsonItem &growPlan,
     ValueItem itemValue;
     convertItemPart(listItem, itemValue, "assign");
     newItem->iterateArray.insert("array", itemValue);
+
+    JsonItem content = growPlan.get("content");
+    assert(content.isValid());
+    for(uint32_t i = 0; i < content.size(); i++)
+    {
+        JsonItem newMap = content.get(i);
+        newMap.insert("b_path", growPlan.get("b_path"));
+        newItem->forChild.push_back(convert(newMap, parent));
+    }
+
+    return newItem;
+}
+
+/**
+ * @brief SakuraCompiler::convertFor
+ * @param growPlan
+ * @param parent
+ * @return
+ */
+SakuraItem*
+SakuraCompiler::convertFor(JsonItem &growPlan,
+                           SakuraItem* parent)
+{
+    ForBranching* newItem = new ForBranching();
+    newItem->parent = parent;
+    newItem->tempVarName = growPlan.get("variable1").getItemContent()->toString();
+    newItem->start = growPlan.get("start").getLong();
+    newItem->end = growPlan.get("end").getLong();
 
     JsonItem content = growPlan.get("content");
     assert(content.isValid());
