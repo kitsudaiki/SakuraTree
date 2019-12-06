@@ -40,7 +40,10 @@ SakuraItem::ItemType SakuraItem::getType() const
 //===================================================================
 // BlossomItem
 //===================================================================
-BlossomItem::BlossomItem() {type = BLOSSOM_ITEM;}
+BlossomItem::BlossomItem()
+{
+    type = BLOSSOM_ITEM;
+}
 
 BlossomItem::~BlossomItem()
 {
@@ -52,7 +55,10 @@ BlossomItem::~BlossomItem()
 //===================================================================
 // BlossomGroupItem
 //===================================================================
-BlossomGroupItem::BlossomGroupItem() {type = BLOSSOM_GROUP_ITEM;}
+BlossomGroupItem::BlossomGroupItem()
+{
+    type = BLOSSOM_GROUP_ITEM;
+}
 
 BlossomGroupItem::~BlossomGroupItem() {}
 
@@ -60,50 +66,127 @@ BlossomGroupItem::~BlossomGroupItem() {}
 //===================================================================
 // BranchItem
 //===================================================================
-BranchItem::BranchItem() {type = BRANCH_ITEM;}
+BranchItem::BranchItem()
+{
+    type = BRANCH_ITEM;
+}
 
-BranchItem::~BranchItem() {}
+BranchItem::~BranchItem()
+{
+    for(uint32_t i = 0; i < childs.size(); i++)
+    {
+        SakuraItem* tempItem = childs.at(i);
+        if(tempItem != nullptr) {
+            delete tempItem;
+        }
+    }
+}
 
 //===================================================================
 // SeedItem
 //===================================================================
-SeedItem::SeedItem() {type = SEED_ITEM;}
+SeedItem::SeedItem()
+{
+    type = SEED_ITEM;
+}
 
-SeedItem::~SeedItem() {}
+SeedItem::~SeedItem()
+{
+    if(child != nullptr) {
+        delete child;
+    }
+}
 
 //===================================================================
 // TreeItem
 //===================================================================
-TreeItem::TreeItem() {type = TREE_ITEM;}
+TreeItem::TreeItem()
+{
+    type = TREE_ITEM;
+}
 
-TreeItem::~TreeItem() {}
+TreeItem::~TreeItem()
+{
+    for(uint32_t i = 0; i < childs.size(); i++)
+    {
+        SakuraItem* tempItem = childs.at(i);
+        if(tempItem != nullptr) {
+            delete tempItem;
+        }
+    }
+}
 
 //===================================================================
 // Sequeniell
 //===================================================================
-SequeniellBranching::SequeniellBranching() {type = SEQUENTIELL_ITEM;}
+SequeniellBranching::SequeniellBranching()
+{
+    type = SEQUENTIELL_ITEM;
+}
 
 SequeniellBranching::~SequeniellBranching() {}
 
 //===================================================================
 // ParallelBranching
 //===================================================================
-ParallelBranching::ParallelBranching() {type = PARALLEL_ITEM;}
+ParallelBranching::ParallelBranching()
+{
+    type = PARALLEL_ITEM;
+}
 
 ParallelBranching::~ParallelBranching() {}
 
 //===================================================================
 // IfBranching
 //===================================================================
-IfBranching::IfBranching() {type = IF_ITEM;}
+IfBranching::IfBranching()
+{
+    type = IF_ITEM;
+}
 
-IfBranching::~IfBranching() {}
+IfBranching::~IfBranching()
+{
+    if(leftSide != nullptr) {
+        delete leftSide;
+    }
+    if(rightSide != nullptr) {
+        delete rightSide;
+    }
+
+    for(uint32_t i = 0; i < ifChilds.size(); i++)
+    {
+        SakuraItem* tempItem = ifChilds.at(i);
+        if(tempItem != nullptr) {
+            delete tempItem;
+        }
+    }
+
+    for(uint32_t i = 0; i < elseChilds.size(); i++)
+    {
+        SakuraItem* tempItem = elseChilds.at(i);
+        if(tempItem != nullptr) {
+            delete tempItem;
+        }
+    }
+}
 
 //===================================================================
 // ForEachBranching
 //===================================================================
-ForEachBranching::ForEachBranching() {type = FOR_EACH_ITEM;}
+ForEachBranching::ForEachBranching()
+{
+    type = FOR_EACH_ITEM;
+}
 
-ForEachBranching::~ForEachBranching() {}
+ForEachBranching::~ForEachBranching()
+{
+    for(uint32_t i = 0; i < forChild.size(); i++)
+    {
+        SakuraItem* tempItem = forChild.at(i);
+        if(tempItem != nullptr) {
+            delete tempItem;
+        }
+    }
+}
 
 }  // namespace SakuraTree
