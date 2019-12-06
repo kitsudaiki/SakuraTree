@@ -222,6 +222,12 @@ if(test_output == "test")
 
     print("test output")
     - output = "{{test_output}}"
+
+    for(package : packages)
+    {
+        print("test output in for-loop")
+        - output = package
+    }
 }
 else
 {

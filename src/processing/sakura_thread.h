@@ -80,6 +80,9 @@ private:
                    ValueItemMap &values,
                    const std::vector<std::string> &hierarchy);
 
+    void processForEach(ForEachBranching* growPlan,
+                        ValueItemMap &values,
+                        const std::vector<std::string> &hierarchy);
 
     void processSequeniellPart(SequeniellBranching* growPlan,
                                ValueItemMap &values,

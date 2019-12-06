@@ -100,10 +100,10 @@ IfBranching::IfBranching() {type = IF_ITEM;}
 IfBranching::~IfBranching() {}
 
 //===================================================================
-// ForBranching
+// ForEachBranching
 //===================================================================
-ForBranching::ForBranching() {type = FOR_ITEM;}
+ForEachBranching::ForEachBranching() {type = FOR_EACH_ITEM;}
 
-ForBranching::~ForBranching() {}
+ForEachBranching::~ForEachBranching() {}
 
 }  // namespace SakuraTree

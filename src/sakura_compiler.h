@@ -70,6 +70,8 @@ private:
                             SakuraItem* parent);
     SakuraItem* convertIf(JsonItem &growPlan,
                           SakuraItem* parent);
+    SakuraItem* convertForEach(JsonItem &growPlan,
+                               SakuraItem* parent);
 
     SakuraItem* convertSequeniellPart(JsonItem &growPlan,
                                       SakuraItem* parent);
