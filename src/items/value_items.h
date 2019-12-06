@@ -102,7 +102,7 @@ struct ValueItemMap
 {
     std::map<std::string, ValueItem> valueMap;
 
-    bool insert(const std::string &key, DataValue* value, bool force=true)
+    bool insert(const std::string &key, DataItem* value, bool force=true)
     {
         ValueItem valueItem;
         valueItem.item = value->copy();

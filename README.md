@@ -222,6 +222,18 @@ if(test_output == "test")
 
     print("test output")
     - output = "{{test_output}}"
+
+    for(package : packages)
+    {
+        print("test output in for-loop")
+        - output = package
+    }
+
+    for(i = 0; i < 5; i++)
+    {
+        print("test iter-number")
+        - output = i
+    }
 }
 else
 {
