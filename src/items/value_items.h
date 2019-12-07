@@ -24,6 +24,7 @@
 #define VALUE_ITEMS_H
 
 #include <common.h>
+#include <items/value_item_functions.h>
 
 //===================================================================
 // FunctionItem
@@ -35,7 +36,10 @@ struct FunctionItem
         UNDEFINED_FUNCTION = 0,
         GET_FUNCTION = 1,
         SPLIT_FUNCTION = 2,
-        CONTAINS_FUNCTION = 3
+        CONTAINS_FUNCTION = 3,
+        GET_SIZE_FUNCTION = 4,
+        INSERT_FUNCTION = 5,
+        APPEND_FUNCTION = 6
     };
 
     FunctionType type = UNDEFINED_FUNCTION;
@@ -93,6 +97,47 @@ struct ValueItem
         return *this;
     }
 
+    DataItem* getProcessedItem()
+    {
+        if(isIdentifier == false) {
+            return item;
+        }
+
+        DataItem* tempItem = item;
+        for(uint32_t i = 0; i < functions.size(); i++)
+        {
+            if(tempItem == nullptr) {
+                return nullptr;
+            }
+
+            switch(functions.at(i).type)
+            {
+            case FunctionItem::GET_FUNCTION:
+                tempItem = getValue(item, &functions.at(i).arguments.at(0));
+                break;
+            case FunctionItem::SPLIT_FUNCTION:
+                tempItem = splitValue(item, &functions.at(i).arguments.at(0));
+                break;
+            case FunctionItem::CONTAINS_FUNCTION:
+                tempItem = containsValue(item, &functions.at(i).arguments.at(0));
+                break;
+            case FunctionItem::GET_SIZE_FUNCTION:
+                tempItem = sizeValue(item);
+                break;
+            case FunctionItem::INSERT_FUNCTION:
+                tempItem = insertValue(item,
+                                       &functions.at(i).arguments.at(0),
+                                       &functions.at(i).arguments.at(1));
+                break;
+            case FunctionItem::APPEND_FUNCTION:
+                tempItem = appendValue(item, &functions.at(i).arguments.at(0));
+                break;
+            default:
+                break;
+            }
+        }
+        return tempItem;
+    }
 };
 
 //===================================================================
