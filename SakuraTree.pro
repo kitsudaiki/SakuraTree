@@ -98,7 +98,8 @@ SOURCES += \
     tests/processing/blossoms/files/text_files/text_write_blossom_test.cpp \
     tests/processing/blossoms/files/text_files/text_replace_blossom_test.cpp \
     src/processing/blossoms/special/assert_blossom.cpp \
-    src/items/value_item_functions.cpp
+    src/items/value_item_functions.cpp \
+    tests/items/value_items_functions_test.cpp
 
 
 HEADERS += \
@@ -156,6 +157,7 @@ HEADERS += \
     tests/processing/blossoms/files/text_files/text_replace_blossom_test.h \
     src/processing/blossoms/special/assert_blossom.h \
     src/items/value_items.h \
-    src/items/value_item_functions.h
+    src/items/value_item_functions.h \
+    tests/items/value_items_functions_test.h
 
 

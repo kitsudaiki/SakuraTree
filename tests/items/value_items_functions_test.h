@@ -1,5 +1,5 @@
 /**
- * @file        defines.h
+ * @file        value_items_functions_test.h
  *
  * @author      Tobias Anker <tobias.anker@kitsunemimi.moe>
  *
@@ -20,12 +20,32 @@
  *      limitations under the License.
  */
 
-#ifndef DEFINES_H
-#define DEFINES_H
+#ifndef VALUE_ITEMS_FUNCTIONS_TEST_H
+#define VALUE_ITEMS_FUNCTIONS_TEST_H
 
-#include <common/includes.h>
+#include <common.h>
+#include <libKitsunemimiCommon/test.h>
+#include <items/value_item_functions.h>
 
-#define DEBUG false
-#define RUN_UNIT_TEST
+namespace SakuraTree
+{
+class ValueItemsFunctions_Test
+        : public Kitsunemimi::Common::Test
+{
+public:
+    ValueItemsFunctions_Test();
 
-#endif // DEFINES_H
+private:
+    void getValue_test();
+    void splitValue_test();
+    void sizeValue_test();
+    void containsValue_test();
+    void appendValue_test();
+    void insertValue_test();
+
+    void checkNullptr(DataItem *value);
+};
+
+}
+
+#endif // VALUE_ITEMS_FUNCTIONS_TEST_H

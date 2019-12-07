@@ -33,6 +33,10 @@ using Kitsunemimi::Common::splitStringByDelimiter;
  */
 DataItem* getValue(DataItem* original, DataValue* value)
 {
+    if(original == nullptr) {
+        return nullptr;
+    }
+
     if(original->isMap())
     {
         DataItem* resultItem = original->get(value->toString());
@@ -62,7 +66,9 @@ DataItem* getValue(DataItem* original, DataValue* value)
  */
 DataItem* splitValue(DataItem* original, DataValue* delimiter)
 {
-    if(original->isValue() == false) {
+    if(original == nullptr
+            || original->isValue() == false)
+    {
         return nullptr;
     }
 
@@ -90,6 +96,10 @@ DataItem* splitValue(DataItem* original, DataValue* delimiter)
  */
 DataItem* sizeValue(DataItem* original)
 {
+    if(original == nullptr) {
+        return nullptr;
+    }
+
     const long size = static_cast<long>(original->size());
     DataValue* resultItem = new DataValue(size);
 
@@ -104,7 +114,9 @@ DataItem* sizeValue(DataItem* original)
  */
 DataItem* containsValue(DataItem* original, DataValue* key)
 {
-    if(original->isMap() == false) {
+    if(original == nullptr
+            || original->isMap() == false)
+    {
         return nullptr;
     }
 
@@ -122,7 +134,9 @@ DataItem* containsValue(DataItem* original, DataValue* key)
  */
 DataItem* appendValue(DataItem* original, DataValue* value)
 {
-    if(original->isArray() == false) {
+    if(original == nullptr
+            || original->isArray() == false)
+    {
         return nullptr;
     }
 
@@ -140,7 +154,9 @@ DataItem* appendValue(DataItem* original, DataValue* value)
  */
 DataItem* insertValue(DataItem* original, DataValue* key, DataValue* value)
 {
-    if(original->isMap() == false) {
+    if(original == nullptr
+            || original->isMap() == false)
+    {
         return nullptr;
     }
 
