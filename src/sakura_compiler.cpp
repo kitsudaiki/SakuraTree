@@ -131,6 +131,18 @@ SakuraCompiler::convertItemPart(JsonItem &itemInput,
         if(functions.get(f).get("m_type").toString() == "contains") {
             functionItem.type = FunctionItem::CONTAINS_FUNCTION;
         }
+        if(functions.get(f).get("m_type").toString() == "size") {
+            functionItem.type = FunctionItem::SIZE_FUNCTION;
+        }
+
+        if(functions.get(f).get("m_type").toString() == "insert") {
+            functionItem.type = FunctionItem::INSERT_FUNCTION;
+        }
+
+        if(functions.get(f).get("m_type").toString() == "append") {
+            functionItem.type = FunctionItem::APPEND_FUNCTION;
+        }
+
 
         itemPart.functions.push_back(functionItem);
     }

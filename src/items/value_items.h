@@ -37,7 +37,7 @@ struct FunctionItem
         GET_FUNCTION = 1,
         SPLIT_FUNCTION = 2,
         CONTAINS_FUNCTION = 3,
-        GET_SIZE_FUNCTION = 4,
+        SIZE_FUNCTION = 4,
         INSERT_FUNCTION = 5,
         APPEND_FUNCTION = 6
     };
@@ -121,7 +121,7 @@ struct ValueItem
             case FunctionItem::CONTAINS_FUNCTION:
                 tempItem = containsValue(item, &functions.at(i).arguments.at(0));
                 break;
-            case FunctionItem::GET_SIZE_FUNCTION:
+            case FunctionItem::SIZE_FUNCTION:
                 tempItem = sizeValue(item);
                 break;
             case FunctionItem::INSERT_FUNCTION:
