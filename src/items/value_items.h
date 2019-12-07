@@ -99,10 +99,6 @@ struct ValueItem
 
     DataItem* getProcessedItem()
     {
-        if(isIdentifier == false) {
-            return item;
-        }
-
         DataItem* tempItem = item;
         for(uint32_t i = 0; i < functions.size(); i++)
         {

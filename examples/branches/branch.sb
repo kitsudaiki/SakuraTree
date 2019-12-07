@@ -44,6 +44,9 @@ if(test_output == "test")
     print("test output")
     - output = "{{test_output}}"
 
+    print("test output of size")
+    - output = packages.size()
+
     for(package : packages)
     {
         print("test output in for-loop")

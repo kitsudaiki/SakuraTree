@@ -135,6 +135,8 @@ fillInputItems(ValueItemMap &items,
         {
             ValueItem valueItem;
             valueItem.item = insertValues.get(it->second.item->toString())->copy();
+            valueItem.functions = it->second.functions;
+            valueItem.item = valueItem.getProcessedItem();
             it->second = valueItem;
         }
     }
