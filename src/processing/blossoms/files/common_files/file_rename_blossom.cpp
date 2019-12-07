@@ -45,8 +45,6 @@ FileRenameBlossom::initTask(BlossomItem &blossomItem)
         return;
     }
 
-    std::map<std::string, ValueItem>::iterator it;
-
     m_filePath = blossomItem.values.getValueAsString("file_path");
     m_newFileName = blossomItem.values.getValueAsString("new_name");
 

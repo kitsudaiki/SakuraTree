@@ -49,6 +49,10 @@
 #include <processing/blossoms/files/text_files/text_replace_blossom.h>
 #include <processing/blossoms/files/text_files/text_write_blossom.h>
 
+#include <processing/blossoms/files/ini_files/ini_delete_entry_blossom.h>
+#include <processing/blossoms/files/ini_files/ini_read_entry_blossom.h>
+#include <processing/blossoms/files/ini_files/ini_set_entry_blossom.h>
+
 namespace SakuraTree
 {
 
@@ -142,6 +146,19 @@ getBlossom(const std::string type,
         }
         if(subType == "append") {
             return new TextAppendBlossom();
+        }
+    }
+
+    if(type == "ini_file")
+    {
+        if(subType == "read") {
+            return new IniReadEntryBlossom();
+        }
+        if(subType == "set") {
+            return new IniSetEntryBlossom();
+        }
+        if(subType == "delete") {
+            return new IniDeleteEntryBlossom();
         }
     }
 

@@ -39,6 +39,11 @@ LIBS += -L../libKitsunemimiJson/src/debug -lKitsunemimiJson
 LIBS += -L../libKitsunemimiJson/src/release -lKitsunemimiJson
 INCLUDEPATH += ../libKitsunemimiJson/include
 
+LIBS += -L../libKitsunemimiIni/src -lKitsunemimiIni
+LIBS += -L../libKitsunemimiIni/src/debug -lKitsunemimiIni
+LIBS += -L../libKitsunemimiIni/src/release -lKitsunemimiIni
+INCLUDEPATH += ../libKitsunemimiIni/include
+
 LIBS += -L../libKitsunemimiSakuraParser/src -lKitsunemimiSakuraParser
 LIBS += -L../libKitsunemimiSakuraParser/src/debug -lKitsunemimiSakuraParser
 LIBS += -L../libKitsunemimiSakuraParser/src/release -lKitsunemimiSakuraParser
@@ -99,7 +104,10 @@ SOURCES += \
     tests/processing/blossoms/files/text_files/text_replace_blossom_test.cpp \
     src/processing/blossoms/special/assert_blossom.cpp \
     src/items/value_item_functions.cpp \
-    tests/items/value_items_functions_test.cpp
+    tests/items/value_items_functions_test.cpp \
+    src/processing/blossoms/files/ini_files/ini_read_entry_blossom.cpp \
+    src/processing/blossoms/files/ini_files/ini_set_entry_blossom.cpp \
+    src/processing/blossoms/files/ini_files/ini_delete_entry_blossom.cpp
 
 
 HEADERS += \
@@ -158,6 +166,9 @@ HEADERS += \
     src/processing/blossoms/special/assert_blossom.h \
     src/items/value_items.h \
     src/items/value_item_functions.h \
-    tests/items/value_items_functions_test.h
+    tests/items/value_items_functions_test.h \
+    src/processing/blossoms/files/ini_files/ini_read_entry_blossom.h \
+    src/processing/blossoms/files/ini_files/ini_set_entry_blossom.h \
+    src/processing/blossoms/files/ini_files/ini_delete_entry_blossom.h
 
 

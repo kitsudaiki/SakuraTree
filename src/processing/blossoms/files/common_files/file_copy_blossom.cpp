@@ -44,8 +44,6 @@ FileCopyBlossom::initTask(BlossomItem &blossomItem)
         return;
     }
 
-    std::map<std::string, ValueItem>::iterator it;
-
     m_sourcePath = blossomItem.values.getValueAsString("source_path");
     m_destinationPath = blossomItem.values.getValueAsString("dest_path");
 
