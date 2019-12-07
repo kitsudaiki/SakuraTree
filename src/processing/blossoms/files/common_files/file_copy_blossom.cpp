@@ -69,13 +69,13 @@ FileCopyBlossom::preCheck(BlossomItem &blossomItem)
         return;
     }
 
-    if(doesPathExist(m_destinationPath))
+    // TODO: compare files, until then copy everytime
+    /* if(doesPathExist(m_destinationPath))
     {
-        // TODO: compare files
         blossomItem.skip = true;
         blossomItem.success = true;
         return;
-    }
+    }*/
 
     blossomItem.success = true;
 }

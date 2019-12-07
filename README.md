@@ -180,6 +180,7 @@ This is only a simple first example, which I used for my current tests. Its a bo
 [install_branch]
 - packages = [ "nano", "vim" ]
 - test_output = "test"
+- test_output2 = "test"
 
 apt("update and install")  
 -> update
@@ -228,6 +229,21 @@ if(test_output == "test")
             - output = packages.get(i)
         }
     }
+
+    ini_file("get value from a test-ini-file")
+    - file_path = "/tmp/test_file"
+    - group = "DEFAULT"
+    - entry = "asdf"
+    -> read:
+        - blossom_output >> test_output
+    -> set:
+        - value = "0123456789"
+    -> read:
+        - blossom_output >> test_output2
+
+    print("print init-file-output")
+    - first_try = test_output
+    - second_try = test_output2
 }
 else
 {

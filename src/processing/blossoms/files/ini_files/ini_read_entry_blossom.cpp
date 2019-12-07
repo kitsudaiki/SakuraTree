@@ -97,7 +97,7 @@ IniReadEntryBlossom::runTask(BlossomItem &blossomItem)
         return;
     }
 
-    blossomItem.blossomOutput = iniItem.get(m_group, m_entry);
+    blossomItem.blossomOutput = iniItem.get(m_group, m_entry)->copy();
     blossomItem.success = true;
 }
 
