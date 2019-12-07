@@ -146,13 +146,6 @@ IfBranching::IfBranching()
 
 IfBranching::~IfBranching()
 {
-    if(leftSide != nullptr) {
-        delete leftSide;
-    }
-    if(rightSide != nullptr) {
-        delete rightSide;
-    }
-
     for(uint32_t i = 0; i < ifChilds.size(); i++)
     {
         SakuraItem* tempItem = ifChilds.at(i);

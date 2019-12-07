@@ -23,6 +23,8 @@
 #include "run_unit_tests.h"
 
 #include <tests/items/item_methods_test.h>
+#include <tests/items/value_items_functions_test.h>
+
 #include <tests/processing/blossoms/files/file_methods_test.h>
 
 #include <tests/processing/blossoms/files/common_files/file_chmod_blossom_test.h>
@@ -51,6 +53,7 @@ void
 RunUnitTests::run()
 {
     #ifdef RUN_UNIT_TEST
+    SakuraTree::ValueItemsFunctions_Test();
     SakuraTree::ItemMethods_Test();
     SakuraTree::FileMethods_Test();
     //SakuraTree::FileChmodBlossom_Test();

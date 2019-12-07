@@ -191,18 +191,6 @@ if(test_output == "test")
     assert("test-assert")
     - test_output == "test"
 
-    apt("try to delete")
-    -> absent:
-       - names = packages
-
-    apt("try to delete again")
-    -> absent:
-       - names = packages
-
-    apt("install via apt")
-    -> present:
-       - names = packages
-
     file("copy a testfile")
     -> copy:
        - source_path = "test_file"
@@ -223,27 +211,33 @@ if(test_output == "test")
     print("test output")
     - output = "{{test_output}}"
 
+    print("test output of size")
+    - output = packages.size()
+
     for(package : packages)
     {
         print("test output in for-loop")
         - output = package
     }
 
-    for(i = 0; i < 5; i++)
+    if(packages.size() == 2)
     {
-        print("test iter-number")
-        - output = i
+        for(i = 0; i < packages.size(); i++)
+        {
+            print("test iter-number")
+            - output = packages.get(i)
+        }
     }
 }
 else
 {
     apt("first apt in else")
     -> absent:
-       - names = "{{packages}}"
+       - names = packages
 
     apt("second apt in else")
     -> present:
-       - names = "{{packages}}"
+       - names = packages
 }
 
 ```

@@ -24,6 +24,7 @@
 #define VALUE_ITEMS_H
 
 #include <common.h>
+#include <items/value_item_functions.h>
 
 //===================================================================
 // FunctionItem
@@ -35,7 +36,10 @@ struct FunctionItem
         UNDEFINED_FUNCTION = 0,
         GET_FUNCTION = 1,
         SPLIT_FUNCTION = 2,
-        CONTAINS_FUNCTION = 3
+        CONTAINS_FUNCTION = 3,
+        SIZE_FUNCTION = 4,
+        INSERT_FUNCTION = 5,
+        APPEND_FUNCTION = 6
     };
 
     FunctionType type = UNDEFINED_FUNCTION;
@@ -67,7 +71,9 @@ struct ValueItem
         if(item != nullptr) {
             delete item;
         }
-        item = other.item->copy();
+        if(other.item != nullptr) {
+            item = other.item->copy();
+        }
         type = other.type;
         isIdentifier = other.isIdentifier;
         functions = other.functions;
@@ -85,7 +91,9 @@ struct ValueItem
             if(this->item != nullptr) {
                 delete this->item;
             }
-            this->item = other.item->copy();
+            if(other.item != nullptr) {
+                this->item = other.item->copy();
+            }
             this->type = other.type;
             this->isIdentifier = other.isIdentifier;
             this->functions = other.functions;
@@ -93,6 +101,58 @@ struct ValueItem
         return *this;
     }
 
+    DataItem* getProcessedItem()
+    {
+        DataItem* tempItem = item;
+        for(uint32_t i = 0; i < functions.size(); i++)
+        {
+            if(tempItem == nullptr) {
+                return nullptr;
+            }
+
+            switch(functions.at(i).type)
+            {
+            case FunctionItem::GET_FUNCTION:
+                if(functions.at(i).arguments.size() != 1) {
+                    return nullptr;
+                }
+                tempItem = getValue(item, &functions.at(i).arguments.at(0));
+                break;
+            case FunctionItem::SPLIT_FUNCTION:
+                if(functions.at(i).arguments.size() != 1) {
+                    return nullptr;
+                }
+                tempItem = splitValue(item, &functions.at(i).arguments.at(0));
+                break;
+            case FunctionItem::CONTAINS_FUNCTION:
+                if(functions.at(i).arguments.size() != 1) {
+                    return nullptr;
+                }
+                tempItem = containsValue(item, &functions.at(i).arguments.at(0));
+                break;
+            case FunctionItem::SIZE_FUNCTION:
+                tempItem = sizeValue(item);
+                break;
+            case FunctionItem::INSERT_FUNCTION:
+                if(functions.at(i).arguments.size() != 2) {
+                    return nullptr;
+                }
+                tempItem = insertValue(item,
+                                       &functions.at(i).arguments.at(0),
+                                       &functions.at(i).arguments.at(1));
+                break;
+            case FunctionItem::APPEND_FUNCTION:
+                if(functions.at(i).arguments.size() != 1) {
+                    return nullptr;
+                }
+                tempItem = appendValue(item, &functions.at(i).arguments.at(0));
+                break;
+            default:
+                break;
+            }
+        }
+        return tempItem;
+    }
 };
 
 //===================================================================
@@ -174,6 +234,17 @@ struct ValueItemMap
         }
 
         return nullptr;
+    }
+
+    ValueItem getValueItem(const std::string &key)
+    {
+        std::map<std::string, ValueItem>::iterator it;
+        it = valueMap.find(key);
+        if(it != valueMap.end()) {
+            return it->second;
+        }
+
+        return ValueItem();
     }
 
     uint64_t size()

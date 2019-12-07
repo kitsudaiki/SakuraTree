@@ -204,9 +204,9 @@ public:
     IfBranching();
     ~IfBranching();
 
-    DataMap* leftSide = nullptr;
+    ValueItem leftSide;
     compareTypes ifType = EQUAL;
-    DataMap* rightSide = nullptr;
+    ValueItem rightSide;
 
     std::vector<SakuraItem*> ifChilds;
     std::vector<SakuraItem*> elseChilds;
@@ -237,8 +237,8 @@ public:
     ~ForBranching();
 
     std::string tempVarName = "";
-    long start = 0;
-    long end = 0;
+    ValueItem start;
+    ValueItem end;
 
     std::vector<SakuraItem*> forChild;
 };
