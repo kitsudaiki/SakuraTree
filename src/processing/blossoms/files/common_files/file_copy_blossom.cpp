@@ -44,8 +44,6 @@ FileCopyBlossom::initTask(BlossomItem &blossomItem)
         return;
     }
 
-    std::map<std::string, ValueItem>::iterator it;
-
     m_sourcePath = blossomItem.values.getValueAsString("source_path");
     m_destinationPath = blossomItem.values.getValueAsString("dest_path");
 
@@ -71,13 +69,13 @@ FileCopyBlossom::preCheck(BlossomItem &blossomItem)
         return;
     }
 
-    if(doesPathExist(m_destinationPath))
+    // TODO: compare files, until then copy everytime
+    /* if(doesPathExist(m_destinationPath))
     {
-        // TODO: compare files
         blossomItem.skip = true;
         blossomItem.success = true;
         return;
-    }
+    }*/
 
     blossomItem.success = true;
 }

@@ -55,6 +55,8 @@ get_required_kitsune_lib_repo "libKitsunemimiNetwork" "master" 4
 
 get_required_kitsune_lib_repo "libKitsunemimiJson" "master" 1
 
+get_required_kitsune_lib_repo "libKitsunemimiIni" "master" 1
+
 get_required_kitsune_lib_repo "libKitsunemimiJinja2" "master" 1
 
 get_required_kitsune_lib_repo "libKitsunemimiSakuraParser" "master" 1

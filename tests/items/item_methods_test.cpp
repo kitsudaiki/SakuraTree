@@ -85,10 +85,9 @@ ItemMethods_Test::overrideItems_test()
 
     overrideItems(original, override);
 
-    TEST_EQUAL(original.size(), 3);
+    TEST_EQUAL(original.size(), 2);
     TEST_EQUAL(original.get("x")->toString(), "{{test}}");
     TEST_EQUAL(original.get("y")->toString(), "poi");
-    TEST_EQUAL(original.get("z")->toString(), "hmmm");
 }
 
 /**

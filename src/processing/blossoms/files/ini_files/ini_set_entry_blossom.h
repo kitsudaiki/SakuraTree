@@ -1,5 +1,5 @@
 /**
- * @file        file_methods.h
+ * @file        ini_set_entry_blossom.h
  *
  * @author      Tobias Anker <tobias.anker@kitsunemimi.moe>
  *
@@ -20,23 +20,33 @@
  *      limitations under the License.
  */
 
-#ifndef FILE_METHODS_H
-#define FILE_METHODS_H
+#ifndef INI_SET_ENTRY_BLOSSOM_H
+#define INI_SET_ENTRY_BLOSSOM_H
 
-#include <common.h>
+#include <processing/blossoms/blossom.h>
 
 namespace SakuraTree
 {
 
-bool doesPathExist(const std::string path);
-bool doesFileExist(const std::string filePath);
-bool doesDirExist(const std::string dirPath);
-const std::pair<bool, std::string> renameFileOrDir(const std::string oldPath,
-                                                   const std::string newPath);
-const std::pair<bool, std::string> copyPath(const std::string sourcePath,
-                                            const std::string targetPath, bool force=true);
-bool deleteFileOrDir(const std::string path);
+class IniSetEntryBlossom : public Blossom
+{
+public:
+    IniSetEntryBlossom();
+
+protected:
+    void initTask(BlossomItem &blossomItem);
+    void preCheck(BlossomItem &blossomItem);
+    void runTask(BlossomItem &blossomItem);
+    void postCheck(BlossomItem &blossomItem);
+    void closeTask(BlossomItem &blossomItem);
+
+private:
+    std::string m_filePath = "";
+    std::string m_group = "";
+    std::string m_entry = "";
+    std::string m_value = "";
+};
 
 }
 
-#endif // FILE_METHODS_H
+#endif // INI_SET_ENTRY_BLOSSOM_H

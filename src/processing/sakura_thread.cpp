@@ -34,7 +34,7 @@ namespace SakuraTree
  * constructor
  */
 SakuraThread::SakuraThread(SakuraItem* growPlan,
-                           ValueItemMap &values,
+                           ValueItemMap values,
                            const std::vector<std::string> &hierarchy)
 {
     assert(growPlan != nullptr);
@@ -90,7 +90,7 @@ SakuraThread::run()
  */
 void
 SakuraThread::grow(SakuraItem* growPlan,
-                   ValueItemMap &values,
+                   ValueItemMap values,
                    const std::vector<std::string> &hierarchy)
 {
     if(m_abort) {
@@ -103,7 +103,9 @@ SakuraThread::grow(SakuraItem* growPlan,
         std::vector<std::string> newHierarchy = hierarchy;
 
         ValueItemMap tempItemMap = blossomItem->values;
+        overrideItems(values, blossomItem->parent->values);
         std::pair<bool, std::string> result = fillInputItems(tempItemMap, values);
+
         if(result.first == false)
         {
             blossomItem->outputMessage = result.second;
@@ -117,7 +119,7 @@ SakuraThread::grow(SakuraItem* growPlan,
                        tempItemMap,
                        newHierarchy);
 
-        fillOutputItems(values, tempBlossomItem.blossomOutput);
+        fillOutputItems(tempItemMap, tempBlossomItem.blossomOutput);
         overrideItems(tempBlossomItem.parent->values, tempItemMap);
 
         return;
@@ -254,7 +256,7 @@ SakuraThread::grow(SakuraItem* growPlan,
  */
 void
 SakuraThread::processBlossom(BlossomItem &growPlan,
-                             ValueItemMap &values,
+                             ValueItemMap values,
                              const std::vector<std::string> &hierarchy)
 {
     // init
@@ -285,7 +287,7 @@ SakuraThread::processBlossom(BlossomItem &growPlan,
  */
 void
 SakuraThread::processBlossomGroup(BlossomGroupItem &growPlan,
-                                  ValueItemMap &values,
+                                  ValueItemMap values,
                                   const std::vector<std::string> &hierarchy)
 {
     for(uint32_t i = 0; i < growPlan.blossoms.size(); i++)
@@ -306,7 +308,7 @@ SakuraThread::processBlossomGroup(BlossomGroupItem &growPlan,
  */
 void
 SakuraThread::processBranch(BranchItem* growPlan,
-                            ValueItemMap &values,
+                            ValueItemMap values,
                             const std::vector<std::string> &hierarchy)
 {
     for(uint32_t i = 0; i < growPlan->childs.size(); i++)
@@ -324,7 +326,7 @@ SakuraThread::processBranch(BranchItem* growPlan,
  */
 void
 SakuraThread::processTree(TreeItem* growPlan,
-                          ValueItemMap &values,
+                          ValueItemMap values,
                           const std::vector<std::string> &hierarchy)
 {
     for(uint32_t i = 0; i < growPlan->childs.size(); i++)
@@ -345,7 +347,7 @@ SakuraThread::processTree(TreeItem* growPlan,
  */
 void
 SakuraThread::processIf(IfBranching* growPlan,
-                        ValueItemMap &values,
+                        ValueItemMap values,
                         const std::vector<std::string> &hierarchy)
 {
     bool ifMatch = false;
@@ -427,16 +429,15 @@ SakuraThread::processIf(IfBranching* growPlan,
  */
 void
 SakuraThread::processForEach(ForEachBranching* growPlan,
-                             ValueItemMap &values,
+                             ValueItemMap values,
                              const std::vector<std::string> &hierarchy)
 {
     DataArray* array = growPlan->iterateArray.get("array")->toArray();
-    ValueItemMap tempMap = values;
     for(uint32_t i = 0; i < array->size(); i++)
     {
-        tempMap.insert(growPlan->tempVarName, array->get(i), true);
+        values.insert(growPlan->tempVarName, array->get(i), true);
         grow(growPlan->forChild.front(),
-             tempMap,
+             values,
              hierarchy);
     }
 }
@@ -449,10 +450,9 @@ SakuraThread::processForEach(ForEachBranching* growPlan,
  */
 void
 SakuraThread::processFor(ForBranching* growPlan,
-                         ValueItemMap &values,
+                         ValueItemMap values,
                          const std::vector<std::string> &hierarchy)
 {
-    ValueItemMap tempMap = values;
     ValueItem valueItem;
 
     long startValue = 0;
@@ -486,9 +486,9 @@ SakuraThread::processFor(ForBranching* growPlan,
 
     for(long i = startValue; i < endValue; i++)
     {
-        tempMap.insert(growPlan->tempVarName, new DataValue(i), true);
+        values.insert(growPlan->tempVarName, new DataValue(i), true);
         grow(growPlan->forChild.front(),
-             tempMap,
+             values,
              hierarchy);
     }
 }
@@ -498,7 +498,7 @@ SakuraThread::processFor(ForBranching* growPlan,
  */
 void
 SakuraThread::processSequeniellPart(SequeniellBranching* growPlan,
-                                    ValueItemMap &values,
+                                    ValueItemMap values,
                                     const std::vector<std::string> &hierarchy)
 {
     for(uint32_t i = 0; i < growPlan->childs.size(); i++)
@@ -516,7 +516,7 @@ SakuraThread::processSequeniellPart(SequeniellBranching* growPlan,
  */
 void
 SakuraThread::processParallelPart(ParallelBranching* growPlan,
-                                  ValueItemMap &values,
+                                  ValueItemMap values,
                                   const std::vector<std::string> &hierarchy)
 {
     // create and initialize all threads
