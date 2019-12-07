@@ -103,13 +103,6 @@ fillInputItems(ValueItemMap &items,
         it != items.valueMap.end();
         it++)
     {
-        // TODO: make better
-        if(it->first == "subtree")
-        {
-            //it->second.item = new DataValue(insertValues.at(0).item->toString());
-            continue;
-        }
-
         if(it->second.isIdentifier == false
                 && it->second.type == ValueItem::INPUT_PAIR_TYPE
                 && it->second.item->isStringValue())
@@ -136,6 +129,17 @@ fillInputItems(ValueItemMap &items,
             ValueItem valueItem;
             valueItem.item = insertValues.get(it->second.item->toString())->copy();
             valueItem.functions = it->second.functions;
+
+            for(uint32_t i = 0; i < valueItem.functions.size(); i++)
+            {
+                for(uint32_t j = 0; j < valueItem.functions.at(i).arguments.size(); j++)
+                {
+                    const std::string key = valueItem.functions[i].arguments[j].toString();
+                    DataValue* replacement = insertValues.get(key)->toValue();
+                    valueItem.functions[i].arguments[j] = *replacement;
+                }
+            }
+
             valueItem.item = valueItem.getProcessedItem();
             it->second = valueItem;
         }

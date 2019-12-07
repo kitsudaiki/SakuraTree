@@ -115,13 +115,6 @@ SakuraCompiler::convertItemPart(JsonItem &itemInput,
     {
         FunctionItem functionItem;
 
-        JsonItem arguments = functions.get("args");
-        for(uint32_t a = 0; a < arguments.size(); a++)
-        {
-            DataValue* arg = arguments.get(a).getItemContent()->toValue();
-            functionItem.arguments.push_back(*arg);
-        }
-
         if(functions.get(f).get("m_type").toString() == "get") {
             functionItem.type = FunctionItem::GET_FUNCTION;
         }
@@ -143,6 +136,12 @@ SakuraCompiler::convertItemPart(JsonItem &itemInput,
             functionItem.type = FunctionItem::APPEND_FUNCTION;
         }
 
+        JsonItem arguments = functions.get(f).get("args");
+        for(uint32_t a = 0; a < arguments.size(); a++)
+        {
+            DataValue* arg = arguments.get(a).getItemContent()->toValue();
+            functionItem.arguments.push_back(*arg);
+        }
 
         itemPart.functions.push_back(functionItem);
     }
@@ -442,8 +441,16 @@ SakuraCompiler::convertIf(JsonItem &growPlan,
 {
     IfBranching* newItem = new IfBranching();
     newItem->parent = parent;
-    newItem->leftSide = growPlan.get("left").getItemContent()->copy()->toMap();
-    newItem->rightSide = growPlan.get("right").getItemContent()->copy()->toMap();
+
+    JsonItem startItem = growPlan.get("left");
+    ValueItem leftItemValue;
+    convertItemPart(startItem, leftItemValue, "assign");
+    newItem->leftSide = leftItemValue;
+
+    JsonItem richtItem = growPlan.get("right");
+    ValueItem rightItemValue;
+    convertItemPart(richtItem, rightItemValue, "assign");
+    newItem->rightSide = rightItemValue;
 
     if(growPlan.get("if_type").getString() == "==") {
         newItem->ifType = IfBranching::EQUAL;
@@ -530,8 +537,17 @@ SakuraCompiler::convertFor(JsonItem &growPlan,
     ForBranching* newItem = new ForBranching();
     newItem->parent = parent;
     newItem->tempVarName = growPlan.get("variable1").getItemContent()->toString();
-    newItem->start = growPlan.get("start").getLong();
-    newItem->end = growPlan.get("end").getLong();
+
+    JsonItem startItem = growPlan.get("start").getItemContent()->toMap();
+    ValueItem startItemValue;
+    convertItemPart(startItem, startItemValue, "assign");
+    newItem->start = startItemValue;
+
+    JsonItem endItem = growPlan.get("end").getItemContent()->toMap();
+    ValueItem endItemValue;
+    convertItemPart(endItem, endItemValue, "assign");
+    newItem->end = endItemValue;
+
 
     JsonItem content = growPlan.get("content");
     assert(content.isValid());

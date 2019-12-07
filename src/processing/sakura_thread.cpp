@@ -350,22 +350,46 @@ SakuraThread::processIf(IfBranching* growPlan,
 {
     bool ifMatch = false;
     std::map<std::string, ValueItem>::iterator it;
+    ValueItem valueItem;
+
+    std::string leftSide = "";
+    std::string rightSide = "";
+
+    if(growPlan->leftSide.isIdentifier == true)
+    {
+        const std::string leftSideKey = growPlan->leftSide.item->toString();
+        valueItem.item = values.getValueItem(leftSideKey).item->copy();
+        valueItem.functions = growPlan->leftSide.functions;
+        valueItem.item = valueItem.getProcessedItem();
+        leftSide = valueItem.item->toString();
+    }
+    else
+    {
+        leftSide = growPlan->leftSide.item->toString();
+    }
+
+    if(growPlan->rightSide.isIdentifier == true)
+    {
+        const std::string rightSideKey = growPlan->rightSide.item->toString();
+        valueItem.item = values.getValueItem(rightSideKey).item->copy();
+        valueItem.functions = growPlan->rightSide.functions;
+        valueItem.item = valueItem.getProcessedItem();
+        rightSide = valueItem.item->toString();
+    }
+    else
+    {
+        rightSide = growPlan->rightSide.item->toString();
+    }
 
     switch(growPlan->ifType)
     {
         case IfBranching::EQUAL:
             {
-                const std::string key = growPlan->leftSide->get("item")->toString();
-                const std::string leftSide = values.getValueAsString(key);
-                const std::string rightSide = growPlan->rightSide->get("item")->toString();
                 ifMatch = leftSide == rightSide;
                 break;
             }
         case IfBranching::UNEQUAL:
             {
-                const std::string key = growPlan->leftSide->get("item")->toString();
-                const std::string leftSide = values.getValueAsString(key);
-                const std::string rightSide = growPlan->rightSide->get("item")->toString();
                 ifMatch = leftSide != rightSide;
                 break;
             }
@@ -429,7 +453,38 @@ SakuraThread::processFor(ForBranching* growPlan,
                          const std::vector<std::string> &hierarchy)
 {
     ValueItemMap tempMap = values;
-    for(long i = growPlan->start; i < growPlan->end; i++)
+    ValueItem valueItem;
+
+    long startValue = 0;
+    long endValue = 0;
+
+    if(growPlan->start.isIdentifier == true)
+    {
+        const std::string rightSideKey = growPlan->start.item->toString();
+        valueItem.item = values.getValueItem(rightSideKey).item->copy();
+        valueItem.functions = growPlan->start.functions;
+        valueItem.item = valueItem.getProcessedItem();
+        startValue = valueItem.item->toValue()->getLong();
+    }
+    else
+    {
+        startValue = growPlan->start.item->toValue()->getLong();
+    }
+
+    if(growPlan->end.isIdentifier == true)
+    {
+        const std::string rightSideKey = growPlan->end.item->toString();
+        valueItem.item = values.getValueItem(rightSideKey).item->copy();
+        valueItem.functions = growPlan->end.functions;
+        valueItem.item = valueItem.getProcessedItem();
+        endValue = valueItem.item->toValue()->getLong();
+    }
+    else
+    {
+        endValue = growPlan->end.item->toValue()->getLong();
+    }
+
+    for(long i = startValue; i < endValue; i++)
     {
         tempMap.insert(growPlan->tempVarName, new DataValue(i), true);
         grow(growPlan->forChild.front(),
