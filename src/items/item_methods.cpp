@@ -78,6 +78,7 @@ const Result fillOutputItems(ValueItemMap &items,
         {
             ValueItem valueItem;
             valueItem.item = output->copy();
+            valueItem.type = ValueItem::OUTPUT_PAIR_TYPE;
             it->second = valueItem;
         }
     }
@@ -127,7 +128,14 @@ fillInputItems(ValueItemMap &items,
                 && it->second.type == ValueItem::INPUT_PAIR_TYPE)
         {
             ValueItem valueItem;
-            valueItem.item = insertValues.get(it->second.item->toString())->copy();
+            const std::string key = it->second.item->toString();
+
+            DataItem* tempItem = insertValues.get(key);
+            if(tempItem == nullptr) {
+                continue;
+            }
+
+            valueItem.item = tempItem->copy();
             valueItem.functions = it->second.functions;
 
             for(uint32_t i = 0; i < valueItem.functions.size(); i++)
@@ -163,10 +171,6 @@ void overrideItems(ValueItemMap &original,
 
         if(originalIt != original.valueMap.end()) {
             originalIt->second = overrideIt->second;
-        }
-        else
-        {
-            original.insert(overrideIt->first, overrideIt->second);
         }
     }
 }

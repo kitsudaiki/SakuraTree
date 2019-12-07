@@ -34,7 +34,7 @@ bool doesDirExist(const std::string dirPath);
 const std::pair<bool, std::string> renameFileOrDir(const std::string oldPath,
                                                    const std::string newPath);
 const std::pair<bool, std::string> copyPath(const std::string sourcePath,
-                                            const std::string targetPath);
+                                            const std::string targetPath, bool force=true);
 bool deleteFileOrDir(const std::string path);
 
 }

@@ -98,7 +98,7 @@ IniSetEntryBlossom::runTask(BlossomItem &blossomItem)
         return;
     }
 
-    iniItem.set(m_group, m_entry, m_value);
+    iniItem.set(m_group, m_entry, m_value, true);
 
     const std::string newFileContent = iniItem.toString();
     result = Kitsunemimi::Persistence::writeFile(m_filePath, newFileContent, true);

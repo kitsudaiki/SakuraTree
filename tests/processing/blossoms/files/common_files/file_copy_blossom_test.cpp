@@ -106,7 +106,7 @@ FileCopyBlossom_Test::preCheck_test()
 
     fakeCopyBlossom.preCheck(fakeItem);
     TEST_EQUAL(fakeItem.success, true);
-    TEST_EQUAL(fakeItem.skip, true);
+    TEST_EQUAL(fakeItem.skip, false);
 
     runSyncProcess(fakeItem, "rm " + m_destinationFile);
 }
@@ -146,6 +146,7 @@ FileCopyBlossom_Test::postCheck_test()
     FileCopyBlossom fakeCopyBlossom;
 
     fakeCopyBlossom.initTask(fakeItem);
+    runSyncProcess(fakeItem, "touch " + m_destinationFile);
     fakeCopyBlossom.postCheck(fakeItem);
     TEST_EQUAL(fakeItem.success, true);
 

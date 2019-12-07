@@ -106,14 +106,16 @@ renameFileOrDir(const std::string oldPath,
  * @return
  */
 const std::pair<bool, std::string>
-copyPath(const std::string sourcePath, const std::string targetPath)
+copyPath(const std::string sourcePath, const std::string targetPath, bool force)
 {
     std::pair<bool, std::string> result;
 
     boost::system::error_code error;
     error.clear();
 
-    boost::filesystem::remove(targetPath);
+    if(force) {
+        boost::filesystem::remove(targetPath);
+    }
     boost::filesystem::copy(sourcePath, targetPath, error);
 
     if(error.value() != 0)

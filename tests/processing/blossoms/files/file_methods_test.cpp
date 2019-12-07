@@ -159,7 +159,7 @@ FileMethods_Test::copyPath_test()
     result = copyPath(oldFilePath, newFileName);
     TEST_EQUAL(result.first, true);
 
-    result = copyPath(oldFilePath, newFileName);
+    result = copyPath(oldFilePath, newFileName, false);
     TEST_EQUAL(result.first, false);
 
     TEST_EQUAL(doesPathExist(oldFilePath), true);

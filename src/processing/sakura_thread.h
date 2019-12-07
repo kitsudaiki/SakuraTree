@@ -38,7 +38,7 @@ class SakuraThread
 
 public:
     SakuraThread(SakuraItem* growPlan,
-                 ValueItemMap &values,
+                 ValueItemMap values,
                  const std::vector<std::string> &hierarchy);
     ~SakuraThread();
 
@@ -57,43 +57,43 @@ private:
     void run();
 
     void grow(SakuraItem* growPlan,
-              ValueItemMap &values,
+              ValueItemMap values,
               const std::vector<std::string> &hierarchy);
 
     void processBlossom(BlossomItem &growPlan,
-                        ValueItemMap &values,
+                        ValueItemMap values,
                         const std::vector<std::string> &hierarchy);
 
     void processBlossomGroup(BlossomGroupItem &growPlan,
-                             ValueItemMap &values,
+                             ValueItemMap values,
                              const std::vector<std::string> &hierarchy);
 
     void processBranch(BranchItem* growPlan,
-                       ValueItemMap &values,
+                       ValueItemMap values,
                        const std::vector<std::string> &hierarchy);
 
     void processTree(TreeItem* growPlan,
-                     ValueItemMap &values,
+                     ValueItemMap values,
                      const std::vector<std::string> &hierarchy);
 
     void processIf(IfBranching* growPlan,
-                   ValueItemMap &values,
+                   ValueItemMap values,
                    const std::vector<std::string> &hierarchy);
 
     void processForEach(ForEachBranching* growPlan,
-                        ValueItemMap &values,
+                        ValueItemMap values,
                         const std::vector<std::string> &hierarchy);
 
     void processFor(ForBranching* growPlan,
-                    ValueItemMap &values,
+                    ValueItemMap values,
                     const std::vector<std::string> &hierarchy);
 
     void processSequeniellPart(SequeniellBranching* growPlan,
-                               ValueItemMap &values,
+                               ValueItemMap values,
                                const std::vector<std::string> &hierarchy);
 
     void processParallelPart(ParallelBranching* growPlan,
-                             ValueItemMap &values,
+                             ValueItemMap values,
                              const std::vector<std::string> &hierarchy);
 
     void clearChilds();
