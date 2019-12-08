@@ -119,12 +119,12 @@ TreeItem::~TreeItem()
 //===================================================================
 // Sequeniell
 //===================================================================
-SequeniellBranching::SequeniellBranching()
+SequentiellBranching::SequentiellBranching()
 {
     type = SEQUENTIELL_ITEM;
 }
 
-SequeniellBranching::~SequeniellBranching() {}
+SequentiellBranching::~SequentiellBranching() {}
 
 //===================================================================
 // ParallelBranching

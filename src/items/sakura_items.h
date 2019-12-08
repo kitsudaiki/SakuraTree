@@ -165,11 +165,11 @@ public:
 //===================================================================
 // Sequeniell
 //===================================================================
-class SequeniellBranching : public SakuraItem
+class SequentiellBranching : public SakuraItem
 {
 public:
-    SequeniellBranching();
-    ~SequeniellBranching();
+    SequentiellBranching();
+    ~SequentiellBranching();
 
     std::vector<SakuraItem*> childs;
 };

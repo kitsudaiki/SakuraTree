@@ -225,7 +225,7 @@ SakuraThread::grow(SakuraItem* growPlan,
 
     if(growPlan->getType() == SakuraItem::SEQUENTIELL_ITEM)
     {
-        processSequeniellPart(dynamic_cast<SequeniellBranching*>(growPlan),
+        processSequeniellPart(dynamic_cast<SequentiellBranching*>(growPlan),
                               values,
                               hierarchy);
         return;
@@ -497,7 +497,7 @@ SakuraThread::processFor(ForBranching* growPlan,
  * @brief SakuraThread::processSequeniellPart
  */
 void
-SakuraThread::processSequeniellPart(SequeniellBranching* growPlan,
+SakuraThread::processSequeniellPart(SequentiellBranching* growPlan,
                                     ValueItemMap values,
                                     const std::vector<std::string> &hierarchy)
 {
