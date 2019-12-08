@@ -75,6 +75,50 @@ fillJinja2Template(const std::string baseString,
 }
 
 /**
+ * @brief fillIdentifierItem
+ * @param resulting
+ * @param original
+ * @param input
+ * @return
+ */
+const Result
+fillIdentifierItem(ValueItem &resulting,
+                   ValueItem &original,
+                   ValueItemMap &input)
+{
+    Result result;
+
+    const std::string key = original.item->toString();
+
+    DataItem* tempItem = input.get(key);
+    if(tempItem == nullptr)
+    {
+        result.success = false;
+        result.errorMessage = "couldn't find key: " + key;
+        return result;
+    }
+
+    resulting.item = tempItem->copy();
+    resulting.functions = original.functions;
+
+    for(uint32_t i = 0; i < resulting.functions.size(); i++)
+    {
+        for(uint32_t j = 0; j < resulting.functions.at(i).arguments.size(); j++)
+        {
+            const std::string key = resulting.functions[i].arguments[j].toString();
+            DataValue* replacement = input.get(key)->toValue();
+            resulting.functions[i].arguments[j] = *replacement;
+        }
+    }
+
+    resulting.item = resulting.getProcessedItem();
+
+    result.success = true;
+
+    return result;
+}
+
+/**
  * @brief writeOutputBack
  * @param items
  * @param output
@@ -143,27 +187,15 @@ fillInputItems(ValueItemMap &items,
                 && it->second.type == ValueItem::INPUT_PAIR_TYPE)
         {
             ValueItem valueItem;
-            const std::string key = it->second.item->toString();
+            const Result convertResult = fillIdentifierItem(valueItem,
+                                                            it->second,
+                                                            insertValues);
 
-            DataItem* tempItem = insertValues.get(key);
-            if(tempItem == nullptr) {
-                continue;
+            // process negative result
+            if(convertResult.success == false) {
+                return convertResult;
             }
 
-            valueItem.item = tempItem->copy();
-            valueItem.functions = it->second.functions;
-
-            for(uint32_t i = 0; i < valueItem.functions.size(); i++)
-            {
-                for(uint32_t j = 0; j < valueItem.functions.at(i).arguments.size(); j++)
-                {
-                    const std::string key = valueItem.functions[i].arguments[j].toString();
-                    DataValue* replacement = insertValues.get(key)->toValue();
-                    valueItem.functions[i].arguments[j] = *replacement;
-                }
-            }
-
-            valueItem.item = valueItem.getProcessedItem();
             it->second = valueItem;
         }
     }

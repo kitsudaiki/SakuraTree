@@ -31,6 +31,7 @@ namespace SakuraTree
 {
 
 const Result fillJinja2Template(const std::string baseString, ValueItemMap &insertValues);
+const Result fillIdentifierItem(ValueItem &resulting, ValueItem &original, ValueItemMap &input);
 const Result fillOutputItems(ValueItemMap &items, DataItem* output);
 const Result fillInputItems(ValueItemMap &items, ValueItemMap &insertValues);
 
