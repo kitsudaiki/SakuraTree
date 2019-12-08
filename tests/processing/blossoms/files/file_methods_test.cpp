@@ -120,7 +120,7 @@ void
 FileMethods_Test::renameFileOrDir_test()
 {
     BlossomItem fakeBlossom;
-    std::pair<bool, std::string> result;
+    Result result;
 
     const std::string oldFilePath = "/tmp/renameFileOrDir_test_testfile_ALT";
     const std::string newFileName = "/tmp/renameFileOrDir_test_testfile_NEU";
@@ -129,10 +129,10 @@ FileMethods_Test::renameFileOrDir_test()
     runSyncProcess(fakeBlossom, "rm " + newFileName);
 
     result = renameFileOrDir(oldFilePath, newFileName);
-    TEST_EQUAL(result.first, true);
+    TEST_EQUAL(result.success, true);
 
     result = renameFileOrDir(oldFilePath, newFileName);
-    TEST_EQUAL(result.first, false);
+    TEST_EQUAL(result.success, false);
 
     TEST_EQUAL(doesPathExist(oldFilePath), false);
     TEST_EQUAL(doesPathExist(newFileName), true);
@@ -148,7 +148,7 @@ void
 FileMethods_Test::copyPath_test()
 {
     BlossomItem fakeBlossom;
-    std::pair<bool, std::string> result;
+    Result result;
 
     const std::string oldFilePath = "/tmp/copyFile_test_testfile_ALT";
     const std::string newFileName = "/tmp/copyFile_test_testfile_NEU";
@@ -157,10 +157,10 @@ FileMethods_Test::copyPath_test()
     runSyncProcess(fakeBlossom, "rm " + newFileName);
 
     result = copyPath(oldFilePath, newFileName);
-    TEST_EQUAL(result.first, true);
+    TEST_EQUAL(result.success, true);
 
     result = copyPath(oldFilePath, newFileName, false);
-    TEST_EQUAL(result.first, false);
+    TEST_EQUAL(result.success, false);
 
     TEST_EQUAL(doesPathExist(oldFilePath), true);
     TEST_EQUAL(doesPathExist(newFileName), true);

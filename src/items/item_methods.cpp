@@ -41,6 +41,8 @@ const Result
 fillJinja2Template(const std::string baseString,
                    ValueItemMap &insertValues)
 {
+    Result result;
+
     // prepare map for jinja2-convert
     DataMap possibleValues;
     std::map<std::string, ValueItem>::iterator insertIt;
@@ -55,7 +57,65 @@ fillJinja2Template(const std::string baseString,
 
     // convert jinja2-string
     Jinja2Converter* converter = SakuraRoot::m_root->m_jinja2Converter;
-    return converter->convert(baseString, &possibleValues);
+    const std::pair<bool, std::string> convertResult = converter->convert(baseString,
+                                                                          &possibleValues);
+
+    if(convertResult.first == false)
+    {
+        result.success = false;
+        result.errorMessage = convertResult.second;
+    }
+    else
+    {
+        result.success = true;
+        result.item = new DataValue(convertResult.second);
+    }
+
+    return result;
+}
+
+/**
+ * @brief fillIdentifierItem
+ * @param resulting
+ * @param original
+ * @param input
+ * @return
+ */
+const Result
+fillIdentifierItem(ValueItem &resulting,
+                   ValueItem &original,
+                   ValueItemMap &input)
+{
+    Result result;
+
+    const std::string key = original.item->toString();
+
+    DataItem* tempItem = input.get(key);
+    if(tempItem == nullptr)
+    {
+        result.success = false;
+        result.errorMessage = "couldn't find key: " + key;
+        return result;
+    }
+
+    resulting.item = tempItem->copy();
+    resulting.functions = original.functions;
+
+    for(uint32_t i = 0; i < resulting.functions.size(); i++)
+    {
+        for(uint32_t j = 0; j < resulting.functions.at(i).arguments.size(); j++)
+        {
+            const std::string key = resulting.functions[i].arguments[j].toString();
+            DataValue* replacement = input.get(key)->toValue();
+            resulting.functions[i].arguments[j] = *replacement;
+        }
+    }
+
+    resulting.item = resulting.getProcessedItem();
+
+    result.success = true;
+
+    return result;
 }
 
 /**
@@ -64,10 +124,11 @@ fillJinja2Template(const std::string baseString,
  * @param output
  * @return
  */
-const Result fillOutputItems(ValueItemMap &items,
-                             DataItem *output)
+const Result
+fillOutputItems(ValueItemMap &items,
+                DataItem *output)
 {
-    std::pair<bool, std::string> result;
+    Result result;
 
     std::map<std::string, ValueItem>::iterator it;
     for(it = items.valueMap.begin();
@@ -83,7 +144,8 @@ const Result fillOutputItems(ValueItemMap &items,
         }
     }
 
-    result.first = true;
+    result.success = true;
+
     return result;
 }
 
@@ -112,48 +174,34 @@ fillInputItems(ValueItemMap &items,
                                                             insertValues);
 
             // process negative result
-            if(convertResult.first == false)
-            {
-                result.first = false;
-                result.second = "failed to fill value of: " + it->first;
-                return result;
+            if(convertResult.success == false) {
+                return convertResult;
             }
 
             // write positive result back to item-list
             ValueItem valueItem;
-            valueItem.item = new DataValue(convertResult.second);
+            valueItem.item = convertResult.item;
             it->second = valueItem;
         }
         else if(it->second.isIdentifier
                 && it->second.type == ValueItem::INPUT_PAIR_TYPE)
         {
             ValueItem valueItem;
-            const std::string key = it->second.item->toString();
+            const Result convertResult = fillIdentifierItem(valueItem,
+                                                            it->second,
+                                                            insertValues);
 
-            DataItem* tempItem = insertValues.get(key);
-            if(tempItem == nullptr) {
-                continue;
+            // process negative result
+            if(convertResult.success == false) {
+                return convertResult;
             }
 
-            valueItem.item = tempItem->copy();
-            valueItem.functions = it->second.functions;
-
-            for(uint32_t i = 0; i < valueItem.functions.size(); i++)
-            {
-                for(uint32_t j = 0; j < valueItem.functions.at(i).arguments.size(); j++)
-                {
-                    const std::string key = valueItem.functions[i].arguments[j].toString();
-                    DataValue* replacement = insertValues.get(key)->toValue();
-                    valueItem.functions[i].arguments[j] = *replacement;
-                }
-            }
-
-            valueItem.item = valueItem.getProcessedItem();
             it->second = valueItem;
         }
     }
 
-    result.first = true;
+    result.success = true;
+
     return result;
 }
 

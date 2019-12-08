@@ -46,38 +46,38 @@ public:
     SakuraCompiler();
     ~SakuraCompiler();
 
-    SakuraItem* compile(JsonItem &tree);
+    SakuraItem* compile(const JsonItem &tree);
 
 private:
-    SakuraItem* convert(JsonItem &growPlan,
+    SakuraItem* convert(const JsonItem &growPlan,
                         SakuraItem* parent);
 
     void overrideItems(JsonItem &original,
-                       JsonItem &override);
-    bool convertItemPart(JsonItem &itemInput,
-                         ValueItem &itemPart,
+                       const JsonItem &override);
+    bool convertItemPart(ValueItem &resultingPart,
+                         JsonItem itemInput,
                          const std::string pairType);
+    void convertValues(SakuraItem* obj,
+                       const JsonItem &values);
 
-    BlossomItem* convertBlossom(JsonItem &growPlan,
-                                SakuraItem* parent);
-    SakuraItem* convertBlossomGroup(JsonItem &growPlan,
+    SakuraItem* convertBlossomGroup(const JsonItem &growPlan,
                                     SakuraItem* parent);
-    SakuraItem* convertBranch(JsonItem &growPlan,
+    SakuraItem* convertBranch(const JsonItem &growPlan,
                               SakuraItem* parent);
-    SakuraItem* convertTree(JsonItem &growPlan,
+    SakuraItem* convertTree(const JsonItem &growPlan,
                             SakuraItem* parent);
-    SakuraItem* convertSeed(JsonItem &growPlan,
+    SakuraItem* convertSeed(const JsonItem &growPlan,
                             SakuraItem* parent);
-    SakuraItem* convertIf(JsonItem &growPlan,
+    SakuraItem* convertIf(const JsonItem &growPlan,
                           SakuraItem* parent);
-    SakuraItem* convertForEach(JsonItem &growPlan,
+    SakuraItem* convertForEach(const JsonItem &growPlan,
                                SakuraItem* parent);
-    SakuraItem* convertFor(JsonItem &growPlan,
+    SakuraItem* convertFor(const JsonItem &growPlan,
                            SakuraItem* parent);
 
-    SakuraItem* convertSequeniellPart(JsonItem &growPlan,
+    SakuraItem* convertSequeniellPart(const JsonItem &growPlan,
                                       SakuraItem* parent);
-    SakuraItem* convertParallelPart(JsonItem &growPlan,
+    SakuraItem* convertParallelPart(const JsonItem &growPlan,
                                     SakuraItem* parent);
 };
 

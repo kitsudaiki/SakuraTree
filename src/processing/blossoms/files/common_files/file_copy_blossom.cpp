@@ -86,12 +86,12 @@ FileCopyBlossom::preCheck(BlossomItem &blossomItem)
 void
 FileCopyBlossom::runTask(BlossomItem &blossomItem)
 {
-    const std::pair<bool, std::string> copyResult = copyPath(m_sourcePath, m_destinationPath);
+    const Result copyResult = copyPath(m_sourcePath, m_destinationPath);
 
-    if(copyResult.first == false)
+    if(copyResult.success == false)
     {
         blossomItem.success = false;
-        blossomItem.outputMessage = "COPY FAILED: " + copyResult.second;
+        blossomItem.outputMessage = "COPY FAILED: " + copyResult.errorMessage;
         return;
     }
 

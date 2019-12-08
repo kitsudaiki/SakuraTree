@@ -50,12 +50,11 @@ SakuraCompiler::~SakuraCompiler() {}
 
 /**
  * @brief SakuraCompiler::compile
- * @param rootPath
- * @param seedName
+ * @param tree
  * @return
  */
 SakuraItem*
-SakuraCompiler::compile(JsonItem &tree)
+SakuraCompiler::compile(const JsonItem &tree)
 {
     // debug-output
     if(DEBUG)
@@ -73,18 +72,19 @@ SakuraCompiler::compile(JsonItem &tree)
 
 /**
  * @brief SakuraCompiler::convertItemPart
+ * @param resultingPart
  * @param itemInput
- * @param itemPart
+ * @param pairType
  * @return
  */
 bool
-SakuraCompiler::convertItemPart(JsonItem &itemInput,
-                                ValueItem &itemPart,
+SakuraCompiler::convertItemPart(ValueItem &resultingPart,
+                                JsonItem itemInput,
                                 const std::string pairType)
 {
     if(itemInput.isMap())
     {
-        itemPart.item = itemInput.get("item").getItemContent()->copy()->toValue();
+        resultingPart.item = itemInput.get("item").getItemContent()->copy()->toValue();
     }
     else if (itemInput.isArray())
     {
@@ -93,28 +93,32 @@ SakuraCompiler::convertItemPart(JsonItem &itemInput,
         {
             tempArray->append(itemInput.get(i).getItemContent()->copy());
         }
-        itemPart.item = tempArray;
+        resultingPart.item = tempArray;
     }
 
+    // set type
     if(pairType == "assign") {
-        itemPart.type = ValueItem::INPUT_PAIR_TYPE;
+        resultingPart.type = ValueItem::INPUT_PAIR_TYPE;
     }
     if(pairType == "compare") {
-        itemPart.type = ValueItem::COMPARE_EQUAL_PAIR_TYPE;
+        resultingPart.type = ValueItem::COMPARE_EQUAL_PAIR_TYPE;
     }
     if(pairType == "output") {
-        itemPart.type = ValueItem::OUTPUT_PAIR_TYPE;
+        resultingPart.type = ValueItem::OUTPUT_PAIR_TYPE;
     }
 
+    // check if current value is value or identifier
     if(itemInput.get("type").toString() == "identifier") {
-        itemPart.isIdentifier = true;
+        resultingPart.isIdentifier = true;
     }
 
+    // get function
     JsonItem functions = itemInput.get("functions");
     for(uint32_t f = 0; f < functions.size(); f++)
     {
         FunctionItem functionItem;
 
+        // get function-type
         if(functions.get(f).get("m_type").toString() == "get") {
             functionItem.type = FunctionItem::GET_FUNCTION;
         }
@@ -127,15 +131,14 @@ SakuraCompiler::convertItemPart(JsonItem &itemInput,
         if(functions.get(f).get("m_type").toString() == "size") {
             functionItem.type = FunctionItem::SIZE_FUNCTION;
         }
-
         if(functions.get(f).get("m_type").toString() == "insert") {
             functionItem.type = FunctionItem::INSERT_FUNCTION;
         }
-
         if(functions.get(f).get("m_type").toString() == "append") {
             functionItem.type = FunctionItem::APPEND_FUNCTION;
         }
 
+        // get argument-list
         JsonItem arguments = functions.get(f).get("args");
         for(uint32_t a = 0; a < arguments.size(); a++)
         {
@@ -143,73 +146,100 @@ SakuraCompiler::convertItemPart(JsonItem &itemInput,
             functionItem.arguments.push_back(*arg);
         }
 
-        itemPart.functions.push_back(functionItem);
+        resultingPart.functions.push_back(functionItem);
     }
 
     return true;
 }
 
 /**
- * @brief overrideItems
+ * @brief merge two item-maps
+ * @param original original item-map
+ * @param override additional item-map for merging into the original one
  */
 void
 SakuraCompiler::overrideItems(JsonItem &original,
-                              JsonItem &override)
+                              const JsonItem &override)
 {
-    const std::vector<std::string> keys = override.getKeys();
-    for(uint32_t i = 0; i < keys.size(); i++)
+    DataMap* overrideMap = override.getItemContent()->toMap();
+    std::map<std::string, DataItem*>::const_iterator it;
+    for(it = overrideMap->m_map.begin();
+        it != overrideMap->m_map.end();
+        it++)
     {
-        original.insert(keys.at(i),
-                        override.get(keys.at(i)).getItemContent()->copy(),
+        original.insert(it->first,
+                        it->second->copy(),
                         true);
     }
 }
 
 /**
- * @brief SakuraCompiler::process
- * @param growPlan
- * @return
+ * @brief SakuraCompiler::convertValues
+ * @param obj
+ * @param subtree
+ */
+void
+SakuraCompiler::convertValues(SakuraItem* obj,
+                              const JsonItem &values)
+{
+    for(uint32_t i = 0; i < values.size(); i++)
+    {
+        const std::string key = values.get(i).get("key").toString();
+        const std::string pairType = values.get(i).get("type").toString();
+        const JsonItem value = values.get(i).get("value");
+
+        ValueItem itemValue;
+        convertItemPart(itemValue, value, pairType);
+        obj->values.insert(key, itemValue);
+    }
+}
+
+/**
+ * @brief convert subtree
+ * @param subtree current subtree for converting
+ * @param parent pointer ot the parent-branch or -tree
+ * @return pointer of the current converted part
  */
 SakuraItem*
-SakuraCompiler::convert(JsonItem &growPlan,
+SakuraCompiler::convert(const JsonItem &subtree,
                         SakuraItem* parent)
 {
-    const std::string typeName = growPlan.get("b_type").toString();
+    const std::string typeName = subtree.get("b_type").toString();
 
     if(typeName == "blossom_group") {
-        return convertBlossomGroup(growPlan, parent);
+        return convertBlossomGroup(subtree, parent);
     }
 
     if(typeName == "branch") {
-        return convertBranch(growPlan, parent);
+        return convertBranch(subtree, parent);
     }
 
     if(typeName == "tree") {
-        return convertTree(growPlan, parent);
+        return convertTree(subtree, parent);
     }
 
     if(typeName == "sequentiell") {
-        return convertSequeniellPart(growPlan, parent);
+        return convertSequeniellPart(subtree, parent);
     }
 
     if(typeName == "parallel") {
-        return convertParallelPart(growPlan, parent);
+        return convertParallelPart(subtree, parent);
     }
 
     if(typeName == "seed") {
-        return convertSeed(growPlan, parent);
+        return convertSeed(subtree, parent);
     }
 
     if(typeName == "if") {
-        return convertIf(growPlan, parent);
+        return convertIf(subtree, parent);
     }
 
     if(typeName == "for_each") {
-        return convertForEach(growPlan, parent);
+        return convertForEach(subtree, parent);
     }
 
     if(typeName == "for") {
-        return convertFor(growPlan, parent);
+        return convertFor(subtree, parent);
     }
 
     // it must everytime match one of the names
@@ -219,90 +249,50 @@ SakuraCompiler::convert(JsonItem &growPlan,
 }
 
 /**
- * @brief SakuraCompiler::convertBlossom
- * @param growPlan
- * @return
- */
-BlossomItem*
-SakuraCompiler::convertBlossom(JsonItem &growPlan,
-                               SakuraItem* parent)
-{
-    BlossomItem* blossomItem =  new BlossomItem();
-    blossomItem->blossomType = growPlan.get("blossom-type").toString();
-    blossomItem->parent = parent;
-
-    JsonItem array = growPlan.get("items-input");
-    for(uint32_t i = 0; i < array.size(); i++)
-    {
-        const std::string key = array.get(i).get("key").toString();
-        const std::string pairType = array.get(i).get("type").toString();
-        JsonItem value = array.get(i).get("value");
-
-        ValueItem itemValue;
-        convertItemPart(value, itemValue, pairType);
-        blossomItem->values.insert(key, itemValue);
-    }
-
-    return blossomItem;
-}
-
-/**
- * @brief SakuraCompiler::convertBlossomGroup
- * @param growPlan
- * @return
+ * @brief convert blossom-group
+ * @param subtree current suttree for converting
+ * @param parent pointer ot the parent-branch or -tree
+ * @return pointer of the current converted part
  */
 SakuraItem*
-SakuraCompiler::convertBlossomGroup(JsonItem &growPlan,
+SakuraCompiler::convertBlossomGroup(const JsonItem &subtree,
                                     SakuraItem* parent)
 {
+    // init new blossom-group-item
     BlossomGroupItem* blossomGroupItem =  new BlossomGroupItem();
-    blossomGroupItem->id = growPlan.get("name").toString();
-    blossomGroupItem->blossomGroupType = growPlan.get("blossom-group-type").toString();
+    blossomGroupItem->id = subtree.get("name").toString();
+    blossomGroupItem->blossomGroupType = subtree.get("blossom-group-type").toString();
     blossomGroupItem->parent = parent;
 
-    const JsonItem subTypeArray = growPlan.get("blossoms");
+    // convert all blossoms of the group
+    const JsonItem subTypeArray = subtree.get("blossoms");
     if(subTypeArray.size() > 0)
     {
         for(uint32_t i = 0; i < subTypeArray.size(); i++)
         {
-            JsonItem item = subTypeArray.get(i);
+            const JsonItem item = subTypeArray.get(i);
 
-            BlossomItem* blossomItem = convertBlossom(item, parent);
-            blossomItem->blossomPath = growPlan.get("b_path").toString();
+            // init new blossom-item
+            BlossomItem* blossomItem = new BlossomItem();
+            blossomItem->parent = parent;
+            blossomItem->blossomType = item.get("blossom-type").toString();
+            blossomItem->blossomPath = subtree.get("b_path").toString();
 
-            JsonItem array = growPlan.get("items-input");
-            for(uint32_t i = 0; i < array.size(); i++)
-            {
-                const std::string key = array.get(i).get("key").toString();
-                const std::string pairType = array.get(i).get("type").toString();
-                JsonItem value = array.get(i).get("value");
-
-                ValueItem itemValue;
-                convertItemPart(value, itemValue, pairType);
-                blossomItem->values.insert(key, itemValue);
-            }
+            convertValues(blossomItem, subtree.get("items-input"));
+            convertValues(blossomItem, item.get("items-input"));
 
             blossomGroupItem->blossoms.push_back(blossomItem);
         }
     }
     else
     {
+        // init new blossom-item
         BlossomItem* blossomItem =  new BlossomItem();
-        blossomItem->blossomPath = growPlan.get("b_path").toString();
-        blossomItem->blossomType = growPlan.get("blossom-group-type").toString();
+        blossomItem->blossomPath = subtree.get("b_path").toString();
+        blossomItem->blossomType = subtree.get("blossom-group-type").toString();
         blossomItem->parent = parent;
 
-        JsonItem array = growPlan.get("items-input");
-        for(uint32_t i = 0; i < array.size(); i++)
-        {
-            const std::string key = array.get(i).get("key").toString();
-            const std::string pairType = array.get(i).get("type").toString();
-            JsonItem value = array.get(i).get("value");
-
-            ValueItem itemValue;
-            convertItemPart(value, itemValue, pairType);
-            blossomItem->values.insert(key, itemValue);
-        }
+        convertValues(blossomItem, subtree.get("items-input"));
 
         blossomGroupItem->blossomGroupType = "special";
         blossomGroupItem->blossoms.push_back(blossomItem);
@@ -312,44 +302,34 @@ SakuraCompiler::convertBlossomGroup(JsonItem &growPlan,
 }
 
 /**
- * @brief SakuraCompiler::convertBranch
- * @param growPlan
- * @return
+ * @brief convert branch
+ * @param subtree current suttree for converting
+ * @param parent pointer ot the parent-branch or -tree
+ * @return pointer of the current converted part
  */
 SakuraItem*
-SakuraCompiler::convertBranch(JsonItem &growPlan,
+SakuraCompiler::convertBranch(const JsonItem &subtree,
                               SakuraItem* parent)
 {
+    // init new branch-item
     BranchItem* branchItem = new BranchItem();
-    branchItem->id = growPlan.get("id").toString();
+    branchItem->id = subtree.get("id").toString();
     branchItem->parent = parent;
 
-    JsonItem items = growPlan.get("items");
-
-    if(growPlan.contains("items-input"))
-    {
-        JsonItem itemInput = growPlan.get("items-input");
-        overrideItems(items, itemInput);
+    // fill values with the input of the upper level and convert the result
+    JsonItem items = subtree.get("items");
+    if(subtree.contains("items-input")) {
+        overrideItems(items, subtree.get("items-input"));
     }
+    convertValues(branchItem,items);
 
-    for(uint32_t i = 0; i < items.size(); i++)
-    {
-        const std::string key = items.get(i).get("key").toString();
-        const std::string pairType = items.get(i).get("type").toString();
-        JsonItem value = items.get(i).get("value");
-
-        ValueItem itemValue;
-        convertItemPart(value, itemValue, pairType);
-        branchItem->values.insert(key, itemValue);
-    }
-
-    JsonItem parts = growPlan.get("parts");
+    // convert parts of the branch
+    const JsonItem parts = subtree.get("parts");
     assert(parts.isValid());
-
     for(uint32_t i = 0; i < parts.size(); i++)
     {
         JsonItem newMap = parts.get(i);
-        newMap.insert("b_path", growPlan.get("b_path"));
+        newMap.insert("b_path", subtree.get("b_path"));
         branchItem->childs.push_back(convert(newMap, branchItem));
     }
 
@@ -357,40 +337,30 @@ SakuraCompiler::convertBranch(JsonItem &growPlan,
 }
 
 /**
- * @brief SakuraCompiler::convertTree
- * @param growPlan
- * @return
+ * @brief convert tree
+ * @param subtree current suttree for converting
+ * @param parent pointer ot the parent-branch or -tree
+ * @return pointer of the current converted part
  */
 SakuraItem*
-SakuraCompiler::convertTree(JsonItem &growPlan,
+SakuraCompiler::convertTree(const JsonItem &subtree,
                             SakuraItem* parent)
 {
+    // init new tree-item
     TreeItem* treeItem = new TreeItem();
-    treeItem->id = growPlan.get("id").toString();
+    treeItem->id = subtree.get("id").toString();
     treeItem->parent = parent;
 
-    JsonItem items = growPlan.get("items");
-
-    if(growPlan.contains("items-input"))
-    {
-        JsonItem itemInput = growPlan.get("items-input");
-        overrideItems(items, itemInput);
+    // fill values with the input of the upper level and convert the result
+    JsonItem items = subtree.get("items");
+    if(subtree.contains("items-input")) {
+        overrideItems(items, subtree.get("items-input"));
     }
+    convertValues(treeItem,items);
 
-    for(uint32_t i = 0; i < items.size(); i++)
-    {
-        const std::string key = items.get(i).get("key").toString();
-        const std::string pairType = items.get(i).get("type").toString();
-        JsonItem value = items.get(i).get("value");
-
-        ValueItem itemValue;
-        convertItemPart(value, itemValue, pairType);
-        treeItem->values.insert(key, itemValue);
-    }
-
-    JsonItem parts = growPlan.get("parts");
+    // convert parts of the tree
+    const JsonItem parts = subtree.get("parts");
     assert(parts.isValid());
-
     for(uint32_t i = 0; i < parts.size(); i++)
     {
         JsonItem newMap = parts.get(i);
@@ -401,19 +371,22 @@ SakuraCompiler::convertTree(JsonItem &growPlan,
 }
 
 /**
- * @brief SakuraCompiler::convertForest
- * @param growPlan
- * @return
+ * @brief convert seed-object
+ * @param subtree current suttree for converting
+ * @param parent pointer ot the parent-branch or -tree
+ * @return pointer of the current converted part
  */
 SakuraItem*
-SakuraCompiler::convertSeed(JsonItem &growPlan,
+SakuraCompiler::convertSeed(const JsonItem &subtree,
                             SakuraItem* parent)
 {
+    // init new seed-item
     SeedItem* seedItem = new SeedItem();
-    seedItem->name = growPlan.get("id").toString();
+    seedItem->name = subtree.get("id").toString();
     seedItem->parent = parent;
 
-    JsonItem connectionInfos = growPlan.get("connection");
+    // generate new branch-item based on the information
+    const JsonItem connectionInfos = subtree.get("connection");
     BranchItem* provisioningBranch = createProvisionBranch
             (
                 connectionInfos.get("address").getString(),
@@ -422,7 +395,7 @@ SakuraCompiler::convertSeed(JsonItem &growPlan,
                 connectionInfos.get("ssh_key").getString(),
                 SakuraRoot::m_executablePath,
                 "",
-                growPlan.get("subtree").getString()
+                subtree.get("subtree").getString()
             );
 
     seedItem->child = provisioningBranch;
@@ -431,61 +404,60 @@ SakuraCompiler::convertSeed(JsonItem &growPlan,
 }
 
 /**
- * @brief SakuraCompiler::convertIf
- * @param growPlan
- * @return
+ * @brief convert if-condition
+ * @param subtree current suttree for converting
+ * @param parent pointer ot the parent-branch or -tree
+ * @return pointer of the current converted part
  */
 SakuraItem*
-SakuraCompiler::convertIf(JsonItem &growPlan,
+SakuraCompiler::convertIf(const JsonItem &subtree,
                           SakuraItem* parent)
 {
+    // init new if-item
     IfBranching* newItem = new IfBranching();
     newItem->parent = parent;
 
-    JsonItem startItem = growPlan.get("left");
-    ValueItem leftItemValue;
-    convertItemPart(startItem, leftItemValue, "assign");
-    newItem->leftSide = leftItemValue;
+    // convert the both sides of the if-condition
+    convertItemPart(newItem->leftSide, subtree.get("left"), "assign");
+    convertItemPart(newItem->rightSide, subtree.get("right"), "assign");
 
-    JsonItem richtItem = growPlan.get("right");
-    ValueItem rightItemValue;
-    convertItemPart(richtItem, rightItemValue, "assign");
-    newItem->rightSide = rightItemValue;
-
-    if(growPlan.get("if_type").getString() == "==") {
+    // convert compare-tpye
+    if(subtree.get("if_type").getString() == "==") {
         newItem->ifType = IfBranching::EQUAL;
     }
-    if(growPlan.get("if_type").getString() == "!=") {
+    if(subtree.get("if_type").getString() == "!=") {
         newItem->ifType = IfBranching::UNEQUAL;
     }
-    if(growPlan.get("if_type").getString() == ">=") {
+    if(subtree.get("if_type").getString() == ">=") {
         newItem->ifType = IfBranching::GREATER_EQUAL;
     }
-    if(growPlan.get("if_type").getString() == ">") {
+    if(subtree.get("if_type").getString() == ">") {
         newItem->ifType = IfBranching::GREATER;
     }
-    if(growPlan.get("if_type").getString() == "<=") {
+    if(subtree.get("if_type").getString() == "<=") {
         newItem->ifType = IfBranching::SMALLER_EQUAL;
     }
-    if(growPlan.get("if_type").getString() == "<") {
+    if(subtree.get("if_type").getString() == "<") {
         newItem->ifType = IfBranching::SMALLER;
     }
 
-    JsonItem if_parts = growPlan.get("if_parts");
+    // convert if-part
+    JsonItem if_parts = subtree.get("if_parts");
     assert(if_parts.isValid());
     for(uint32_t i = 0; i < if_parts.size(); i++)
     {
         JsonItem newMap = if_parts.get(i);
-        newMap.insert("b_path", growPlan.get("b_path"));
+        newMap.insert("b_path", subtree.get("b_path"));
         newItem->ifChilds.push_back(convert(newMap, parent));
     }
 
-    JsonItem else_parts = growPlan.get("else_parts");
+    // convert else-part
+    JsonItem else_parts = subtree.get("else_parts");
     assert(else_parts.isValid());
     for(uint32_t i = 0; i < else_parts.size(); i++)
     {
         JsonItem newMap = else_parts.get(i);
-        newMap.insert("b_path", growPlan.get("b_path"));
+        newMap.insert("b_path", subtree.get("b_path"));
         newItem->elseChilds.push_back(convert(newMap, parent));
     }
 
@@ -493,31 +465,32 @@ SakuraCompiler::convertIf(JsonItem &growPlan,
 }
 
 /**
- * @brief SakuraCompiler::convertForEach
- * @param growPlan
- * @param parent
- * @return
+ * @brief convert for-each-loop
+ * @param subtree current suttree for converting
+ * @param parent pointer ot the parent-branch or -tree
+ * @return pointer of the current converted part
  */
 SakuraItem*
-SakuraCompiler::convertForEach(JsonItem &growPlan,
+SakuraCompiler::convertForEach(const JsonItem &subtree,
                                SakuraItem* parent)
 {
+    // init new for-each-item
     ForEachBranching* newItem = new ForEachBranching();
     newItem->parent = parent;
-    newItem->tempVarName = growPlan.get("variable").getItemContent()->toString();
+    newItem->tempVarName = subtree.get("variable").getItemContent()->toString();
 
-    JsonItem listItem = growPlan.get("list").getItemContent()->toMap();
-
+    // convert the item, over which should be iterated
     ValueItem itemValue;
-    convertItemPart(listItem, itemValue, "assign");
+    convertItemPart(itemValue, subtree.get("list"), "assign");
     newItem->iterateArray.insert("array", itemValue);
 
-    JsonItem content = growPlan.get("content");
+    // convert content of the for-loop
+    const JsonItem content = subtree.get("content");
     assert(content.isValid());
     for(uint32_t i = 0; i < content.size(); i++)
     {
         JsonItem newMap = content.get(i);
-        newMap.insert("b_path", growPlan.get("b_path"));
+        newMap.insert("b_path", subtree.get("b_path"));
         newItem->forChild.push_back(convert(newMap, parent));
     }
 
@@ -525,36 +498,31 @@ SakuraCompiler::convertForEach(JsonItem &growPlan,
 }
 
 /**
- * @brief SakuraCompiler::convertFor
- * @param growPlan
- * @param parent
- * @return
+ * @brief convert for-loop
+ * @param subtree current suttree for converting
+ * @param parent pointer ot the parent-branch or -tree
+ * @return pointer of the current converted part
  */
 SakuraItem*
-SakuraCompiler::convertFor(JsonItem &growPlan,
+SakuraCompiler::convertFor(const JsonItem &subtree,
                            SakuraItem* parent)
 {
+    // init new for-item
     ForBranching* newItem = new ForBranching();
     newItem->parent = parent;
-    newItem->tempVarName = growPlan.get("variable1").getItemContent()->toString();
+    newItem->tempVarName = subtree.get("variable1").getItemContent()->toString();
 
-    JsonItem startItem = growPlan.get("start").getItemContent()->toMap();
-    ValueItem startItemValue;
-    convertItemPart(startItem, startItemValue, "assign");
-    newItem->start = startItemValue;
+    // convert start- and end-point of the iterations
+    convertItemPart(newItem->start, subtree.get("start"), "assign");
+    convertItemPart(newItem->end, subtree.get("end"), "assign");
 
-    JsonItem endItem = growPlan.get("end").getItemContent()->toMap();
-    ValueItem endItemValue;
-    convertItemPart(endItem, endItemValue, "assign");
-    newItem->end = endItemValue;
-
-
-    JsonItem content = growPlan.get("content");
+    // convert content of the for-loop
+    const JsonItem content = subtree.get("content");
     assert(content.isValid());
     for(uint32_t i = 0; i < content.size(); i++)
     {
         JsonItem newMap = content.get(i);
-        newMap.insert("b_path", growPlan.get("b_path"));
+        newMap.insert("b_path", subtree.get("b_path"));
         newItem->forChild.push_back(convert(newMap, parent));
     }
 
@@ -562,48 +530,50 @@ SakuraCompiler::convertFor(JsonItem &growPlan,
 }
 
 /**
- * @brief SakuraCompiler::processSequeniellPart
- * @param growPlan
- * @return
+ * @brief convert sequentiell part of tree
+ * @param subtree current suttree for converting
+ * @param parent pointer ot the parent-branch or -tree
+ * @return pointer of the current converted part
  */
 SakuraItem*
-SakuraCompiler::convertSequeniellPart(JsonItem &growPlan,
+SakuraCompiler::convertSequeniellPart(const JsonItem &subtree,
                                       SakuraItem* parent)
 {
-    SequeniellBranching* newItem = new SequeniellBranching();
+    // init new sequentiell-branching-item
+    SequentiellBranching* newItem = new SequentiellBranching();
     newItem->parent = parent;
 
-    JsonItem parts = growPlan.get("parts");
+    // convert parts of the tree
+    const JsonItem parts = subtree.get("parts");
     assert(parts.isValid());
-
     for(uint32_t i = 0; i < parts.size(); i++)
     {
-        JsonItem newMap = parts.get(i);
-        newItem->childs.push_back(convert(newMap, parent));
+        newItem->childs.push_back(convert(parts.get(i), parent));
     }
 
     return newItem;
 }
 
 /**
- * @brief SakuraCompiler::processParallelPart
- * @param growPlan
- * @return
+ * @brief convert parallel part of tree
+ * @param subtree current suttree for converting
+ * @param parent pointer ot the parent-branch or -tree
+ * @return pointer of the current converted part
  */
 SakuraItem*
-SakuraCompiler::convertParallelPart(JsonItem &growPlan,
+SakuraCompiler::convertParallelPart(const JsonItem &subtree,
                                     SakuraItem* parent)
 {
+    // init new parallel-branching-item
     ParallelBranching* newItem = new ParallelBranching();
     newItem->parent = parent;
 
-    JsonItem parts = growPlan.get("parts");
+    // convert parts of the tree
+    const JsonItem parts = subtree.get("parts");
     assert(parts.isValid());
-
     for(uint32_t i = 0; i < parts.size(); i++)
     {
-        JsonItem newMap = parts.get(i);
-        newItem->childs.push_back(convert(newMap, parent));
+        newItem->childs.push_back(convert(parts.get(i), parent));
     }
 
     return newItem;

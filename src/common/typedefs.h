@@ -26,6 +26,7 @@
 #include <chrono>
 #include <map>
 #include <string>
+#include <common/includes.h>
 
 typedef std::chrono::microseconds chronoMicroSec;
 typedef std::chrono::nanoseconds chronoNanoSec;
@@ -33,7 +34,12 @@ typedef std::chrono::seconds chronoSec;
 typedef std::chrono::high_resolution_clock::time_point chronoTimePoint;
 typedef std::chrono::high_resolution_clock chronoClock;
 
-typedef std::pair<bool, std::string> Result;
+struct Result
+{
+    bool success = false;
+    std::string errorMessage = "";
+    DataItem* item = nullptr;
+};
 
 namespace SakuraTree {
 class SakuraBranch;

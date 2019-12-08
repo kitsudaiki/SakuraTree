@@ -93,12 +93,12 @@ FileRenameBlossom::preCheck(BlossomItem &blossomItem)
 void
 FileRenameBlossom::runTask(BlossomItem &blossomItem)
 {
-    const std::pair<bool, std::string> renameResult = renameFileOrDir(m_filePath, m_newFilePath);
+    const Result renameResult = renameFileOrDir(m_filePath, m_newFilePath);
 
-    if(renameResult.first == false)
+    if(renameResult.success == false)
     {
         blossomItem.success = false;
-        blossomItem.outputMessage = "RENAME FAILED: " + renameResult.second;
+        blossomItem.outputMessage = "RENAME FAILED: " + renameResult.errorMessage;
         return;
     }
 

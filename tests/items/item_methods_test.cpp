@@ -62,10 +62,9 @@ ItemMethods_Test::fillItems_test()
     ValueItemMap insertValues;
     insertValues.insert("test", new DataValue("hmmm"));
 
-    std::pair<bool, std::string> result;
-    result = fillInputItems(items, insertValues);
+    const Result result = fillInputItems(items, insertValues);
 
-    TEST_EQUAL(result.first, true);
+    TEST_EQUAL(result.success, true);
     TEST_EQUAL(items.get("x")->toString(), "hmmm");
 }
 
