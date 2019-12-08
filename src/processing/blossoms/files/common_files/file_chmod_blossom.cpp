@@ -35,6 +35,16 @@ FileChmodBlossom::FileChmodBlossom() :
 void
 FileChmodBlossom::initTask(BlossomItem &blossomItem)
 {
+    const std::vector<std::string> requiredKeys = {"file_path", "permission"};
+
+    checkForRequiredKeys(blossomItem, requiredKeys);
+    if(blossomItem.success == false) {
+        return;
+    }
+
+    m_filePath = blossomItem.values.getValueAsString("file_path");
+    m_permission = blossomItem.values.getValueAsString("permission");
+
     blossomItem.success = true;
 }
 
@@ -44,6 +54,15 @@ FileChmodBlossom::initTask(BlossomItem &blossomItem)
 void
 FileChmodBlossom::preCheck(BlossomItem &blossomItem)
 {
+    if(doesPathExist(m_filePath) == false)
+    {
+        blossomItem.success = false;
+        blossomItem.outputMessage = "CHMOD FAILED: file-path "
+                                   + m_filePath
+                                   + " doesn't exist";
+        return;
+    }
+
     blossomItem.success = true;
 }
 
@@ -53,6 +72,14 @@ FileChmodBlossom::preCheck(BlossomItem &blossomItem)
 void
 FileChmodBlossom::runTask(BlossomItem &blossomItem)
 {
+    std::string command = "chmod ";
+    if(doesDirExist(m_filePath)) {
+        command += "-R ";
+    }
+    command += m_permission + " ";
+    command += m_filePath;
+
+    runSyncProcess(blossomItem, command);
     blossomItem.success = true;
 }
 
