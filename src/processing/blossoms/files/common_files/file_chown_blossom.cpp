@@ -35,6 +35,16 @@ FileChownBlossom::FileChownBlossom() :
 void
 FileChownBlossom::initTask(BlossomItem &blossomItem)
 {
+    const std::vector<std::string> requiredKeys = {"file_path", "owner"};
+
+    checkForRequiredKeys(blossomItem, requiredKeys);
+    if(blossomItem.success == false) {
+        return;
+    }
+
+    m_filePath = blossomItem.values.getValueAsString("file_path");
+    m_owner = blossomItem.values.getValueAsString("owner");
+
     blossomItem.success = true;
 }
 
@@ -44,6 +54,15 @@ FileChownBlossom::initTask(BlossomItem &blossomItem)
 void
 FileChownBlossom::preCheck(BlossomItem &blossomItem)
 {
+    if(doesPathExist(m_filePath) == false)
+    {
+        blossomItem.success = false;
+        blossomItem.outputMessage = "CHOWN FAILED: file-path "
+                                   + m_filePath
+                                   + " doesn't exist";
+        return;
+    }
+
     blossomItem.success = true;
 }
 
@@ -53,6 +72,14 @@ FileChownBlossom::preCheck(BlossomItem &blossomItem)
 void
 FileChownBlossom::runTask(BlossomItem &blossomItem)
 {
+    std::string command = "chown ";
+    if(doesDirExist(m_filePath)) {
+        command += "-R ";
+    }
+    command += m_owner + ":" + m_owner + " ";
+    command += m_filePath;
+
+    runSyncProcess(blossomItem, command);
     blossomItem.success = true;
 }
 

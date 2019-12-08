@@ -40,6 +40,9 @@ protected:
     void postCheck(BlossomItem &blossomItem);
     void closeTask(BlossomItem &blossomItem);
 
+private:
+    std::string m_filePath = "";
+    std::string m_permission = "";
 };
 
 }
