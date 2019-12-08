@@ -76,11 +76,11 @@ doesDirExist(const std::string dirPath)
  * @param newPath
  * @return
  */
-const std::pair<bool, std::string>
+const Result
 renameFileOrDir(const std::string oldPath,
                 const std::string newPath)
 {
-    std::pair<bool, std::string> result;
+    Result result;
 
     boost::system::error_code error;
     error.clear();
@@ -89,13 +89,13 @@ renameFileOrDir(const std::string oldPath,
 
     if(error.value() != 0)
     {
-        result.first = false;
-        result.second = error.message();
+        result.success = false;
+        result.errorMessage = error.message();
         return result;
     }
 
-    result.first = true;
-    result.second = "";
+    result.success = true;
+
     return result;
 }
 
@@ -105,10 +105,12 @@ renameFileOrDir(const std::string oldPath,
  * @param targetPath
  * @return
  */
-const std::pair<bool, std::string>
-copyPath(const std::string sourcePath, const std::string targetPath, bool force)
+const Result
+copyPath(const std::string sourcePath,
+         const std::string targetPath,
+         const bool force)
 {
-    std::pair<bool, std::string> result;
+    Result result;
 
     boost::system::error_code error;
     error.clear();
@@ -120,13 +122,13 @@ copyPath(const std::string sourcePath, const std::string targetPath, bool force)
 
     if(error.value() != 0)
     {
-        result.first = false;
-        result.second = error.message();
+        result.success = false;
+        result.errorMessage = error.message();
         return result;
     }
 
-    result.first = true;
-    result.second = "";
+    result.success = true;
+
     return result;
 }
 

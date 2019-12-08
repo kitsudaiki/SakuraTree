@@ -104,11 +104,11 @@ SakuraThread::grow(SakuraItem* growPlan,
 
         ValueItemMap tempItemMap = blossomItem->values;
         overrideItems(values, blossomItem->parent->values);
-        std::pair<bool, std::string> result = fillInputItems(tempItemMap, values);
+        Result result = fillInputItems(tempItemMap, values);
 
-        if(result.first == false)
+        if(result.success == false)
         {
-            blossomItem->outputMessage = result.second;
+            blossomItem->outputMessage = result.errorMessage;
             blossomItem->success = false;
             m_abort = true;
             return;
@@ -144,8 +144,8 @@ SakuraThread::grow(SakuraItem* growPlan,
         newHierarchy.push_back("BRANCH: " + branchItem->id);
 
         ValueItemMap tempItemMap = branchItem->values;
-        std::pair<bool, std::string> result = fillInputItems(tempItemMap, values);
-        if(result.first == false)
+        Result result = fillInputItems(tempItemMap, values);
+        if(result.success == false)
         {
             // TODO: error-output
             m_abort = true;
@@ -170,8 +170,8 @@ SakuraThread::grow(SakuraItem* growPlan,
         newHierarchy.push_back("TREE: " + treeItem->id);
 
         ValueItemMap tempItemMap = treeItem->values;
-        std::pair<bool, std::string> result = fillInputItems(tempItemMap, values);
-        if(result.first == false)
+        Result result = fillInputItems(tempItemMap, values);
+        if(result.success == false)
         {
             // TODO: error-output
             m_abort = true;
@@ -202,7 +202,7 @@ SakuraThread::grow(SakuraItem* growPlan,
         ForEachBranching* forEachBranching = dynamic_cast<ForEachBranching*>(growPlan);
 
         Result result = fillInputItems(forEachBranching->iterateArray, values);
-        if(result.first == false)
+        if(result.success == false)
         {
             m_abort = true;
             return;

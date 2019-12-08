@@ -41,6 +41,8 @@ const Result
 fillJinja2Template(const std::string baseString,
                    ValueItemMap &insertValues)
 {
+    Result result;
+
     // prepare map for jinja2-convert
     DataMap possibleValues;
     std::map<std::string, ValueItem>::iterator insertIt;
@@ -55,7 +57,21 @@ fillJinja2Template(const std::string baseString,
 
     // convert jinja2-string
     Jinja2Converter* converter = SakuraRoot::m_root->m_jinja2Converter;
-    return converter->convert(baseString, &possibleValues);
+    const std::pair<bool, std::string> convertResult = converter->convert(baseString,
+                                                                          &possibleValues);
+
+    if(convertResult.first == false)
+    {
+        result.success = false;
+        result.errorMessage = convertResult.second;
+    }
+    else
+    {
+        result.success = true;
+        result.item = new DataValue(convertResult.second);
+    }
+
+    return result;
 }
 
 /**
@@ -64,10 +80,11 @@ fillJinja2Template(const std::string baseString,
  * @param output
  * @return
  */
-const Result fillOutputItems(ValueItemMap &items,
-                             DataItem *output)
+const Result
+fillOutputItems(ValueItemMap &items,
+                DataItem *output)
 {
-    std::pair<bool, std::string> result;
+    Result result;
 
     std::map<std::string, ValueItem>::iterator it;
     for(it = items.valueMap.begin();
@@ -83,7 +100,8 @@ const Result fillOutputItems(ValueItemMap &items,
         }
     }
 
-    result.first = true;
+    result.success = true;
+
     return result;
 }
 
@@ -112,16 +130,13 @@ fillInputItems(ValueItemMap &items,
                                                             insertValues);
 
             // process negative result
-            if(convertResult.first == false)
-            {
-                result.first = false;
-                result.second = "failed to fill value of: " + it->first;
-                return result;
+            if(convertResult.success == false) {
+                return convertResult;
             }
 
             // write positive result back to item-list
             ValueItem valueItem;
-            valueItem.item = new DataValue(convertResult.second);
+            valueItem.item = convertResult.item;
             it->second = valueItem;
         }
         else if(it->second.isIdentifier
@@ -153,7 +168,8 @@ fillInputItems(ValueItemMap &items,
         }
     }
 
-    result.first = true;
+    result.success = true;
+
     return result;
 }
 
