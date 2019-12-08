@@ -102,25 +102,9 @@ SakuraThread::grow(SakuraItem* growPlan,
         BlossomItem* blossomItem = dynamic_cast<BlossomItem*>(growPlan);
         std::vector<std::string> newHierarchy = hierarchy;
 
-        ValueItemMap tempItemMap = blossomItem->values;
-        overrideItems(values, blossomItem->parent->values);
-        Result result = fillInputItems(tempItemMap, values);
-
-        if(result.success == false)
-        {
-            blossomItem->outputMessage = result.errorMessage;
-            blossomItem->success = false;
-            m_abort = true;
-            return;
-        }
-
+        // copy the item or else the for-each-loop is broken
         BlossomItem tempBlossomItem = *blossomItem;
-        processBlossom(tempBlossomItem,
-                       tempItemMap,
-                       newHierarchy);
-
-        fillOutputItems(tempItemMap, tempBlossomItem.blossomOutput);
-        overrideItems(tempBlossomItem.parent->values, tempItemMap);
+        processBlossom(tempBlossomItem, values, newHierarchy);
 
         return;
     }
@@ -131,9 +115,8 @@ SakuraThread::grow(SakuraItem* growPlan,
         std::vector<std::string> newHierarchy = hierarchy;
         newHierarchy.push_back("BLOSSOM: " + blossomGroupItem->id);
 
-        processBlossomGroup(*blossomGroupItem,
-                            values,
-                            newHierarchy);
+        processBlossomGroup(*blossomGroupItem, values, newHierarchy);
+
         return;
     }
 
@@ -143,22 +126,7 @@ SakuraThread::grow(SakuraItem* growPlan,
         std::vector<std::string> newHierarchy = hierarchy;
         newHierarchy.push_back("BRANCH: " + branchItem->id);
 
-        ValueItemMap tempItemMap = branchItem->values;
-        Result result = fillInputItems(tempItemMap, values);
-        if(result.success == false)
-        {
-            // TODO: error-output
-            m_abort = true;
-            return;
-        }
-
-        processBranch(branchItem,
-                      tempItemMap,
-                      newHierarchy);
-
-        if(branchItem->parent != nullptr) {
-            overrideItems(branchItem->parent->values, tempItemMap);
-        }
+        processBranch(branchItem, values, newHierarchy);
 
         return;
     }
@@ -169,73 +137,47 @@ SakuraThread::grow(SakuraItem* growPlan,
         std::vector<std::string> newHierarchy = hierarchy;
         newHierarchy.push_back("TREE: " + treeItem->id);
 
-        ValueItemMap tempItemMap = treeItem->values;
-        Result result = fillInputItems(tempItemMap, values);
-        if(result.success == false)
-        {
-            // TODO: error-output
-            m_abort = true;
-            return;
-        }
-
-        processTree(treeItem,
-                    tempItemMap,
-                    newHierarchy);
-
-        if(treeItem->parent != nullptr) {
-            overrideItems(treeItem->parent->values, tempItemMap);
-        }
+        processTree(treeItem, values, newHierarchy);
 
         return;
     }
 
     if(growPlan->getType() == SakuraItem::IF_ITEM)
     {
-        processIf(dynamic_cast<IfBranching*>(growPlan),
-                  values,
-                  hierarchy);
+        IfBranching* ifBranching = dynamic_cast<IfBranching*>(growPlan);
+        processIf(ifBranching, values, hierarchy);
+
         return;
     }
 
     if(growPlan->getType() == SakuraItem::FOR_EACH_ITEM)
     {
         ForEachBranching* forEachBranching = dynamic_cast<ForEachBranching*>(growPlan);
+        processForEach(forEachBranching, values, hierarchy);
 
-        Result result = fillInputItems(forEachBranching->iterateArray, values);
-        if(result.success == false)
-        {
-            m_abort = true;
-            return;
-        }
-
-        processForEach(forEachBranching,
-                       values,
-                       hierarchy);
         return;
     }
 
     if(growPlan->getType() == SakuraItem::FOR_ITEM)
     {
         ForBranching* forBranching = dynamic_cast<ForBranching*>(growPlan);
-        processFor(forBranching,
-                   values,
-                   hierarchy);
+        processFor(forBranching, values, hierarchy);
         return;
     }
 
     if(growPlan->getType() == SakuraItem::SEQUENTIELL_ITEM)
     {
-        processSequeniellPart(dynamic_cast<SequentiellBranching*>(growPlan),
-                              values,
-                              hierarchy);
+        SequentiellBranching* sequentiell = dynamic_cast<SequentiellBranching*>(growPlan);
+        processSequeniellPart(sequentiell, values, hierarchy);
+
         return;
     }
 
     if(growPlan->getType() == SakuraItem::PARALLEL_ITEM)
     {
-        processParallelPart(dynamic_cast<ParallelBranching*>(growPlan),
-                            values,
-                            hierarchy);
+        ParallelBranching* parallel = dynamic_cast<ParallelBranching*>(growPlan);
+        processParallelPart(parallel, values, hierarchy);
+
         return;
     }
 
@@ -243,9 +185,9 @@ SakuraThread::grow(SakuraItem* growPlan,
     {
         SeedItem* forestItem = dynamic_cast<SeedItem*>(growPlan);
         BranchItem* branchItem = dynamic_cast<BranchItem*>(forestItem->child);
-        processBranch(branchItem,
-                      values,
-                      hierarchy);
+        processBranch(branchItem, values, hierarchy);
+
+        return;
     }
 
     return;
@@ -260,9 +202,22 @@ SakuraThread::processBlossom(BlossomItem &growPlan,
                              const std::vector<std::string> &hierarchy)
 {
     // init
-    growPlan.values = values;
     growPlan.nameHirarchie = hierarchy;
 
+    // prepare values
+    overrideItems(values, growPlan.parent->values);
+    Result result = fillInputItems(growPlan.values, values);
+
+    // check if value-preparation was successful
+    if(result.success == false)
+    {
+        growPlan.outputMessage = result.errorMessage;
+        growPlan.success = false;
+        m_abort = true;
+        return;
+    }
+
+    // get and process blossom
     Blossom* blossom = getBlossom(growPlan.blossomGroupType,
                                   growPlan.blossomType);
     blossom->growBlossom(growPlan);
@@ -275,6 +230,10 @@ SakuraThread::processBlossom(BlossomItem &growPlan,
 
     // send result to root
     SakuraRoot::m_root->printOutput(growPlan);
+
+    // write processing result back to parent
+    fillOutputItems(growPlan.values, growPlan.blossomOutput);
+    overrideItems(growPlan.parent->values, growPlan.values);
 
     return;
 }
@@ -311,11 +270,23 @@ SakuraThread::processBranch(BranchItem* growPlan,
                             ValueItemMap values,
                             const std::vector<std::string> &hierarchy)
 {
+    Result result = fillInputItems(growPlan->values, values);
+    if(result.success == false)
+    {
+        // TODO: error-output
+        m_abort = true;
+        return;
+    }
+
     for(uint32_t i = 0; i < growPlan->childs.size(); i++)
     {
         grow(growPlan->childs.at(i),
-             values,
+             growPlan->values,
              hierarchy);
+    }
+
+    if(growPlan->parent != nullptr) {
+        overrideItems(growPlan->parent->values, growPlan->values);
     }
 
     return;
@@ -329,11 +300,23 @@ SakuraThread::processTree(TreeItem* growPlan,
                           ValueItemMap values,
                           const std::vector<std::string> &hierarchy)
 {
+    Result result = fillInputItems(growPlan->values, values);
+    if(result.success == false)
+    {
+        // TODO: error-output
+        m_abort = true;
+        return;
+    }
+
     for(uint32_t i = 0; i < growPlan->childs.size(); i++)
     {
         grow(growPlan->childs.at(i),
-             values,
+             growPlan->values,
              hierarchy);
+    }
+
+    if(growPlan->parent != nullptr) {
+        overrideItems(growPlan->parent->values, growPlan->values);
     }
 
     return;
@@ -432,6 +415,13 @@ SakuraThread::processForEach(ForEachBranching* growPlan,
                              ValueItemMap values,
                              const std::vector<std::string> &hierarchy)
 {
+    Result result = fillInputItems(growPlan->iterateArray, values);
+    if(result.success == false)
+    {
+        m_abort = true;
+        return;
+    }
+
     DataArray* array = growPlan->iterateArray.get("array")->toArray();
     for(uint32_t i = 0; i < array->size(); i++)
     {
