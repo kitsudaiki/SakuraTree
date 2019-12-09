@@ -141,11 +141,14 @@ ValueItemsFunctions_Test::sizeValue_test()
 void
 ValueItemsFunctions_Test::containsValue_test()
 {
+    DataItem* result = nullptr;
+
+    // map-type
     DataMap testMap;
     testMap.insert("asdf", new DataValue("poi"));
     testMap.insert("xyz", new DataValue(42));
 
-    DataItem* result = containsValue(&testMap, new DataValue("asdf"));
+    result = containsValue(&testMap, new DataValue("asdf"));
 
     TEST_EQUAL(result->isBoolValue(), true);
     TEST_EQUAL(result->toValue()->getBool(), true);
@@ -156,12 +159,44 @@ ValueItemsFunctions_Test::containsValue_test()
     TEST_EQUAL(result->toValue()->getBool(), false);
 
 
-    // negative tests
-    result = containsValue(new DataArray(), new DataValue("12345"));
-    checkNullptr(result);
+    // array-type
+    DataArray testArray;
+    testArray.append(new DataValue("poi"));
+    testArray.append(new DataValue(42));
 
-    result = containsValue(nullptr, new DataValue("12345"));
-    checkNullptr(result);
+    result = containsValue(&testArray, new DataValue("poi"));
+
+    TEST_EQUAL(result->isBoolValue(), true);
+    TEST_EQUAL(result->toValue()->getBool(), true);
+
+    result = containsValue(&testArray, new DataValue("42"));
+
+    TEST_EQUAL(result->isBoolValue(), true);
+    TEST_EQUAL(result->toValue()->getBool(), true);
+
+    result = containsValue(&testArray, new DataValue("12345"));
+
+    TEST_EQUAL(result->isBoolValue(), true);
+    TEST_EQUAL(result->toValue()->getBool(), false);
+
+
+    // value-type
+    DataValue testValue("this is a test-string");
+
+    result = containsValue(&testValue, new DataValue("this"));
+
+    TEST_EQUAL(result->isBoolValue(), true);
+    TEST_EQUAL(result->toValue()->getBool(), true);
+
+    result = containsValue(&testValue, new DataValue("is a test-s"));
+
+    TEST_EQUAL(result->isBoolValue(), true);
+    TEST_EQUAL(result->toValue()->getBool(), true);
+
+    result = containsValue(&testValue, new DataValue("12345"));
+
+    TEST_EQUAL(result->isBoolValue(), true);
+    TEST_EQUAL(result->toValue()->getBool(), false);
 }
 
 /**
