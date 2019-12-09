@@ -24,7 +24,7 @@ function build_kitsune_lib_repo () {
     cd $REPO_DIR
 
     # build repo library with qmake
-    /usr/lib/x86_64-linux-gnu/qt5/bin/qmake "$PARENT_DIR/$REPO_NAME/$REPO_NAME.pro" -spec linux-g++ "CONFIG += optimize_full"
+    /usr/lib/x86_64-linux-gnu/qt5/bin/qmake "$PARENT_DIR/$REPO_NAME/$REPO_NAME.pro" -spec linux-g++ "CONFIG += optimize_full staticlib"
     /usr/bin/make -j$NUMBER_OF_THREADS
 
     # copy build-result and include-files into the result-directory
@@ -38,7 +38,7 @@ function get_required_kitsune_lib_repo () {
     NUMBER_OF_THREADS=$3
 
     # clone repo
-    git clone  git@gitlab.com:tobiasanker/$REPO_NAME.git "$PARENT_DIR/$REPO_NAME"
+    git clone https://github.com/tobiasanker/$REPO_NAME.git "$PARENT_DIR/$REPO_NAME"
     cd "$PARENT_DIR/$REPO_NAME"
     git checkout $TAG_OR_BRANCH
 
@@ -51,7 +51,7 @@ get_required_kitsune_lib_repo "libKitsunemimiCommon" "master" 4
 
 get_required_kitsune_lib_repo "libKitsunemimiPersistence" "master" 4
 
-get_required_kitsune_lib_repo "libKitsunemimiNetwork" "master" 4
+# get_required_kitsune_lib_repo "libKitsunemimiNetwork" "master" 4
 
 get_required_kitsune_lib_repo "libKitsunemimiJson" "master" 1
 
@@ -61,9 +61,9 @@ get_required_kitsune_lib_repo "libKitsunemimiJinja2" "master" 1
 
 get_required_kitsune_lib_repo "libKitsunemimiSakuraParser" "master" 1
 
-get_required_kitsune_lib_repo "libKitsunemimiProjectCommon" "master" 4
+# get_required_kitsune_lib_repo "libKitsunemimiProjectCommon" "master" 4
 
-get_required_kitsune_lib_repo "libKitsunemimiSakuraNetwork" "master" 4
+# get_required_kitsune_lib_repo "libKitsunemimiSakuraNetwork" "master" 4
 
 #-----------------------------------------------------------------------------------------------------------------
 
@@ -73,7 +73,11 @@ mkdir -p $LIB_KITSUNE_SAKURA_TREE_DIR
 cd $LIB_KITSUNE_SAKURA_TREE_DIR
 
 # build SakuraTree library with qmake
-/usr/lib/x86_64-linux-gnu/qt5/bin/qmake "$PARENT_DIR/SakuraTree/SakuraTree.pro" -spec linux-g++ "CONFIG += optimize_full" "QMAKE_CXXFLAGS += -DRUN_UNIT_TEST"
+if [ $1 = "test" ]; then
+    /usr/lib/x86_64-linux-gnu/qt5/bin/qmake "$PARENT_DIR/SakuraTree/SakuraTree.pro" -spec linux-g++ "CONFIG += optimize_full" "QMAKE_CXXFLAGS += -DRUN_UNIT_TEST"
+else
+    /usr/lib/x86_64-linux-gnu/qt5/bin/qmake "$PARENT_DIR/SakuraTree/SakuraTree.pro" -spec linux-g++ "CONFIG += optimize_full"
+fi
 /usr/bin/make -j4
 
 # copy build-result and include-files into the result-directory
