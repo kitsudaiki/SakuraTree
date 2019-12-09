@@ -115,13 +115,10 @@ Repository-Name | Version-Tag | Download-Path
 --- | --- | ---
 libKitsunemimiCommon | master |  https://github.com/tobiasanker/libKitsunemimiCommon.git
 libKitsunemimiPersistence | master |  https://github.com/tobiasanker/libKitsunemimiPersistence.git
-libKitsunemimiNetwork | master |  https://github.com/tobiasanker/libKitsunemimiNetwork.git
 libKitsunemimiJson | master |  https://github.com/tobiasanker/libKitsunemimiJson.git
 libKitsunemimiJinja2 | master |  https://github.com/tobiasanker/libKitsunemimiJinja2.git
 libKitsunemimiIni | master |  https://github.com/tobiasanker/libKitsunemimiIni.git
-libKitsunemimiProjectCommon | master |  https://github.com/tobiasanker/libKitsunemimiProjectCommon.git
 libKitsunemimiSakuraParser | master |  https://github.com/tobiasanker/libKitsunemimiSakuraParser.git
-libKitsunemimiSakuraNetwork | master |  https://github.com/tobiasanker/libKitsunemimiSakuraNetwork.git
 
 
 ### build library
