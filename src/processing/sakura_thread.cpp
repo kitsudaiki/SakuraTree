@@ -340,6 +340,8 @@ SakuraThread::processIf(IfBranching* growPlan,
     std::string leftSide = "";
     std::string rightSide = "";
 
+    overrideItems(values, growPlan->parent->values);
+
     if(growPlan->leftSide.isIdentifier == true)
     {
         const std::string leftSideKey = growPlan->leftSide.item->toString();
@@ -415,6 +417,8 @@ SakuraThread::processForEach(ForEachBranching* growPlan,
                              ValueItemMap values,
                              const std::vector<std::string> &hierarchy)
 {
+    overrideItems(values, growPlan->parent->values);
+
     Result result = fillInputItems(growPlan->iterateArray, values);
     if(result.success == false)
     {
@@ -447,6 +451,8 @@ SakuraThread::processFor(ForBranching* growPlan,
 
     long startValue = 0;
     long endValue = 0;
+
+    overrideItems(values, growPlan->parent->values);
 
     if(growPlan->start.isIdentifier == true)
     {

@@ -234,13 +234,34 @@ if(test_output == "test")
     -> read:
         - blossom_output >> test_output
     -> set:
-        - value = "0123456789"
+        - value = "123456789"
     -> read:
         - blossom_output >> test_output2
 
     print("print init-file-output")
     - first_try = test_output
     - second_try = test_output2
+
+    if(packages.contains("nano") == true)
+    {
+        print("contains successful")
+        - answer = "yeah"
+    }
+
+    if(packages.contains("asdf") == false)
+    {
+        print("contains successful negative")
+        - answer = "yeah again"
+    }
+
+    assert("test-assert")
+    - test_output2 == "123456789"
+
+    if(test_output2.contains("345") == true)
+    {
+        print("contains in string successful")
+        - answer = "yeah again again"
+    }
 }
 else
 {
