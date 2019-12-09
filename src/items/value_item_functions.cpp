@@ -114,16 +114,39 @@ DataItem* sizeValue(DataItem* original)
  */
 DataItem* containsValue(DataItem* original, DataValue* key)
 {
-    if(original == nullptr
-            || original->isMap() == false)
-    {
+    if(original == nullptr) {
         return nullptr;
     }
 
-    const bool result = original->toMap()->contains(key->toString());
-    DataValue* resultItem = new DataValue(result);
+    if(original->isMap())
+    {
+        const bool result = original->toMap()->contains(key->toString());
+        return new DataValue(result);
+    }
 
-    return resultItem;
+    if(original->isArray())
+    {
+        DataArray* tempArray = original->toArray();
+        for(uint32_t i = 0; i < tempArray->size(); i++)
+        {
+            if(tempArray->get(i)->toString() == key->toString()) {
+                return new DataValue(true);
+            }
+        }
+
+        return new DataValue(false);
+    }
+
+    if(original->isValue())
+    {
+        if (original->toString().find(key->toString()) != std::string::npos) {
+            return new DataValue(true);
+        }
+
+        return new DataValue(false);
+    }
+
+    return nullptr;
 }
 
 /**
