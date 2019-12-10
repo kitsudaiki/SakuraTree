@@ -222,10 +222,6 @@ SakuraCompiler::convert(const JsonItem &subtree,
         return convertSequeniellPart(subtree, parent);
     }
 
-    if(typeName == "parallel") {
-        return convertParallelPart(subtree, parent);
-    }
-
     if(typeName == "seed") {
         return convertSeed(subtree, parent);
     }
@@ -235,11 +231,23 @@ SakuraCompiler::convert(const JsonItem &subtree,
     }
 
     if(typeName == "for_each") {
-        return convertForEach(subtree, parent);
+        return convertForEach(subtree, parent, false);
     }
 
     if(typeName == "for") {
-        return convertFor(subtree, parent);
+        return convertFor(subtree, parent, false);
+    }
+
+    if(typeName == "parallel") {
+        return convertParallel(subtree, parent);
+    }
+
+    if(typeName == "parallel_for") {
+        return convertFor(subtree, parent, true);
+    }
+
+    if(typeName == "parallel_for_each") {
+        return convertForEach(subtree, parent, true);
     }
 
     // it must everytime match one of the names
@@ -444,22 +452,26 @@ SakuraCompiler::convertIf(const JsonItem &subtree,
     // convert if-part
     JsonItem if_parts = subtree.get("if_parts");
     assert(if_parts.isValid());
+    Sequentiell* sequentiellContentIf = new Sequentiell();
     for(uint32_t i = 0; i < if_parts.size(); i++)
     {
         JsonItem newMap = if_parts.get(i);
         newMap.insert("b_path", subtree.get("b_path"));
-        newItem->ifChilds.push_back(convert(newMap, parent));
+        sequentiellContentIf->childs.push_back(convert(newMap, parent));
     }
+    newItem->ifContent = sequentiellContentIf;
 
     // convert else-part
     JsonItem else_parts = subtree.get("else_parts");
     assert(else_parts.isValid());
+    Sequentiell* sequentiellContentElse = new Sequentiell();
     for(uint32_t i = 0; i < else_parts.size(); i++)
     {
         JsonItem newMap = else_parts.get(i);
         newMap.insert("b_path", subtree.get("b_path"));
-        newItem->elseChilds.push_back(convert(newMap, parent));
+        sequentiellContentElse->childs.push_back(convert(newMap, parent));
     }
+    newItem->elseContent = sequentiellContentElse;
 
     return newItem;
 }
@@ -472,10 +484,11 @@ SakuraCompiler::convertIf(const JsonItem &subtree,
  */
 SakuraItem*
 SakuraCompiler::convertForEach(const JsonItem &subtree,
-                               SakuraItem* parent)
+                               SakuraItem* parent,
+                               bool parallel)
 {
     // init new for-each-item
-    ForEachBranching* newItem = new ForEachBranching();
+    ForEachBranching* newItem = new ForEachBranching(parallel);
     newItem->parent = parent;
     newItem->tempVarName = subtree.get("variable").getItemContent()->toString();
 
@@ -487,12 +500,14 @@ SakuraCompiler::convertForEach(const JsonItem &subtree,
     // convert content of the for-loop
     const JsonItem content = subtree.get("content");
     assert(content.isValid());
+    Sequentiell* sequentiellContent = new Sequentiell();
     for(uint32_t i = 0; i < content.size(); i++)
     {
         JsonItem newMap = content.get(i);
         newMap.insert("b_path", subtree.get("b_path"));
-        newItem->forChild.push_back(convert(newMap, parent));
+        sequentiellContent->childs.push_back(convert(newMap, parent));
     }
+    newItem->content = sequentiellContent;
 
     return newItem;
 }
@@ -505,10 +520,11 @@ SakuraCompiler::convertForEach(const JsonItem &subtree,
  */
 SakuraItem*
 SakuraCompiler::convertFor(const JsonItem &subtree,
-                           SakuraItem* parent)
+                           SakuraItem* parent,
+                           bool parallel)
 {
     // init new for-item
-    ForBranching* newItem = new ForBranching();
+    ForBranching* newItem = new ForBranching(parallel);
     newItem->parent = parent;
     newItem->tempVarName = subtree.get("variable1").getItemContent()->toString();
 
@@ -519,11 +535,38 @@ SakuraCompiler::convertFor(const JsonItem &subtree,
     // convert content of the for-loop
     const JsonItem content = subtree.get("content");
     assert(content.isValid());
+    Sequentiell* sequentiellContent = new Sequentiell();
     for(uint32_t i = 0; i < content.size(); i++)
     {
         JsonItem newMap = content.get(i);
         newMap.insert("b_path", subtree.get("b_path"));
-        newItem->forChild.push_back(convert(newMap, parent));
+        sequentiellContent->childs.push_back(convert(newMap, parent));
+    }
+    newItem->content = sequentiellContent;
+
+    return newItem;
+}
+
+/**
+ * @brief convert parallel part of branch
+ * @param subtree current suttree for converting
+ * @param parent pointer ot the parent-branch or -tree
+ * @return pointer of the current converted part
+ */
+SakuraItem*
+SakuraCompiler::convertParallel(const JsonItem &subtree,
+                                SakuraItem* parent)
+{
+    // init new parallel-branching-item
+    Parallel* newItem = new Parallel();
+    newItem->parent = parent;
+
+    // convert parts of the tree
+    const JsonItem parts = subtree.get("content");
+    assert(parts.isValid());
+    for(uint32_t i = 0; i < parts.size(); i++)
+    {
+        newItem->childs.push_back(convert(parts.get(i), parent));
     }
 
     return newItem;
@@ -540,7 +583,7 @@ SakuraCompiler::convertSequeniellPart(const JsonItem &subtree,
                                       SakuraItem* parent)
 {
     // init new sequentiell-branching-item
-    SequentiellBranching* newItem = new SequentiellBranching();
+    Sequentiell* newItem = new Sequentiell();
     newItem->parent = parent;
 
     // convert parts of the tree
@@ -565,7 +608,7 @@ SakuraCompiler::convertParallelPart(const JsonItem &subtree,
                                     SakuraItem* parent)
 {
     // init new parallel-branching-item
-    ParallelBranching* newItem = new ParallelBranching();
+    Parallel* newItem = new Parallel();
     newItem->parent = parent;
 
     // convert parts of the tree

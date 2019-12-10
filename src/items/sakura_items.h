@@ -47,7 +47,9 @@ public:
         PARALLEL_ITEM = 7,
         IF_ITEM = 8,
         FOR_EACH_ITEM = 9,
-        FOR_ITEM = 10
+        FOR_ITEM = 10,
+        PARALLEL_FOR_EACH_ITEM = 11,
+        PARALLEL_FOR_ITEM = 12
     };
 
     SakuraItem();
@@ -165,23 +167,11 @@ public:
 //===================================================================
 // Sequeniell
 //===================================================================
-class SequentiellBranching : public SakuraItem
+class Sequentiell : public SakuraItem
 {
 public:
-    SequentiellBranching();
-    ~SequentiellBranching();
-
-    std::vector<SakuraItem*> childs;
-};
-
-//===================================================================
-// ParallelBranching
-//===================================================================
-class ParallelBranching : public SakuraItem
-{
-public:
-    ParallelBranching();
-    ~ParallelBranching();
+    Sequentiell();
+    ~Sequentiell();
 
     std::vector<SakuraItem*> childs;
 };
@@ -208,8 +198,8 @@ public:
     compareTypes ifType = EQUAL;
     ValueItem rightSide;
 
-    std::vector<SakuraItem*> ifChilds;
-    std::vector<SakuraItem*> elseChilds;
+    SakuraItem* ifContent;
+    SakuraItem* elseContent;
 };
 
 //===================================================================
@@ -218,13 +208,13 @@ public:
 class ForEachBranching : public SakuraItem
 {
 public:
-    ForEachBranching();
+    ForEachBranching(const bool parallel=false);
     ~ForEachBranching();
 
     std::string tempVarName = "";
     ValueItemMap iterateArray;
 
-    std::vector<SakuraItem*> forChild;
+    SakuraItem* content;
 };
 
 //===================================================================
@@ -233,14 +223,26 @@ public:
 class ForBranching : public SakuraItem
 {
 public:
-    ForBranching();
+    ForBranching(const bool parallel=false);
     ~ForBranching();
 
     std::string tempVarName = "";
     ValueItem start;
     ValueItem end;
 
-    std::vector<SakuraItem*> forChild;
+    SakuraItem* content;
+};
+
+//===================================================================
+// Parallel
+//===================================================================
+class Parallel : public SakuraItem
+{
+public:
+    Parallel();
+    ~Parallel();
+
+    std::vector<SakuraItem*> childs;
 };
 
 }  // namespace SakuraTree

@@ -48,7 +48,7 @@ public:
 private:
     bool m_started = false;
 
-    std::vector<SakuraThread*> m_childs;
+    std::vector<SakuraThread*> m_childThreads;
 
     SakuraItem* m_growPlan;
     ValueItemMap m_values;
@@ -82,21 +82,23 @@ private:
 
     void processForEach(ForEachBranching* growPlan,
                         ValueItemMap values,
-                        const std::vector<std::string> &hierarchy);
+                        const std::vector<std::string> &hierarchy,
+                        bool parallel);
 
     void processFor(ForBranching* growPlan,
                     ValueItemMap values,
-                    const std::vector<std::string> &hierarchy);
+                    const std::vector<std::string> &hierarchy,
+                    bool parallel);
 
-    void processSequeniellPart(SequentiellBranching* growPlan,
+    void processSequeniellPart(Sequentiell* growPlan,
                                ValueItemMap values,
                                const std::vector<std::string> &hierarchy);
 
-    void processParallelPart(ParallelBranching* growPlan,
+    void processParallelPart(Parallel* growPlan,
                              ValueItemMap values,
                              const std::vector<std::string> &hierarchy);
 
-    void clearChilds();
+    void clearChildThreads();
 };
 
 }

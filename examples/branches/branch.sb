@@ -38,15 +38,24 @@ if(test_output == "test")
 
     for(package : packages)
     {
-        print("test output in for-loop")
+        print("test output in normal for-each-loop")
+        - output = package
+    }
+
+    parallel_for(package : packages)
+    {
+        print("test output in parallel for-each-loop")
         - output = package
     }
 
     if(packages.size() == 2)
     {
-        for(i = 0; i < packages.size(); i++)
+        parallel_for(i = 0; i < packages.size(); i++)
         {
-            print("test iter-number")
+            print("test iter-number in parallel for-loop")
+            - output = packages.get(i)
+
+            print("another output test iter-number in parallel for-loop")
             - output = packages.get(i)
         }
     }

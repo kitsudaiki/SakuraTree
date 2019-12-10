@@ -71,9 +71,13 @@ private:
     SakuraItem* convertIf(const JsonItem &growPlan,
                           SakuraItem* parent);
     SakuraItem* convertForEach(const JsonItem &growPlan,
-                               SakuraItem* parent);
+                               SakuraItem* parent,
+                               bool parallel);
     SakuraItem* convertFor(const JsonItem &growPlan,
-                           SakuraItem* parent);
+                           SakuraItem* parent,
+                           bool parallel);
+    SakuraItem* convertParallel(const JsonItem &subtree,
+                                SakuraItem* parent);
 
     SakuraItem* convertSequeniellPart(const JsonItem &growPlan,
                                       SakuraItem* parent);
