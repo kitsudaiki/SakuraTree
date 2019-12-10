@@ -127,16 +127,6 @@ SequentiellBranching::SequentiellBranching()
 SequentiellBranching::~SequentiellBranching() {}
 
 //===================================================================
-// ParallelBranching
-//===================================================================
-ParallelBranching::ParallelBranching()
-{
-    type = PARALLEL_ITEM;
-}
-
-ParallelBranching::~ParallelBranching() {}
-
-//===================================================================
 // IfBranching
 //===================================================================
 IfBranching::IfBranching()
@@ -191,6 +181,63 @@ ForBranching::ForBranching()
 }
 
 ForBranching::~ForBranching()
+{
+    for(uint32_t i = 0; i < forChild.size(); i++)
+    {
+        SakuraItem* tempItem = forChild.at(i);
+        if(tempItem != nullptr) {
+            delete tempItem;
+        }
+    }
+}
+
+//===================================================================
+// Parallel
+//===================================================================
+Parallel::Parallel()
+{
+    type = PARALLEL_ITEM;
+}
+
+Parallel::~Parallel()
+{
+    for(uint32_t i = 0; i < childs.size(); i++)
+    {
+        SakuraItem* tempItem = childs.at(i);
+        if(tempItem != nullptr) {
+            delete tempItem;
+        }
+    }
+}
+
+//===================================================================
+// ParallelForEachBranching
+//===================================================================
+ParallelForEachBranching::ParallelForEachBranching()
+{
+    type = PARALLEL_FOR_EACH_ITEM;
+}
+
+ParallelForEachBranching::~ParallelForEachBranching()
+{
+    for(uint32_t i = 0; i < forChild.size(); i++)
+    {
+        SakuraItem* tempItem = forChild.at(i);
+        if(tempItem != nullptr) {
+            delete tempItem;
+        }
+    }
+}
+
+//===================================================================
+// ParallelForBranching
+//===================================================================
+ParallelForBranching::ParallelForBranching()
+{
+    type = PARALLEL_FOR_ITEM;
+}
+
+ParallelForBranching::~ParallelForBranching()
 {
     for(uint32_t i = 0; i < forChild.size(); i++)
     {

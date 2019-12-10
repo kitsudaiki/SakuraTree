@@ -47,7 +47,9 @@ public:
         PARALLEL_ITEM = 7,
         IF_ITEM = 8,
         FOR_EACH_ITEM = 9,
-        FOR_ITEM = 10
+        FOR_ITEM = 10,
+        PARALLEL_FOR_EACH_ITEM = 11,
+        PARALLEL_FOR_ITEM = 12
     };
 
     SakuraItem();
@@ -175,18 +177,6 @@ public:
 };
 
 //===================================================================
-// ParallelBranching
-//===================================================================
-class ParallelBranching : public SakuraItem
-{
-public:
-    ParallelBranching();
-    ~ParallelBranching();
-
-    std::vector<SakuraItem*> childs;
-};
-
-//===================================================================
 // IfBranching
 //===================================================================
 class IfBranching : public SakuraItem
@@ -235,6 +225,49 @@ class ForBranching : public SakuraItem
 public:
     ForBranching();
     ~ForBranching();
+
+    std::string tempVarName = "";
+    ValueItem start;
+    ValueItem end;
+
+    std::vector<SakuraItem*> forChild;
+};
+
+//===================================================================
+// Parallel
+//===================================================================
+class Parallel : public SakuraItem
+{
+public:
+    Parallel();
+    ~Parallel();
+
+    std::vector<SakuraItem*> childs;
+};
+
+//===================================================================
+// ParallelForEachBranching
+//===================================================================
+class ParallelForEachBranching : public SakuraItem
+{
+public:
+    ParallelForEachBranching();
+    ~ParallelForEachBranching();
+
+    std::string tempVarName = "";
+    ValueItemMap iterateArray;
+
+    std::vector<SakuraItem*> forChild;
+};
+
+//===================================================================
+// ParallelForBranching
+//===================================================================
+class ParallelForBranching : public SakuraItem
+{
+public:
+    ParallelForBranching();
+    ~ParallelForBranching();
 
     std::string tempVarName = "";
     ValueItem start;
