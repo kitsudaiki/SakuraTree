@@ -96,7 +96,7 @@ private:
                             ValueItemMap values,
                             const std::vector<std::string> &hierarchy);
 
-    void processSequeniellPart(SequentiellBranching* growPlan,
+    void processSequeniellPart(Sequentiell* growPlan,
                                ValueItemMap values,
                                const std::vector<std::string> &hierarchy);
 

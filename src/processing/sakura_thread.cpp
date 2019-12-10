@@ -182,7 +182,7 @@ SakuraThread::grow(SakuraItem* growPlan,
 
     if(growPlan->getType() == SakuraItem::SEQUENTIELL_ITEM)
     {
-        SequentiellBranching* sequentiell = dynamic_cast<SequentiellBranching*>(growPlan);
+        Sequentiell* sequentiell = dynamic_cast<Sequentiell*>(growPlan);
         processSequeniellPart(sequentiell, values, hierarchy);
 
         return;
@@ -401,23 +401,10 @@ SakuraThread::processIf(IfBranching* growPlan,
             break;
     }
 
-    if(ifMatch)
-    {
-        for(uint32_t i = 0; i < growPlan->ifChilds.size(); i++)
-        {
-            grow(growPlan->ifChilds.at(i),
-                 values,
-                 hierarchy);
-        }
-    }
-    else
-    {
-        for(uint32_t i = 0; i < growPlan->elseChilds.size(); i++)
-        {
-            grow(growPlan->elseChilds.at(i),
-                 values,
-                 hierarchy);
-        }
+    if(ifMatch) {
+        grow(growPlan->ifContent, values, hierarchy);
+    } else {
+        grow(growPlan->elseContent, values, hierarchy);
     }
 }
 
@@ -445,7 +432,7 @@ SakuraThread::processForEach(ForEachBranching* growPlan,
     for(uint32_t i = 0; i < array->size(); i++)
     {
         values.insert(growPlan->tempVarName, array->get(i), true);
-        grow(growPlan->forChild.front(),
+        grow(growPlan->content,
              values,
              hierarchy);
     }
@@ -498,7 +485,7 @@ SakuraThread::processFor(ForBranching* growPlan,
     for(long i = startValue; i < endValue; i++)
     {
         values.insert(growPlan->tempVarName, new DataValue(i), true);
-        grow(growPlan->forChild.front(),
+        grow(growPlan->content,
              values,
              hierarchy);
     }
@@ -529,7 +516,7 @@ SakuraThread::processParallelForEach(ParallelForEachBranching* growPlan,
     for(uint32_t i = 0; i < array->size(); i++)
     {
         values.insert(growPlan->tempVarName, array->get(i), true);
-        SakuraThread* child = new SakuraThread(growPlan->forChild.front(),
+        SakuraThread* child = new SakuraThread(growPlan->content,
                                                values,
                                                hierarchy);
         m_childThreads.push_back(child);
@@ -602,7 +589,7 @@ SakuraThread::processParallelFor(ParallelForBranching* growPlan,
     for(long i = startValue; i < endValue; i++)
     {
         values.insert(growPlan->tempVarName, new DataValue(i), true);
-        SakuraThread* child = new SakuraThread(growPlan->forChild.front(),
+        SakuraThread* child = new SakuraThread(growPlan->content,
                                                values,
                                                hierarchy);
         m_childThreads.push_back(child);
@@ -631,7 +618,7 @@ SakuraThread::processParallelFor(ParallelForBranching* growPlan,
  * @brief SakuraThread::processSequeniellPart
  */
 void
-SakuraThread::processSequeniellPart(SequentiellBranching* growPlan,
+SakuraThread::processSequeniellPart(Sequentiell* growPlan,
                                     ValueItemMap values,
                                     const std::vector<std::string> &hierarchy)
 {

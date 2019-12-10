@@ -119,12 +119,21 @@ TreeItem::~TreeItem()
 //===================================================================
 // Sequeniell
 //===================================================================
-SequentiellBranching::SequentiellBranching()
+Sequentiell::Sequentiell()
 {
     type = SEQUENTIELL_ITEM;
 }
 
-SequentiellBranching::~SequentiellBranching() {}
+Sequentiell::~Sequentiell()
+{
+    for(uint32_t i = 0; i < childs.size(); i++)
+    {
+        SakuraItem* tempItem = childs.at(i);
+        if(tempItem != nullptr) {
+            delete tempItem;
+        }
+    }
+}
 
 //===================================================================
 // IfBranching
@@ -136,20 +145,12 @@ IfBranching::IfBranching()
 
 IfBranching::~IfBranching()
 {
-    for(uint32_t i = 0; i < ifChilds.size(); i++)
-    {
-        SakuraItem* tempItem = ifChilds.at(i);
-        if(tempItem != nullptr) {
-            delete tempItem;
-        }
+    if(ifContent != nullptr) {
+        delete ifContent;
     }
 
-    for(uint32_t i = 0; i < elseChilds.size(); i++)
-    {
-        SakuraItem* tempItem = elseChilds.at(i);
-        if(tempItem != nullptr) {
-            delete tempItem;
-        }
+    if(elseContent != nullptr) {
+        delete elseContent;
     }
 }
 
@@ -163,12 +164,8 @@ ForEachBranching::ForEachBranching()
 
 ForEachBranching::~ForEachBranching()
 {
-    for(uint32_t i = 0; i < forChild.size(); i++)
-    {
-        SakuraItem* tempItem = forChild.at(i);
-        if(tempItem != nullptr) {
-            delete tempItem;
-        }
+    if(content != nullptr) {
+        delete content;
     }
 }
 
@@ -182,12 +179,8 @@ ForBranching::ForBranching()
 
 ForBranching::~ForBranching()
 {
-    for(uint32_t i = 0; i < forChild.size(); i++)
-    {
-        SakuraItem* tempItem = forChild.at(i);
-        if(tempItem != nullptr) {
-            delete tempItem;
-        }
+    if(content != nullptr) {
+        delete content;
     }
 }
 
@@ -220,12 +213,8 @@ ParallelForEachBranching::ParallelForEachBranching()
 
 ParallelForEachBranching::~ParallelForEachBranching()
 {
-    for(uint32_t i = 0; i < forChild.size(); i++)
-    {
-        SakuraItem* tempItem = forChild.at(i);
-        if(tempItem != nullptr) {
-            delete tempItem;
-        }
+    if(content != nullptr) {
+        delete content;
     }
 }
 
@@ -239,12 +228,8 @@ ParallelForBranching::ParallelForBranching()
 
 ParallelForBranching::~ParallelForBranching()
 {
-    for(uint32_t i = 0; i < forChild.size(); i++)
-    {
-        SakuraItem* tempItem = forChild.at(i);
-        if(tempItem != nullptr) {
-            delete tempItem;
-        }
+    if(content != nullptr) {
+        delete content;
     }
 }
 

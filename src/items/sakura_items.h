@@ -167,11 +167,11 @@ public:
 //===================================================================
 // Sequeniell
 //===================================================================
-class SequentiellBranching : public SakuraItem
+class Sequentiell : public SakuraItem
 {
 public:
-    SequentiellBranching();
-    ~SequentiellBranching();
+    Sequentiell();
+    ~Sequentiell();
 
     std::vector<SakuraItem*> childs;
 };
@@ -198,8 +198,8 @@ public:
     compareTypes ifType = EQUAL;
     ValueItem rightSide;
 
-    std::vector<SakuraItem*> ifChilds;
-    std::vector<SakuraItem*> elseChilds;
+    SakuraItem* ifContent;
+    SakuraItem* elseContent;
 };
 
 //===================================================================
@@ -214,7 +214,7 @@ public:
     std::string tempVarName = "";
     ValueItemMap iterateArray;
 
-    std::vector<SakuraItem*> forChild;
+    SakuraItem* content;
 };
 
 //===================================================================
@@ -230,7 +230,7 @@ public:
     ValueItem start;
     ValueItem end;
 
-    std::vector<SakuraItem*> forChild;
+    SakuraItem* content;
 };
 
 //===================================================================
@@ -257,7 +257,7 @@ public:
     std::string tempVarName = "";
     ValueItemMap iterateArray;
 
-    std::vector<SakuraItem*> forChild;
+    SakuraItem* content;
 };
 
 //===================================================================
@@ -273,7 +273,7 @@ public:
     ValueItem start;
     ValueItem end;
 
-    std::vector<SakuraItem*> forChild;
+    SakuraItem* content;
 };
 
 }  // namespace SakuraTree
