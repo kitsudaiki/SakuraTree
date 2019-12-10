@@ -222,10 +222,6 @@ SakuraCompiler::convert(const JsonItem &subtree,
         return convertSequeniellPart(subtree, parent);
     }
 
-    if(typeName == "parallel") {
-        return convertParallelPart(subtree, parent);
-    }
-
     if(typeName == "seed") {
         return convertSeed(subtree, parent);
     }
@@ -235,11 +231,11 @@ SakuraCompiler::convert(const JsonItem &subtree,
     }
 
     if(typeName == "for_each") {
-        return convertForEach(subtree, parent);
+        return convertForEach(subtree, parent, false);
     }
 
     if(typeName == "for") {
-        return convertFor(subtree, parent);
+        return convertFor(subtree, parent, false);
     }
 
     if(typeName == "parallel") {
@@ -247,11 +243,11 @@ SakuraCompiler::convert(const JsonItem &subtree,
     }
 
     if(typeName == "parallel_for") {
-        return convertParallelFor(subtree, parent);
+        return convertFor(subtree, parent, true);
     }
 
     if(typeName == "parallel_for_each") {
-        return convertParallelForEach(subtree, parent);
+        return convertForEach(subtree, parent, true);
     }
 
     // it must everytime match one of the names
@@ -488,10 +484,11 @@ SakuraCompiler::convertIf(const JsonItem &subtree,
  */
 SakuraItem*
 SakuraCompiler::convertForEach(const JsonItem &subtree,
-                               SakuraItem* parent)
+                               SakuraItem* parent,
+                               bool parallel)
 {
     // init new for-each-item
-    ForEachBranching* newItem = new ForEachBranching();
+    ForEachBranching* newItem = new ForEachBranching(parallel);
     newItem->parent = parent;
     newItem->tempVarName = subtree.get("variable").getItemContent()->toString();
 
@@ -523,10 +520,11 @@ SakuraCompiler::convertForEach(const JsonItem &subtree,
  */
 SakuraItem*
 SakuraCompiler::convertFor(const JsonItem &subtree,
-                           SakuraItem* parent)
+                           SakuraItem* parent,
+                           bool parallel)
 {
     // init new for-item
-    ForBranching* newItem = new ForBranching();
+    ForBranching* newItem = new ForBranching(parallel);
     newItem->parent = parent;
     newItem->tempVarName = subtree.get("variable1").getItemContent()->toString();
 
@@ -570,76 +568,6 @@ SakuraCompiler::convertParallel(const JsonItem &subtree,
     {
         newItem->childs.push_back(convert(parts.get(i), parent));
     }
-
-    return newItem;
-}
-
-/**
- * @brief convert parallel for-each-loop
- * @param subtree current suttree for converting
- * @param parent pointer ot the parent-branch or -tree
- * @return pointer of the current converted part
- */
-SakuraItem*
-SakuraCompiler::convertParallelForEach(const JsonItem &subtree,
-                                       SakuraItem* parent)
-{
-    // init new for-each-item
-    ParallelForEachBranching* newItem = new ParallelForEachBranching();
-    newItem->parent = parent;
-    newItem->tempVarName = subtree.get("variable").getItemContent()->toString();
-
-    // convert the item, over which should be iterated
-    ValueItem itemValue;
-    convertItemPart(itemValue, subtree.get("list"), "assign");
-    newItem->iterateArray.insert("array", itemValue);
-
-    // convert content of the for-loop
-    const JsonItem content = subtree.get("content");
-    assert(content.isValid());
-    Sequentiell* sequentiellContent = new Sequentiell();
-    for(uint32_t i = 0; i < content.size(); i++)
-    {
-        JsonItem newMap = content.get(i);
-        newMap.insert("b_path", subtree.get("b_path"));
-        sequentiellContent->childs.push_back(convert(newMap, parent));
-    }
-    newItem->content = sequentiellContent;
-
-    return newItem;
-}
-
-/**
- * @brief convert parallel for-loop
- * @param subtree current suttree for converting
- * @param parent pointer ot the parent-branch or -tree
- * @return pointer of the current converted part
- */
-SakuraItem*
-SakuraCompiler::convertParallelFor(const JsonItem &subtree,
-                                   SakuraItem* parent)
-{
-    // init new for-item
-    ParallelForBranching* newItem = new ParallelForBranching();
-    newItem->parent = parent;
-    newItem->tempVarName = subtree.get("variable1").getItemContent()->toString();
-
-    // convert start- and end-point of the iterations
-    convertItemPart(newItem->start, subtree.get("start"), "assign");
-    convertItemPart(newItem->end, subtree.get("end"), "assign");
-
-    // convert content of the for-loop
-    const JsonItem content = subtree.get("content");
-    assert(content.isValid());
-
-    Sequentiell* sequentiellContent = new Sequentiell();
-    for(uint32_t i = 0; i < content.size(); i++)
-    {
-        JsonItem newMap = content.get(i);
-        newMap.insert("b_path", subtree.get("b_path"));
-        sequentiellContent->childs.push_back(convert(newMap, parent));
-    }
-    newItem->content = sequentiellContent;
 
     return newItem;
 }

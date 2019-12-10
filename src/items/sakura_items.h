@@ -208,7 +208,7 @@ public:
 class ForEachBranching : public SakuraItem
 {
 public:
-    ForEachBranching();
+    ForEachBranching(const bool parallel=false);
     ~ForEachBranching();
 
     std::string tempVarName = "";
@@ -223,7 +223,7 @@ public:
 class ForBranching : public SakuraItem
 {
 public:
-    ForBranching();
+    ForBranching(const bool parallel=false);
     ~ForBranching();
 
     std::string tempVarName = "";
@@ -243,37 +243,6 @@ public:
     ~Parallel();
 
     std::vector<SakuraItem*> childs;
-};
-
-//===================================================================
-// ParallelForEachBranching
-//===================================================================
-class ParallelForEachBranching : public SakuraItem
-{
-public:
-    ParallelForEachBranching();
-    ~ParallelForEachBranching();
-
-    std::string tempVarName = "";
-    ValueItemMap iterateArray;
-
-    SakuraItem* content;
-};
-
-//===================================================================
-// ParallelForBranching
-//===================================================================
-class ParallelForBranching : public SakuraItem
-{
-public:
-    ParallelForBranching();
-    ~ParallelForBranching();
-
-    std::string tempVarName = "";
-    ValueItem start;
-    ValueItem end;
-
-    SakuraItem* content;
 };
 
 }  // namespace SakuraTree

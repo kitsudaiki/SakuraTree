@@ -153,30 +153,28 @@ SakuraThread::grow(SakuraItem* growPlan,
     if(growPlan->getType() == SakuraItem::FOR_EACH_ITEM)
     {
         ForEachBranching* forEachBranching = dynamic_cast<ForEachBranching*>(growPlan);
-        processForEach(forEachBranching, values, hierarchy);
-
+        processForEach(forEachBranching, values, hierarchy, false);
         return;
     }
 
     if(growPlan->getType() == SakuraItem::FOR_ITEM)
     {
         ForBranching* forBranching = dynamic_cast<ForBranching*>(growPlan);
-        processFor(forBranching, values, hierarchy);
+        processFor(forBranching, values, hierarchy, false);
         return;
     }
 
     if(growPlan->getType() == SakuraItem::PARALLEL_FOR_EACH_ITEM)
     {
-        ParallelForEachBranching* forEachBranching = dynamic_cast<ParallelForEachBranching*>(growPlan);
-        processParallelForEach(forEachBranching, values, hierarchy);
-
+        ForEachBranching* forEachBranching = dynamic_cast<ForEachBranching*>(growPlan);
+        processForEach(forEachBranching, values, hierarchy, true);
         return;
     }
 
     if(growPlan->getType() == SakuraItem::PARALLEL_FOR_ITEM)
     {
-        ParallelForBranching* forBranching = dynamic_cast<ParallelForBranching*>(growPlan);
-        processParallelFor(forBranching, values, hierarchy);
+        ForBranching* forBranching = dynamic_cast<ForBranching*>(growPlan);
+        processFor(forBranching, values, hierarchy, true);
         return;
     }
 
@@ -417,7 +415,8 @@ SakuraThread::processIf(IfBranching* growPlan,
 void
 SakuraThread::processForEach(ForEachBranching* growPlan,
                              ValueItemMap values,
-                             const std::vector<std::string> &hierarchy)
+                             const std::vector<std::string> &hierarchy,
+                             bool parallel)
 {
     overrideItems(values, growPlan->parent->values);
 
@@ -428,13 +427,47 @@ SakuraThread::processForEach(ForEachBranching* growPlan,
         return;
     }
 
-    DataArray* array = growPlan->iterateArray.get("array")->toArray();
-    for(uint32_t i = 0; i < array->size(); i++)
+    if(parallel == false)
     {
-        values.insert(growPlan->tempVarName, array->get(i), true);
-        grow(growPlan->content,
-             values,
-             hierarchy);
+        DataArray* array = growPlan->iterateArray.get("array")->toArray();
+        for(uint32_t i = 0; i < array->size(); i++)
+        {
+            values.insert(growPlan->tempVarName, array->get(i), true);
+            grow(growPlan->content,
+                 values,
+                 hierarchy);
+        }
+    }
+    else
+    {
+        // create and initialize all threads
+        DataArray* array = growPlan->iterateArray.get("array")->toArray();
+        for(uint32_t i = 0; i < array->size(); i++)
+        {
+            values.insert(growPlan->tempVarName, array->get(i), true);
+            SakuraThread* child = new SakuraThread(growPlan->content,
+                                                   values,
+                                                   hierarchy);
+            m_childThreads.push_back(child);
+            child->startThread();
+        }
+
+        // wait for the end of all threads
+        for(uint32_t i = 0; i < m_childThreads.size(); i++)
+        {
+            // wait the process is startet, so the join-method can not be called
+            // before the new thread was really started
+            m_childThreads.at(i)->waitUntilStarted();
+
+            // finish the threads after they done their tasks
+            m_childThreads.at(i)->waitForFinish();
+
+            // check if any child was aborted
+            if(m_childThreads.at(i)->isAborted()) {
+                m_abort = true;
+            }
+        }
+        clearChildThreads();
     }
 }
 
@@ -447,7 +480,8 @@ SakuraThread::processForEach(ForEachBranching* growPlan,
 void
 SakuraThread::processFor(ForBranching* growPlan,
                          ValueItemMap values,
-                         const std::vector<std::string> &hierarchy)
+                         const std::vector<std::string> &hierarchy,
+                         bool parallel)
 {
     ValueItem valueItem;
 
@@ -482,136 +516,47 @@ SakuraThread::processFor(ForBranching* growPlan,
         endValue = growPlan->end.item->toValue()->getLong();
     }
 
-    for(long i = startValue; i < endValue; i++)
+
+    if(parallel == false)
     {
-        values.insert(growPlan->tempVarName, new DataValue(i), true);
-        grow(growPlan->content,
-             values,
-             hierarchy);
-    }
-}
-
-/**
- * @brief SakuraThread::processForEach
- * @param growPlan
- * @param values
- * @param hierarchy
- */
-void
-SakuraThread::processParallelForEach(ParallelForEachBranching* growPlan,
-                                     ValueItemMap values,
-                                     const std::vector<std::string> &hierarchy)
-{
-    overrideItems(values, growPlan->parent->values);
-
-    Result result = fillInputItems(growPlan->iterateArray, values);
-    if(result.success == false)
-    {
-        m_abort = true;
-        return;
-    }
-
-    // create and initialize all threads
-    DataArray* array = growPlan->iterateArray.get("array")->toArray();
-    for(uint32_t i = 0; i < array->size(); i++)
-    {
-        values.insert(growPlan->tempVarName, array->get(i), true);
-        SakuraThread* child = new SakuraThread(growPlan->content,
-                                               values,
-                                               hierarchy);
-        m_childThreads.push_back(child);
-        child->startThread();
-    }
-
-    // wait for the end of all threads
-    for(uint32_t i = 0; i < m_childThreads.size(); i++)
-    {
-        // wait the process is startet, so the join-method can not be called
-        // before the new thread was really started
-        m_childThreads.at(i)->waitUntilStarted();
-
-        // finish the threads after they done their tasks
-        m_childThreads.at(i)->waitForFinish();
-
-        // check if any child was aborted
-        if(m_childThreads.at(i)->isAborted()) {
-            m_abort = true;
+        for(long i = startValue; i < endValue; i++)
+        {
+            values.insert(growPlan->tempVarName, new DataValue(i), true);
+            grow(growPlan->content,
+                 values,
+                 hierarchy);
         }
-    }
-    clearChildThreads();
-}
-
-/**
- * @brief SakuraThread::processFor
- * @param growPlan
- * @param values
- * @param hierarchy
- */
-void
-SakuraThread::processParallelFor(ParallelForBranching* growPlan,
-                                 ValueItemMap values,
-                                 const std::vector<std::string> &hierarchy)
-{
-    ValueItem valueItem;
-
-    long startValue = 0;
-    long endValue = 0;
-
-    overrideItems(values, growPlan->parent->values);
-
-    if(growPlan->start.isIdentifier == true)
-    {
-        const std::string rightSideKey = growPlan->start.item->toString();
-        valueItem.item = values.getValueItem(rightSideKey).item->copy();
-        valueItem.functions = growPlan->start.functions;
-        valueItem.item = valueItem.getProcessedItem();
-        startValue = valueItem.item->toValue()->getLong();
     }
     else
     {
-        startValue = growPlan->start.item->toValue()->getLong();
-    }
-
-    if(growPlan->end.isIdentifier == true)
-    {
-        const std::string rightSideKey = growPlan->end.item->toString();
-        valueItem.item = values.getValueItem(rightSideKey).item->copy();
-        valueItem.functions = growPlan->end.functions;
-        valueItem.item = valueItem.getProcessedItem();
-        endValue = valueItem.item->toValue()->getLong();
-    }
-    else
-    {
-        endValue = growPlan->end.item->toValue()->getLong();
-    }
-
-    // create and initialize all threads
-    for(long i = startValue; i < endValue; i++)
-    {
-        values.insert(growPlan->tempVarName, new DataValue(i), true);
-        SakuraThread* child = new SakuraThread(growPlan->content,
-                                               values,
-                                               hierarchy);
-        m_childThreads.push_back(child);
-        child->startThread();
-    }
-
-    // wait for the end of all threads
-    for(uint32_t i = 0; i < m_childThreads.size(); i++)
-    {
-        // wait the process is startet, so the join-method can not be called
-        // before the new thread was really started
-        m_childThreads.at(i)->waitUntilStarted();
-
-        // finish the threads after they done their tasks
-        m_childThreads.at(i)->waitForFinish();
-
-        // check if any child was aborted
-        if(m_childThreads.at(i)->isAborted()) {
-            m_abort = true;
+        // create and initialize all threads
+        for(long i = startValue; i < endValue; i++)
+        {
+            values.insert(growPlan->tempVarName, new DataValue(i), true);
+            SakuraThread* child = new SakuraThread(growPlan->content,
+                                                   values,
+                                                   hierarchy);
+            m_childThreads.push_back(child);
+            child->startThread();
         }
+
+        // wait for the end of all threads
+        for(uint32_t i = 0; i < m_childThreads.size(); i++)
+        {
+            // wait the process is startet, so the join-method can not be called
+            // before the new thread was really started
+            m_childThreads.at(i)->waitUntilStarted();
+
+            // finish the threads after they done their tasks
+            m_childThreads.at(i)->waitForFinish();
+
+            // check if any child was aborted
+            if(m_childThreads.at(i)->isAborted()) {
+                m_abort = true;
+            }
+        }
+        clearChildThreads();
     }
-    clearChildThreads();
 }
 
 /**

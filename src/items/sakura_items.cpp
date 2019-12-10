@@ -157,9 +157,13 @@ IfBranching::~IfBranching()
 //===================================================================
 // ForEachBranching
 //===================================================================
-ForEachBranching::ForEachBranching()
+ForEachBranching::ForEachBranching(const bool parallel)
 {
-    type = FOR_EACH_ITEM;
+    if(parallel) {
+        type = PARALLEL_FOR_EACH_ITEM;
+    } else {
+        type = FOR_EACH_ITEM;
+    }
 }
 
 ForEachBranching::~ForEachBranching()
@@ -172,9 +176,13 @@ ForEachBranching::~ForEachBranching()
 //===================================================================
 // ForBranching
 //===================================================================
-ForBranching::ForBranching()
+ForBranching::ForBranching(const bool parallel)
 {
-    type = FOR_ITEM;
+    if(parallel) {
+        type = PARALLEL_FOR_ITEM;
+    } else {
+        type = FOR_ITEM;
+    }
 }
 
 ForBranching::~ForBranching()
@@ -200,36 +208,6 @@ Parallel::~Parallel()
         if(tempItem != nullptr) {
             delete tempItem;
         }
-    }
-}
-
-//===================================================================
-// ParallelForEachBranching
-//===================================================================
-ParallelForEachBranching::ParallelForEachBranching()
-{
-    type = PARALLEL_FOR_EACH_ITEM;
-}
-
-ParallelForEachBranching::~ParallelForEachBranching()
-{
-    if(content != nullptr) {
-        delete content;
-    }
-}
-
-//===================================================================
-// ParallelForBranching
-//===================================================================
-ParallelForBranching::ParallelForBranching()
-{
-    type = PARALLEL_FOR_ITEM;
-}
-
-ParallelForBranching::~ParallelForBranching()
-{
-    if(content != nullptr) {
-        delete content;
     }
 }
 

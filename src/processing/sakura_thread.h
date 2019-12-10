@@ -82,19 +82,13 @@ private:
 
     void processForEach(ForEachBranching* growPlan,
                         ValueItemMap values,
-                        const std::vector<std::string> &hierarchy);
+                        const std::vector<std::string> &hierarchy,
+                        bool parallel);
 
     void processFor(ForBranching* growPlan,
                     ValueItemMap values,
-                    const std::vector<std::string> &hierarchy);
-
-    void processParallelForEach(ParallelForEachBranching* growPlan,
-                                ValueItemMap values,
-                                const std::vector<std::string> &hierarchy);
-
-    void processParallelFor(ParallelForBranching* growPlan,
-                            ValueItemMap values,
-                            const std::vector<std::string> &hierarchy);
+                    const std::vector<std::string> &hierarchy,
+                    bool parallel);
 
     void processSequeniellPart(Sequentiell* growPlan,
                                ValueItemMap values,
