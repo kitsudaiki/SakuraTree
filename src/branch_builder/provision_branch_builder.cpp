@@ -37,7 +37,7 @@ namespace SakuraTree
  * @param subtree
  * @return
  */
-BranchItem*
+SubtreeItem*
 createProvisionBranch(const std::string &address,
                       const int port,
                       const std::string &userName,
@@ -46,7 +46,7 @@ createProvisionBranch(const std::string &address,
                       const std::string &targetPath,
                       const std::string &subtree)
 {
-    BranchItem* item = new BranchItem();
+    SubtreeItem* item = new SubtreeItem();
 
     /*BlossomItem* updateBlossom = createAptUpdateBlossom(address,
                                                         port,

@@ -31,74 +31,36 @@ using namespace Kitsunemimi::Common;
 
 namespace SakuraTree
 {
+class SubtreeQueue;
 
 class SakuraThread
         : public Kitsunemimi::Common::Thread
 {
 
 public:
-    SakuraThread(SakuraItem* growPlan,
-                 ValueItemMap values,
-                 const std::vector<std::string> &hierarchy);
+    SakuraThread(SubtreeQueue* queue);
     ~SakuraThread();
-
-    void waitUntilStarted();
-    bool isAborted() const;
 
 private:
     bool m_started = false;
+    SubtreeQueue* m_queue;
 
-    std::vector<SakuraThread*> m_childThreads;
-
-    SakuraItem* m_growPlan;
-    ValueItemMap m_values;
-    std::vector<std::string> m_hirarchie;
+    DataMap m_parentValues;
+    std::vector<std::string> m_hierarchy;
 
     void run();
 
-    void grow(SakuraItem* growPlan,
-              ValueItemMap values,
-              const std::vector<std::string> &hierarchy);
+    bool grow(SakuraItem* subtree);
 
-    void processBlossom(BlossomItem &growPlan,
-                        ValueItemMap values,
-                        const std::vector<std::string> &hierarchy);
+    bool processBlossom(BlossomItem &subtree);
+    bool processBlossomGroup(BlossomGroupItem &subtree);
+    bool processSubtree(SubtreeItem* subtree);
+    bool processIf(IfBranching* subtree);
+    bool processForEach(ForEachBranching* subtree, bool parallel);
+    bool processFor(ForBranching* subtree, bool parallel);
+    bool processSequeniellPart(Sequentiell* subtree);
+    bool processParallelPart(Parallel* subtree);
 
-    void processBlossomGroup(BlossomGroupItem &growPlan,
-                             ValueItemMap values,
-                             const std::vector<std::string> &hierarchy);
-
-    void processBranch(BranchItem* growPlan,
-                       ValueItemMap values,
-                       const std::vector<std::string> &hierarchy);
-
-    void processTree(TreeItem* growPlan,
-                     ValueItemMap values,
-                     const std::vector<std::string> &hierarchy);
-
-    void processIf(IfBranching* growPlan,
-                   ValueItemMap values,
-                   const std::vector<std::string> &hierarchy);
-
-    void processForEach(ForEachBranching* growPlan,
-                        ValueItemMap values,
-                        const std::vector<std::string> &hierarchy,
-                        bool parallel);
-
-    void processFor(ForBranching* growPlan,
-                    ValueItemMap values,
-                    const std::vector<std::string> &hierarchy,
-                    bool parallel);
-
-    void processSequeniellPart(Sequentiell* growPlan,
-                               ValueItemMap values,
-                               const std::vector<std::string> &hierarchy);
-
-    void processParallelPart(Parallel* growPlan,
-                             ValueItemMap values,
-                             const std::vector<std::string> &hierarchy);
-
-    void clearChildThreads();
 };
 
 }

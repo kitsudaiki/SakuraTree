@@ -66,12 +66,12 @@ BlossomGroupItem::~BlossomGroupItem() {}
 //===================================================================
 // BranchItem
 //===================================================================
-BranchItem::BranchItem()
+SubtreeItem::SubtreeItem()
 {
-    type = BRANCH_ITEM;
+    type = SUBTREE_ITEM;
 }
 
-BranchItem::~BranchItem()
+SubtreeItem::~SubtreeItem()
 {
     for(uint32_t i = 0; i < childs.size(); i++)
     {

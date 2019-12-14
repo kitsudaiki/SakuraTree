@@ -59,7 +59,7 @@ ItemMethods_Test::fillItems_test()
 {
     ValueItemMap items;
     items.insert("x", new DataValue("{{test}}"));
-    ValueItemMap insertValues;
+    DataMap insertValues;
     insertValues.insert("test", new DataValue("hmmm"));
 
     const Result result = fillInputItems(items, insertValues);
@@ -74,7 +74,7 @@ ItemMethods_Test::fillItems_test()
 void
 ItemMethods_Test::overrideItems_test()
 {
-    ValueItemMap original;
+    DataMap original;
     original.insert("x", new DataValue("{{test}}"));
     original.insert("y", new DataValue("asdf"));
 

@@ -40,7 +40,7 @@ public:
         UNDEFINED_ITEM = 0,
         BLOSSOM_ITEM = 1,
         BLOSSOM_GROUP_ITEM = 2,
-        BRANCH_ITEM = 3,
+        SUBTREE_ITEM = 3,
         TREE_ITEM = 4,
         SEED_ITEM = 5,
         SEQUENTIELL_ITEM = 6,
@@ -55,7 +55,6 @@ public:
     SakuraItem();
     virtual ~SakuraItem();
 
-    SakuraItem* parent = nullptr;
     ValueItemMap values;
 
     ItemType getType() const;
@@ -90,6 +89,7 @@ public:
     std::string blossomPath = "";
 
     DataItem* blossomOutput = nullptr;
+    DataMap* parentValues = nullptr;
 
     // process
     int execState = 0;
@@ -154,11 +154,11 @@ public:
 //===================================================================
 // BranchItem
 //===================================================================
-class BranchItem : public SakuraItem
+class SubtreeItem : public SakuraItem
 {
 public:
-    BranchItem();
-    ~BranchItem();
+    SubtreeItem();
+    ~SubtreeItem();
 
     std::string id = "";
     std::vector<SakuraItem*> childs;

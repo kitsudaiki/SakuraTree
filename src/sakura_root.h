@@ -43,6 +43,7 @@ using Kitsunemimi::Jinja2::Jinja2Converter;
 namespace SakuraTree
 {
 class SakuraThread;
+class ThreadPool;
 struct BlossomItem;
 
 class SakuraRoot
@@ -73,6 +74,7 @@ public:
 private:
     Kitsunemimi::Sakura::SakuraHostHandler* m_controller = nullptr;
     SakuraThread* m_rootThread = nullptr;
+    ThreadPool* m_threadPool = nullptr;
 
     std::mutex m_mutex;
 };

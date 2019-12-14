@@ -27,10 +27,10 @@
 
 namespace SakuraTree
 {
-class BranchItem;
+class SubtreeItem;
 class BlossomItem;
 
-BranchItem* createProvisionBranch(const std::string &address,
+SubtreeItem* createProvisionBranch(const std::string &address,
                                   const int port,
                                   const std::string &userName,
                                   const std::string &keyPath,

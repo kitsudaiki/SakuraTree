@@ -26,6 +26,7 @@
 #include <items/item_methods.h>
 #include <processing/sakura_thread.h>
 #include <processing/sakura_tree_callbacks.h>
+#include <processing/thread_pool.h>
 
 // #include <libKitsunemimiSakuraNetwork/sakura_host_handler.h>
 #include <libKitsunemimiSakuraParser/file_collector.h>
@@ -48,6 +49,7 @@ SakuraRoot::SakuraRoot(const std::string &executablePath)
     m_root = this;
     m_jinja2Converter = new Kitsunemimi::Jinja2::Jinja2Converter;
     m_executablePath = executablePath;
+    m_threadPool = new ThreadPool(1);
 
     // TODO: enable again in 0.3.0
     // m_controller = new Kitsunemimi::Sakura::SakuraHostHandler(this,
@@ -89,11 +91,11 @@ SakuraRoot::startProcess(const std::string &rootPath,
     assert(processPlan != nullptr);
 
     // run process
-    ValueItemMap dummyObj;
-    m_rootThread = new SakuraThread(processPlan, dummyObj, std::vector<std::string>());
-    m_rootThread->startThread();
-    m_rootThread->waitUntilStarted();
-    m_rootThread->waitForFinish();
+    SubtreeQueue::SubtreeObject object;
+    object.subtree = processPlan;
+    m_threadPool->m_queue.addSubtree(object);
+
+    std::this_thread::sleep_for(chronoSec(10000));
 
     // sleep(1000);
     std::cout<<"finish"<<std::endl;
@@ -127,8 +129,8 @@ SakuraRoot::startSubtreeProcess(const std::string &subtree,
     // m_rootThread = new SakuraThread(processPlan,
     //                                 *valuesJson.getItemContent()->copy()->toMap(),
     //                                 std::vector<std::string>());
-    m_rootThread->startThread();
-    m_rootThread->waitUntilStarted();
+    // m_rootThread->startThread();
+    // m_rootThread->waitUntilStarted();
 
     std::cout<<"finish"<<std::endl;
 

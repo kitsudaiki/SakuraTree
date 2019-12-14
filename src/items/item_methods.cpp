@@ -39,19 +39,19 @@ namespace SakuraTree
  */
 const Result
 fillJinja2Template(const std::string baseString,
-                   ValueItemMap &insertValues)
+                   DataMap &insertValues)
 {
     Result result;
 
     // prepare map for jinja2-convert
     DataMap possibleValues;
-    std::map<std::string, ValueItem>::iterator insertIt;
-    for(insertIt = insertValues.valueMap.begin();
-        insertIt != insertValues.valueMap.end();
+    std::map<std::string, DataItem*>::iterator insertIt;
+    for(insertIt = insertValues.m_map.begin();
+        insertIt != insertValues.m_map.end();
         insertIt++)
     {
-        if(insertIt->second.item->isValue()) {
-            possibleValues.insert(insertIt->first, insertIt->second.item->copy());
+        if(insertIt->second->isValue()) {
+            possibleValues.insert(insertIt->first, insertIt->second->copy());
         }
     }
 
@@ -84,7 +84,7 @@ fillJinja2Template(const std::string baseString,
 const Result
 fillIdentifierItem(ValueItem &resulting,
                    ValueItem &original,
-                   ValueItemMap &input)
+                   DataMap &input)
 {
     Result result;
 
@@ -157,7 +157,7 @@ fillOutputItems(ValueItemMap &items,
  */
 const Result
 fillInputItems(ValueItemMap &items,
-               ValueItemMap &insertValues)
+               DataMap &insertValues)
 {
     Result result;
 
@@ -205,20 +205,67 @@ fillInputItems(ValueItemMap &items,
     return result;
 }
 
+void overrideItems(DataMap &original,
+                   const DataMap &override,
+                   bool onlyExisting)
+{
+    if(onlyExisting)
+    {
+        std::map<std::string, DataItem*>::const_iterator overrideIt;
+        for(overrideIt = override.m_map.begin();
+            overrideIt != override.m_map.end();
+            overrideIt++)
+        {
+            std::map<std::string, DataItem*>::iterator originalIt;
+            originalIt = original.m_map.find(overrideIt->first);
+
+            if(originalIt != original.m_map.end()) {
+                original.insert(overrideIt->first, overrideIt->second->copy(), true);
+            }
+        }
+    }
+    else
+    {
+        std::map<std::string, DataItem*>::const_iterator overrideIt;
+        for(overrideIt = override.m_map.begin();
+            overrideIt != override.m_map.end();
+            overrideIt++)
+        {
+            original.insert(overrideIt->first, overrideIt->second->copy(), true);
+        }
+    }
+}
+
 /**
  * @brief overrideItems
  */
-void overrideItems(ValueItemMap &original,
-                   ValueItemMap &override)
+void overrideItems(DataMap &original,
+                   const ValueItemMap &override,
+                   bool onlyExisting)
 {
-    std::map<std::string, ValueItem>::iterator overrideIt;
-    for(overrideIt = override.valueMap.begin(); overrideIt != override.valueMap.end(); overrideIt++)
+    if(onlyExisting)
     {
-        std::map<std::string, ValueItem>::iterator originalIt;
-        originalIt = original.valueMap.find(overrideIt->first);
+        std::map<std::string, ValueItem>::const_iterator overrideIt;
+        for(overrideIt = override.valueMap.begin();
+            overrideIt != override.valueMap.end();
+            overrideIt++)
+        {
+            std::map<std::string, DataItem*>::iterator originalIt;
+            originalIt = original.m_map.find(overrideIt->first);
 
-        if(originalIt != original.valueMap.end()) {
-            originalIt->second = overrideIt->second;
+            if(originalIt != original.m_map.end()) {
+                original.insert(overrideIt->first, overrideIt->second.item->copy(), true);
+            }
+        }
+    }
+    else
+    {
+        std::map<std::string, ValueItem>::const_iterator overrideIt;
+        for(overrideIt = override.valueMap.begin();
+            overrideIt != override.valueMap.end();
+            overrideIt++)
+        {
+            original.insert(overrideIt->first, overrideIt->second.item->copy(), true);
         }
     }
 }
