@@ -38,8 +38,8 @@ namespace SakuraTree
 {
 
 SakuraRoot* SakuraRoot::m_root = nullptr;
-Jinja2Converter* SakuraRoot::m_jinja2Converter = nullptr;
 std::string SakuraRoot::m_executablePath = "";
+Jinja2Converter* SakuraRoot::m_jinja2Converter = nullptr;
 
 /**
  * constructor
@@ -47,9 +47,9 @@ std::string SakuraRoot::m_executablePath = "";
 SakuraRoot::SakuraRoot(const std::string &executablePath)
 {
     m_root = this;
-    m_jinja2Converter = new Kitsunemimi::Jinja2::Jinja2Converter;
     m_executablePath = executablePath;
-    m_threadPool = new ThreadPool(1);
+    m_jinja2Converter = new Jinja2Converter();
+    m_threadPool = new ThreadPool(2);
 
     // TODO: enable again in 0.3.0
     // m_controller = new Kitsunemimi::Sakura::SakuraHostHandler(this,

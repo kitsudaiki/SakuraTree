@@ -23,6 +23,7 @@
 #include "item_methods_test.h"
 
 #include <sakura_root.h>
+#include <libKitsunemimiJinja2/jinja2_converter.h>
 
 namespace SakuraTree
 {

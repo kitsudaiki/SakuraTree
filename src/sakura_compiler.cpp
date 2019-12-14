@@ -352,38 +352,6 @@ SakuraCompiler::convertSubtree(const JsonItem &subtree)
 }
 
 /**
- * @brief convert tree
- * @param subtree current suttree for converting
- * @param parent pointer ot the parent-branch or -tree
- * @return pointer of the current converted part
- */
-SakuraItem*
-SakuraCompiler::convertTree(const JsonItem &subtree)
-{
-    // init new tree-item
-    TreeItem* treeItem = new TreeItem();
-    treeItem->id = subtree.get("id").toString();
-
-    // fill values with the input of the upper level and convert the result
-    JsonItem items = subtree.get("items");
-    if(subtree.contains("items-input")) {
-        overrideItems(items, subtree.get("items-input"));
-    }
-    convertValues(treeItem,items);
-
-    // convert parts of the tree
-    const JsonItem parts = subtree.get("parts");
-    assert(parts.isValid());
-    for(uint32_t i = 0; i < parts.size(); i++)
-    {
-        JsonItem newMap = parts.get(i);
-        treeItem->childs.push_back(convert(newMap));
-    }
-
-    return treeItem;
-}
-
-/**
  * @brief convert seed-object
  * @param subtree current suttree for converting
  * @param parent pointer ot the parent-branch or -tree

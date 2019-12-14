@@ -17,11 +17,11 @@ bool
 SubtreeQueue::addSubtree(const SubtreeObject &subtree)
 {
     bool result = false;
-    while(lock.test_and_set(std::memory_order_acquire)) {
-        ; // spin
-    }
+    m_lock.lock();
+
     m_queue.push(subtree);
-    lock.clear(std::memory_order_release);
+
+    m_lock.unlock();
     return result;
 }
 
@@ -33,9 +33,7 @@ SubtreeQueue::SubtreeObject
 SubtreeQueue::getSubtree()
 {
     SubtreeObject subtree;
-    while(lock.test_and_set(std::memory_order_acquire)) {
-        ; // spin
-    }
+    m_lock.lock();
 
     if(m_queue.empty() == false)
     {
@@ -43,7 +41,7 @@ SubtreeQueue::getSubtree()
         m_queue.pop();
     }
 
-    lock.clear(std::memory_order_release);
+    m_lock.unlock();
 
     return subtree;
 }

@@ -68,8 +68,8 @@ public:
     void printOutput(const std::string &output);
 
     static SakuraTree::SakuraRoot* m_root;
-    static Jinja2Converter* m_jinja2Converter;
     static std::string m_executablePath;
+    static Jinja2Converter* m_jinja2Converter;
 
 private:
     Kitsunemimi::Sakura::SakuraHostHandler* m_controller = nullptr;

@@ -26,11 +26,18 @@
 #include <common.h>
 #include <items/sakura_items.h>
 
+namespace Kitsunemimi
+{
+namespace Jinja2 {
+class Jinja2Converter;
+}
+}
+
 using Kitsunemimi::Common::DataMap;
 namespace SakuraTree
 {
 
-const Result fillJinja2Template(const std::string baseString, ValueItemMap &insertValues);
+const Result fillJinja2Template(const std::string baseString, const ValueItemMap &insertValues);
 const Result fillIdentifierItem(ValueItem &resulting, ValueItem &original, DataMap &input);
 const Result fillOutputItems(ValueItemMap &items, DataItem* output);
 const Result fillInputItems(ValueItemMap &items, DataMap &insertValues);

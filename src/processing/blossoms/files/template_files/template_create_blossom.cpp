@@ -101,7 +101,8 @@ TemplateCreateBlossom::preCheck(BlossomItem &blossomItem)
     }
 
     // create file-content form template
-    results = SakuraRoot::m_jinja2Converter->convert(results.second, &inputData);
+    Kitsunemimi::Jinja2::Jinja2Converter jinja2Converter;
+    results = jinja2Converter.convert(results.second, &inputData);
     if(results.first == false)
     {
         blossomItem.success = false;

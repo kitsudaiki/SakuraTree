@@ -27,6 +27,7 @@
 #include <processing/blossoms/blossom.h>
 #include <processing/blossoms/blossom_getter.h>
 #include <processing/subtree_queue.h>
+#include <libKitsunemimiJinja2/jinja2_converter.h>
 
 namespace SakuraTree
 {
@@ -64,6 +65,7 @@ SakuraThread::run()
         {
             m_hierarchy = currentSubtree.hirarchy;
             m_parentValues = currentSubtree.items;
+            overrideItems(m_parentValues, currentSubtree.subtree->values, false);
             grow(currentSubtree.subtree);
         }
     }
@@ -79,9 +81,6 @@ SakuraThread::grow(SakuraItem* subtree)
     {
         SubtreeItem* subtreeItem = dynamic_cast<SubtreeItem*>(subtree);
         m_hierarchy.push_back("SUBTREE: " + subtreeItem->id);
-
-        overrideItems(m_parentValues, subtreeItem->values, false);
-
         return processSubtree(subtreeItem);
     }
 
@@ -155,22 +154,19 @@ SakuraThread::grow(SakuraItem* subtree)
 bool
 SakuraThread::processBlossom(BlossomItem &subtree)
 {
-    // get and process blossom
-    BlossomItem tempBlossomCopy = subtree;
-
-    fillInputItems(tempBlossomCopy.values, m_parentValues);
-    Blossom* blossom = getBlossom(tempBlossomCopy.blossomGroupType,
-                                  tempBlossomCopy.blossomType);
-    blossom->growBlossom(tempBlossomCopy);
+    fillInputItems(subtree.values, m_parentValues);
+    Blossom* blossom = getBlossom(subtree.blossomGroupType,
+                                  subtree.blossomType);
+    blossom->growBlossom(subtree);
     delete blossom;
 
     // send result to root
-    SakuraRoot::m_root->printOutput(tempBlossomCopy);
+    SakuraRoot::m_root->printOutput(subtree);
 
     // write processing result back to parent
-    fillOutputItems(tempBlossomCopy.values, tempBlossomCopy.blossomOutput);
+    fillOutputItems(subtree.values, subtree.blossomOutput);
 
-    overrideItems(m_parentValues, tempBlossomCopy.values);
+    overrideItems(m_parentValues, subtree.values);
 
     return subtree.success;
 }
@@ -376,22 +372,22 @@ SakuraThread::processFor(ForBranching* subtree,
                 return false;
             }
         }
+        DataMap postBalueBackup = m_parentValues;
+        m_parentValues = preBalueBackup;
+        overrideItems(m_parentValues, postBalueBackup);
     }
     else
     {
         for(long i = startValue; i < endValue; i++)
         {
+            m_parentValues.insert(subtree->tempVarName, new DataValue(i), true);
             SubtreeQueue::SubtreeObject object;
-            object.subtree = subtree->content;
+            object.subtree = subtree->content->copy();
             object.items = m_parentValues;
             object.hirarchy = m_hierarchy;
             m_queue->addSubtree(object);
         }
     }
-
-    DataMap postBalueBackup = m_parentValues;
-    m_parentValues = preBalueBackup;
-    overrideItems(m_parentValues, postBalueBackup);
 
     return true;
 }

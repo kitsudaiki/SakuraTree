@@ -64,7 +64,6 @@ private:
 
     SakuraItem* convertBlossomGroup(const JsonItem &growPlan);
     SakuraItem* convertSubtree(const JsonItem &growPlan);
-    SakuraItem* convertTree(const JsonItem &growPlan);
     SakuraItem* convertSeed(const JsonItem &growPlan);
     SakuraItem* convertIf(const JsonItem &growPlan);
     SakuraItem* convertForEach(const JsonItem &growPlan, bool parallel);

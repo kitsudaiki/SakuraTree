@@ -25,6 +25,7 @@
 #include <libKitsunemimiJinja2/jinja2_converter.h>
 #include <sakura_root.h>
 #include <processing/blossoms/blossom.h>
+#include <libKitsunemimiJinja2/jinja2_converter.h>
 
 using Kitsunemimi::Jinja2::Jinja2Converter;
 
@@ -39,13 +40,13 @@ namespace SakuraTree
  */
 const Result
 fillJinja2Template(const std::string baseString,
-                   DataMap &insertValues)
+                   const DataMap &insertValues)
 {
     Result result;
 
     // prepare map for jinja2-convert
     DataMap possibleValues;
-    std::map<std::string, DataItem*>::iterator insertIt;
+    std::map<std::string, DataItem*>::const_iterator insertIt;
     for(insertIt = insertValues.m_map.begin();
         insertIt != insertValues.m_map.end();
         insertIt++)
@@ -56,7 +57,7 @@ fillJinja2Template(const std::string baseString,
     }
 
     // convert jinja2-string
-    Jinja2Converter* converter = SakuraRoot::m_root->m_jinja2Converter;
+    Jinja2Converter* converter = SakuraRoot::m_jinja2Converter;
     const std::pair<bool, std::string> convertResult = converter->convert(baseString,
                                                                           &possibleValues);
 
@@ -106,8 +107,8 @@ fillIdentifierItem(ValueItem &resulting,
         for(uint32_t j = 0; j < resulting.functions.at(i).arguments.size(); j++)
         {
             const std::string key = resulting.functions[i].arguments[j].toString();
-            DataValue* replacement = input.get(key)->toValue();
-            resulting.functions[i].arguments[j] = *replacement;
+            DataValue replacement = *input.get(key)->toValue();
+            resulting.functions[i].arguments[j] = replacement;
         }
     }
 

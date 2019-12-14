@@ -44,7 +44,6 @@ TextReadBlossom::initTask(BlossomItem &blossomItem)
     }
 
     m_filePath = blossomItem.values.getValueAsString("file_path");
-
     blossomItem.success = true;
 }
 

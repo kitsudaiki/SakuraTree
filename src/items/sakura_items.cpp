@@ -52,6 +52,36 @@ BlossomItem::~BlossomItem()
     }
 }
 
+SakuraItem* BlossomItem::copy()
+{
+    BlossomItem* newItem = new BlossomItem();
+
+    newItem->type = type;
+    newItem->values = values;
+
+    newItem->blossomGroupType = blossomGroupType;
+    newItem->blossomType = blossomType;
+    newItem->blossomPath = blossomPath;
+
+    if(blossomOutput != nullptr) {
+        newItem->blossomOutput = blossomOutput->copy();
+    }
+
+    // process
+    newItem->execState = execState;
+    newItem->processOutput = processOutput;
+    newItem->processError = processError;
+
+    // result
+    newItem->resultState = resultState;
+    newItem->nameHirarchie = nameHirarchie;
+    newItem->skip = skip;
+    newItem->success = success;
+    newItem->outputMessage = outputMessage;
+
+    return newItem;
+}
+
 //===================================================================
 // BlossomGroupItem
 //===================================================================
@@ -60,7 +90,34 @@ BlossomGroupItem::BlossomGroupItem()
     type = BLOSSOM_GROUP_ITEM;
 }
 
-BlossomGroupItem::~BlossomGroupItem() {}
+BlossomGroupItem::~BlossomGroupItem()
+{
+    for(uint32_t i = 0; i < blossoms.size(); i++)
+    {
+        SakuraItem* tempItem = blossoms.at(i);
+        if(tempItem != nullptr) {
+            delete tempItem;
+        }
+    }
+}
+
+SakuraItem *BlossomGroupItem::copy()
+{
+    BlossomGroupItem* newItem = new BlossomGroupItem();
+
+    newItem->type = type;
+    newItem->values = values;
+
+    newItem->id = id;
+    newItem->blossomGroupType = blossomGroupType;
+
+    for(uint32_t i = 0; i < blossoms.size(); i++)
+    {
+        newItem->blossoms.push_back(static_cast<BlossomItem*>(blossoms.at(i)->copy()));
+    }
+
+    return newItem;
+}
 
 
 //===================================================================
@@ -82,6 +139,22 @@ SubtreeItem::~SubtreeItem()
     }
 }
 
+SakuraItem *SubtreeItem::copy()
+{
+    SubtreeItem* newItem = new SubtreeItem();
+
+    newItem->type = type;
+    newItem->values = values;
+
+    newItem->id = id;
+    for(uint32_t i = 0; i < childs.size(); i++)
+    {
+        newItem->childs.push_back(childs.at(i)->copy());
+    }
+
+    return newItem;
+}
+
 //===================================================================
 // SeedItem
 //===================================================================
@@ -97,23 +170,25 @@ SeedItem::~SeedItem()
     }
 }
 
-//===================================================================
-// TreeItem
-//===================================================================
-TreeItem::TreeItem()
+SakuraItem *SeedItem::copy()
 {
-    type = TREE_ITEM;
-}
+    SeedItem* newItem = new SeedItem();
 
-TreeItem::~TreeItem()
-{
-    for(uint32_t i = 0; i < childs.size(); i++)
-    {
-        SakuraItem* tempItem = childs.at(i);
-        if(tempItem != nullptr) {
-            delete tempItem;
-        }
+    newItem->type = type;
+    newItem->values = values;
+
+    newItem->name = name;
+    newItem->address = address;
+    newItem->sshPort = sshPort;
+    newItem->sshUser = sshUser;
+    newItem->sshKey = sshKey;
+    newItem->content = content;
+
+    if(child != nullptr) {
+        newItem->child = child->copy();
     }
+
+    return newItem;
 }
 
 //===================================================================
@@ -135,6 +210,21 @@ Sequentiell::~Sequentiell()
     }
 }
 
+SakuraItem *Sequentiell::copy()
+{
+    Sequentiell* newItem = new Sequentiell();
+
+    newItem->type = type;
+    newItem->values = values;
+
+    for(uint32_t i = 0; i < childs.size(); i++)
+    {
+        newItem->childs.push_back(childs.at(i)->copy());
+    }
+
+    return newItem;
+}
+
 //===================================================================
 // IfBranching
 //===================================================================
@@ -152,6 +242,27 @@ IfBranching::~IfBranching()
     if(elseContent != nullptr) {
         delete elseContent;
     }
+}
+
+SakuraItem *IfBranching::copy()
+{
+    IfBranching* newItem = new IfBranching();
+
+    newItem->type = type;
+    newItem->values = values;
+
+    newItem->leftSide = leftSide;
+    newItem->ifType = ifType;
+    newItem->rightSide = rightSide;
+
+    if(ifContent != nullptr) {
+        newItem->ifContent = ifContent->copy();
+    }
+    if(elseContent != nullptr) {
+        newItem->elseContent = elseContent->copy();
+    }
+
+    return newItem;
 }
 
 //===================================================================
@@ -173,6 +284,22 @@ ForEachBranching::~ForEachBranching()
     }
 }
 
+SakuraItem *ForEachBranching::copy()
+{
+    ForEachBranching* newItem = new ForEachBranching();
+
+    newItem->type = type;
+    newItem->values = values;
+
+    newItem->tempVarName = tempVarName;
+    newItem->iterateArray = iterateArray;
+    if(content != nullptr) {
+        newItem->content = content->copy();
+    }
+
+    return newItem;
+}
+
 //===================================================================
 // ForBranching
 //===================================================================
@@ -192,6 +319,24 @@ ForBranching::~ForBranching()
     }
 }
 
+SakuraItem *ForBranching::copy()
+{
+    ForBranching* newItem = new ForBranching();
+
+    newItem->type = type;
+    newItem->values = values;
+
+    newItem->tempVarName = tempVarName;
+    newItem->start = start;
+    newItem->end = end;
+
+    if(content != nullptr) {
+        newItem->content = content->copy();
+    }
+
+    return newItem;
+}
+
 //===================================================================
 // Parallel
 //===================================================================
@@ -209,6 +354,21 @@ Parallel::~Parallel()
             delete tempItem;
         }
     }
+}
+
+SakuraItem* Parallel::copy()
+{
+    Parallel* newItem = new Parallel();
+
+    newItem->type = type;
+    newItem->values = values;
+
+    for(uint32_t i = 0; i < childs.size(); i++)
+    {
+        newItem->childs.push_back(childs.at(i)->copy());
+    }
+
+    return newItem;
 }
 
 }  // namespace SakuraTree

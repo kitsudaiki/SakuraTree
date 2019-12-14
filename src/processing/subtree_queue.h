@@ -15,7 +15,7 @@ public:
     struct SubtreeObject
     {
         SakuraItem* subtree = nullptr;
-        DataMap items = DataMap();
+        DataMap items;
         std::vector<std::string> hirarchy;
     };
 
@@ -23,7 +23,7 @@ public:
     SubtreeObject getSubtree();
 
 private:
-    std::atomic_flag lock = ATOMIC_FLAG_INIT;
+    std::mutex m_lock;
     std::queue<SubtreeObject> m_queue;
 
 };
