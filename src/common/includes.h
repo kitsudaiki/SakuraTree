@@ -39,6 +39,7 @@
 #include <streambuf>
 #include <istream>
 #include <iterator>
+#include <queue>
 
 #include <boost/filesystem.hpp>
 

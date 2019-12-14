@@ -162,6 +162,34 @@ struct ValueItemMap
 {
     std::map<std::string, ValueItem> valueMap;
 
+    ValueItemMap() {}
+    ValueItemMap(const ValueItemMap &other)
+    {
+        std::map<std::string, ValueItem>::const_iterator it;
+        for(it = other.valueMap.begin();
+            it != other.valueMap.end();
+            it++)
+        {
+            ValueItem value = it->second;
+            valueMap.insert(std::pair<std::string, ValueItem>(it->first, value));
+        }
+    }
+    ValueItemMap &operator=(const ValueItemMap &other)
+    {
+        if(this != &other)
+        {
+            std::map<std::string, ValueItem>::const_iterator it;
+            for(it = other.valueMap.begin();
+                it != other.valueMap.end();
+                it++)
+            {
+                ValueItem value = it->second;
+                this->valueMap.insert(std::pair<std::string, ValueItem>(it->first, value));
+            }
+        }
+        return *this;
+    }
+
     bool insert(const std::string &key, DataItem* value, bool force=true)
     {
         ValueItem valueItem;
@@ -190,7 +218,7 @@ struct ValueItemMap
 
     bool contains(const std::string &key)
     {
-        std::map<std::string, ValueItem>::iterator it;
+        std::map<std::string, ValueItem>::const_iterator it;
         it = valueMap.find(key);
 
         if(it != valueMap.end())
@@ -202,7 +230,7 @@ struct ValueItemMap
 
     bool remove(const std::string &key)
     {
-        std::map<std::string, ValueItem>::iterator it;
+        std::map<std::string, ValueItem>::const_iterator it;
         it = valueMap.find(key);
 
         if(it != valueMap.end())
@@ -216,7 +244,7 @@ struct ValueItemMap
 
     std::string getValueAsString(const std::string &key)
     {
-        std::map<std::string, ValueItem>::iterator it;
+        std::map<std::string, ValueItem>::const_iterator it;
         it = valueMap.find(key);
         if(it != valueMap.end()) {
             return it->second.item->toString();
@@ -227,7 +255,7 @@ struct ValueItemMap
 
     DataItem* get(const std::string &key)
     {
-        std::map<std::string, ValueItem>::iterator it;
+        std::map<std::string, ValueItem>::const_iterator it;
         it = valueMap.find(key);
         if(it != valueMap.end()) {
             return it->second.item;
@@ -238,7 +266,7 @@ struct ValueItemMap
 
     ValueItem getValueItem(const std::string &key)
     {
-        std::map<std::string, ValueItem>::iterator it;
+        std::map<std::string, ValueItem>::const_iterator it;
         it = valueMap.find(key);
         if(it != valueMap.end()) {
             return it->second;

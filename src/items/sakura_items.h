@@ -40,7 +40,7 @@ public:
         UNDEFINED_ITEM = 0,
         BLOSSOM_ITEM = 1,
         BLOSSOM_GROUP_ITEM = 2,
-        BRANCH_ITEM = 3,
+        SUBTREE_ITEM = 3,
         TREE_ITEM = 4,
         SEED_ITEM = 5,
         SEQUENTIELL_ITEM = 6,
@@ -54,8 +54,8 @@ public:
 
     SakuraItem();
     virtual ~SakuraItem();
+    virtual SakuraItem* copy() = 0;
 
-    SakuraItem* parent = nullptr;
     ValueItemMap values;
 
     ItemType getType() const;
@@ -84,6 +84,7 @@ public:
 
     BlossomItem();
     ~BlossomItem();
+    SakuraItem* copy();
 
     std::string blossomGroupType = "";
     std::string blossomType = "";
@@ -112,6 +113,7 @@ class BlossomGroupItem : public SakuraItem
 public:
     BlossomGroupItem();
     ~BlossomGroupItem();
+    SakuraItem* copy();
 
     std::string id = "";
     std::string blossomGroupType = "";
@@ -127,6 +129,7 @@ class SeedItem : public SakuraItem
 public:
     SeedItem();
     ~SeedItem();
+    SakuraItem* copy();
 
     std::string name = "";
     std::string address = "";
@@ -139,26 +142,14 @@ public:
 };
 
 //===================================================================
-// TreeItem
-//===================================================================
-class TreeItem : public SakuraItem
-{
-public:
-    TreeItem();
-    ~TreeItem();
-
-    std::string id = "";
-    std::vector<SakuraItem*> childs;
-};
-
-//===================================================================
 // BranchItem
 //===================================================================
-class BranchItem : public SakuraItem
+class SubtreeItem : public SakuraItem
 {
 public:
-    BranchItem();
-    ~BranchItem();
+    SubtreeItem();
+    ~SubtreeItem();
+    SakuraItem* copy();
 
     std::string id = "";
     std::vector<SakuraItem*> childs;
@@ -172,6 +163,7 @@ class Sequentiell : public SakuraItem
 public:
     Sequentiell();
     ~Sequentiell();
+    SakuraItem* copy();
 
     std::vector<SakuraItem*> childs;
 };
@@ -193,6 +185,7 @@ public:
 
     IfBranching();
     ~IfBranching();
+    SakuraItem* copy();
 
     ValueItem leftSide;
     compareTypes ifType = EQUAL;
@@ -210,6 +203,7 @@ class ForEachBranching : public SakuraItem
 public:
     ForEachBranching(const bool parallel=false);
     ~ForEachBranching();
+    SakuraItem* copy();
 
     std::string tempVarName = "";
     ValueItemMap iterateArray;
@@ -225,6 +219,7 @@ class ForBranching : public SakuraItem
 public:
     ForBranching(const bool parallel=false);
     ~ForBranching();
+    SakuraItem* copy();
 
     std::string tempVarName = "";
     ValueItem start;
@@ -241,6 +236,7 @@ class Parallel : public SakuraItem
 public:
     Parallel();
     ~Parallel();
+    SakuraItem* copy();
 
     std::vector<SakuraItem*> childs;
 };

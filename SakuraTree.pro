@@ -107,7 +107,9 @@ SOURCES += \
     tests/items/value_items_functions_test.cpp \
     src/processing/blossoms/files/ini_files/ini_read_entry_blossom.cpp \
     src/processing/blossoms/files/ini_files/ini_set_entry_blossom.cpp \
-    src/processing/blossoms/files/ini_files/ini_delete_entry_blossom.cpp
+    src/processing/blossoms/files/ini_files/ini_delete_entry_blossom.cpp \
+    src/processing/thread_pool.cpp \
+    src/processing/subtree_queue.cpp
 
 
 HEADERS += \
@@ -169,6 +171,8 @@ HEADERS += \
     tests/items/value_items_functions_test.h \
     src/processing/blossoms/files/ini_files/ini_read_entry_blossom.h \
     src/processing/blossoms/files/ini_files/ini_set_entry_blossom.h \
-    src/processing/blossoms/files/ini_files/ini_delete_entry_blossom.h
+    src/processing/blossoms/files/ini_files/ini_delete_entry_blossom.h \
+    src/processing/thread_pool.h \
+    src/processing/subtree_queue.h
 
 

@@ -62,6 +62,8 @@ void
 CmdBlossom::runTask(BlossomItem &blossomItem)
 {
     runSyncProcess(blossomItem, m_command);
+
+    blossomItem.blossomOutput = new DataValue(blossomItem.processOutput);
 }
 
 /**
