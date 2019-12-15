@@ -78,8 +78,13 @@ DataItem* splitValue(DataItem* original,
         return nullptr;
     }
 
+    char demilimter = delimiterString.at(0);
+    if(delimiterString == "\\n") {
+        demilimter = '\n';
+    }
+
     const std::vector<std::string> array = splitStringByDelimiter(original->toString(),
-                                                                  delimiterString.at(0));
+                                                                  demilimter);
 
     DataArray* resultArray = new DataArray();
     for(uint32_t i = 0; i < array.size(); i++)
