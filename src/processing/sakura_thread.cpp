@@ -272,6 +272,7 @@ SakuraThread::processForEach(ForEachBranching* subtree,
 {
     DataMap preBalueBackup = m_parentValues;
     fillInputValueItemMap(subtree->iterateArray, m_parentValues);
+    overrideItems(m_parentValues, subtree->values, false);
 
     if(parallel == false)
     {
