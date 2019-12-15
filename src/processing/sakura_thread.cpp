@@ -157,6 +157,7 @@ SakuraThread::processBlossom(BlossomItem &subtree)
     fillInputValueItemMap(subtree.values, m_parentValues);
     Blossom* blossom = getBlossom(subtree.blossomGroupType,
                                   subtree.blossomType);
+    subtree.parentValues = &m_parentValues;
     blossom->growBlossom(subtree);
     delete blossom;
 

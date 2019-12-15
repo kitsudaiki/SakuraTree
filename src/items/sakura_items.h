@@ -90,6 +90,7 @@ public:
     std::string blossomPath = "";
 
     DataItem* blossomOutput = nullptr;
+    DataMap* parentValues = nullptr;
 
     // process
     int execState = 0;

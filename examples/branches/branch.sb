@@ -10,6 +10,10 @@ apt("update and install")
 
 if(test_output == "test")
 {
+    assert("test-assert")
+    - test_output == "test"
+
+
     file("copy a testfile")
     -> copy:
        - source_path = "test_file"
@@ -91,6 +95,8 @@ if(test_output == "test")
         - answer = "yeah again"
     }
 
+    assert("test-assert")
+    - test_output2 == "123456789"
 
     if(test_output2.contains("345") == true)
     {
