@@ -59,8 +59,7 @@ AssertBlossom::runTask(BlossomItem &blossomItem)
         it != blossomItem.values.valueMap.end();
         it++)
     {
-        //const std::string isValue = blossomItem.parent->values.getValueAsString(it->first);
-        const std::string isValue = "";
+        const std::string isValue = blossomItem.parentValues->get(it->first)->toString();
         const std::string shouldValue = it->second.item->toString();
 
         if(isValue != shouldValue)
