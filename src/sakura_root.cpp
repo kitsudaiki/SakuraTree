@@ -49,7 +49,7 @@ SakuraRoot::SakuraRoot(const std::string &executablePath)
     m_root = this;
     m_executablePath = executablePath;
     m_jinja2Converter = new Jinja2Converter();
-    m_threadPool = new ThreadPool(2);
+    m_threadPool = new ThreadPool(8);
 
     // TODO: enable again in 0.3.0
     // m_controller = new Kitsunemimi::Sakura::SakuraHostHandler(this,
