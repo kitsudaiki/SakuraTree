@@ -29,6 +29,8 @@
 //===================================================================
 // FunctionItem
 //===================================================================
+struct ValueItem;
+
 struct FunctionItem
 {
     enum FunctionType
@@ -43,7 +45,7 @@ struct FunctionItem
     };
 
     FunctionType type = UNDEFINED_FUNCTION;
-    std::vector<DataValue> arguments;
+    std::vector<ValueItem> arguments;
 };
 
 //===================================================================
@@ -99,59 +101,6 @@ struct ValueItem
             this->functions = other.functions;
         }
         return *this;
-    }
-
-    DataItem* getProcessedItem()
-    {
-        DataItem* tempItem = item;
-        for(uint32_t i = 0; i < functions.size(); i++)
-        {
-            if(tempItem == nullptr) {
-                return nullptr;
-            }
-
-            switch(functions.at(i).type)
-            {
-            case FunctionItem::GET_FUNCTION:
-                if(functions.at(i).arguments.size() != 1) {
-                    return nullptr;
-                }
-                tempItem = getValue(item, &functions.at(i).arguments.at(0));
-                break;
-            case FunctionItem::SPLIT_FUNCTION:
-                if(functions.at(i).arguments.size() != 1) {
-                    return nullptr;
-                }
-                tempItem = splitValue(item, &functions.at(i).arguments.at(0));
-                break;
-            case FunctionItem::CONTAINS_FUNCTION:
-                if(functions.at(i).arguments.size() != 1) {
-                    return nullptr;
-                }
-                tempItem = containsValue(item, &functions.at(i).arguments.at(0));
-                break;
-            case FunctionItem::SIZE_FUNCTION:
-                tempItem = sizeValue(item);
-                break;
-            case FunctionItem::INSERT_FUNCTION:
-                if(functions.at(i).arguments.size() != 2) {
-                    return nullptr;
-                }
-                tempItem = insertValue(item,
-                                       &functions.at(i).arguments.at(0),
-                                       &functions.at(i).arguments.at(1));
-                break;
-            case FunctionItem::APPEND_FUNCTION:
-                if(functions.at(i).arguments.size() != 1) {
-                    return nullptr;
-                }
-                tempItem = appendValue(item, &functions.at(i).arguments.at(0));
-                break;
-            default:
-                break;
-            }
-        }
-        return tempItem;
     }
 };
 

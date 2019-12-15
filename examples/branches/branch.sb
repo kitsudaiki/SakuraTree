@@ -19,5 +19,5 @@ parallel_for(i = 0; i < 20; i++)
        - blossom_output >> tempVal
 
 	print("poi2")
-	- tempVal = tempVal
+	- tempVal = tempVal.split(" ")
 }

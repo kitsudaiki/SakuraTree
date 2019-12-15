@@ -64,7 +64,8 @@ DataItem* getValue(DataItem* original, DataValue* value)
  * @param delimiter
  * @return
  */
-DataItem* splitValue(DataItem* original, DataValue* delimiter)
+DataItem* splitValue(DataItem* original,
+                     DataValue* delimiter)
 {
     if(original == nullptr
             || original->isValue() == false)

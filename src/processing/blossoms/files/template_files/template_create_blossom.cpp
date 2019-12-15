@@ -95,7 +95,9 @@ TemplateCreateBlossom::preCheck(BlossomItem &blossomItem)
         it != blossomItem.values.valueMap.end();
         it++)
     {
-        if(it->second.item->isValue()) {
+        if(it->second.item != nullptr
+                && it->second.item->isValue())
+        {
             inputData.insert(it->first, it->second.item->copy());
         }
     }
