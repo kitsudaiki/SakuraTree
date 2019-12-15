@@ -296,7 +296,7 @@ SakuraThread::processForEach(ForEachBranching* subtree,
 
         for(uint32_t i = 0; i < array->size(); i++)
         {
-            m_parentValues.insert(subtree->tempVarName, array->get(i), true);
+            m_parentValues.insert(subtree->tempVarName, array->get(i)->copy(), true);
             SubtreeQueue::SubtreeObject object;
             object.subtree = subtree->content->copy();
             object.items = m_parentValues;
