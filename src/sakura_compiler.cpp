@@ -142,8 +142,9 @@ SakuraCompiler::convertItemPart(ValueItem &resultingPart,
         JsonItem arguments = functions.get(f).get("args");
         for(uint32_t a = 0; a < arguments.size(); a++)
         {
-            DataValue* arg = arguments.get(a).getItemContent()->toValue();
-            functionItem.arguments.push_back(*arg);
+            ValueItem newItem;
+            convertItemPart(newItem, arguments.get(a), "assign");
+            functionItem.arguments.push_back(newItem);
         }
 
         resultingPart.functions.push_back(functionItem);

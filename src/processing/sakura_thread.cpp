@@ -154,7 +154,7 @@ SakuraThread::grow(SakuraItem* subtree)
 bool
 SakuraThread::processBlossom(BlossomItem &subtree)
 {
-    fillInputItems(subtree.values, m_parentValues);
+    fillInputValueItemMap(subtree.values, m_parentValues);
     Blossom* blossom = getBlossom(subtree.blossomGroupType,
                                   subtree.blossomType);
     blossom->growBlossom(subtree);
@@ -164,7 +164,7 @@ SakuraThread::processBlossom(BlossomItem &subtree)
     SakuraRoot::m_root->printOutput(subtree);
 
     // write processing result back to parent
-    fillOutputItems(subtree.values, subtree.blossomOutput);
+    fillOutputValueItemMap(subtree.values, subtree.blossomOutput);
 
     overrideItems(m_parentValues, subtree.values);
 
@@ -223,37 +223,13 @@ bool
 SakuraThread::processIf(IfBranching* subtree)
 {
     bool ifMatch = false;
-    std::map<std::string, ValueItem>::iterator it;
     ValueItem valueItem;
 
-    std::string leftSide = "";
-    std::string rightSide = "";
+    const ValueItem valueItemLeft = fillValueItem(subtree->leftSide, m_parentValues);
+    const std::string  leftSide = valueItemLeft.item->toValue()->toString();
 
-    if(subtree->leftSide.isIdentifier == true)
-    {
-        const std::string leftSideKey = subtree->leftSide.item->toString();
-        valueItem.item = subtree->values.getValueItem(leftSideKey).item->copy();
-        valueItem.functions = subtree->leftSide.functions;
-        valueItem.item = valueItem.getProcessedItem();
-        leftSide = valueItem.item->toString();
-    }
-    else
-    {
-        leftSide = subtree->leftSide.item->toString();
-    }
-
-    if(subtree->rightSide.isIdentifier == true)
-    {
-        const std::string rightSideKey = subtree->rightSide.item->toString();
-        valueItem.item = subtree->values.getValueItem(rightSideKey).item->copy();
-        valueItem.functions = subtree->rightSide.functions;
-        valueItem.item = valueItem.getProcessedItem();
-        rightSide = valueItem.item->toString();
-    }
-    else
-    {
-        rightSide = subtree->rightSide.item->toString();
-    }
+    const ValueItem valueItemRight = fillValueItem(subtree->rightSide, m_parentValues);
+    const std::string  rightSide = valueItemRight.item->toValue()->toString();
 
     switch(subtree->ifType)
     {
@@ -328,36 +304,11 @@ bool
 SakuraThread::processFor(ForBranching* subtree,
                          bool parallel)
 {
-    ValueItem valueItem;
+    const ValueItem valueItemStart = fillValueItem(subtree->start, m_parentValues);
+    const long startValue = valueItemStart.item->toValue()->getLong();
 
-    long startValue = 0;
-    long endValue = 0;
-
-    if(subtree->start.isIdentifier == true)
-    {
-        const std::string rightSideKey = subtree->start.item->toString();
-        valueItem.item = subtree->values.getValueItem(rightSideKey).item->copy();
-        valueItem.functions = subtree->start.functions;
-        valueItem.item = valueItem.getProcessedItem();
-        startValue = valueItem.item->toValue()->getLong();
-    }
-    else
-    {
-        startValue = subtree->start.item->toValue()->getLong();
-    }
-
-    if(subtree->end.isIdentifier == true)
-    {
-        const std::string rightSideKey = subtree->end.item->toString();
-        valueItem.item = subtree->values.getValueItem(rightSideKey).item->copy();
-        valueItem.functions = subtree->end.functions;
-        valueItem.item = valueItem.getProcessedItem();
-        endValue = valueItem.item->toValue()->getLong();
-    }
-    else
-    {
-        endValue = subtree->end.item->toValue()->getLong();
-    }
+    const ValueItem valueItemEnd = fillValueItem(subtree->end, m_parentValues);
+    const long endValue = valueItemEnd.item->toValue()->getLong();
 
     DataMap preBalueBackup = m_parentValues;
     overrideItems(m_parentValues, subtree->values, false);

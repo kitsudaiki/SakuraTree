@@ -56,9 +56,8 @@ public:
     virtual ~SakuraItem();
     virtual SakuraItem* copy() = 0;
 
-    ValueItemMap values;
-
     ItemType getType() const;
+    ValueItemMap values;
 
 protected:
     ItemType type = UNDEFINED_ITEM;
