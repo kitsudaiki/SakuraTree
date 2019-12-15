@@ -67,6 +67,9 @@ SakuraThread::run()
             m_parentValues = currentSubtree.items;
             overrideItems(m_parentValues, currentSubtree.subtree->values, false);
             grow(currentSubtree.subtree);
+            if(currentSubtree.activeCounter != nullptr) {
+                currentSubtree.activeCounter->increaseCounter();
+            }
         }
     }
 }
@@ -282,14 +285,14 @@ SakuraThread::processForEach(ForEachBranching* subtree,
             }
         }
 
-        DataMap postBalueBackup = m_parentValues;
-        m_parentValues = preBalueBackup;
-        overrideItems(m_parentValues, postBalueBackup);
     }
     else
     {
         // create and initialize all threads
         DataArray* array = subtree->iterateArray.get("array")->toArray();
+        SubtreeQueue::ActiveCounter* counter = new SubtreeQueue::ActiveCounter();
+        counter->shouldCount = static_cast<uint32_t>(array->size());
+
         for(uint32_t i = 0; i < array->size(); i++)
         {
             m_parentValues.insert(subtree->tempVarName, array->get(i), true);
@@ -297,9 +300,18 @@ SakuraThread::processForEach(ForEachBranching* subtree,
             object.subtree = subtree->content->copy();
             object.items = m_parentValues;
             object.hirarchy = m_hierarchy;
+            object.activeCounter = counter;
             m_queue->addSubtree(object);
         }
+
+        while(counter->isEqual() == false) {
+            std::this_thread::sleep_for(chronoMilliSec(10));
+        }
     }
+
+    DataMap postBalueBackup = m_parentValues;
+    m_parentValues = preBalueBackup;
+    overrideItems(m_parentValues, postBalueBackup);
 
     return true;
 }
@@ -333,12 +345,12 @@ SakuraThread::processFor(ForBranching* subtree,
                 return false;
             }
         }
-        DataMap postBalueBackup = m_parentValues;
-        m_parentValues = preBalueBackup;
-        overrideItems(m_parentValues, postBalueBackup);
     }
     else
     {
+        SubtreeQueue::ActiveCounter* counter = new SubtreeQueue::ActiveCounter();
+        counter->shouldCount = static_cast<uint32_t>(endValue - startValue);
+
         for(long i = startValue; i < endValue; i++)
         {
             m_parentValues.insert(subtree->tempVarName, new DataValue(i), true);
@@ -346,9 +358,18 @@ SakuraThread::processFor(ForBranching* subtree,
             object.subtree = subtree->content->copy();
             object.items = m_parentValues;
             object.hirarchy = m_hierarchy;
+            object.activeCounter = counter;
             m_queue->addSubtree(object);
         }
+
+        while(counter->isEqual() == false) {
+            std::this_thread::sleep_for(chronoMilliSec(10));
+        }
     }
+
+    DataMap postBalueBackup = m_parentValues;
+    m_parentValues = preBalueBackup;
+    overrideItems(m_parentValues, postBalueBackup);
 
     return true;
 }
@@ -377,12 +398,21 @@ bool
 SakuraThread::processParallelPart(Parallel *subtree)
 {
     // create and initialize all threads
+    SubtreeQueue::ActiveCounter* counter = new SubtreeQueue::ActiveCounter();
+    counter->shouldCount = static_cast<uint32_t>(subtree->childs.size());
+
     for(uint32_t i = 0; i < subtree->childs.size(); i++)
     {
         SubtreeQueue::SubtreeObject object;
         object.subtree = subtree->childs.at(i);
         object.hirarchy = m_hierarchy;
+        object.items = m_parentValues;
+        object.activeCounter = counter;
         m_queue->addSubtree(object);
+    }
+
+    while(counter->isEqual() == false) {
+        std::this_thread::sleep_for(chronoMilliSec(10));
     }
 
     return true;

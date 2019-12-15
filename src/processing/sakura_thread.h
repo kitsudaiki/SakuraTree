@@ -36,7 +36,6 @@ class SubtreeQueue;
 class SakuraThread
         : public Kitsunemimi::Common::Thread
 {
-
 public:
     SakuraThread(SubtreeQueue* queue);
     ~SakuraThread();

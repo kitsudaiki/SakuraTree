@@ -93,9 +93,13 @@ SakuraRoot::startProcess(const std::string &rootPath,
     // run process
     SubtreeQueue::SubtreeObject object;
     object.subtree = processPlan;
+    object.activeCounter = new SubtreeQueue::ActiveCounter();
+    object.activeCounter->shouldCount = 1;
     m_threadPool->m_queue.addSubtree(object);
 
-    std::this_thread::sleep_for(chronoSec(10000));
+    while(object.activeCounter->isEqual() == false) {
+        std::this_thread::sleep_for(chronoMilliSec(10));
+    }
 
     // sleep(1000);
     std::cout<<"finish"<<std::endl;
