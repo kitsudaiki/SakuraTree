@@ -22,6 +22,13 @@ if(test_output == "test")
        - checker = 42
        - name = "test-template"
 
+    cmd("read something over command")
+    - command = "cat /etc/hosts"
+    - blossom_output >> test_output
+
+    print("test output")
+    - output = test_output
+
     text_file("read template")
     - file_path = "/tmp/test_template"
     -> read:
