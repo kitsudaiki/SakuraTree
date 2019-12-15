@@ -266,17 +266,24 @@ bool
 SakuraThread::processForEach(ForEachBranching* subtree,
                              bool parallel)
 {
+    DataMap preBalueBackup = m_parentValues;
+    fillInputValueItemMap(subtree->iterateArray, m_parentValues);
+
     if(parallel == false)
     {
         DataArray* array = subtree->iterateArray.get("array")->toArray();
         for(uint32_t i = 0; i < array->size(); i++)
         {
-            subtree->content->values.insert(subtree->tempVarName, array->get(i), true);
-            const bool result = grow(subtree->content);
+            m_parentValues.insert(subtree->tempVarName, array->get(i), true);
+            const bool result = grow(subtree->content->copy());
             if(result == false) {
                 return false;
             }
         }
+
+        DataMap postBalueBackup = m_parentValues;
+        m_parentValues = preBalueBackup;
+        overrideItems(m_parentValues, postBalueBackup);
     }
     else
     {
@@ -284,8 +291,10 @@ SakuraThread::processForEach(ForEachBranching* subtree,
         DataArray* array = subtree->iterateArray.get("array")->toArray();
         for(uint32_t i = 0; i < array->size(); i++)
         {
+            m_parentValues.insert(subtree->tempVarName, array->get(i), true);
             SubtreeQueue::SubtreeObject object;
-            object.subtree = subtree->content;
+            object.subtree = subtree->content->copy();
+            object.items = m_parentValues;
             object.hirarchy = m_hierarchy;
             m_queue->addSubtree(object);
         }
