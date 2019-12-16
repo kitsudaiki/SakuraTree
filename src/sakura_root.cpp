@@ -21,7 +21,7 @@
  */
 
 #include "sakura_root.h"
-#include <sakura_compiler.h>
+#include <converter.h>
 
 #include <items/item_methods.h>
 #include <processing/sakura_thread.h>
@@ -78,13 +78,14 @@ SakuraRoot::~SakuraRoot()
  */
 bool
 SakuraRoot::startProcess(const std::string &rootPath,
-                         std::string seedName)
+                         std::string seedName,
+                         DataMap &initialValues)
 {
     // m_controller->createServer(1337);
 
     // parsing
     FileCollector fileCollector;
-    SakuraCompiler compiler;
+    Converter compiler;
     JsonItem tree = fileCollector.parseFiles(rootPath, seedName, DEBUG);
     SakuraItem* processPlan = compiler.compile(tree);
 
@@ -93,6 +94,7 @@ SakuraRoot::startProcess(const std::string &rootPath,
     // run process
     SubtreeQueue::SubtreeObject object;
     object.subtree = processPlan;
+    object.items = initialValues;
     object.activeCounter = new SubtreeQueue::ActiveCounter();
     object.activeCounter->shouldCount = 1;
     m_threadPool->m_queue.addSubtree(object);
@@ -121,7 +123,7 @@ SakuraRoot::startSubtreeProcess(const std::string &subtree,
     JsonItem completePlan;
     completePlan.parse(subtree);
 
-    SakuraCompiler compiler;
+    Converter compiler;
     SakuraItem* processPlan = compiler.compile(completePlan);
 
     assert(processPlan != nullptr);

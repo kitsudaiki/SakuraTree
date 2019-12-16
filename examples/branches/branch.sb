@@ -1,116 +1,42 @@
 [install_branch]
-- packages = [ "nano", "vim" ]
-- test_output = "test"
-- test_output2 = "test"
+- packages = ""
+- install_branch = ""
 
-apt("update and install")  
--> update
--> present:
-    - names = packages
+- containers = ["barbican_worker", "barbican_api", "heat_engine", "heat_api_cfn", "heat_api", "neutron_metadata_agent"
+                , "neutron_l3_agent", "neutron_dhcp_agent", "neutron_openvswitch_agent", "neutron_server", "nova_compute"
+                , "nova_conductor", "nova_api", "nova_scheduler", "placement_api", "cinder_volume", "cinder_scheduler"
+                , "cinder_api", "glance_api", "keystone"]
 
-if(test_output == "test")
+if(packages.size() != 0)
 {
-    assert("test-assert")
-    - test_output == "test"
+    print("print number of containers in list")
+    - number_of_containers = containers.size()
 
-
-    file("copy a testfile")
-    -> copy:
-       - source_path = "test_file"
-       - dest_path = "/tmp/test_file"
-
-    template("create a template")
-    - source_path = "test_template.j2"
-    - dest_path = "/tmp/test_template"
-    -> create:
-       - checker = 42
-       - name = "test-template"
-
-    cmd("read something over command")
-    - command = "cat /etc/hosts"
-    - blossom_output >> test_output
-
-    print("test output")
-    - output = test_output
-
-    text_file("read template")
-    - file_path = "/tmp/test_template"
-    -> read:
-       - blossom_output >> test_output
-
-    print("test output")
-    - output = "{{test_output}}"
-
-    print("test output of size")
-    - output = packages.size()
-
-    for(package : packages)
+    parallel_for(container : containers)
+    - installed_packages = ""
     {
-        print("test output in normal for-each-loop")
-        - output = package
-    }
+        cmd("get installed packages")
+        - command = "sudo docker exec --user root {{container}} bash -c 'pip list --format=freeze | sed s/=.*//'"
+        - blossom_output >> installed_packages
 
-    parallel_for(package : packages)
-    {
-        print("test output in parallel for-each-loop")
-        - output = package
-    }
-
-    if(packages.size() == 2)
-    {
-        parallel_for(i = 0; i < packages.size(); i++)
+        for(package : packages.splt(","))
         {
-            print("test iter-number in parallel for-loop")
-            - output = packages.get(i)
+            if(installed_packages.split("\n").contains(package) == true)
+            {
+                print("install package in container")
+                - package = package
+                - container = container
 
-            print("another output test iter-number in parallel for-loop")
-            - output = packages.get(i)
+                cmd("install")
+                - command = "sudo docker exec --user root {{container}} bash -c 'PBR_VERSION=999 pip install -U git+ssh://git@gitlab.cloudandheat.com/WallsOfConstantinople/woc-fork-{{package}}.git@{{install_branch}}'"
+            }
         }
     }
 
-    ini_file("get value from a test-ini-file")
-    - file_path = "/tmp/test_file"
-    - group = "DEFAULT"
-    - entry = "asdf"
-    -> read:
-        - blossom_output >> test_output
-    -> set:
-        - value = "123456789"
-    -> read:
-        - blossom_output >> test_output2
-
-    print("print init-file-output")
-    - first_try = test_output
-    - second_try = test_output2
-
-    if(packages.contains("nano") == true)
-    {
-        print("contains successful")
-        - answer = "yeah"
-    }
-
-    if(packages.contains("asdf") == false)
-    {
-        print("contains successful negative")
-        - answer = "yeah again"
-    }
-
-    assert("test-assert")
-    - test_output2 == "123456789"
-
-    if(test_output2.contains("345") == true)
-    {
-        print("contains in string successful")
-        - answer = "yeah again again"
-    }
 }
 else
 {
-    apt("first apt in else")
-    -> absent:
-       - names = packages
-
-    apt("second apt in else")
-    -> present:
-       - names = packages
+    print("error when nothing was set")
+    - message = "no packages for installation defined"
 }
+

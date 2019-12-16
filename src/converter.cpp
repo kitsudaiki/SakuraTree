@@ -1,5 +1,5 @@
 /**
- * @file        sakura_compiler.cpp
+ * @file        converter.cpp
  *
  * @author      Tobias Anker <tobias.anker@kitsunemimi.moe>
  *
@@ -20,7 +20,7 @@
  *      limitations under the License.
  */
 
-#include "sakura_compiler.h"
+#include "converter.h"
 
 #include <libKitsunemimiSakuraParser/sakura_parsing.h>
 #include <libKitsunemimiSakuraParser/file_collector.h>
@@ -41,12 +41,12 @@ namespace SakuraTree
 /**
  * @brief constructor
  */
-SakuraCompiler::SakuraCompiler() {}
+Converter::Converter() {}
 
 /**
  * @brief destructor
  */
-SakuraCompiler::~SakuraCompiler() {}
+Converter::~Converter() {}
 
 /**
  * @brief SakuraCompiler::compile
@@ -54,7 +54,7 @@ SakuraCompiler::~SakuraCompiler() {}
  * @return
  */
 SakuraItem*
-SakuraCompiler::compile(const JsonItem &tree)
+Converter::compile(const JsonItem &tree)
 {
     // debug-output
     if(DEBUG)
@@ -78,7 +78,7 @@ SakuraCompiler::compile(const JsonItem &tree)
  * @return
  */
 bool
-SakuraCompiler::convertItemPart(ValueItem &resultingPart,
+Converter::convertItemPart(ValueItem &resultingPart,
                                 JsonItem itemInput,
                                 const std::string pairType)
 {
@@ -159,7 +159,7 @@ SakuraCompiler::convertItemPart(ValueItem &resultingPart,
  * @param override additional item-map for merging into the original one
  */
 void
-SakuraCompiler::overrideItems(JsonItem &original,
+Converter::overrideItems(JsonItem &original,
                               const JsonItem &override)
 {
     DataMap* overrideMap = override.getItemContent()->toMap();
@@ -180,7 +180,7 @@ SakuraCompiler::overrideItems(JsonItem &original,
  * @param override additional item-map for merging into the original one
  */
 void
-SakuraCompiler::overrideItems(ValueItemMap &original,
+Converter::overrideItems(ValueItemMap &original,
                               const ValueItemMap &override)
 {
     std::map<std::string, ValueItem>::const_iterator it;
@@ -202,7 +202,7 @@ SakuraCompiler::overrideItems(ValueItemMap &original,
  * @param subtree
  */
 void
-SakuraCompiler::convertValues(SakuraItem* obj,
+Converter::convertValues(SakuraItem* obj,
                               const JsonItem &values)
 {
     for(uint32_t i = 0; i < values.size(); i++)
@@ -224,7 +224,7 @@ SakuraCompiler::convertValues(SakuraItem* obj,
  * @return pointer of the current converted part
  */
 SakuraItem*
-SakuraCompiler::convert(const JsonItem &subtree)
+Converter::convert(const JsonItem &subtree)
 {
     const std::string typeName = subtree.get("b_type").toString();
 
@@ -277,7 +277,7 @@ SakuraCompiler::convert(const JsonItem &subtree)
  * @return pointer of the current converted part
  */
 SakuraItem*
-SakuraCompiler::convertBlossomGroup(const JsonItem &subtree)
+Converter::convertBlossomGroup(const JsonItem &subtree)
 {
     // init new blossom-group-item
     BlossomGroupItem* blossomGroupItem =  new BlossomGroupItem();
@@ -326,7 +326,7 @@ SakuraCompiler::convertBlossomGroup(const JsonItem &subtree)
  * @return pointer of the current converted part
  */
 SakuraItem*
-SakuraCompiler::convertSubtree(const JsonItem &subtree)
+Converter::convertSubtree(const JsonItem &subtree)
 {
     // init new branch-item
     SubtreeItem* branchItem = new SubtreeItem();
@@ -359,7 +359,7 @@ SakuraCompiler::convertSubtree(const JsonItem &subtree)
  * @return pointer of the current converted part
  */
 SakuraItem*
-SakuraCompiler::convertSeed(const JsonItem &subtree)
+Converter::convertSeed(const JsonItem &subtree)
 {
     // init new seed-item
     SeedItem* seedItem = new SeedItem();
@@ -390,7 +390,7 @@ SakuraCompiler::convertSeed(const JsonItem &subtree)
  * @return pointer of the current converted part
  */
 SakuraItem*
-SakuraCompiler::convertIf(const JsonItem &subtree)
+Converter::convertIf(const JsonItem &subtree)
 {
     // init new if-item
     IfBranching* newItem = new IfBranching();
@@ -453,7 +453,7 @@ SakuraCompiler::convertIf(const JsonItem &subtree)
  * @return pointer of the current converted part
  */
 SakuraItem*
-SakuraCompiler::convertForEach(const JsonItem &subtree,
+Converter::convertForEach(const JsonItem &subtree,
                                bool parallel)
 {
     // init new for-each-item
@@ -489,7 +489,7 @@ SakuraCompiler::convertForEach(const JsonItem &subtree,
  * @return pointer of the current converted part
  */
 SakuraItem*
-SakuraCompiler::convertFor(const JsonItem &subtree,
+Converter::convertFor(const JsonItem &subtree,
                            bool parallel)
 {
     // init new for-item
@@ -525,7 +525,7 @@ SakuraCompiler::convertFor(const JsonItem &subtree,
  * @return pointer of the current converted part
  */
 SakuraItem*
-SakuraCompiler::convertParallel(const JsonItem &subtree)
+Converter::convertParallel(const JsonItem &subtree)
 {
     // init new parallel-branching-item
     Parallel* newItem = new Parallel();

@@ -57,7 +57,6 @@ INCLUDEPATH += $$PWD \
 SOURCES += \
     src/main.cpp \
     src/processing/blossoms/blossom.cpp \
-    src/sakura_compiler.cpp \
     src/processing/blossoms/install/apt/apt_absent_blossom.cpp \
     src/processing/blossoms/install/apt/apt_latest_bossom.cpp \
     src/processing/blossoms/install/apt/apt_present_bossom.cpp \
@@ -109,7 +108,8 @@ SOURCES += \
     src/processing/blossoms/files/ini_files/ini_set_entry_blossom.cpp \
     src/processing/blossoms/files/ini_files/ini_delete_entry_blossom.cpp \
     src/processing/thread_pool.cpp \
-    src/processing/subtree_queue.cpp
+    src/processing/subtree_queue.cpp \
+    src/converter.cpp
 
 
 HEADERS += \
@@ -119,7 +119,6 @@ HEADERS += \
     src/common/includes.h \
     src/common/typedefs.h \
     src/processing/blossoms/blossom.h \
-    src/sakura_compiler.h \
     src/processing/blossoms/install/apt/apt_absent_blossom.h \
     src/processing/blossoms/install/apt/apt_latest_blossom.h \
     src/processing/blossoms/install/apt/apt_update_blossom.h \
@@ -173,6 +172,7 @@ HEADERS += \
     src/processing/blossoms/files/ini_files/ini_set_entry_blossom.h \
     src/processing/blossoms/files/ini_files/ini_delete_entry_blossom.h \
     src/processing/thread_pool.h \
-    src/processing/subtree_queue.h
+    src/processing/subtree_queue.h \
+    src/converter.h
 
 
