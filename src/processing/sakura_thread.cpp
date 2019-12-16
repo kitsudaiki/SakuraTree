@@ -64,8 +64,8 @@ SakuraThread::run()
         else
         {
             m_hierarchy = currentSubtree.hirarchy;
-            m_parentValues = currentSubtree.items;
             overrideItems(m_parentValues, currentSubtree.subtree->values, false);
+            overrideItems(m_parentValues, currentSubtree.items, false);
             grow(currentSubtree.subtree);
             if(currentSubtree.activeCounter != nullptr) {
                 currentSubtree.activeCounter->increaseCounter();

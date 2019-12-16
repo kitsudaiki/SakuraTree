@@ -1,5 +1,5 @@
 /**
- * @file        sakura_compiler.h
+ * @file        converter.h
  *
  * @author      Tobias Anker <tobias.anker@kitsunemimi.moe>
  *
@@ -20,8 +20,8 @@
  *      limitations under the License.
  */
 
-#ifndef SAKURA_COMPILER_H
-#define SAKURA_COMPILER_H
+#ifndef CONVERTER_H
+#define CONVERTER_H
 
 #include <common.h>
 #include <items/value_items.h>
@@ -40,11 +40,11 @@ class FileCollector;
 class SakuraItem;
 class BlossomItem;
 
-class SakuraCompiler
+class Converter
 {
 public:
-    SakuraCompiler();
-    ~SakuraCompiler();
+    Converter();
+    ~Converter();
 
     SakuraItem* compile(const JsonItem &tree);
 
@@ -73,4 +73,4 @@ private:
 
 }
 
-#endif // SAKURA_COMPILER_H
+#endif // CONVERTER_H

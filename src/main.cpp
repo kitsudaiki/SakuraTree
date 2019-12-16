@@ -24,6 +24,7 @@
 #include <sakura_root.h>
 #include <tests/run_unit_tests.h>
 #include <boost/program_options.hpp>
+#include <libKitsunemimiCommon/common_methods/string_methods.h>
 
 namespace argParser = boost::program_options;
 
@@ -44,12 +45,17 @@ int main(int argc, char *argv[])
         (
             "seed-path",
             argParser::value<std::string>(),
-            "set the path to the initial seed-file"
+            "set the path to the initial seed-file or the directory with the files"
         )
         (
             "seed-name",
             argParser::value<std::string>(),
-            "set the path to the initial seed-file"
+            "set name initial seed-file"
+        )
+        (
+            "input,i",
+            argParser::value<std::vector<std::string>>()->multitoken()->zero_tokens()->composing(),
+            "set initial values"
         )
         (
             "server-address",
@@ -59,7 +65,7 @@ int main(int argc, char *argv[])
         (
             "server-port",
             argParser::value<int>(),
-            "address of the server"
+            "port of the server"
         )
     ;
 
@@ -75,16 +81,42 @@ int main(int argc, char *argv[])
     }
 
     // seed-path-arg
-    if(vm.count("seed-path") && vm.count("seed-name"))
+    if(vm.count("seed-path"))
     {
         std::cout << "seed-path: "
                   << vm["seed-path"].as<std::string>()
                   << std::endl;
         SakuraTree::SakuraRoot* root = new SakuraTree::SakuraRoot(std::string(argv[0]));
-        const std::string seedPath = vm["seed-path"].as<std::string>();
-        const std::string seedName = vm["seed-name"].as<std::string>();
 
-        root->startProcess(seedPath, seedName);
+        // seed-path
+        const std::string seedPath = vm["seed-path"].as<std::string>();
+
+        // seed-name
+        std::string seedName = "";
+        if(vm.count("seed-name")) {
+            seedName = vm["seed-name"].as<std::string>();
+        }
+
+        // input-values
+        DataMap initialValues;
+        if(vm.count("input"))
+        {
+            std::vector<std::string> envs = vm["input"].as<std::vector<std::string>>();
+            for(uint32_t i = 0; i < envs.size(); i++)
+            {
+                const std::vector<std::string> pair =
+                        Kitsunemimi::Common::splitStringByDelimiter(envs.at(i), '=');
+                if(pair.size() != 2)
+                {
+                    std::cout << "'"<<envs.at(i)<<"' is not a valid pair"<<std::endl;
+                    return 1;
+                }
+                initialValues.insert(pair.at(0), new DataValue(pair.at(1)));
+            }
+        }
+
+        // start
+        root->startProcess(seedPath, seedName, initialValues);
     }
     else if(vm.count("server-address") && vm.count("server-port"))
     {

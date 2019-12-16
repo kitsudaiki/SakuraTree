@@ -54,7 +54,8 @@ public:
     ~SakuraRoot();
 
     bool startProcess(const std::string &rootPath,
-                      std::string seedName="");
+                      std::string seedName,
+                      DataMap &initialValues);
     bool startSubtreeProcess(const std::string &subtree,
                              const std::string &values);
 
