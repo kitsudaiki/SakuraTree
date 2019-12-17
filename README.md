@@ -98,8 +98,6 @@ paket | version
 --- | ---
 g++ | 6.3.0
 qt5-qmake | 5.7.1
-libssl1.1 | 1.1.0k
-libssl-dev | 1.1.0k
 libboost-program-options-dev | 1.62
 libboost-filesystem-dev | 1.62
 libsqlite3-dev | 3.16.2
