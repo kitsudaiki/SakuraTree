@@ -18,10 +18,6 @@ Primary goals are:
 
 If you are interested in this project, then keep an eye on it or feel free to help me.
 
-### Current state
-
-It still at the beginning and there is much to do, so its not very stable and useful now. At the moment only the very basic structure exist. I wanted to bring it open-source as fast as possible, but for this I want to make sure that the core-functions works and is very flexible for the next updates. This results in some quick-and-dirty parts in the source code, which will be fixed in the next days.
-
 ### Why I created my own tool
 
 My main-project (still private) consist of multiple components and is hard to test and debug without an automized deploy process. At work I had already to do with the tools Ansible and Chef, but I don't like any of them. They use, with Yaml in Ansible and Ruby in Chef, way too much generic languages, which makes it, at least for me, sometimes hard to understand. Beside this, the debugging is sooo horrible slow and I miss some basic features in both of them.
@@ -32,7 +28,7 @@ So I decided to create my own tool to try to make it better. Maybe there already
 
 I used Ansible and Chef as inspration for my naming. In Ansible there are roles and playbooks and in Chef are cookbooks and recipes. Because I like tree-structures and see the different tasks and threads while deploying in this structure too, I used the tree as name-base. Especially I love trees with cherry blossoms, like I saw in japan. `sakura` is the japanese name for cherry blossom and cherry tree is in japanese `sakura no ki`, but this as name is too generic. So I elected `SakuraTree` as name. This basically says the same, but is more unique and fits better as name. Additionally I'm used to create my tool names from a japanse name I like, together with a english word, which is related to the function of the tool and in this case here, the translation of sakura match perfectly too.
 
-Based on this, the components in my tool are named `seed`, `tree`, `branch` and `blossom`. 
+Based on this, the components in my tool are named `seed`, `tree` and `blossom`. 
 
 
 ### Feature Overview (most of them are not implemented so far)
@@ -41,7 +37,7 @@ Based on this, the components in my tool are named `seed`, `tree`, `branch` and 
 
     **current state: basic version implemented, but some features are missing**
 
-    Chef contains the full power of ruby. That brings many functionallity, but makes it hard to write and to understand. Ansible is more easy with its Yaml-files, but this makes things like loops and if-conditions really broken, in my opinion. So I wanted to create my own description language, which is designed for automation. See example for the current state below. Based the cherry trees the structure is: `seeds` create `trees`, `trees` own subtrees and `branches` and `branches` own `blossoms`.
+    Chef contains the full power of ruby. That brings many functionallity, but makes it hard to write and to understand. Ansible is more easy with its Yaml-files, but this makes things like loops and if-conditions really broken, in my opinion. So I wanted to create my own description language, which is designed for automation. See example for the current state below. Based the cherry trees the structure is: `seeds` create `trees` and `trees` own `blossoms`.
 
 - **easily multi-threading** 
 
