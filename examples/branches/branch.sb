@@ -106,3 +106,6 @@ else
     -> present:
        - names = packages
 }
+
+exit("kill current run")
+- status = 42
