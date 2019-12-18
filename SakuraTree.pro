@@ -109,7 +109,8 @@ SOURCES += \
     src/processing/blossoms/files/ini_files/ini_delete_entry_blossom.cpp \
     src/processing/thread_pool.cpp \
     src/processing/subtree_queue.cpp \
-    src/converter.cpp
+    src/converter.cpp \
+    src/processing/blossoms/special/exit_blossom.cpp
 
 
 HEADERS += \
@@ -173,6 +174,7 @@ HEADERS += \
     src/processing/blossoms/files/ini_files/ini_delete_entry_blossom.h \
     src/processing/thread_pool.h \
     src/processing/subtree_queue.h \
-    src/converter.h
+    src/converter.h \
+    src/processing/blossoms/special/exit_blossom.h
 
 
