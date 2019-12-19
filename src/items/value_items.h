@@ -75,6 +75,8 @@ struct ValueItem
         }
         if(other.item != nullptr) {
             item = other.item->copy();
+        } else {
+            item = nullptr;
         }
         type = other.type;
         isIdentifier = other.isIdentifier;
@@ -95,6 +97,8 @@ struct ValueItem
             }
             if(other.item != nullptr) {
                 this->item = other.item->copy();
+            } else {
+                this->item = nullptr;
             }
             this->type = other.type;
             this->isIdentifier = other.isIdentifier;

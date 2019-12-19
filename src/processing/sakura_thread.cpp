@@ -157,7 +157,11 @@ SakuraThread::grow(SakuraItem* subtree)
 bool
 SakuraThread::processBlossom(BlossomItem &subtree)
 {
-    fillInputValueItemMap(subtree.values, m_parentValues);
+    const bool result = fillInputValueItemMap(subtree.values, m_parentValues);
+    if(result == false) {
+        return false;
+    }
+
     Blossom* blossom = getBlossom(subtree.blossomGroupType,
                                   subtree.blossomType);
     subtree.parentValues = &m_parentValues;
@@ -229,11 +233,15 @@ SakuraThread::processIf(IfBranching* subtree)
     bool ifMatch = false;
     ValueItem valueItem;
 
-    const ValueItem valueItemLeft = fillValueItem(subtree->leftSide, m_parentValues);
-    const std::string  leftSide = valueItemLeft.item->toValue()->toString();
+    if(fillValueItem(subtree->leftSide, m_parentValues) == false) {
+        return false;
+    }
+    const std::string  leftSide = subtree->leftSide.item->toValue()->toString();
 
-    const ValueItem valueItemRight = fillValueItem(subtree->rightSide, m_parentValues);
-    const std::string  rightSide = valueItemRight.item->toValue()->toString();
+    if(fillValueItem(subtree->rightSide, m_parentValues) == false) {
+        return false;
+    }
+    const std::string  rightSide = subtree->rightSide.item->toValue()->toString();
 
     switch(subtree->ifType)
     {
@@ -327,11 +335,15 @@ bool
 SakuraThread::processFor(ForBranching* subtree,
                          bool parallel)
 {
-    const ValueItem valueItemStart = fillValueItem(subtree->start, m_parentValues);
-    const long startValue = valueItemStart.item->toValue()->getLong();
+    if(fillValueItem(subtree->start, m_parentValues) == false) {
+        return false;
+    }
+    const long startValue = subtree->start.item->toValue()->getLong();
 
-    const ValueItem valueItemEnd = fillValueItem(subtree->end, m_parentValues);
-    const long endValue = valueItemEnd.item->toValue()->getLong();
+    if(fillValueItem(subtree->end, m_parentValues) == false) {
+        return false;
+    }
+    const long endValue = subtree->end.item->toValue()->getLong();
 
     DataMap preBalueBackup = m_parentValues;
     overrideItems(m_parentValues, subtree->values, false);

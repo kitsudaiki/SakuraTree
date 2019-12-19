@@ -63,9 +63,9 @@ ItemMethods_Test::fillItems_test()
     DataMap insertValues;
     insertValues.insert("test", new DataValue("hmmm"));
 
-    const Result result = fillInputValueItemMap(items, insertValues);
+    const bool result = fillInputValueItemMap(items, insertValues);
 
-    TEST_EQUAL(result.success, true);
+    TEST_EQUAL(result, true);
     TEST_EQUAL(items.get("x")->toString(), "hmmm");
 }
 
