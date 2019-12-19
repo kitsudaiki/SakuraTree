@@ -36,7 +36,6 @@ class SakuraParsing;
 
 namespace SakuraTree
 {
-class FileCollector;
 class SakuraItem;
 class BlossomItem;
 
@@ -46,10 +45,10 @@ public:
     Converter();
     ~Converter();
 
-    SakuraItem* compile(const JsonItem &tree);
+    SakuraItem* convert(const JsonItem &tree);
 
 private:
-    SakuraItem* convert(const JsonItem &growPlan);
+    SakuraItem* convertPart(const JsonItem &growPlan);
 
     void overrideItems(JsonItem &original,
                        const JsonItem &override);

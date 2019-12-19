@@ -33,77 +33,89 @@ using Kitsunemimi::Jinja2::Jinja2Converter;
 namespace SakuraTree
 {
 
-const ValueItem
+bool
 getProcessedItem(ValueItem &original,
                  DataMap &insertValues)
 {
-    ValueItem result;
-    result = original;
-
-    for(uint32_t i = 0; i < result.functions.size(); i++)
+    for(uint32_t i = 0; i < original.functions.size(); i++)
     {
-        if(result.item == nullptr) {
-            return result;
+        if(original.item == nullptr) {
+            return false;
         }
 
-        switch(result.functions.at(i).type)
+        switch(original.functions.at(i).type)
         {
         case FunctionItem::GET_FUNCTION:
         {
-            if(result.functions.at(i).arguments.size() != 1) {
-                return result;
+            if(original.functions.at(i).arguments.size() != 1) {
+                return false;
             }
-            const ValueItem arg = fillValueItem(result.functions.at(i).arguments.at(0), insertValues);
-            result.item = getValue(result.item, arg.item->toValue());
+            ValueItem arg = original.functions.at(i).arguments.at(0);
+            if(fillValueItem(arg, insertValues)) {
+                original.item = getValue(original.item, arg.item->toValue());
+            }
             break;
         }
         case FunctionItem::SPLIT_FUNCTION:
         {
-            if(result.functions.at(i).arguments.size() != 1) {
-                return result;
+            if(original.functions.at(i).arguments.size() != 1) {
+                return false;
             }
-            const ValueItem arg = fillValueItem(result.functions.at(i).arguments.at(0), insertValues);
-            result.item = splitValue(result.item, arg.item->toValue());
+            ValueItem arg = original.functions.at(i).arguments.at(0);
+            if(fillValueItem(arg, insertValues)) {
+                original.item = splitValue(original.item, arg.item->toValue());
+            }
             break;
         }
         case FunctionItem::CONTAINS_FUNCTION:
         {
-            if(result.functions.at(i).arguments.size() != 1) {
-                return result;
+            if(original.functions.at(i).arguments.size() != 1) {
+                return false;
             }
-            const ValueItem arg = fillValueItem(result.functions.at(i).arguments.at(0), insertValues);
-            result.item = containsValue(result.item, arg.item->toValue());
+            ValueItem arg = original.functions.at(i).arguments.at(0);
+            if(fillValueItem(arg, insertValues)) {
+                original.item = containsValue(original.item, arg.item->toValue());
+            }
             break;
         }
         case FunctionItem::SIZE_FUNCTION:
         {
-            result.item = sizeValue(result.item);
+            original.item = sizeValue(original.item);
             break;
         }
         case FunctionItem::INSERT_FUNCTION:
         {
-            if(result.functions.at(i).arguments.size() != 2) {
-                return result;
+            if(original.functions.at(i).arguments.size() != 2) {
+                return false;
             }
-            const ValueItem arg1 = fillValueItem(result.functions.at(i).arguments.at(0), insertValues);
-            const ValueItem arg2 = fillValueItem(result.functions.at(i).arguments.at(1), insertValues);
-            result.item = insertValue(result.item, arg1.item->toValue(), arg2.item->toValue());
+            ValueItem arg1 = original.functions.at(i).arguments.at(0);
+            ValueItem arg2 = original.functions.at(i).arguments.at(0);
+            if(fillValueItem(arg1, insertValues)
+                    && fillValueItem(arg2, insertValues))
+            {
+                original.item = insertValue(original.item,
+                                            arg1.item->toValue(),
+                                            arg2.item->toValue());
+            }
             break;
         }
         case FunctionItem::APPEND_FUNCTION:
         {
-            if(result.functions.at(i).arguments.size() != 1) {
-                return result;
+            if(original.functions.at(i).arguments.size() != 1) {
+                return false;
             }
-            const ValueItem arg = fillValueItem(result.functions.at(i).arguments.at(0), insertValues);
-            result.item = appendValue(result.item, arg.item->toValue());
+            ValueItem arg = original.functions.at(i).arguments.at(0);
+            if(fillValueItem(arg, insertValues)) {
+                original.item = appendValue(original.item, arg.item->toValue());
+            }
             break;
         }
         default:
             break;
         }
     }
-    return result;
+
+    return true;
 }
 
 /**
@@ -113,23 +125,23 @@ getProcessedItem(ValueItem &original,
  * @param input
  * @return
  */
-const ValueItem
+bool
 fillIdentifierItem(ValueItem &original,
                    DataMap &insertValues)
 {
-    ValueItem result;
-
     // replace identifier with value from the insert-values
     DataItem* tempItem = insertValues.get(original.item->toString());
     if(tempItem == nullptr) {
-        return result;
+        return false;
     }
-    result.item = tempItem->copy();
-    result.functions = original.functions;
 
-    result = getProcessedItem(result, insertValues);
+    delete original.item;
+    original.item = tempItem->copy();
+    original.functions = original.functions;
 
-    return result;
+    getProcessedItem(original, insertValues);
+
+    return true;
 }
 
 /**
@@ -138,34 +150,24 @@ fillIdentifierItem(ValueItem &original,
  * @param insertValues
  * @return
  */
-const ValueItem
-fillJinja2Template(const std::string baseString,
-                   const DataMap &insertValues)
+bool
+fillJinja2Template(ValueItem &original,
+                   DataMap &insertValues)
 {
-    // prepare map for jinja2-convert
-    DataMap possibleValues;
-    std::map<std::string, DataItem*>::const_iterator insertIt;
-    for(insertIt = insertValues.m_map.begin();
-        insertIt != insertValues.m_map.end();
-        insertIt++)
-    {
-        if(insertIt->second->isValue()) {
-            possibleValues.insert(insertIt->first, insertIt->second->copy());
-        }
-    }
-
     // convert jinja2-string
     Jinja2Converter* converter = SakuraRoot::m_jinja2Converter;
     std::pair<bool, std::string> convertResult;
-    convertResult = converter->convert(baseString, &possibleValues);
-
+    convertResult = converter->convert(original.item->toString(), &insertValues);
 
     ValueItem returnValue;
-    if(convertResult.first) {
-        returnValue.item = new DataValue(convertResult.second);
+    if(convertResult.first == false) {
+        return false;
     }
 
-    return returnValue;
+    delete original.item;
+    original.item = new DataValue(convertResult.second);
+
+    return true;
 }
 
 /**
@@ -175,23 +177,23 @@ fillJinja2Template(const std::string baseString,
  * @param input
  * @return
  */
-const ValueItem
+bool
 fillValueItem(ValueItem &original,
               DataMap &insertValues)
 {
     if(original.isIdentifier == false
-            && original.type == ValueItem::INPUT_PAIR_TYPE
+            && original.type != ValueItem::OUTPUT_PAIR_TYPE
             && original.item->isStringValue())
     {
-        return fillJinja2Template(original.item->toString(), insertValues);
+        return fillJinja2Template(original, insertValues);
     }
     else if(original.isIdentifier
-            && original.type == ValueItem::INPUT_PAIR_TYPE)
+            && original.type != ValueItem::OUTPUT_PAIR_TYPE)
     {
         return fillIdentifierItem(original, insertValues);
     }
 
-    return original;
+    return true;
 }
 
 /**
@@ -200,7 +202,7 @@ fillValueItem(ValueItem &original,
  * @param insertValues
  * @return
  */
-const Result
+bool
 fillInputValueItemMap(ValueItemMap &items,
                       DataMap &insertValues)
 {
@@ -211,17 +213,12 @@ fillInputValueItemMap(ValueItemMap &items,
         it != items.valueMap.end();
         it++)
     {
-        it->second = fillValueItem(it->second, insertValues);
-        if(it->second.item == nullptr)
-        {
-            result.success = false;
-            return result;
+        if(fillValueItem(it->second, insertValues) == false) {
+            return false;
         }
     }
 
-    result.success = true;
-
-    return result;
+    return true;
 }
 
 
@@ -231,12 +228,10 @@ fillInputValueItemMap(ValueItemMap &items,
  * @param output
  * @return
  */
-const Result
+bool
 fillOutputValueItemMap(ValueItemMap &items,
                        DataItem *output)
 {
-    Result result;
-
     std::map<std::string, ValueItem>::iterator it;
     for(it = items.valueMap.begin();
         it != items.valueMap.end();
@@ -251,9 +246,7 @@ fillOutputValueItemMap(ValueItemMap &items,
         }
     }
 
-    result.success = true;
-
-    return result;
+    return true;
 }
 
 /**
@@ -296,9 +289,10 @@ void overrideItems(DataMap &original,
 /**
  * @brief overrideItems
  */
-void overrideItems(DataMap &original,
-                   const ValueItemMap &override,
-                   bool onlyExisting)
+void
+overrideItems(DataMap &original,
+              const ValueItemMap &override,
+              bool onlyExisting)
 {
     if(onlyExisting)
     {

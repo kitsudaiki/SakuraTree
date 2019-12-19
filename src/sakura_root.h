@@ -50,6 +50,12 @@ class SakuraRoot
 {
 
 public:
+    struct ErrorOutput
+    {
+        std::string errorMessage = "";
+        ErrorOutput() {}
+    };
+
     SakuraRoot(const std::string &executablePath);
     ~SakuraRoot();
 
@@ -71,6 +77,7 @@ public:
     static SakuraTree::SakuraRoot* m_root;
     static std::string m_executablePath;
     static Jinja2Converter* m_jinja2Converter;
+    static ErrorOutput m_errorOutput;
 
 private:
     Kitsunemimi::Sakura::SakuraHostHandler* m_controller = nullptr;
