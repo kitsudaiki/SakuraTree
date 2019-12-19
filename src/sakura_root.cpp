@@ -29,7 +29,7 @@
 #include <processing/thread_pool.h>
 
 // #include <libKitsunemimiSakuraNetwork/sakura_host_handler.h>
-#include <libKitsunemimiSakuraParser/file_collector.h>
+#include <libKitsunemimiSakuraParser/sakura_parsing.h>
 
 #include <libKitsunemimiJson/json_item.h>
 #include <libKitsunemimiJinja2/jinja2_converter.h>
@@ -39,6 +39,7 @@ namespace SakuraTree
 
 SakuraRoot* SakuraRoot::m_root = nullptr;
 std::string SakuraRoot::m_executablePath = "";
+SakuraRoot::ErrorOutput SakuraRoot::m_errorOutput;
 Jinja2Converter* SakuraRoot::m_jinja2Converter = nullptr;
 
 /**
@@ -84,12 +85,18 @@ SakuraRoot::startProcess(const std::string &rootPath,
     // m_controller->createServer(1337);
 
     // parsing
-    FileCollector fileCollector;
-    Converter compiler;
-    JsonItem tree = fileCollector.parseFiles(rootPath, seedName, DEBUG);
-    SakuraItem* processPlan = compiler.compile(tree);
+    SakuraParsing sakuraParsing(DEBUG);
+    bool parserResult = sakuraParsing.parseFiles(rootPath);
+    if(parserResult == false)
+    {
+        std::cout<<sakuraParsing.getError().toString()<<std::endl;
+        return false;
+    }
 
-    assert(processPlan != nullptr);
+    // converting
+    JsonItem tree = sakuraParsing.getParsedFileContent(seedName);
+    Converter converter;
+    SakuraItem* processPlan = converter.convert(tree);
 
     // run process
     SubtreeQueue::SubtreeObject object;
@@ -123,8 +130,8 @@ SakuraRoot::startSubtreeProcess(const std::string &subtree,
     JsonItem completePlan;
     completePlan.parse(subtree);
 
-    Converter compiler;
-    SakuraItem* processPlan = compiler.compile(completePlan);
+    Converter converter;
+    SakuraItem* processPlan = converter.convert(completePlan);
 
     assert(processPlan != nullptr);
 

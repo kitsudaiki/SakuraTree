@@ -23,7 +23,7 @@
 #include "converter.h"
 
 #include <libKitsunemimiSakuraParser/sakura_parsing.h>
-#include <libKitsunemimiSakuraParser/file_collector.h>
+#include <libKitsunemimiSakuraParser/sakura_parsing.h>
 
 #include <libKitsunemimiJson/json_item.h>
 
@@ -54,7 +54,7 @@ Converter::~Converter() {}
  * @return
  */
 SakuraItem*
-Converter::compile(const JsonItem &tree)
+Converter::convert(const JsonItem &tree)
 {
     // debug-output
     if(DEBUG)
@@ -65,7 +65,7 @@ Converter::compile(const JsonItem &tree)
         std::cout<<"-----------------------------------------------------"<<std::endl;
     }
 
-    SakuraItem* result = convert(tree);
+    SakuraItem* result = convertPart(tree);
 
     return result;
 }
@@ -79,8 +79,8 @@ Converter::compile(const JsonItem &tree)
  */
 bool
 Converter::convertItemPart(ValueItem &resultingPart,
-                                JsonItem itemInput,
-                                const std::string pairType)
+                           JsonItem itemInput,
+                           const std::string pairType)
 {
     if(itemInput.isMap())
     {
@@ -108,7 +108,7 @@ Converter::convertItemPart(ValueItem &resultingPart,
     }
 
     // check if current value is value or identifier
-    if(itemInput.get("type").toString() == "identifier") {
+    if(itemInput.get("b_type").toString() == "identifier") {
         resultingPart.isIdentifier = true;
     }
 
@@ -119,22 +119,22 @@ Converter::convertItemPart(ValueItem &resultingPart,
         FunctionItem functionItem;
 
         // get function-type
-        if(functions.get(f).get("m_type").toString() == "get") {
+        if(functions.get(f).get("b_type").toString() == "get") {
             functionItem.type = FunctionItem::GET_FUNCTION;
         }
-        if(functions.get(f).get("m_type").toString() == "split") {
+        if(functions.get(f).get("b_type").toString() == "split") {
             functionItem.type = FunctionItem::SPLIT_FUNCTION;
         }
-        if(functions.get(f).get("m_type").toString() == "contains") {
+        if(functions.get(f).get("b_type").toString() == "contains") {
             functionItem.type = FunctionItem::CONTAINS_FUNCTION;
         }
-        if(functions.get(f).get("m_type").toString() == "size") {
+        if(functions.get(f).get("b_type").toString() == "size") {
             functionItem.type = FunctionItem::SIZE_FUNCTION;
         }
-        if(functions.get(f).get("m_type").toString() == "insert") {
+        if(functions.get(f).get("b_type").toString() == "insert") {
             functionItem.type = FunctionItem::INSERT_FUNCTION;
         }
-        if(functions.get(f).get("m_type").toString() == "append") {
+        if(functions.get(f).get("b_type").toString() == "append") {
             functionItem.type = FunctionItem::APPEND_FUNCTION;
         }
 
@@ -160,7 +160,7 @@ Converter::convertItemPart(ValueItem &resultingPart,
  */
 void
 Converter::overrideItems(JsonItem &original,
-                              const JsonItem &override)
+                         const JsonItem &override)
 {
     DataMap* overrideMap = override.getItemContent()->toMap();
     std::map<std::string, DataItem*>::const_iterator it;
@@ -181,7 +181,7 @@ Converter::overrideItems(JsonItem &original,
  */
 void
 Converter::overrideItems(ValueItemMap &original,
-                              const ValueItemMap &override)
+                         const ValueItemMap &override)
 {
     std::map<std::string, ValueItem>::const_iterator it;
     for(it = override.valueMap.begin();
@@ -203,12 +203,12 @@ Converter::overrideItems(ValueItemMap &original,
  */
 void
 Converter::convertValues(SakuraItem* obj,
-                              const JsonItem &values)
+                         const JsonItem &values)
 {
     for(uint32_t i = 0; i < values.size(); i++)
     {
         const std::string key = values.get(i).get("key").toString();
-        const std::string pairType = values.get(i).get("type").toString();
+        const std::string pairType = values.get(i).get("b_type").toString();
         const JsonItem value = values.get(i).get("value");
 
         ValueItem itemValue;
@@ -224,7 +224,7 @@ Converter::convertValues(SakuraItem* obj,
  * @return pointer of the current converted part
  */
 SakuraItem*
-Converter::convert(const JsonItem &subtree)
+Converter::convertPart(const JsonItem &subtree)
 {
     const std::string typeName = subtree.get("b_type").toString();
 
@@ -330,7 +330,7 @@ Converter::convertSubtree(const JsonItem &subtree)
 {
     // init new branch-item
     SubtreeItem* branchItem = new SubtreeItem();
-    branchItem->id = subtree.get("id").toString();
+    branchItem->id = subtree.get("b_id").toString();
 
     // fill values with the input of the upper level and convert the result
     JsonItem items = subtree.get("items");
@@ -346,7 +346,7 @@ Converter::convertSubtree(const JsonItem &subtree)
     {
         JsonItem newMap = parts.get(i);
         newMap.insert("b_path", subtree.get("b_path"));
-        branchItem->childs.push_back(convert(newMap));
+        branchItem->childs.push_back(convertPart(newMap));
     }
 
     return branchItem;
@@ -363,7 +363,7 @@ Converter::convertSeed(const JsonItem &subtree)
 {
     // init new seed-item
     SeedItem* seedItem = new SeedItem();
-    seedItem->name = subtree.get("id").toString();
+    seedItem->name = subtree.get("b_id").toString();
 
     // generate new branch-item based on the information
     const JsonItem connectionInfos = subtree.get("connection");
@@ -427,7 +427,7 @@ Converter::convertIf(const JsonItem &subtree)
     {
         JsonItem newMap = if_parts.get(i);
         newMap.insert("b_path", subtree.get("b_path"));
-        sequentiellContentIf->childs.push_back(convert(newMap));
+        sequentiellContentIf->childs.push_back(convertPart(newMap));
     }
     newItem->ifContent = sequentiellContentIf;
 
@@ -439,7 +439,7 @@ Converter::convertIf(const JsonItem &subtree)
     {
         JsonItem newMap = else_parts.get(i);
         newMap.insert("b_path", subtree.get("b_path"));
-        sequentiellContentElse->childs.push_back(convert(newMap));
+        sequentiellContentElse->childs.push_back(convertPart(newMap));
     }
     newItem->elseContent = sequentiellContentElse;
 
@@ -454,7 +454,7 @@ Converter::convertIf(const JsonItem &subtree)
  */
 SakuraItem*
 Converter::convertForEach(const JsonItem &subtree,
-                               bool parallel)
+                          bool parallel)
 {
     // init new for-each-item
     ForEachBranching* newItem = new ForEachBranching(parallel);
@@ -466,16 +466,16 @@ Converter::convertForEach(const JsonItem &subtree,
     newItem->iterateArray.insert("array", itemValue);
     convertValues(newItem, subtree.get("items"));
 
-    // convert content of the for-loop
-    const JsonItem content = subtree.get("content");
-    assert(content.isValid());
+    // convert parts of the for-loop
+    const JsonItem parts = subtree.get("parts");
+    assert(parts.isValid());
 
     Sequentiell* sequentiellContent = new Sequentiell();
-    for(uint32_t i = 0; i < content.size(); i++)
+    for(uint32_t i = 0; i < parts.size(); i++)
     {
-        JsonItem newMap = content.get(i);
+        JsonItem newMap = parts.get(i);
         newMap.insert("b_path", subtree.get("b_path"));
-        sequentiellContent->childs.push_back(convert(newMap));
+        sequentiellContent->childs.push_back(convertPart(newMap));
     }
     newItem->content = sequentiellContent;
 
@@ -502,16 +502,16 @@ Converter::convertFor(const JsonItem &subtree,
     convertValues(newItem, subtree.get("items"));
 
 
-    // convert content of the for-loop
-    const JsonItem content = subtree.get("content");
-    assert(content.isValid());
+    // convert parts of the for-loop
+    const JsonItem parts = subtree.get("parts");
+    assert(parts.isValid());
 
     Sequentiell* sequentiellContent = new Sequentiell();
-    for(uint32_t i = 0; i < content.size(); i++)
+    for(uint32_t i = 0; i < parts.size(); i++)
     {
-        JsonItem newMap = content.get(i);
+        JsonItem newMap = parts.get(i);
         newMap.insert("b_path", subtree.get("b_path"));
-        sequentiellContent->childs.push_back(convert(newMap));
+        sequentiellContent->childs.push_back(convertPart(newMap));
     }
     newItem->content = sequentiellContent;
 
@@ -531,11 +531,11 @@ Converter::convertParallel(const JsonItem &subtree)
     Parallel* newItem = new Parallel();
 
     // convert parts of the tree
-    const JsonItem parts = subtree.get("content");
+    const JsonItem parts = subtree.get("parts");
     assert(parts.isValid());
     for(uint32_t i = 0; i < parts.size(); i++)
     {
-        newItem->childs.push_back(convert(parts.get(i)));
+        newItem->childs.push_back(convertPart(parts.get(i)));
     }
 
     return newItem;
