@@ -52,8 +52,6 @@ private:
 
     void overrideItems(JsonItem &original,
                        const JsonItem &override);
-    void overrideItems(ValueItemMap &original,
-                       const ValueItemMap &override);
 
     bool convertItemPart(ValueItem &resultingPart,
                          JsonItem itemInput,

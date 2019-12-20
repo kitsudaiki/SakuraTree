@@ -26,7 +26,7 @@
 #include <sakura_root.h>
 #include <processing/blossoms/blossom.h>
 #include <libKitsunemimiJinja2/jinja2_converter.h>
-#include <items/value_item_functions.h>
+#include <processing/common/functions.h>
 
 using Kitsunemimi::Jinja2::Jinja2Converter;
 

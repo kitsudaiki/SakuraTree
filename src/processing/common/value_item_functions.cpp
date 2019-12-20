@@ -20,7 +20,7 @@
  *      limitations under the License.
  */
 
-#include <items/value_item_functions.h>
+#include <processing/common/functions.h>
 #include <libKitsunemimiCommon/common_methods/string_methods.h>
 
 using Kitsunemimi::Common::splitStringByDelimiter;
@@ -31,7 +31,9 @@ using Kitsunemimi::Common::splitStringByDelimiter;
  * @param value
  * @return
  */
-DataItem* getValue(DataItem* original, DataValue* value)
+DataItem*
+getValue(DataItem* original,
+         DataValue* value)
 {
     if(original == nullptr) {
         return nullptr;
@@ -64,8 +66,9 @@ DataItem* getValue(DataItem* original, DataValue* value)
  * @param delimiter
  * @return
  */
-DataItem* splitValue(DataItem* original,
-                     DataValue* delimiter)
+DataItem*
+splitValue(DataItem* original,
+           DataValue* delimiter)
 {
     if(original == nullptr
             || original->isValue() == false)
@@ -100,7 +103,8 @@ DataItem* splitValue(DataItem* original,
  * @param original
  * @return
  */
-DataItem* sizeValue(DataItem* original)
+DataItem*
+sizeValue(DataItem* original)
 {
     if(original == nullptr) {
         return nullptr;
@@ -118,7 +122,9 @@ DataItem* sizeValue(DataItem* original)
  * @param value
  * @return
  */
-DataItem* containsValue(DataItem* original, DataValue* key)
+DataItem*
+containsValue(DataItem* original,
+              DataValue* key)
 {
     if(original == nullptr) {
         return nullptr;
@@ -161,7 +167,9 @@ DataItem* containsValue(DataItem* original, DataValue* key)
  * @param value
  * @return
  */
-DataItem* appendValue(DataItem* original, DataValue* value)
+DataItem*
+appendValue(DataItem* original,
+            DataValue* value)
 {
     if(original == nullptr
             || original->isArray() == false)
@@ -181,7 +189,10 @@ DataItem* appendValue(DataItem* original, DataValue* value)
  * @param value
  * @return
  */
-DataItem* insertValue(DataItem* original, DataValue* key, DataValue* value)
+DataItem*
+insertValue(DataItem* original,
+            DataValue* key,
+            DataValue* value)
 {
     if(original == nullptr
             || original->isMap() == false)

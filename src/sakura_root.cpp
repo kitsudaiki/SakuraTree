@@ -21,9 +21,9 @@
  */
 
 #include "sakura_root.h"
-#include <converter.h>
+#include <converter/converter.h>
 
-#include <items/item_methods.h>
+#include <processing/common/item_methods.h>
 #include <processing/sakura_thread.h>
 #include <processing/sakura_tree_callbacks.h>
 #include <processing/thread_pool.h>

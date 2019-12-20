@@ -29,7 +29,7 @@
 
 #include <sakura_root.h>
 #include <items/sakura_items.h>
-#include <items/item_methods.h>
+#include <processing/common/item_methods.h>
 
 #include <branch_builder/provision_branch_builder.h>
 
@@ -173,28 +173,6 @@ Converter::overrideItems(JsonItem &original,
                         true);
     }
 }
-
-/**
- * @brief merge two item-maps
- * @param original original item-map
- * @param override additional item-map for merging into the original one
- */
-void
-Converter::overrideItems(ValueItemMap &original,
-                         const ValueItemMap &override)
-{
-    std::map<std::string, ValueItem>::const_iterator it;
-    for(it = override.valueMap.begin();
-        it != override.valueMap.end();
-        it++)
-    {
-        ValueItem item = it->second;
-        original.insert(it->first,
-                        item,
-                        true);
-    }
-}
-
 
 /**
  * @brief SakuraCompiler::convertValues

@@ -24,7 +24,7 @@
 #define VALUE_ITEMS_H
 
 #include <common.h>
-#include <items/value_item_functions.h>
+#include <processing/common/functions.h>
 
 //===================================================================
 // FunctionItem
