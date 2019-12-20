@@ -29,7 +29,11 @@ namespace SakuraTree
 using Kitsunemimi::Common::splitStringByDelimiter;
 
 FileCopyBlossom::FileCopyBlossom()
-    : Blossom() {}
+    : Blossom()
+{
+    m_requiredKeys.insert("source_path", new DataValue(true));
+    m_requiredKeys.insert("dest_path", new DataValue(true));
+}
 
 /**
  * @brief initTask
@@ -37,13 +41,6 @@ FileCopyBlossom::FileCopyBlossom()
 void
 FileCopyBlossom::initTask(BlossomItem &blossomItem)
 {
-    const std::vector<std::string> requiredKeys = {"source_path", "dest_path"};
-
-    checkForRequiredKeys(blossomItem, requiredKeys);
-    if(blossomItem.success == false) {
-        return;
-    }
-
     m_sourcePath = blossomItem.values.getValueAsString("source_path");
     m_destinationPath = blossomItem.values.getValueAsString("dest_path");
 

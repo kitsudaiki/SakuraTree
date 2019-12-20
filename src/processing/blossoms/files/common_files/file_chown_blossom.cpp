@@ -27,7 +27,11 @@ namespace SakuraTree
 {
 
 FileChownBlossom::FileChownBlossom()
-    : Blossom() {}
+    : Blossom()
+{
+    m_requiredKeys.insert("file_path", new DataValue(true));
+    m_requiredKeys.insert("owner", new DataValue(true));
+}
 
 /**
  * @brief initTask
@@ -35,13 +39,6 @@ FileChownBlossom::FileChownBlossom()
 void
 FileChownBlossom::initTask(BlossomItem &blossomItem)
 {
-    const std::vector<std::string> requiredKeys = {"file_path", "owner"};
-
-    checkForRequiredKeys(blossomItem, requiredKeys);
-    if(blossomItem.success == false) {
-        return;
-    }
-
     m_filePath = blossomItem.values.getValueAsString("file_path");
     m_owner = blossomItem.values.getValueAsString("owner");
 

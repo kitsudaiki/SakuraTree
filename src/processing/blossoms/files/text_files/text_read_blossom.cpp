@@ -28,7 +28,10 @@ namespace SakuraTree
 {
 
 TextReadBlossom::TextReadBlossom()
-    : Blossom() {}
+    : Blossom()
+{
+    m_requiredKeys.insert("file_path", new DataValue(true));
+}
 
 /**
  * @brief initTask
@@ -36,13 +39,6 @@ TextReadBlossom::TextReadBlossom()
 void
 TextReadBlossom::initTask(BlossomItem &blossomItem)
 {
-    const std::vector<std::string> requiredKeys = {"file_path"};
-
-    checkForRequiredKeys(blossomItem, requiredKeys);
-    if(blossomItem.success == false) {
-        return;
-    }
-
     m_filePath = blossomItem.values.getValueAsString("file_path");
     blossomItem.success = true;
 }

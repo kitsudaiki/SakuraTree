@@ -26,7 +26,14 @@ namespace SakuraTree
 {
 
 SshCmdBlossom::SshCmdBlossom()
-    : Blossom() {}
+    : Blossom()
+{
+    m_requiredKeys.insert("user", new DataValue(true));
+    m_requiredKeys.insert("address", new DataValue(true));
+    m_requiredKeys.insert("command", new DataValue(true));
+    m_requiredKeys.insert("port", new DataValue(false));
+    m_requiredKeys.insert("ssh_key", new DataValue(false));
+}
 
 /**
  * initTask
@@ -34,13 +41,6 @@ SshCmdBlossom::SshCmdBlossom()
 void
 SshCmdBlossom::initTask(BlossomItem &blossomItem)
 {
-    const std::vector<std::string> requiredKeys = {"user", "address", "command"};
-
-    checkForRequiredKeys(blossomItem, requiredKeys);
-    if(blossomItem.success == false) {
-        return;
-    }
-
     m_user = blossomItem.values.getValueAsString("user");
     m_address = blossomItem.values.getValueAsString("address");
     m_command = blossomItem.values.getValueAsString("command");

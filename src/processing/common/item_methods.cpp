@@ -331,8 +331,10 @@ checkItems(ValueItemMap &items)
 {
     std::vector<std::string> result;
 
-    std::map<std::string, ValueItem>::iterator it;
-    for(it = items.valueMap.begin(); it != items.valueMap.end(); it++)
+    std::map<std::string, ValueItem>::const_iterator it;
+    for(it = items.valueMap.begin();
+        it != items.valueMap.end();
+        it++)
     {
         if(it->second.item->getString() == "{{}}") {
             result.push_back(it->first);
@@ -348,30 +350,44 @@ checkItems(ValueItemMap &items)
  * @param requiredKeys
  * @return
  */
-void
+bool
 checkForRequiredKeys(BlossomItem &blossomItem,
-                     const std::vector<std::string> &requiredKeys)
+                     DataMap &requiredKeys)
 {
-    std::string result = "";
-    blossomItem.success = true;
-
-    for(uint32_t i = 0; i < requiredKeys.size(); i++)
+    if(requiredKeys.contains("*") == false)
     {
-        const bool found = blossomItem.values.contains(requiredKeys.at(i));
-        if(found == false)
+        std::map<std::string, ValueItem>::const_iterator it;
+        for(it = blossomItem.values.valueMap.begin();
+            it != blossomItem.values.valueMap.end();
+            it++)
         {
-            if(result.size() > 0) {
-                result += ", ";
+            if(requiredKeys.contains(it->first) == false)
+            {
+                // TODO: error-message
+                return false;
             }
-            result += requiredKeys.at(i);
         }
     }
 
-    if(result.size() > 0)
+    std::map<std::string, DataItem*>::const_iterator it;
+    for(it = requiredKeys.m_map.begin();
+        it != requiredKeys.m_map.end();
+        it++)
     {
-        blossomItem.success = false;
-        blossomItem.outputMessage = "following keys are not set: " + result;
+        if(it->first == "*") {
+            continue;
+        }
+        if(blossomItem.values.contains(it->first) == false
+                && it->second->toValue()->getBool() == true)
+        {
+            // TODO: error-message
+            return false;
+        }
     }
+
+
+
+    return true;
 }
 
 /**

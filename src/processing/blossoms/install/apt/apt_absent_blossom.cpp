@@ -27,7 +27,10 @@ namespace SakuraTree
 {
 
 AptAbsentBlossom::AptAbsentBlossom()
-    : Blossom() {}
+    : Blossom()
+{
+    m_requiredKeys.insert("packages", new DataValue(true));
+}
 
 /**
  * initTask
@@ -35,14 +38,7 @@ AptAbsentBlossom::AptAbsentBlossom()
 void
 AptAbsentBlossom::initTask(BlossomItem &blossomItem)
 {
-    const std::vector<std::string> requiredKeys = {"names"};
-
-    checkForRequiredKeys(blossomItem, requiredKeys);
-    if(blossomItem.success == false) {
-        return;
-    }
-
-    DataArray* names = blossomItem.values.get("names")->toArray();
+    DataArray* names = blossomItem.values.get("packages")->toArray();
     if(names != nullptr)
     {
         for(uint32_t i = 0; i < names->size(); i++)
@@ -52,7 +48,7 @@ AptAbsentBlossom::initTask(BlossomItem &blossomItem)
     }
     else
     {
-        m_packageNames.push_back(blossomItem.values.get("names")->toString());
+        m_packageNames.push_back(blossomItem.values.get("packages")->toString());
     }
 
     if(m_packageNames.size() == 0)

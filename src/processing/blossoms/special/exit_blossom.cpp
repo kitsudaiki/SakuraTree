@@ -26,7 +26,10 @@ namespace SakuraTree
 {
 
 ExitBlossom::ExitBlossom()
-    : Blossom() {}
+    : Blossom()
+{
+    m_requiredKeys.insert("status", new DataValue(false));
+}
 
 /**
  * initTask

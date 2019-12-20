@@ -28,7 +28,12 @@ namespace SakuraTree
 {
 
 SakuraCopySubtreeBlossom::SakuraCopySubtreeBlossom()
-    : Blossom() {}
+    : Blossom()
+{
+    m_requiredKeys.insert("subtree", new DataValue(true));
+    m_requiredKeys.insert("address", new DataValue(true));
+    m_requiredKeys.insert("values", new DataValue(true));
+}
 
 /**
  * initTask

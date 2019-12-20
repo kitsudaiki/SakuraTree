@@ -47,6 +47,8 @@ protected:
     virtual void runTask(BlossomItem &blossomItem) = 0;
     virtual void postCheck(BlossomItem &blossomItem) = 0;
     virtual void closeTask(BlossomItem &blossomItem) = 0;
+
+    DataMap m_requiredKeys;
 };
 
 }

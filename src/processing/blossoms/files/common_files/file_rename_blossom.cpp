@@ -30,7 +30,11 @@ namespace SakuraTree
 using Kitsunemimi::Common::splitStringByDelimiter;
 
 FileRenameBlossom::FileRenameBlossom()
-    : Blossom() {}
+    : Blossom()
+{
+    m_requiredKeys.insert("file_path", new DataValue(true));
+    m_requiredKeys.insert("new_name", new DataValue(true));
+}
 
 /**
  * @brief initTask
@@ -38,13 +42,6 @@ FileRenameBlossom::FileRenameBlossom()
 void
 FileRenameBlossom::initTask(BlossomItem &blossomItem)
 {
-    const std::vector<std::string> requiredKeys = {"file_path", "new_name"};
-
-    checkForRequiredKeys(blossomItem, requiredKeys);
-    if(blossomItem.success == false) {
-        return;
-    }
-
     m_filePath = blossomItem.values.getValueAsString("file_path");
     m_newFileName = blossomItem.values.getValueAsString("new_name");
 

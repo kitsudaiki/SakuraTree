@@ -45,7 +45,8 @@ bool fillValueItem(ValueItem &original, DataMap &insertValues);
 bool fillInputValueItemMap(ValueItemMap &items, DataMap &insertValues);
 bool fillOutputValueItemMap(ValueItemMap &items, DataItem* output);
 
-void checkForRequiredKeys(BlossomItem &blossomItem, const std::vector<std::string> &requiredKeys);
+bool checkForRequiredKeys(BlossomItem &blossomItem,
+                          const std::map<std::string, bool> &requiredKeys);
 void overrideItems(DataMap &original,
                    const DataMap &override,
                    bool onlyExisting=true);

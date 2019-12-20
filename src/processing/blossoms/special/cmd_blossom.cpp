@@ -26,7 +26,10 @@ namespace SakuraTree
 {
 
 CmdBlossom::CmdBlossom()
-    : Blossom() {}
+    : Blossom()
+{
+    m_requiredKeys.insert("command", new DataValue(true));
+}
 
 /**
  * initTask
@@ -34,13 +37,6 @@ CmdBlossom::CmdBlossom()
 void
 CmdBlossom::initTask(BlossomItem &blossomItem)
 {
-    const std::vector<std::string> requiredKeys = {"command"};
-
-    checkForRequiredKeys(blossomItem, requiredKeys);
-    if(blossomItem.success == false) {
-        return;
-    }
-
     m_command = blossomItem.values.getValueAsString("command");
 
     blossomItem.success = true;
