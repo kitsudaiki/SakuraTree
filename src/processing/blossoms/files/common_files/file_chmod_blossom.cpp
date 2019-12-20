@@ -26,8 +26,8 @@
 namespace SakuraTree
 {
 
-FileChmodBlossom::FileChmodBlossom() :
-    Blossom() {}
+FileChmodBlossom::FileChmodBlossom()
+    : Blossom() {}
 
 /**
  * @brief initTask

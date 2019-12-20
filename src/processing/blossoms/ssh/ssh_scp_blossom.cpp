@@ -27,9 +27,7 @@ namespace SakuraTree
 {
 
 SshScpBlossom::SshScpBlossom()
-{
-
-}
+    : Blossom() {}
 
 /**
  * initTask

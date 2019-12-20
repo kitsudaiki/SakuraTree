@@ -29,8 +29,8 @@
 namespace SakuraTree
 {
 
-TemplateCreateBlossom::TemplateCreateBlossom() :
-    Blossom() {}
+TemplateCreateBlossom::TemplateCreateBlossom()
+    : Blossom() {}
 
 /**
  * initTask

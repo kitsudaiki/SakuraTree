@@ -27,8 +27,8 @@
 namespace SakuraTree
 {
 
-AssertBlossom::AssertBlossom() :
-    Blossom() {}
+AssertBlossom::AssertBlossom()
+    : Blossom() {}
 
 /**
  * initTask

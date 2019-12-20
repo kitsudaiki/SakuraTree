@@ -28,7 +28,8 @@
 namespace SakuraTree
 {
 
-class SakuraCopySubtreeBlossom : public Blossom
+class SakuraCopySubtreeBlossom
+        : public Blossom
 {
 public:
     SakuraCopySubtreeBlossom();

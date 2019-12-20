@@ -29,7 +29,8 @@ namespace SakuraTree
 {
 class TextReplaceBlossom_Test;
 
-class TextReplaceBlossom : public Blossom
+class TextReplaceBlossom
+        : public Blossom
 {
 public:
     TextReplaceBlossom();

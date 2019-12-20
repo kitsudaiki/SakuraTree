@@ -27,8 +27,8 @@
 namespace SakuraTree
 {
 
-PrintBlossom::PrintBlossom() :
-    Blossom() {}
+PrintBlossom::PrintBlossom()
+    : Blossom() {}
 
 /**
  * initTask

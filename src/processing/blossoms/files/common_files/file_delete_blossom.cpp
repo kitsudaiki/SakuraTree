@@ -26,8 +26,8 @@
 namespace SakuraTree
 {
 
-FileDeleteBlossom::FileDeleteBlossom() :
-    Blossom() {}
+FileDeleteBlossom::FileDeleteBlossom()
+    : Blossom() {}
 
 /**
  * @brief initTask

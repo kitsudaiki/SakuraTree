@@ -26,9 +26,7 @@ namespace SakuraTree
 {
 
 SshCmdBlossom::SshCmdBlossom()
-{
-
-}
+    : Blossom() {}
 
 /**
  * initTask

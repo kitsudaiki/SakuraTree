@@ -28,7 +28,8 @@
 namespace SakuraTree
 {
 
-class IniDeleteEntryBlossom : public Blossom
+class IniDeleteEntryBlossom
+        : public Blossom
 {
 public:
     IniDeleteEntryBlossom();

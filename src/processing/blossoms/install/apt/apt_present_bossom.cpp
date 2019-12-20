@@ -30,8 +30,8 @@ namespace SakuraTree
  * @brief AptInstallBlossom::AptInstallBlossom
  * @param content
  */
-AptPresentBlossom::AptPresentBlossom() :
-    Blossom() {}
+AptPresentBlossom::AptPresentBlossom()
+    : Blossom() {}
 
 /**
  * @brief AptInstallBlossom::initTask

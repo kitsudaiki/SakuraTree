@@ -25,8 +25,8 @@
 namespace SakuraTree
 {
 
-CmdBlossom::CmdBlossom() :
-    Blossom() {}
+CmdBlossom::CmdBlossom()
+    : Blossom() {}
 
 /**
  * initTask

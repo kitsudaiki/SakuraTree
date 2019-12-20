@@ -29,7 +29,8 @@ namespace SakuraTree
 {
 class CmdBlossom_Test;
 
-class CmdBlossom : public Blossom
+class CmdBlossom
+        : public Blossom
 {
 
 public:

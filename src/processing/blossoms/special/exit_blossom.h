@@ -27,7 +27,8 @@
 
 namespace SakuraTree
 {
-class ExitBlossom : public Blossom
+class ExitBlossom
+        : public Blossom
 {
 public:
     ExitBlossom();

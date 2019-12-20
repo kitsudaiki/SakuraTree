@@ -26,8 +26,8 @@
 namespace SakuraTree
 {
 
-AptLatestBlossom::AptLatestBlossom() :
-    Blossom() {}
+AptLatestBlossom::AptLatestBlossom()
+    : Blossom() {}
 
 /**
  * @brief AptLatestBlossom::initTask

@@ -27,8 +27,8 @@
 namespace SakuraTree
 {
 
-TextAppendBlossom::TextAppendBlossom() :
-    Blossom() {}
+TextAppendBlossom::TextAppendBlossom()
+    : Blossom() {}
 
 /**
  * @brief initTask

@@ -27,8 +27,8 @@
 namespace SakuraTree
 {
 
-TextWriteBlossom::TextWriteBlossom() :
-    Blossom() {}
+TextWriteBlossom::TextWriteBlossom()
+    : Blossom() {}
 
 /**
  * @brief initTask

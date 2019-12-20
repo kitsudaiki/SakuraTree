@@ -26,8 +26,8 @@
 namespace SakuraTree
 {
 
-FileChownBlossom::FileChownBlossom() :
-    Blossom() {}
+FileChownBlossom::FileChownBlossom()
+    : Blossom() {}
 
 /**
  * @brief initTask

@@ -29,8 +29,8 @@ namespace SakuraTree
 {
 using Kitsunemimi::Common::splitStringByDelimiter;
 
-FileRenameBlossom::FileRenameBlossom() :
-    Blossom() {}
+FileRenameBlossom::FileRenameBlossom()
+    : Blossom() {}
 
 /**
  * @brief initTask

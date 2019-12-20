@@ -25,8 +25,8 @@
 namespace SakuraTree
 {
 
-ExitBlossom::ExitBlossom() :
-    Blossom() {}
+ExitBlossom::ExitBlossom()
+    : Blossom() {}
 
 /**
  * initTask

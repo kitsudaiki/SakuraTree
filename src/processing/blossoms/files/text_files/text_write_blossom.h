@@ -29,7 +29,8 @@ namespace SakuraTree
 {
 class TextWriteBlossom_Test;
 
-class TextWriteBlossom : public Blossom
+class TextWriteBlossom
+        : public Blossom
 {
 public:
     TextWriteBlossom();

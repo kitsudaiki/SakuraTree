@@ -29,7 +29,8 @@ namespace SakuraTree
 {
 class FileRenameBlossom_Test;
 
-class FileRenameBlossom : public Blossom
+class FileRenameBlossom
+        : public Blossom
 {
 public:
     FileRenameBlossom();

@@ -28,8 +28,8 @@ namespace SakuraTree
 {
 using Kitsunemimi::Common::splitStringByDelimiter;
 
-FileCopyBlossom::FileCopyBlossom() :
-    Blossom() {}
+FileCopyBlossom::FileCopyBlossom()
+    : Blossom() {}
 
 /**
  * @brief initTask

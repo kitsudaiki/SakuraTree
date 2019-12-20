@@ -29,7 +29,8 @@ namespace SakuraTree
 {
 class TextReadBlossom_Test;
 
-class TextReadBlossom : public Blossom
+class TextReadBlossom
+        : public Blossom
 {
 public:
     TextReadBlossom();

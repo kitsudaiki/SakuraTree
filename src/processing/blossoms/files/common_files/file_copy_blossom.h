@@ -29,7 +29,8 @@ namespace SakuraTree
 {
 class FileCopyBlossom_Test;
 
-class FileCopyBlossom : public Blossom
+class FileCopyBlossom
+        : public Blossom
 {
 public:
     FileCopyBlossom();

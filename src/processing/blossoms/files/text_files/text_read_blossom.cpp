@@ -27,8 +27,8 @@
 namespace SakuraTree
 {
 
-TextReadBlossom::TextReadBlossom() :
-    Blossom() {}
+TextReadBlossom::TextReadBlossom()
+    : Blossom() {}
 
 /**
  * @brief initTask

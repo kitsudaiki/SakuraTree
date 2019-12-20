@@ -30,8 +30,8 @@ using Kitsunemimi::Ini::IniItem;
 namespace SakuraTree
 {
 
-IniSetEntryBlossom::IniSetEntryBlossom() :
-    Blossom() {}
+IniSetEntryBlossom::IniSetEntryBlossom()
+    : Blossom() {}
 
 /**
  * @brief initTask

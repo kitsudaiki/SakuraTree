@@ -27,8 +27,8 @@
 namespace SakuraTree
 {
 
-SakuraCopySubtreeBlossom::SakuraCopySubtreeBlossom() :
-    Blossom() {}
+SakuraCopySubtreeBlossom::SakuraCopySubtreeBlossom()
+    : Blossom() {}
 
 /**
  * initTask

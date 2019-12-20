@@ -29,7 +29,8 @@ namespace SakuraTree
 {
 class TemplateCreateBlossom_Test;
 
-class TemplateCreateBlossom : public Blossom
+class TemplateCreateBlossom
+        : public Blossom
 {
 
 public:

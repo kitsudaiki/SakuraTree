@@ -26,8 +26,8 @@
 namespace SakuraTree
 {
 
-AptAbsentBlossom::AptAbsentBlossom() :
-    Blossom() {}
+AptAbsentBlossom::AptAbsentBlossom()
+    : Blossom() {}
 
 /**
  * initTask

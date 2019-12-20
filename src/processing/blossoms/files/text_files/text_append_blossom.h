@@ -29,7 +29,8 @@ namespace SakuraTree
 {
 class TextAppendBlossom_Test;
 
-class TextAppendBlossom : public Blossom
+class TextAppendBlossom
+        : public Blossom
 {
 public:
     TextAppendBlossom();
