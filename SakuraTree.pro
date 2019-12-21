@@ -116,7 +116,8 @@ HEADERS += \
     tests/processing/blossoms/special/cmd_blossom_test.h \
     tests/processing/common/functions_test.h \
     tests/processing/common/item_methods_test.h \
-    tests/run_unit_tests.h
+    tests/run_unit_tests.h \
+    src/converter/common_methods.h
 
 SOURCES += \
     src/branch_builder/provision_branch_builder.cpp \
@@ -174,7 +175,8 @@ SOURCES += \
     tests/processing/blossoms/special/cmd_blossom_test.cpp \
     tests/processing/common/functions_test.cpp \
     tests/processing/common/item_methods_test.cpp \
-    tests/run_unit_tests.cpp
+    tests/run_unit_tests.cpp \
+    src/converter/common_methods.cpp
 
 
 

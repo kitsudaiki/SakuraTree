@@ -6,7 +6,7 @@
 apt("update and install")  
 -> update
 -> present:
-    - names = packages
+    - packages = packages
 
 if(test_output == "test")
 {
@@ -100,11 +100,11 @@ else
 {
     apt("first apt in else")
     -> absent:
-       - names = packages
+       - packages = packages
 
     apt("second apt in else")
     -> present:
-       - names = packages
+       - packages = packages
 }
 
 exit("kill current run")

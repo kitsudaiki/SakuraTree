@@ -1,5 +1,5 @@
 /**
- * @file        blossom.h
+ * @file        common_methos.h
  *
  * @author      Tobias Anker <tobias.anker@kitsunemimi.moe>
  *
@@ -20,37 +20,21 @@
  *      limitations under the License.
  */
 
-#ifndef BLOSSOM_H
-#define BLOSSOM_H
+#ifndef COMMON_CONVERTER_METHODS_H
+#define COMMON_CONVERTER_METHODS_H
 
 #include <common.h>
 #include <items/sakura_items.h>
-#include <processing/common/item_methods.h>
-#include <processing/common/process_execution.h>
-
-using Kitsunemimi::Common::DataMap;
 
 namespace SakuraTree
 {
 
-class Blossom
-{
-public:
-    Blossom();
-    virtual ~Blossom();
-
-    void growBlossom(BlossomItem &blossomItem);
-
-    DataMap m_requiredKeys;
-
-protected:
-    virtual void initTask(BlossomItem &blossomItem) = 0;
-    virtual void preCheck(BlossomItem &blossomItem) = 0;
-    virtual void runTask(BlossomItem &blossomItem) = 0;
-    virtual void postCheck(BlossomItem &blossomItem) = 0;
-    virtual void closeTask(BlossomItem &blossomItem) = 0;
-};
+void overrideItems(JsonItem &original,
+                   const JsonItem &override);
+bool checkForRequiredKeys(BlossomItem &blossomItem);
+bool checkForRequiredKeys(BlossomItem &blossomItem,
+                          DataMap &requiredKeys);
 
 }
 
-#endif // BLOSSOM_H
+#endif // COMMON_CONVERTER_METHODS_H

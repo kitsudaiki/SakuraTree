@@ -345,52 +345,6 @@ checkItems(ValueItemMap &items)
 }
 
 /**
- * @brief checkForRequiredKeys
- * @param values
- * @param requiredKeys
- * @return
- */
-bool
-checkForRequiredKeys(BlossomItem &blossomItem,
-                     DataMap &requiredKeys)
-{
-    if(requiredKeys.contains("*") == false)
-    {
-        std::map<std::string, ValueItem>::const_iterator it;
-        for(it = blossomItem.values.valueMap.begin();
-            it != blossomItem.values.valueMap.end();
-            it++)
-        {
-            if(requiredKeys.contains(it->first) == false)
-            {
-                // TODO: error-message
-                return false;
-            }
-        }
-    }
-
-    std::map<std::string, DataItem*>::const_iterator it;
-    for(it = requiredKeys.m_map.begin();
-        it != requiredKeys.m_map.end();
-        it++)
-    {
-        if(it->first == "*") {
-            continue;
-        }
-        if(blossomItem.values.contains(it->first) == false
-                && it->second->toValue()->getBool() == true)
-        {
-            // TODO: error-message
-            return false;
-        }
-    }
-
-
-
-    return true;
-}
-
-/**
  * @brief printOutput
  * @param blossom
  */

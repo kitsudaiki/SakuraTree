@@ -39,7 +39,7 @@ namespace SakuraTree
 
 SakuraRoot* SakuraRoot::m_root = nullptr;
 std::string SakuraRoot::m_executablePath = "";
-SakuraRoot::ErrorOutput SakuraRoot::m_errorOutput;
+TableItem SakuraRoot::m_errorOutput;
 Jinja2Converter* SakuraRoot::m_jinja2Converter = nullptr;
 
 /**
@@ -50,6 +50,11 @@ SakuraRoot::SakuraRoot(const std::string &executablePath)
     m_root = this;
     m_executablePath = executablePath;
     m_jinja2Converter = new Jinja2Converter();
+
+    m_errorOutput.addColumn("Field");
+    m_errorOutput.addColumn("Value");
+    m_errorOutput.addRow(std::vector<std::string>{"ERROR", "ERROR"});
+
     m_threadPool = new ThreadPool(8);
 
     // TODO: enable again in 0.3.0
@@ -97,6 +102,11 @@ SakuraRoot::startProcess(const std::string &rootPath,
     JsonItem tree = sakuraParsing.getParsedFileContent(seedName);
     Converter converter;
     SakuraItem* processPlan = converter.convert(tree);
+    if(processPlan == nullptr)
+    {
+        std::cout<<m_errorOutput.toString()<<std::endl;
+        return false;
+    }
 
     // run process
     SubtreeQueue::SubtreeObject object;
@@ -132,8 +142,9 @@ SakuraRoot::startSubtreeProcess(const std::string &subtree,
 
     Converter converter;
     SakuraItem* processPlan = converter.convert(completePlan);
-
-    assert(processPlan != nullptr);
+    if(processPlan == nullptr) {
+        return false;
+    }
 
     // run process
     JsonItem valuesJson;
