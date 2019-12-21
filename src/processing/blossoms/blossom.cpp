@@ -22,7 +22,7 @@
 
 #include "blossom.h"
 #include <sakura_root.h>
-#include <items/item_methods.h>
+#include <processing/common/item_methods.h>
 
 namespace SakuraTree
 {

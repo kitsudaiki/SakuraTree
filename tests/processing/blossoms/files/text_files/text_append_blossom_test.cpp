@@ -21,7 +21,7 @@
  */
 
 #include "text_append_blossom_test.h"
-#include <processing/process_execution.h>
+#include <processing/common/process_execution.h>
 #include <items/sakura_items.h>
 #include <processing/blossoms/files/text_files/text_append_blossom.h>
 #include <libKitsunemimiPersistence/files/text_file.h>
@@ -60,14 +60,7 @@ TextAppendBlossom_Test::initTask_test()
     TextAppendBlossom appendBlossom;
     BlossomItem blossomItem;
 
-    appendBlossom.initTask(blossomItem);
-    TEST_EQUAL(blossomItem.success, false);
-
     blossomItem.values.insert("file_path", new DataValue(m_path));
-
-    appendBlossom.initTask(blossomItem);
-    TEST_EQUAL(blossomItem.success, false);
-
     blossomItem.values.insert("new_text", new DataValue(m_newText));
 
     appendBlossom.initTask(blossomItem);

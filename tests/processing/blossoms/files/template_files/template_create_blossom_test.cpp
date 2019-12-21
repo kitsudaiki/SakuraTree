@@ -21,7 +21,7 @@
  */
 
 #include "template_create_blossom_test.h"
-#include <processing/process_execution.h>
+#include <processing/common/process_execution.h>
 #include <items/sakura_items.h>
 #include <processing/blossoms/files/template_files/template_create_blossom.h>
 #include <libKitsunemimiPersistence/files/text_file.h>
@@ -73,14 +73,7 @@ TemplateCreateBlossom_Test::initTask_test()
     fakeItem.blossomPath = "/tmp/";
     TemplateCreateBlossom fakeCreateBlossom;
 
-    fakeCreateBlossom.initTask(fakeItem);
-    TEST_EQUAL(fakeItem.success, false);
-
     fakeItem.values.insert("source_path", new DataValue(m_localTemplatePath));
-
-    fakeCreateBlossom.initTask(fakeItem);
-    TEST_EQUAL(fakeItem.success, false);
-
     fakeItem.values.insert("dest_path", new DataValue(m_destinationFile));
 
     fakeCreateBlossom.initTask(fakeItem);

@@ -1,4 +1,4 @@
-/**
+﻿/**
  * @file        converter.cpp
  *
  * @author      Tobias Anker <tobias.anker@kitsunemimi.moe>
@@ -29,7 +29,8 @@
 
 #include <sakura_root.h>
 #include <items/sakura_items.h>
-#include <items/item_methods.h>
+#include <processing/common/item_methods.h>
+#include <converter/common_methods.h>
 
 #include <branch_builder/provision_branch_builder.h>
 
@@ -65,7 +66,14 @@ Converter::convert(const JsonItem &tree)
         std::cout<<"-----------------------------------------------------"<<std::endl;
     }
 
-    SakuraItem* result = convertPart(tree);
+    bool success = true;
+    SakuraItem* result = convertPart(tree, success);
+
+    if(success == false)
+    {
+        delete result;
+        result = nullptr;
+    }
 
     return result;
 }
@@ -79,8 +87,9 @@ Converter::convert(const JsonItem &tree)
  */
 bool
 Converter::convertItemPart(ValueItem &resultingPart,
-                           JsonItem itemInput,
-                           const std::string pairType)
+                           const JsonItem &itemInput,
+                           const std::string pairType,
+                           bool &success)
 {
     if(itemInput.isMap())
     {
@@ -143,7 +152,7 @@ Converter::convertItemPart(ValueItem &resultingPart,
         for(uint32_t a = 0; a < arguments.size(); a++)
         {
             ValueItem newItem;
-            convertItemPart(newItem, arguments.get(a), "assign");
+            convertItemPart(newItem, arguments.get(a), "assign", success);
             functionItem.arguments.push_back(newItem);
         }
 
@@ -154,56 +163,14 @@ Converter::convertItemPart(ValueItem &resultingPart,
 }
 
 /**
- * @brief merge two item-maps
- * @param original original item-map
- * @param override additional item-map for merging into the original one
- */
-void
-Converter::overrideItems(JsonItem &original,
-                         const JsonItem &override)
-{
-    DataMap* overrideMap = override.getItemContent()->toMap();
-    std::map<std::string, DataItem*>::const_iterator it;
-    for(it = overrideMap->m_map.begin();
-        it != overrideMap->m_map.end();
-        it++)
-    {
-        original.insert(it->first,
-                        it->second->copy(),
-                        true);
-    }
-}
-
-/**
- * @brief merge two item-maps
- * @param original original item-map
- * @param override additional item-map for merging into the original one
- */
-void
-Converter::overrideItems(ValueItemMap &original,
-                         const ValueItemMap &override)
-{
-    std::map<std::string, ValueItem>::const_iterator it;
-    for(it = override.valueMap.begin();
-        it != override.valueMap.end();
-        it++)
-    {
-        ValueItem item = it->second;
-        original.insert(it->first,
-                        item,
-                        true);
-    }
-}
-
-
-/**
  * @brief SakuraCompiler::convertValues
  * @param obj
  * @param subtree
  */
 void
 Converter::convertValues(SakuraItem* obj,
-                         const JsonItem &values)
+                         const JsonItem &values,
+                         bool &success)
 {
     for(uint32_t i = 0; i < values.size(); i++)
     {
@@ -212,7 +179,7 @@ Converter::convertValues(SakuraItem* obj,
         const JsonItem value = values.get(i).get("value");
 
         ValueItem itemValue;
-        convertItemPart(itemValue, value, pairType);
+        convertItemPart(itemValue, value, pairType, success);
         obj->values.insert(key, itemValue);
     }
 }
@@ -224,44 +191,44 @@ Converter::convertValues(SakuraItem* obj,
  * @return pointer of the current converted part
  */
 SakuraItem*
-Converter::convertPart(const JsonItem &subtree)
+Converter::convertPart(const JsonItem &subtree, bool &success)
 {
     const std::string typeName = subtree.get("b_type").toString();
 
     if(typeName == "blossom_group") {
-        return convertBlossomGroup(subtree);
+        return convertBlossomGroup(subtree, success);
     }
 
     if(typeName == "subtree") {
-        return convertSubtree(subtree);
+        return convertSubtree(subtree, success);
     }
 
     if(typeName == "seed") {
-        return convertSeed(subtree);
+        return convertSeed(subtree, success);
     }
 
     if(typeName == "if") {
-        return convertIf(subtree);
+        return convertIf(subtree, success);
     }
 
     if(typeName == "for_each") {
-        return convertForEach(subtree, false);
+        return convertForEach(subtree, false, success);
     }
 
     if(typeName == "for") {
-        return convertFor(subtree, false);
+        return convertFor(subtree, false, success);
     }
 
     if(typeName == "parallel") {
-        return convertParallel(subtree);
+        return convertParallel(subtree, success);
     }
 
     if(typeName == "parallel_for") {
-        return convertFor(subtree, true);
+        return convertFor(subtree, true, success);
     }
 
     if(typeName == "parallel_for_each") {
-        return convertForEach(subtree, true);
+        return convertForEach(subtree, true, success);
     }
 
     // it must everytime match one of the names
@@ -277,7 +244,7 @@ Converter::convertPart(const JsonItem &subtree)
  * @return pointer of the current converted part
  */
 SakuraItem*
-Converter::convertBlossomGroup(const JsonItem &subtree)
+Converter::convertBlossomGroup(const JsonItem &subtree, bool &success)
 {
     // init new blossom-group-item
     BlossomGroupItem* blossomGroupItem =  new BlossomGroupItem();
@@ -295,12 +262,17 @@ Converter::convertBlossomGroup(const JsonItem &subtree)
             // init new blossom-item
             BlossomItem* blossomItem = new BlossomItem();
             blossomItem->blossomType = item.get("blossom-type").toString();
+            blossomItem->blossomGroupType = subtree.get("blossom-group-type").toString();
             blossomItem->blossomPath = subtree.get("b_path").toString();
 
-            convertValues(blossomItem, subtree.get("items-input"));
-            convertValues(blossomItem, item.get("items-input"));
+            convertValues(blossomItem, subtree.get("items-input"), success);
+            convertValues(blossomItem, item.get("items-input"), success);
 
             blossomGroupItem->blossoms.push_back(blossomItem);
+
+            if(checkForRequiredKeys(*blossomItem) == false) {
+                success = false;
+            }
         }
     }
     else
@@ -309,11 +281,16 @@ Converter::convertBlossomGroup(const JsonItem &subtree)
         BlossomItem* blossomItem =  new BlossomItem();
         blossomItem->blossomPath = subtree.get("b_path").toString();
         blossomItem->blossomType = subtree.get("blossom-group-type").toString();
+        blossomItem->blossomGroupType = "special";
 
-        convertValues(blossomItem, subtree.get("items-input"));
+        convertValues(blossomItem, subtree.get("items-input"), success);
 
         blossomGroupItem->blossomGroupType = "special";
         blossomGroupItem->blossoms.push_back(blossomItem);
+
+        if(checkForRequiredKeys(*blossomItem) == false) {
+            success = false;
+        }
     }
 
     return blossomGroupItem;
@@ -326,7 +303,7 @@ Converter::convertBlossomGroup(const JsonItem &subtree)
  * @return pointer of the current converted part
  */
 SakuraItem*
-Converter::convertSubtree(const JsonItem &subtree)
+Converter::convertSubtree(const JsonItem &subtree, bool &success)
 {
     // init new branch-item
     SubtreeItem* branchItem = new SubtreeItem();
@@ -337,7 +314,7 @@ Converter::convertSubtree(const JsonItem &subtree)
     if(subtree.contains("items-input")) {
         overrideItems(items, subtree.get("items-input"));
     }
-    convertValues(branchItem, items);
+    convertValues(branchItem, items, success);
 
     // convert parts of the branch
     const JsonItem parts = subtree.get("parts");
@@ -346,7 +323,7 @@ Converter::convertSubtree(const JsonItem &subtree)
     {
         JsonItem newMap = parts.get(i);
         newMap.insert("b_path", subtree.get("b_path"));
-        branchItem->childs.push_back(convertPart(newMap));
+        branchItem->childs.push_back(convertPart(newMap, success));
     }
 
     return branchItem;
@@ -359,7 +336,7 @@ Converter::convertSubtree(const JsonItem &subtree)
  * @return pointer of the current converted part
  */
 SakuraItem*
-Converter::convertSeed(const JsonItem &subtree)
+Converter::convertSeed(const JsonItem &subtree, bool &success)
 {
     // init new seed-item
     SeedItem* seedItem = new SeedItem();
@@ -390,14 +367,14 @@ Converter::convertSeed(const JsonItem &subtree)
  * @return pointer of the current converted part
  */
 SakuraItem*
-Converter::convertIf(const JsonItem &subtree)
+Converter::convertIf(const JsonItem &subtree, bool &success)
 {
     // init new if-item
     IfBranching* newItem = new IfBranching();
 
     // convert the both sides of the if-condition
-    convertItemPart(newItem->leftSide, subtree.get("left"), "assign");
-    convertItemPart(newItem->rightSide, subtree.get("right"), "assign");
+    convertItemPart(newItem->leftSide, subtree.get("left"), "assign", success);
+    convertItemPart(newItem->rightSide, subtree.get("right"), "assign", success);
 
     // convert compare-tpye
     if(subtree.get("if_type").getString() == "==") {
@@ -427,7 +404,7 @@ Converter::convertIf(const JsonItem &subtree)
     {
         JsonItem newMap = if_parts.get(i);
         newMap.insert("b_path", subtree.get("b_path"));
-        sequentiellContentIf->childs.push_back(convertPart(newMap));
+        sequentiellContentIf->childs.push_back(convertPart(newMap, success));
     }
     newItem->ifContent = sequentiellContentIf;
 
@@ -439,7 +416,7 @@ Converter::convertIf(const JsonItem &subtree)
     {
         JsonItem newMap = else_parts.get(i);
         newMap.insert("b_path", subtree.get("b_path"));
-        sequentiellContentElse->childs.push_back(convertPart(newMap));
+        sequentiellContentElse->childs.push_back(convertPart(newMap, success));
     }
     newItem->elseContent = sequentiellContentElse;
 
@@ -454,7 +431,8 @@ Converter::convertIf(const JsonItem &subtree)
  */
 SakuraItem*
 Converter::convertForEach(const JsonItem &subtree,
-                          bool parallel)
+                          bool parallel,
+                          bool &success)
 {
     // init new for-each-item
     ForEachBranching* newItem = new ForEachBranching(parallel);
@@ -462,9 +440,9 @@ Converter::convertForEach(const JsonItem &subtree,
 
     // convert the item, over which should be iterated
     ValueItem itemValue;
-    convertItemPart(itemValue, subtree.get("list"), "assign");
+    convertItemPart(itemValue, subtree.get("list"), "assign", success);
     newItem->iterateArray.insert("array", itemValue);
-    convertValues(newItem, subtree.get("items"));
+    convertValues(newItem, subtree.get("items"), success);
 
     // convert parts of the for-loop
     const JsonItem parts = subtree.get("parts");
@@ -475,7 +453,7 @@ Converter::convertForEach(const JsonItem &subtree,
     {
         JsonItem newMap = parts.get(i);
         newMap.insert("b_path", subtree.get("b_path"));
-        sequentiellContent->childs.push_back(convertPart(newMap));
+        sequentiellContent->childs.push_back(convertPart(newMap, success));
     }
     newItem->content = sequentiellContent;
 
@@ -490,16 +468,17 @@ Converter::convertForEach(const JsonItem &subtree,
  */
 SakuraItem*
 Converter::convertFor(const JsonItem &subtree,
-                           bool parallel)
+                      bool parallel,
+                      bool &success)
 {
     // init new for-item
     ForBranching* newItem = new ForBranching(parallel);
     newItem->tempVarName = subtree.get("variable1").getItemContent()->toString();
 
     // convert start- and end-point of the iterations
-    convertItemPart(newItem->start, subtree.get("start"), "assign");
-    convertItemPart(newItem->end, subtree.get("end"), "assign");
-    convertValues(newItem, subtree.get("items"));
+    convertItemPart(newItem->start, subtree.get("start"), "assign", success);
+    convertItemPart(newItem->end, subtree.get("end"), "assign", success);
+    convertValues(newItem, subtree.get("items"), success);
 
 
     // convert parts of the for-loop
@@ -511,7 +490,7 @@ Converter::convertFor(const JsonItem &subtree,
     {
         JsonItem newMap = parts.get(i);
         newMap.insert("b_path", subtree.get("b_path"));
-        sequentiellContent->childs.push_back(convertPart(newMap));
+        sequentiellContent->childs.push_back(convertPart(newMap, success));
     }
     newItem->content = sequentiellContent;
 
@@ -525,7 +504,7 @@ Converter::convertFor(const JsonItem &subtree,
  * @return pointer of the current converted part
  */
 SakuraItem*
-Converter::convertParallel(const JsonItem &subtree)
+Converter::convertParallel(const JsonItem &subtree, bool &success)
 {
     // init new parallel-branching-item
     Parallel* newItem = new Parallel();
@@ -535,7 +514,7 @@ Converter::convertParallel(const JsonItem &subtree)
     assert(parts.isValid());
     for(uint32_t i = 0; i < parts.size(); i++)
     {
-        newItem->childs.push_back(convertPart(parts.get(i)));
+        newItem->childs.push_back(convertPart(parts.get(i), success));
     }
 
     return newItem;

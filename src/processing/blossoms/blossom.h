@@ -25,8 +25,8 @@
 
 #include <common.h>
 #include <items/sakura_items.h>
-#include <items/item_methods.h>
-#include <processing/process_execution.h>
+#include <processing/common/item_methods.h>
+#include <processing/common/process_execution.h>
 
 using Kitsunemimi::Common::DataMap;
 
@@ -40,6 +40,8 @@ public:
     virtual ~Blossom();
 
     void growBlossom(BlossomItem &blossomItem);
+
+    DataMap m_requiredKeys;
 
 protected:
     virtual void initTask(BlossomItem &blossomItem) = 0;

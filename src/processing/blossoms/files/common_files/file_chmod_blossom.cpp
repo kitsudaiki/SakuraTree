@@ -26,8 +26,12 @@
 namespace SakuraTree
 {
 
-FileChmodBlossom::FileChmodBlossom() :
-    Blossom() {}
+FileChmodBlossom::FileChmodBlossom()
+    : Blossom()
+{
+    m_requiredKeys.insert("file_path", new DataValue(true));
+    m_requiredKeys.insert("permission", new DataValue(true));
+}
 
 /**
  * @brief initTask
@@ -35,13 +39,6 @@ FileChmodBlossom::FileChmodBlossom() :
 void
 FileChmodBlossom::initTask(BlossomItem &blossomItem)
 {
-    const std::vector<std::string> requiredKeys = {"file_path", "permission"};
-
-    checkForRequiredKeys(blossomItem, requiredKeys);
-    if(blossomItem.success == false) {
-        return;
-    }
-
     m_filePath = blossomItem.values.getValueAsString("file_path");
     m_permission = blossomItem.values.getValueAsString("permission");
 

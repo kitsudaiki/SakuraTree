@@ -29,7 +29,8 @@ namespace SakuraTree
 {
 class FileDeleteBlossom_Test;
 
-class FileDeleteBlossom : public Blossom
+class FileDeleteBlossom
+        : public Blossom
 {
 public:
     FileDeleteBlossom();

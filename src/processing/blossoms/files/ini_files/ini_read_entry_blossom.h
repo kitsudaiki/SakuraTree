@@ -28,7 +28,8 @@
 namespace SakuraTree
 {
 
-class IniReadEntryBlossom: public Blossom
+class IniReadEntryBlossom
+        : public Blossom
 {
 public:
     IniReadEntryBlossom();

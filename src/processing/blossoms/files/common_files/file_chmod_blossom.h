@@ -28,7 +28,8 @@
 namespace SakuraTree
 {
 
-class FileChmodBlossom : public Blossom
+class FileChmodBlossom
+        : public Blossom
 {
 public:
     FileChmodBlossom();

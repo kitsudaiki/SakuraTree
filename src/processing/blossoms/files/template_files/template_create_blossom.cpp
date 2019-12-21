@@ -29,8 +29,13 @@
 namespace SakuraTree
 {
 
-TemplateCreateBlossom::TemplateCreateBlossom() :
-    Blossom() {}
+TemplateCreateBlossom::TemplateCreateBlossom()
+    : Blossom()
+{
+    m_requiredKeys.insert("source_path", new DataValue(true));
+    m_requiredKeys.insert("dest_path", new DataValue(true));
+    m_requiredKeys.insert("*", new DataValue(false));
+}
 
 /**
  * initTask
@@ -38,15 +43,6 @@ TemplateCreateBlossom::TemplateCreateBlossom() :
 void
 TemplateCreateBlossom::initTask(BlossomItem &blossomItem)
 {
-    const std::vector<std::string> requiredKeys = {"source_path", "dest_path"};
-
-    checkForRequiredKeys(blossomItem, requiredKeys);
-    if(blossomItem.success == false) {
-        return;
-    }
-
-    std::map<std::string, ValueItem>::iterator it;
-
     m_templatePath = blossomItem.values.getValueAsString("source_path");
     m_destinationPath = blossomItem.values.getValueAsString("dest_path");
 

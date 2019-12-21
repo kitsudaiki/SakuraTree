@@ -27,8 +27,11 @@
 namespace SakuraTree
 {
 
-AssertBlossom::AssertBlossom() :
-    Blossom() {}
+AssertBlossom::AssertBlossom()
+    : Blossom()
+{
+    m_requiredKeys.insert("*", new DataValue(false));
+}
 
 /**
  * initTask

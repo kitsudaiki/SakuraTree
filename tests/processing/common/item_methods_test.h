@@ -1,5 +1,5 @@
 /**
- * @file        value_items_functions_test.h
+ * @file        item_methods_test.h
  *
  * @author      Tobias Anker <tobias.anker@kitsunemimi.moe>
  *
@@ -20,32 +20,33 @@
  *      limitations under the License.
  */
 
-#ifndef VALUE_ITEMS_FUNCTIONS_TEST_H
-#define VALUE_ITEMS_FUNCTIONS_TEST_H
+#ifndef COMMON_METHODS_TEST_H
+#define COMMON_METHODS_TEST_H
 
 #include <common.h>
 #include <libKitsunemimiCommon/test.h>
-#include <items/value_item_functions.h>
+#include <processing/common/item_methods.h>
 
 namespace SakuraTree
 {
-class ValueItemsFunctions_Test
+class SakuraRoot;
+
+class ItemMethods_Test
         : public Kitsunemimi::Common::Test
 {
 public:
-    ValueItemsFunctions_Test();
+    ItemMethods_Test();
 
 private:
-    void getValue_test();
-    void splitValue_test();
-    void sizeValue_test();
-    void containsValue_test();
-    void appendValue_test();
-    void insertValue_test();
+    void initTestCase();
+    void fillItems_test();
+    void overrideItems_test();
+    void checkItems_test();
+    void cleanupTestCase();
 
-    void checkNullptr(DataItem *value);
+    SakuraRoot* m_root = nullptr;
 };
 
 }
 
-#endif // VALUE_ITEMS_FUNCTIONS_TEST_H
+#endif // COMMON_METHODS_TEST_H

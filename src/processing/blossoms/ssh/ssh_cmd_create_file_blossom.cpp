@@ -21,14 +21,20 @@
  */
 
 #include "ssh_cmd_create_file_blossom.h"
-#include <processing/process_execution.h>
+#include <processing/common/process_execution.h>
 
 namespace SakuraTree
 {
 
 SshCmdCreateFileBlossom::SshCmdCreateFileBlossom()
+    : Blossom()
 {
-
+    m_requiredKeys.insert("user", new DataValue(true));
+    m_requiredKeys.insert("address", new DataValue(true));
+    m_requiredKeys.insert("file_content", new DataValue(true));
+    m_requiredKeys.insert("file_path", new DataValue(true));
+    m_requiredKeys.insert("port", new DataValue(false));
+    m_requiredKeys.insert("ssh_key", new DataValue(false));
 }
 
 /**
@@ -37,13 +43,6 @@ SshCmdCreateFileBlossom::SshCmdCreateFileBlossom()
 void
 SshCmdCreateFileBlossom::initTask(BlossomItem &blossomItem)
 {
-    const std::vector<std::string> requiredKeys = {"user", "address", "file_path", "file_content"};
-
-    checkForRequiredKeys(blossomItem, requiredKeys);
-    if(blossomItem.success == false) {
-        return;
-    }
-
     m_user = blossomItem.values.getValueAsString("user");
     m_address = blossomItem.values.getValueAsString("address");
     m_fileContent = blossomItem.values.getValueAsString("file_content");

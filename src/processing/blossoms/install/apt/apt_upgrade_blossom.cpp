@@ -26,8 +26,8 @@
 namespace SakuraTree
 {
 
-AptUpgradeBlossom::AptUpgradeBlossom() :
-    Blossom() {}
+AptUpgradeBlossom::AptUpgradeBlossom()
+    : Blossom() {}
 
 /**
  * initTask

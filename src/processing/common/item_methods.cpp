@@ -26,7 +26,7 @@
 #include <sakura_root.h>
 #include <processing/blossoms/blossom.h>
 #include <libKitsunemimiJinja2/jinja2_converter.h>
-#include <items/value_item_functions.h>
+#include <processing/common/functions.h>
 
 using Kitsunemimi::Jinja2::Jinja2Converter;
 
@@ -331,8 +331,10 @@ checkItems(ValueItemMap &items)
 {
     std::vector<std::string> result;
 
-    std::map<std::string, ValueItem>::iterator it;
-    for(it = items.valueMap.begin(); it != items.valueMap.end(); it++)
+    std::map<std::string, ValueItem>::const_iterator it;
+    for(it = items.valueMap.begin();
+        it != items.valueMap.end();
+        it++)
     {
         if(it->second.item->getString() == "{{}}") {
             result.push_back(it->first);
@@ -340,38 +342,6 @@ checkItems(ValueItemMap &items)
     }
 
     return result;
-}
-
-/**
- * @brief checkForRequiredKeys
- * @param values
- * @param requiredKeys
- * @return
- */
-void
-checkForRequiredKeys(BlossomItem &blossomItem,
-                     const std::vector<std::string> &requiredKeys)
-{
-    std::string result = "";
-    blossomItem.success = true;
-
-    for(uint32_t i = 0; i < requiredKeys.size(); i++)
-    {
-        const bool found = blossomItem.values.contains(requiredKeys.at(i));
-        if(found == false)
-        {
-            if(result.size() > 0) {
-                result += ", ";
-            }
-            result += requiredKeys.at(i);
-        }
-    }
-
-    if(result.size() > 0)
-    {
-        blossomItem.success = false;
-        blossomItem.outputMessage = "following keys are not set: " + result;
-    }
 }
 
 /**

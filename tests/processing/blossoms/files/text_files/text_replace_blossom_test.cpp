@@ -21,7 +21,7 @@
  */
 
 #include "text_replace_blossom_test.h"
-#include <processing/process_execution.h>
+#include <processing/common/process_execution.h>
 #include <items/sakura_items.h>
 #include <processing/blossoms/files/text_files/text_replace_blossom.h>
 #include <libKitsunemimiPersistence/files/text_file.h>
@@ -62,19 +62,8 @@ TextReplaceBlossom_Test::initTask_test()
     TextReplaceBlossom replaceBlossom;
     BlossomItem blossomItem;
 
-    replaceBlossom.initTask(blossomItem);
-    TEST_EQUAL(blossomItem.success, false);
-
     blossomItem.values.insert("file_path", new DataValue(m_path));
-
-    replaceBlossom.initTask(blossomItem);
-    TEST_EQUAL(blossomItem.success, false);
-
     blossomItem.values.insert("old_text", new DataValue(m_oldText));
-
-    replaceBlossom.initTask(blossomItem);
-    TEST_EQUAL(blossomItem.success, false);
-
     blossomItem.values.insert("new_text", new DataValue(m_newText));
 
     replaceBlossom.initTask(blossomItem);

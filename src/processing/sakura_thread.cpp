@@ -23,7 +23,7 @@
 #include "sakura_thread.h"
 
 #include <sakura_root.h>
-#include <items/item_methods.h>
+#include <processing/common/item_methods.h>
 #include <processing/blossoms/blossom.h>
 #include <processing/blossoms/blossom_getter.h>
 #include <processing/subtree_queue.h>

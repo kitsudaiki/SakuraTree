@@ -20,7 +20,7 @@
  *      limitations under the License.
  */
 
-#include "value_items_functions_test.h"
+#include "functions_test.h"
 
 namespace SakuraTree
 {

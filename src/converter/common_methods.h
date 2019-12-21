@@ -1,5 +1,5 @@
 /**
- * @file        item_methods_test.h
+ * @file        common_methos.h
  *
  * @author      Tobias Anker <tobias.anker@kitsunemimi.moe>
  *
@@ -20,33 +20,21 @@
  *      limitations under the License.
  */
 
-#ifndef COMMON_METHODS_TEST_H
-#define COMMON_METHODS_TEST_H
+#ifndef COMMON_CONVERTER_METHODS_H
+#define COMMON_CONVERTER_METHODS_H
 
 #include <common.h>
-#include <libKitsunemimiCommon/test.h>
-#include <items/item_methods.h>
+#include <items/sakura_items.h>
 
 namespace SakuraTree
 {
-class SakuraRoot;
 
-class ItemMethods_Test
-        : public Kitsunemimi::Common::Test
-{
-public:
-    ItemMethods_Test();
-
-private:
-    void initTestCase();
-    void fillItems_test();
-    void overrideItems_test();
-    void checkItems_test();
-    void cleanupTestCase();
-
-    SakuraRoot* m_root = nullptr;
-};
+void overrideItems(JsonItem &original,
+                   const JsonItem &override);
+bool checkForRequiredKeys(BlossomItem &blossomItem);
+bool checkForRequiredKeys(BlossomItem &blossomItem,
+                          DataMap &requiredKeys);
 
 }
 
-#endif // COMMON_METHODS_TEST_H
+#endif // COMMON_CONVERTER_METHODS_H

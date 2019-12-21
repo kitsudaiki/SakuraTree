@@ -29,7 +29,8 @@
 namespace SakuraTree
 {
 
-class SshCmdBlossom : public Blossom
+class SshCmdBlossom
+        : public Blossom
 {
 public:
     SshCmdBlossom();

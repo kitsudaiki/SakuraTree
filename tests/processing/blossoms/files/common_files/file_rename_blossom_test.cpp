@@ -21,7 +21,7 @@
  */
 
 #include "file_rename_blossom_test.h"
-#include <processing/process_execution.h>
+#include <processing/common/process_execution.h>
 #include <items/sakura_items.h>
 #include <processing/blossoms/files/common_files/file_rename_blossom.h>
 
@@ -63,14 +63,7 @@ FileRenameBlossom_Test::initTask_test()
     BlossomItem fakeItem;
     FileRenameBlossom fakeRenameBlossom;
 
-    fakeRenameBlossom.initTask(fakeItem);
-    TEST_EQUAL(fakeItem.success, false);
-
     fakeItem.values.insert("file_path", new DataValue(m_sourceFile));
-
-    fakeRenameBlossom.initTask(fakeItem);
-    TEST_EQUAL(fakeItem.success, false);
-
     fakeItem.values.insert("new_name", new DataValue(m_destinationFileName));
 
     fakeRenameBlossom.initTask(fakeItem);

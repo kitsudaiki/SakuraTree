@@ -28,7 +28,8 @@
 namespace SakuraTree
 {
 
-class FileChownBlossom : public Blossom
+class FileChownBlossom
+        : public Blossom
 {
 public:
     FileChownBlossom();

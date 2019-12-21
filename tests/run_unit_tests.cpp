@@ -22,8 +22,8 @@
 
 #include "run_unit_tests.h"
 
-#include <tests/items/item_methods_test.h>
-#include <tests/items/value_items_functions_test.h>
+#include <tests/processing/common/item_methods_test.h>
+#include <tests/processing/common/functions_test.h>
 
 #include <tests/processing/blossoms/files/file_methods_test.h>
 

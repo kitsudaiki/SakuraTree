@@ -27,8 +27,11 @@
 namespace SakuraTree
 {
 
-PrintBlossom::PrintBlossom() :
-    Blossom() {}
+PrintBlossom::PrintBlossom()
+    : Blossom()
+{
+    m_requiredKeys.insert("*", new DataValue(false));
+}
 
 /**
  * initTask

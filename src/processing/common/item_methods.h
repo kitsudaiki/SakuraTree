@@ -38,22 +38,21 @@ namespace SakuraTree
 {
 
 bool getProcessedItem(ValueItem &original, DataMap &insertValues);
+
 bool fillIdentifierItem(ValueItem &original, DataMap &insertValues);
 bool fillJinja2Template(ValueItem &original, DataMap &insertValues);
 bool fillValueItem(ValueItem &original, DataMap &insertValues);
-
 bool fillInputValueItemMap(ValueItemMap &items, DataMap &insertValues);
 bool fillOutputValueItemMap(ValueItemMap &items, DataItem* output);
 
-void checkForRequiredKeys(BlossomItem &blossomItem, const std::vector<std::string> &requiredKeys);
 void overrideItems(DataMap &original,
                    const DataMap &override,
                    bool onlyExisting=true);
 void overrideItems(DataMap &original,
                    const ValueItemMap &override,
                    bool onlyExisting=true);
-const std::vector<std::string> checkItems(ValueItemMap &items);
 
+const std::vector<std::string> checkItems(ValueItemMap &items);
 const std::string convertBlossomOutput(const BlossomItem &blossom);
 
 }

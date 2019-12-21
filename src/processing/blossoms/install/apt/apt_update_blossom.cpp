@@ -26,8 +26,8 @@
 namespace SakuraTree
 {
 
-AptUdateBlossom::AptUdateBlossom() :
-    Blossom() {}
+AptUdateBlossom::AptUdateBlossom()
+    : Blossom() {}
 
 /**
  * initTask

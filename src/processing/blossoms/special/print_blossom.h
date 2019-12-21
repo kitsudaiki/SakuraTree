@@ -28,7 +28,8 @@
 namespace SakuraTree
 {
 
-class PrintBlossom : public Blossom
+class PrintBlossom
+        : public Blossom
 {
 
 public:

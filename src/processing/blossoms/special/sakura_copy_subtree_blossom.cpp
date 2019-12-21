@@ -21,14 +21,19 @@
  */
 
 #include "sakura_copy_subtree_blossom.h"
-#include <processing/process_execution.h>
+#include <processing/common/process_execution.h>
 #include <sakura_root.h>
 
 namespace SakuraTree
 {
 
-SakuraCopySubtreeBlossom::SakuraCopySubtreeBlossom() :
-    Blossom() {}
+SakuraCopySubtreeBlossom::SakuraCopySubtreeBlossom()
+    : Blossom()
+{
+    m_requiredKeys.insert("subtree", new DataValue(true));
+    m_requiredKeys.insert("address", new DataValue(true));
+    m_requiredKeys.insert("values", new DataValue(true));
+}
 
 /**
  * initTask

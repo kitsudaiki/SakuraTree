@@ -21,7 +21,7 @@
  */
 
 #include "cmd_blossom_test.h"
-#include <processing/process_execution.h>
+#include <processing/common/process_execution.h>
 #include <items/sakura_items.h>
 #include <processing/blossoms/special/cmd_blossom.h>
 #include <processing/blossoms/files/file_methods.h>
@@ -66,9 +66,6 @@ CmdBlossom_Test::initTask_test()
     BlossomItem fakeItem;
     fakeItem.blossomPath = "/tmp/";
     CmdBlossom fakeCmdBlossom;
-
-    fakeCmdBlossom.initTask(fakeItem);
-    TEST_EQUAL(fakeItem.success, false);
 
     fakeItem.values.insert("command", new DataValue(m_command));
 

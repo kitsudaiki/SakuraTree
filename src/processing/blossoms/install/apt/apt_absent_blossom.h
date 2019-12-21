@@ -28,7 +28,8 @@
 namespace SakuraTree
 {
 
-class AptAbsentBlossom : public Blossom
+class AptAbsentBlossom
+        : public Blossom
 {
 
 public:

@@ -28,7 +28,8 @@
 namespace SakuraTree
 {
 
-class AssertBlossom : public Blossom
+class AssertBlossom
+        : public Blossom
 {
 
 public:

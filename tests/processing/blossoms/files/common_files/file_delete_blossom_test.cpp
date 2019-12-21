@@ -21,7 +21,7 @@
  */
 
 #include "file_delete_blossom_test.h"
-#include <processing/process_execution.h>
+#include <processing/common/process_execution.h>
 #include <items/sakura_items.h>
 #include <processing/blossoms/files/common_files/file_delete_blossom.h>
 
@@ -56,9 +56,6 @@ FileDeleteBlossom_Test::initTask_test()
 {
     BlossomItem fakeItem;
     FileDeleteBlossom fakeDeleteBlossom;
-
-    fakeDeleteBlossom.initTask(fakeItem);
-    TEST_EQUAL(fakeItem.success, false);
 
     fakeItem.values.insert("file_path", new DataValue(m_path));
 

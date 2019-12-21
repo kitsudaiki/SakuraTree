@@ -30,8 +30,14 @@ using Kitsunemimi::Ini::IniItem;
 namespace SakuraTree
 {
 
-IniSetEntryBlossom::IniSetEntryBlossom() :
-    Blossom() {}
+IniSetEntryBlossom::IniSetEntryBlossom()
+    : Blossom()
+{
+    m_requiredKeys.insert("file_path", new DataValue(true));
+    m_requiredKeys.insert("group", new DataValue(true));
+    m_requiredKeys.insert("entry", new DataValue(true));
+    m_requiredKeys.insert("value", new DataValue(true));
+}
 
 /**
  * @brief initTask
@@ -39,13 +45,6 @@ IniSetEntryBlossom::IniSetEntryBlossom() :
 void
 IniSetEntryBlossom::initTask(BlossomItem &blossomItem)
 {
-    const std::vector<std::string> requiredKeys = {"file_path", "group", "entry", "value"};
-
-    checkForRequiredKeys(blossomItem, requiredKeys);
-    if(blossomItem.success == false) {
-        return;
-    }
-
     m_filePath = blossomItem.values.getValueAsString("file_path");
     m_group = blossomItem.values.getValueAsString("group");
     m_entry = blossomItem.values.getValueAsString("entry");

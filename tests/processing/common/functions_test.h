@@ -1,5 +1,5 @@
 /**
- * @file        text_read_blossom.h
+ * @file        value_items_functions_test.h
  *
  * @author      Tobias Anker <tobias.anker@kitsunemimi.moe>
  *
@@ -20,34 +20,32 @@
  *      limitations under the License.
  */
 
-#ifndef TEXT_READ_BLOSSOM_H
-#define TEXT_READ_BLOSSOM_H
+#ifndef VALUE_ITEMS_FUNCTIONS_TEST_H
+#define VALUE_ITEMS_FUNCTIONS_TEST_H
 
-#include <processing/blossoms/blossom.h>
+#include <common.h>
+#include <libKitsunemimiCommon/test.h>
+#include <processing/common/functions.h>
 
 namespace SakuraTree
 {
-class TextReadBlossom_Test;
-
-class TextReadBlossom
-        : public Blossom
+class ValueItemsFunctions_Test
+        : public Kitsunemimi::Common::Test
 {
 public:
-    TextReadBlossom();
-
-protected:
-    void initTask(BlossomItem &blossomItem);
-    void preCheck(BlossomItem &blossomItem);
-    void runTask(BlossomItem &blossomItem);
-    void postCheck(BlossomItem &blossomItem);
-    void closeTask(BlossomItem &blossomItem);
+    ValueItemsFunctions_Test();
 
 private:
-    friend TextReadBlossom_Test;
+    void getValue_test();
+    void splitValue_test();
+    void sizeValue_test();
+    void containsValue_test();
+    void appendValue_test();
+    void insertValue_test();
 
-    std::string m_filePath = "";
+    void checkNullptr(DataItem *value);
 };
 
 }
 
-#endif // TEXT_READ_BLOSSOM_H
+#endif // VALUE_ITEMS_FUNCTIONS_TEST_H
