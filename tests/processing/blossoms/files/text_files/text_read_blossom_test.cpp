@@ -59,9 +59,6 @@ TextReadBlossom_Test::initTask_test()
     TextReadBlossom readBlossom;
     BlossomItem blossomItem;
 
-    readBlossom.initTask(blossomItem);
-    TEST_EQUAL(blossomItem.success, false);
-
     blossomItem.values.insert("file_path", new DataValue(m_path));
 
     readBlossom.initTask(blossomItem);

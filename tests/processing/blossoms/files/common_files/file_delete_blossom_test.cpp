@@ -57,9 +57,6 @@ FileDeleteBlossom_Test::initTask_test()
     BlossomItem fakeItem;
     FileDeleteBlossom fakeDeleteBlossom;
 
-    fakeDeleteBlossom.initTask(fakeItem);
-    TEST_EQUAL(fakeItem.success, false);
-
     fakeItem.values.insert("file_path", new DataValue(m_path));
 
     fakeDeleteBlossom.initTask(fakeItem);

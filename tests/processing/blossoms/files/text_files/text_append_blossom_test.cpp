@@ -60,14 +60,7 @@ TextAppendBlossom_Test::initTask_test()
     TextAppendBlossom appendBlossom;
     BlossomItem blossomItem;
 
-    appendBlossom.initTask(blossomItem);
-    TEST_EQUAL(blossomItem.success, false);
-
     blossomItem.values.insert("file_path", new DataValue(m_path));
-
-    appendBlossom.initTask(blossomItem);
-    TEST_EQUAL(blossomItem.success, false);
-
     blossomItem.values.insert("new_text", new DataValue(m_newText));
 
     appendBlossom.initTask(blossomItem);

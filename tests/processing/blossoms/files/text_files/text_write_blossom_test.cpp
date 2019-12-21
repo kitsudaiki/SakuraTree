@@ -59,14 +59,7 @@ TextWriteBlossom_Test::initTask_test()
     TextWriteBlossom writeBlossom;
     BlossomItem blossomItem;
 
-    writeBlossom.initTask(blossomItem);
-    TEST_EQUAL(blossomItem.success, false);
-
     blossomItem.values.insert("file_path", new DataValue(m_path));
-
-    writeBlossom.initTask(blossomItem);
-    TEST_EQUAL(blossomItem.success, false);
-
     blossomItem.values.insert("text", new DataValue(m_text));
 
     writeBlossom.initTask(blossomItem);

@@ -73,14 +73,7 @@ TemplateCreateBlossom_Test::initTask_test()
     fakeItem.blossomPath = "/tmp/";
     TemplateCreateBlossom fakeCreateBlossom;
 
-    fakeCreateBlossom.initTask(fakeItem);
-    TEST_EQUAL(fakeItem.success, false);
-
     fakeItem.values.insert("source_path", new DataValue(m_localTemplatePath));
-
-    fakeCreateBlossom.initTask(fakeItem);
-    TEST_EQUAL(fakeItem.success, false);
-
     fakeItem.values.insert("dest_path", new DataValue(m_destinationFile));
 
     fakeCreateBlossom.initTask(fakeItem);

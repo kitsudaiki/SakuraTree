@@ -67,9 +67,6 @@ CmdBlossom_Test::initTask_test()
     fakeItem.blossomPath = "/tmp/";
     CmdBlossom fakeCmdBlossom;
 
-    fakeCmdBlossom.initTask(fakeItem);
-    TEST_EQUAL(fakeItem.success, false);
-
     fakeItem.values.insert("command", new DataValue(m_command));
 
     fakeCmdBlossom.initTask(fakeItem);
