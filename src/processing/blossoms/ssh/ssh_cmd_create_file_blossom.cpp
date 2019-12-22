@@ -38,10 +38,10 @@ SshCmdCreateFileBlossom::SshCmdCreateFileBlossom()
 }
 
 /**
- * initTask
+ * initBlossom
  */
 void
-SshCmdCreateFileBlossom::initTask(BlossomItem &blossomItem)
+SshCmdCreateFileBlossom::initBlossom(BlossomItem &blossomItem)
 {
     m_user = blossomItem.values.getValueAsString("user");
     m_address = blossomItem.values.getValueAsString("address");
@@ -126,10 +126,10 @@ SshCmdCreateFileBlossom::postCheck(BlossomItem &blossomItem)
 }
 
 /**
- * closeTask
+ * closeBlossom
  */
 void
-SshCmdCreateFileBlossom::closeTask(BlossomItem &blossomItem)
+SshCmdCreateFileBlossom::closeBlossom(BlossomItem &blossomItem)
 {
     blossomItem.success = true;
 }

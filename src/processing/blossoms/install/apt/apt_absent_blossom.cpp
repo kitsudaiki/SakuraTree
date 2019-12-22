@@ -33,10 +33,10 @@ AptAbsentBlossom::AptAbsentBlossom()
 }
 
 /**
- * initTask
+ * initBlossom
  */
 void
-AptAbsentBlossom::initTask(BlossomItem &blossomItem)
+AptAbsentBlossom::initBlossom(BlossomItem &blossomItem)
 {
     DataArray* names = blossomItem.values.get("packages")->toArray();
     if(names != nullptr)
@@ -116,10 +116,10 @@ AptAbsentBlossom::postCheck(BlossomItem &blossomItem)
 }
 
 /**
- * closeTask
+ * closeBlossom
  */
 void
-AptAbsentBlossom::closeTask(BlossomItem &blossomItem)
+AptAbsentBlossom::closeBlossom(BlossomItem &blossomItem)
 {
     m_packageNames.clear();
     blossomItem.success = true;

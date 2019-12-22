@@ -62,7 +62,7 @@ TextWriteBlossom_Test::initTask_test()
     blossomItem.values.insert("file_path", new DataValue(m_path));
     blossomItem.values.insert("text", new DataValue(m_text));
 
-    writeBlossom.initTask(blossomItem);
+    writeBlossom.initBlossom(blossomItem);
     TEST_EQUAL(blossomItem.success, true);
 
     TEST_EQUAL(writeBlossom.m_filePath, m_path);
@@ -80,7 +80,7 @@ TextWriteBlossom_Test::preCheck_test()
     blossomItem.values.insert("file_path", new DataValue(m_path));
     blossomItem.values.insert("text", new DataValue(m_text));
 
-    writeBlossom.initTask(blossomItem);
+    writeBlossom.initBlossom(blossomItem);
     writeBlossom.preCheck(blossomItem);
     TEST_EQUAL(blossomItem.success, false);
     TEST_EQUAL(blossomItem.skip, false);
@@ -112,7 +112,7 @@ TextWriteBlossom_Test::runTask_test()
     blossomItem.values.insert("file_path", new DataValue(m_path));
     blossomItem.values.insert("text", new DataValue(m_text));
 
-    writeBlossom.initTask(blossomItem);
+    writeBlossom.initBlossom(blossomItem);
     writeBlossom.runTask(blossomItem);
     TEST_EQUAL(blossomItem.success, true);
 
@@ -134,7 +134,7 @@ TextWriteBlossom_Test::postCheck_test()
     blossomItem.values.insert("file_path", new DataValue(m_path));
     blossomItem.values.insert("text", new DataValue(m_text));
 
-    writeBlossom.initTask(blossomItem);
+    writeBlossom.initBlossom(blossomItem);
     writeBlossom.postCheck(blossomItem);
     TEST_EQUAL(blossomItem.success, true);
 }
@@ -150,8 +150,8 @@ TextWriteBlossom_Test::closeTask_test()
     blossomItem.values.insert("file_path", new DataValue(m_path));
     blossomItem.values.insert("text", new DataValue(m_text));
 
-    writeBlossom.initTask(blossomItem);
-    writeBlossom.closeTask(blossomItem);
+    writeBlossom.initBlossom(blossomItem);
+    writeBlossom.closeBlossom(blossomItem);
     TEST_EQUAL(blossomItem.success, true);
 }
 

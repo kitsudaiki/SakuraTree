@@ -39,10 +39,10 @@ IniReadEntryBlossom::IniReadEntryBlossom()
 }
 
 /**
- * @brief initTask
+ * @brief initBlossom
  */
 void
-IniReadEntryBlossom::initTask(BlossomItem &blossomItem)
+IniReadEntryBlossom::initBlossom(BlossomItem &blossomItem)
 {
     m_filePath = blossomItem.values.getValueAsString("file_path");
     m_group = blossomItem.values.getValueAsString("group");
@@ -109,10 +109,10 @@ IniReadEntryBlossom::postCheck(BlossomItem &blossomItem)
 }
 
 /**
- * @brief closeTask
+ * @brief closeBlossom
  */
 void
-IniReadEntryBlossom::closeTask(BlossomItem &blossomItem)
+IniReadEntryBlossom::closeBlossom(BlossomItem &blossomItem)
 {
     blossomItem.success = true;
 }

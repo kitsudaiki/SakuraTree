@@ -40,10 +40,10 @@ IniSetEntryBlossom::IniSetEntryBlossom()
 }
 
 /**
- * @brief initTask
+ * @brief initBlossom
  */
 void
-IniSetEntryBlossom::initTask(BlossomItem &blossomItem)
+IniSetEntryBlossom::initBlossom(BlossomItem &blossomItem)
 {
     m_filePath = blossomItem.values.getValueAsString("file_path");
     m_group = blossomItem.values.getValueAsString("group");
@@ -116,10 +116,10 @@ IniSetEntryBlossom::postCheck(BlossomItem &blossomItem)
 }
 
 /**
- * @brief closeTask
+ * @brief closeBlossom
  */
 void
-IniSetEntryBlossom::closeTask(BlossomItem &blossomItem)
+IniSetEntryBlossom::closeBlossom(BlossomItem &blossomItem)
 {
     blossomItem.success = true;
 }

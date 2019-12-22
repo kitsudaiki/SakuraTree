@@ -318,7 +318,13 @@ Converter::convertSubtree(const JsonItem &subtree, bool &success)
 
     // convert parts of the branch
     const JsonItem parts = subtree.get("parts");
-    assert(parts.isValid());
+    if(parts.isValid() == false)
+    {
+        success = false;
+        return  branchItem;
+    }
+
+    // convert parts of the subtree
     for(uint32_t i = 0; i < parts.size(); i++)
     {
         JsonItem newMap = parts.get(i);
@@ -336,7 +342,7 @@ Converter::convertSubtree(const JsonItem &subtree, bool &success)
  * @return pointer of the current converted part
  */
 SakuraItem*
-Converter::convertSeed(const JsonItem &subtree, bool &success)
+Converter::convertSeed(const JsonItem &subtree, bool &)
 {
     // init new seed-item
     SeedItem* seedItem = new SeedItem();
@@ -398,7 +404,13 @@ Converter::convertIf(const JsonItem &subtree, bool &success)
 
     // convert if-part
     JsonItem if_parts = subtree.get("if_parts");
-    assert(if_parts.isValid());
+    if(if_parts.isValid() == false)
+    {
+        success = false;
+        return  newItem;
+    }
+
+    // create a sequentiell section to encapsulate the if-part of the if-condition
     Sequentiell* sequentiellContentIf = new Sequentiell();
     for(uint32_t i = 0; i < if_parts.size(); i++)
     {
@@ -410,7 +422,13 @@ Converter::convertIf(const JsonItem &subtree, bool &success)
 
     // convert else-part
     JsonItem else_parts = subtree.get("else_parts");
-    assert(else_parts.isValid());
+    if(else_parts.isValid() == false)
+    {
+        success = false;
+        return  newItem;
+    }
+
+    // create a sequentiell section to encapsulate the else-part of the if-condition
     Sequentiell* sequentiellContentElse = new Sequentiell();
     for(uint32_t i = 0; i < else_parts.size(); i++)
     {
@@ -446,8 +464,13 @@ Converter::convertForEach(const JsonItem &subtree,
 
     // convert parts of the for-loop
     const JsonItem parts = subtree.get("parts");
-    assert(parts.isValid());
+    if(parts.isValid() == false)
+    {
+        success = false;
+        return  newItem;
+    }
 
+    // create a sequentiell section to encapsulate the content of the for-loop
     Sequentiell* sequentiellContent = new Sequentiell();
     for(uint32_t i = 0; i < parts.size(); i++)
     {
@@ -480,11 +503,15 @@ Converter::convertFor(const JsonItem &subtree,
     convertItemPart(newItem->end, subtree.get("end"), "assign", success);
     convertValues(newItem, subtree.get("items"), success);
 
-
     // convert parts of the for-loop
     const JsonItem parts = subtree.get("parts");
-    assert(parts.isValid());
+    if(parts.isValid() == false)
+    {
+        success = false;
+        return  newItem;
+    }
 
+    // create a sequentiell section to encapsulate the content of the for-loop
     Sequentiell* sequentiellContent = new Sequentiell();
     for(uint32_t i = 0; i < parts.size(); i++)
     {
@@ -511,7 +538,12 @@ Converter::convertParallel(const JsonItem &subtree, bool &success)
 
     // convert parts of the tree
     const JsonItem parts = subtree.get("parts");
-    assert(parts.isValid());
+    if(parts.isValid() == false)
+    {
+        success = false;
+        return  newItem;
+    }
+
     for(uint32_t i = 0; i < parts.size(); i++)
     {
         newItem->childs.push_back(convertPart(parts.get(i), success));

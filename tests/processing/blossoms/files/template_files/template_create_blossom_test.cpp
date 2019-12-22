@@ -76,7 +76,7 @@ TemplateCreateBlossom_Test::initTask_test()
     fakeItem.values.insert("source_path", new DataValue(m_localTemplatePath));
     fakeItem.values.insert("dest_path", new DataValue(m_destinationFile));
 
-    fakeCreateBlossom.initTask(fakeItem);
+    fakeCreateBlossom.initBlossom(fakeItem);
     TEST_EQUAL(fakeItem.success, true);
 
     TEST_EQUAL(fakeCreateBlossom.m_templatePath, m_templatePath);
@@ -98,7 +98,7 @@ TemplateCreateBlossom_Test::preCheck_test()
     fakeItem.values.insert("dest_path", new DataValue(m_destinationFile));
     TemplateCreateBlossom fakeCopyBlossom;
 
-    fakeCopyBlossom.initTask(fakeItem);
+    fakeCopyBlossom.initBlossom(fakeItem);
     fakeCopyBlossom.preCheck(fakeItem);
     TEST_EQUAL(fakeItem.success, false);
     TEST_EQUAL(fakeItem.skip, false);
@@ -142,7 +142,7 @@ TemplateCreateBlossom_Test::runTask_test()
     fakeItem.values.insert("dest_path", new DataValue(m_destinationFile));
     TemplateCreateBlossom fakeCopyBlossom;
 
-    fakeCopyBlossom.initTask(fakeItem);
+    fakeCopyBlossom.initBlossom(fakeItem);
     fakeCopyBlossom.runTask(fakeItem);
     TEST_EQUAL(fakeItem.success, true);
 
@@ -161,7 +161,7 @@ TemplateCreateBlossom_Test::postCheck_test()
     fakeItem.values.insert("dest_path", new DataValue(m_destinationFile));
     TemplateCreateBlossom fakeCopyBlossom;
 
-    fakeCopyBlossom.initTask(fakeItem);
+    fakeCopyBlossom.initBlossom(fakeItem);
     fakeCopyBlossom.runTask(fakeItem);
     TEST_EQUAL(fakeItem.success, true);
 
@@ -183,8 +183,8 @@ TemplateCreateBlossom_Test::closeTask_test()
     fakeItem.values.insert("dest_path", new DataValue(m_destinationFile));
     TemplateCreateBlossom fakeCopyBlossom;
 
-    fakeCopyBlossom.initTask(fakeItem);
-    fakeCopyBlossom.closeTask(fakeItem);
+    fakeCopyBlossom.initBlossom(fakeItem);
+    fakeCopyBlossom.closeBlossom(fakeItem);
     TEST_EQUAL(fakeItem.success, true);
 }
 

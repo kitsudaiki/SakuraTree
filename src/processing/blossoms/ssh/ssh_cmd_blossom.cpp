@@ -36,10 +36,10 @@ SshCmdBlossom::SshCmdBlossom()
 }
 
 /**
- * initTask
+ * initBlossom
  */
 void
-SshCmdBlossom::initTask(BlossomItem &blossomItem)
+SshCmdBlossom::initBlossom(BlossomItem &blossomItem)
 {
     m_user = blossomItem.values.getValueAsString("user");
     m_address = blossomItem.values.getValueAsString("address");
@@ -96,10 +96,10 @@ SshCmdBlossom::postCheck(BlossomItem &blossomItem)
 }
 
 /**
- * closeTask
+ * closeBlossom
  */
 void
-SshCmdBlossom::closeTask(BlossomItem &blossomItem)
+SshCmdBlossom::closeBlossom(BlossomItem &blossomItem)
 {
     blossomItem.success = true;
 }

@@ -30,10 +30,10 @@ AptUpgradeBlossom::AptUpgradeBlossom()
     : Blossom() {}
 
 /**
- * initTask
+ * initBlossom
  */
 void
-AptUpgradeBlossom::initTask(BlossomItem &blossomItem)
+AptUpgradeBlossom::initBlossom(BlossomItem &blossomItem)
 {
     blossomItem.success = true;
 }
@@ -68,10 +68,10 @@ AptUpgradeBlossom::postCheck(BlossomItem &blossomItem)
 }
 
 /**
- * closeTask
+ * closeBlossom
  */
 void
-AptUpgradeBlossom::closeTask(BlossomItem &blossomItem)
+AptUpgradeBlossom::closeBlossom(BlossomItem &blossomItem)
 {
     blossomItem.success = true;
 }

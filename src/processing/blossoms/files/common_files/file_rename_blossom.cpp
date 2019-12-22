@@ -37,10 +37,10 @@ FileRenameBlossom::FileRenameBlossom()
 }
 
 /**
- * @brief initTask
+ * @brief initBlossom
  */
 void
-FileRenameBlossom::initTask(BlossomItem &blossomItem)
+FileRenameBlossom::initBlossom(BlossomItem &blossomItem)
 {
     m_filePath = blossomItem.values.getValueAsString("file_path");
     m_newFileName = blossomItem.values.getValueAsString("new_name");
@@ -129,10 +129,10 @@ FileRenameBlossom::postCheck(BlossomItem &blossomItem)
 }
 
 /**
- * @brief closeTask
+ * @brief closeBlossom
  */
 void
-FileRenameBlossom::closeTask(BlossomItem &blossomItem)
+FileRenameBlossom::closeBlossom(BlossomItem &blossomItem)
 {
     blossomItem.success = true;
 }

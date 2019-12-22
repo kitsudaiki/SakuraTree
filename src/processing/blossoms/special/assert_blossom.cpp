@@ -34,10 +34,10 @@ AssertBlossom::AssertBlossom()
 }
 
 /**
- * initTask
+ * initBlossom
  */
 void
-AssertBlossom::initTask(BlossomItem &blossomItem)
+AssertBlossom::initBlossom(BlossomItem &blossomItem)
 {
     blossomItem.success = true;
 }
@@ -90,10 +90,10 @@ AssertBlossom::postCheck(BlossomItem &blossomItem)
 }
 
 /**
- * closeTask
+ * closeBlossom
  */
 void
-AssertBlossom::closeTask(BlossomItem &blossomItem)
+AssertBlossom::closeBlossom(BlossomItem &blossomItem)
 {
     blossomItem.success = true;
 }

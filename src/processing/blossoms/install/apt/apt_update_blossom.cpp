@@ -30,10 +30,10 @@ AptUdateBlossom::AptUdateBlossom()
     : Blossom() {}
 
 /**
- * initTask
+ * initBlossom
  */
 void
-AptUdateBlossom::initTask(BlossomItem &blossomItem)
+AptUdateBlossom::initBlossom(BlossomItem &blossomItem)
 {
     blossomItem.success = true;
 }
@@ -68,10 +68,10 @@ AptUdateBlossom::postCheck(BlossomItem &blossomItem)
 }
 
 /**
- * closeTask
+ * closeBlossom
  */
 void
-AptUdateBlossom::closeTask(BlossomItem &blossomItem)
+AptUdateBlossom::closeBlossom(BlossomItem &blossomItem)
 {
     blossomItem.success = true;
 }

@@ -34,10 +34,10 @@ PrintBlossom::PrintBlossom()
 }
 
 /**
- * initTask
+ * initBlossom
  */
 void
-PrintBlossom::initTask(BlossomItem &blossomItem)
+PrintBlossom::initBlossom(BlossomItem &blossomItem)
 {
     blossomItem.success = true;
 }
@@ -84,10 +84,10 @@ PrintBlossom::postCheck(BlossomItem &blossomItem)
 }
 
 /**
- * closeTask
+ * closeBlossom
  */
 void
-PrintBlossom::closeTask(BlossomItem &blossomItem)
+PrintBlossom::closeBlossom(BlossomItem &blossomItem)
 {
     blossomItem.success = true;
 }

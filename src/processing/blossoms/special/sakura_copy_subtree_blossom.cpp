@@ -36,10 +36,10 @@ SakuraCopySubtreeBlossom::SakuraCopySubtreeBlossom()
 }
 
 /**
- * initTask
+ * initBlossom
  */
 void
-SakuraCopySubtreeBlossom::initTask(BlossomItem &blossomItem)
+SakuraCopySubtreeBlossom::initBlossom(BlossomItem &blossomItem)
 {
     blossomItem.success = true;
 }
@@ -78,10 +78,10 @@ SakuraCopySubtreeBlossom::postCheck(BlossomItem &blossomItem)
 }
 
 /**
- * closeTask
+ * closeBlossom
  */
 void
-SakuraCopySubtreeBlossom::closeTask(BlossomItem &blossomItem)
+SakuraCopySubtreeBlossom::closeBlossom(BlossomItem &blossomItem)
 {
     blossomItem.success = true;
 }

@@ -65,7 +65,7 @@ FileCopyBlossom_Test::initTask_test()
     fakeItem.values.insert("source_path", new DataValue(m_sourceFile));
     fakeItem.values.insert("dest_path", new DataValue(m_destinationFile));
 
-    fakeCopyBlossom.initTask(fakeItem);
+    fakeCopyBlossom.initBlossom(fakeItem);
     TEST_EQUAL(fakeItem.success, true);
 
     TEST_EQUAL(fakeCopyBlossom.m_sourcePath, m_sourceFile);
@@ -84,7 +84,7 @@ FileCopyBlossom_Test::preCheck_test()
 
     FileCopyBlossom fakeCopyBlossom;
 
-    fakeCopyBlossom.initTask(fakeItem);
+    fakeCopyBlossom.initBlossom(fakeItem);
     fakeCopyBlossom.preCheck(fakeItem);
     TEST_EQUAL(fakeItem.success, false);
     TEST_EQUAL(fakeItem.skip, false);
@@ -116,7 +116,7 @@ FileCopyBlossom_Test::runTask_test()
 
     FileCopyBlossom fakeCopyBlossom;
 
-    fakeCopyBlossom.initTask(fakeItem);
+    fakeCopyBlossom.initBlossom(fakeItem);
     fakeCopyBlossom.runTask(fakeItem);
     TEST_EQUAL(fakeItem.success, true);
 
@@ -138,7 +138,7 @@ FileCopyBlossom_Test::postCheck_test()
 
     FileCopyBlossom fakeCopyBlossom;
 
-    fakeCopyBlossom.initTask(fakeItem);
+    fakeCopyBlossom.initBlossom(fakeItem);
     runSyncProcess(fakeItem, "touch " + m_destinationFile);
     fakeCopyBlossom.postCheck(fakeItem);
     TEST_EQUAL(fakeItem.success, true);
@@ -161,8 +161,8 @@ FileCopyBlossom_Test::closeTask_test()
 
     FileCopyBlossom fakeCopyBlossom;
 
-    fakeCopyBlossom.initTask(fakeItem);
-    fakeCopyBlossom.closeTask(fakeItem);
+    fakeCopyBlossom.initBlossom(fakeItem);
+    fakeCopyBlossom.closeBlossom(fakeItem);
     TEST_EQUAL(fakeItem.success, true);
 }
 

@@ -54,9 +54,9 @@ Blossom::growBlossom(BlossomItem &blossomItem)
 
     //-------------------------------
     if(DEBUG) {
-        std::cout<<"initTask"<<std::endl;
+        std::cout<<"initBlossom"<<std::endl;
     }
-    initTask(blossomItem);
+    initBlossom(blossomItem);
     if(blossomItem.success == false)
     {
         blossomItem.resultState = BlossomItem::ERROR_INIT_STATE;
@@ -104,9 +104,9 @@ Blossom::growBlossom(BlossomItem &blossomItem)
     }
     //-------------------------------
     if(DEBUG) {
-        std::cout<<"closeTask"<<std::endl;
+        std::cout<<"closeBlossom"<<std::endl;
     }
-    closeTask(blossomItem);
+    closeBlossom(blossomItem);
     if(blossomItem.success == false)
     {
         blossomItem.resultState = BlossomItem::ERROR_CLOSE_STATE;

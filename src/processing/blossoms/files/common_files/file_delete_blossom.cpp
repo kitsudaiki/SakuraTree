@@ -33,10 +33,10 @@ FileDeleteBlossom::FileDeleteBlossom()
 }
 
 /**
- * @brief initTask
+ * @brief initBlossom
  */
 void
-FileDeleteBlossom::initTask(BlossomItem &blossomItem)
+FileDeleteBlossom::initBlossom(BlossomItem &blossomItem)
 {
     m_filePath = blossomItem.values.getValueAsString("file_path");
 
@@ -94,10 +94,10 @@ FileDeleteBlossom::postCheck(BlossomItem &blossomItem)
 }
 
 /**
- * @brief closeTask
+ * @brief closeBlossom
  */
 void
-FileDeleteBlossom::closeTask(BlossomItem &blossomItem)
+FileDeleteBlossom::closeBlossom(BlossomItem &blossomItem)
 {
     blossomItem.success = true;
 }

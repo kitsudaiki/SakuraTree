@@ -38,10 +38,10 @@ TemplateCreateBlossom::TemplateCreateBlossom()
 }
 
 /**
- * initTask
+ * initBlossom
  */
 void
-TemplateCreateBlossom::initTask(BlossomItem &blossomItem)
+TemplateCreateBlossom::initBlossom(BlossomItem &blossomItem)
 {
     m_templatePath = blossomItem.values.getValueAsString("source_path");
     m_destinationPath = blossomItem.values.getValueAsString("dest_path");
@@ -171,10 +171,10 @@ TemplateCreateBlossom::postCheck(BlossomItem &blossomItem)
 }
 
 /**
- * closeTask
+ * closeBlossom
  */
 void
-TemplateCreateBlossom::closeTask(BlossomItem &blossomItem)
+TemplateCreateBlossom::closeBlossom(BlossomItem &blossomItem)
 {
     blossomItem.success = true;
 }

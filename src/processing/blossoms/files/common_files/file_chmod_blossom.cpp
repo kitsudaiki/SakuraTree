@@ -34,10 +34,10 @@ FileChmodBlossom::FileChmodBlossom()
 }
 
 /**
- * @brief initTask
+ * @brief initBlossom
  */
 void
-FileChmodBlossom::initTask(BlossomItem &blossomItem)
+FileChmodBlossom::initBlossom(BlossomItem &blossomItem)
 {
     m_filePath = blossomItem.values.getValueAsString("file_path");
     m_permission = blossomItem.values.getValueAsString("permission");
@@ -90,10 +90,10 @@ FileChmodBlossom::postCheck(BlossomItem &blossomItem)
 }
 
 /**
- * @brief closeTask
+ * @brief closeBlossom
  */
 void
-FileChmodBlossom::closeTask(BlossomItem &blossomItem)
+FileChmodBlossom::closeBlossom(BlossomItem &blossomItem)
 {
     blossomItem.success = true;
 }

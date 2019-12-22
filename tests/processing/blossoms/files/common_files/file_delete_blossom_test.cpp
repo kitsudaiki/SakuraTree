@@ -59,7 +59,7 @@ FileDeleteBlossom_Test::initTask_test()
 
     fakeItem.values.insert("file_path", new DataValue(m_path));
 
-    fakeDeleteBlossom.initTask(fakeItem);
+    fakeDeleteBlossom.initBlossom(fakeItem);
     TEST_EQUAL(fakeItem.success, true);
 
     TEST_EQUAL(fakeDeleteBlossom.m_filePath, m_path);
@@ -76,7 +76,7 @@ FileDeleteBlossom_Test::preCheck_test()
 
     FileDeleteBlossom fakeDeleteBlossom;
 
-    fakeDeleteBlossom.initTask(fakeItem);
+    fakeDeleteBlossom.initBlossom(fakeItem);
     fakeDeleteBlossom.preCheck(fakeItem);
     TEST_EQUAL(fakeItem.success, false);
 
@@ -99,7 +99,7 @@ FileDeleteBlossom_Test::runTask_test()
 
     FileDeleteBlossom fakeDeleteBlossom;
 
-    fakeDeleteBlossom.initTask(fakeItem);
+    fakeDeleteBlossom.initBlossom(fakeItem);
     fakeDeleteBlossom.runTask(fakeItem);
     TEST_EQUAL(fakeItem.success, false);
 
@@ -123,7 +123,7 @@ FileDeleteBlossom_Test::postCheck_test()
 
     FileDeleteBlossom fakeDeleteBlossom;
 
-    fakeDeleteBlossom.initTask(fakeItem);
+    fakeDeleteBlossom.initBlossom(fakeItem);
     fakeDeleteBlossom.postCheck(fakeItem);
     TEST_EQUAL(fakeItem.success, true);
 
@@ -145,8 +145,8 @@ FileDeleteBlossom_Test::closeTask_test()
 
     FileDeleteBlossom fakeDeleteBlossom;
 
-    fakeDeleteBlossom.initTask(fakeItem);
-    fakeDeleteBlossom.closeTask(fakeItem);
+    fakeDeleteBlossom.initBlossom(fakeItem);
+    fakeDeleteBlossom.closeBlossom(fakeItem);
     TEST_EQUAL(fakeItem.success, true);
 }
 

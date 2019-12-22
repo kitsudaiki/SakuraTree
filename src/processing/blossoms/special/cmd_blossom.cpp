@@ -32,10 +32,10 @@ CmdBlossom::CmdBlossom()
 }
 
 /**
- * initTask
+ * initBlossom
  */
 void
-CmdBlossom::initTask(BlossomItem &blossomItem)
+CmdBlossom::initBlossom(BlossomItem &blossomItem)
 {
     m_command = blossomItem.values.getValueAsString("command");
 
@@ -73,10 +73,10 @@ CmdBlossom::postCheck(BlossomItem &blossomItem)
 }
 
 /**
- * closeTask
+ * closeBlossom
  */
 void
-CmdBlossom::closeTask(BlossomItem &blossomItem)
+CmdBlossom::closeBlossom(BlossomItem &blossomItem)
 {
     blossomItem.success = true;
 }

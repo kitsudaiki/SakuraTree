@@ -35,10 +35,10 @@ TextWriteBlossom::TextWriteBlossom()
 }
 
 /**
- * @brief initTask
+ * @brief initBlossom
  */
 void
-TextWriteBlossom::initTask(BlossomItem &blossomItem)
+TextWriteBlossom::initBlossom(BlossomItem &blossomItem)
 {
     m_filePath = blossomItem.values.getValueAsString("file_path");
     m_text = blossomItem.values.getValueAsString("text");
@@ -103,10 +103,10 @@ TextWriteBlossom::postCheck(BlossomItem &blossomItem)
 }
 
 /**
- * @brief closeTask
+ * @brief closeBlossom
  */
 void
-TextWriteBlossom::closeTask(BlossomItem &blossomItem)
+TextWriteBlossom::closeBlossom(BlossomItem &blossomItem)
 {
     blossomItem.success = true;
 }
