@@ -30,12 +30,12 @@ namespace SakuraTree
 
 void dataCallback(void* target,
                   const std::string address,
-                  const std::string plan,
+                  const std::string subtree,
                   const std::string values)
 {
-    std::cout<<"dataCallback: "<<plan<<std::endl;
+    std::cout<<"dataCallback: "<<subtree<<std::endl;
     SakuraRoot* rootClass = static_cast<SakuraRoot*>(target);
-    rootClass->startSubtreeProcess(plan, values);
+    rootClass->startSubtreeProcess(subtree, values);
 }
 
 void blossomOutputCallback(void* target,

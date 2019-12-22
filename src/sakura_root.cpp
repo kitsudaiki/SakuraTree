@@ -164,16 +164,16 @@ SakuraRoot::startSubtreeProcess(const std::string &subtree,
 /**
  * @brief SakuraRoot::sendPlan
  * @param address
- * @param plan
+ * @param subtree
  * @return
  */
 bool
 SakuraRoot::sendPlan(const std::string &address,
-                     const std::string &plan,
+                     const std::string &subtree,
                      const std::string &values)
 {
     // TODO: enable again in 0.3.0
-    // return m_controller->sendGrowPlan(address, plan, values);
+    // return m_controller->sendGrowPlan(address, subtree, values);
     return false;
 }
 

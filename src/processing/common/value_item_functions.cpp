@@ -20,40 +20,48 @@
  *      limitations under the License.
  */
 
-#include <processing/common/functions.h>
+#include <processing/common/value_item_functions.h>
 #include <libKitsunemimiCommon/common_methods/string_methods.h>
 
 using Kitsunemimi::Common::splitStringByDelimiter;
 
 /**
- * @brief getValue
- * @param original
- * @param value
- * @return
+ * @brief request a value from a map- or array-item
+ *
+ * @param item map- or array-item
+ * @param key key in map or position in array of the requested object
+ *
+ * @return requested value, if found, else nullptr
  */
 DataItem*
-getValue(DataItem* original,
-         DataValue* value)
+getValue(DataItem* item,
+         DataValue* key)
 {
-    if(original == nullptr) {
+    // precheck
+    if(item == nullptr
+            || key == nullptr)
+    {
         return nullptr;
     }
 
-    if(original->isMap())
+    // get value in case of item is a map
+    if(item->isMap())
     {
-        DataItem* resultItem = original->get(value->toString());
+        DataItem* resultItem = item->get(key->toString());
         return resultItem;
     }
 
-    if(original->isArray())
+    // get value in case of item is an array
+    if(item->isArray())
     {
-        if(value->isIntValue() == false
-                || value->getLong() < 0)
+        // check that value for access is an integer
+        if(key->isIntValue() == false
+                || key->getLong() < 0)
         {
             return nullptr;
         }
 
-        DataItem* resultItem = original->get(static_cast<uint64_t>(value->getLong()));
+        DataItem* resultItem = item->get(static_cast<uint64_t>(key->getLong()));
         return resultItem;
     }
 
@@ -61,34 +69,41 @@ getValue(DataItem* original,
 }
 
 /**
- * @brief splitValue
- * @param original
- * @param delimiter
- * @return
+ * @brief splitValue split a value-item by a delimiter
+ *
+ * @param item value-item, which should be splited
+ * @param delimiter delimiter as string-value to identify the positions, where to split
+ *
+ * @return array-item with the splitted content
  */
-DataItem*
-splitValue(DataItem* original,
+DataArray*
+splitValue(DataValue* item,
            DataValue* delimiter)
 {
-    if(original == nullptr
-            || original->isValue() == false)
+    // precheck
+    if(item == nullptr
+            || delimiter == nullptr)
     {
         return nullptr;
     }
 
+    // get and check delimiter-string
     const std::string delimiterString = delimiter->toString();
     if(delimiterString.size() == 0) {
         return nullptr;
     }
 
+    // get first character as delimiter and handle line-break as special rule
     char demilimter = delimiterString.at(0);
     if(delimiterString == "\\n") {
         demilimter = '\n';
     }
 
-    const std::vector<std::string> array = splitStringByDelimiter(original->toString(),
+    // split string into string-array
+    const std::vector<std::string> array = splitStringByDelimiter(item->toString(),
                                                                   demilimter);
 
+    // convert string-array into a DataArray-object
     DataArray* resultArray = new DataArray();
     for(uint32_t i = 0; i < array.size(); i++)
     {
@@ -100,45 +115,54 @@ splitValue(DataItem* original,
 
 /**
  * @brief sizeValue
- * @param original
+ * @param item
  * @return
  */
 DataItem*
-sizeValue(DataItem* original)
+sizeValue(DataItem* item)
 {
-    if(original == nullptr) {
+    // precheck
+    if(item == nullptr) {
         return nullptr;
     }
 
-    const long size = static_cast<long>(original->size());
+    const long size = static_cast<long>(item->size());
     DataValue* resultItem = new DataValue(size);
 
     return resultItem;
 }
 
 /**
- * @brief containsValue
- * @param original
- * @param value
- * @return
+ * @brief check if a map or array item contains a specific value
+ *
+ * @param item data-item, which should be checked
+ * @param key value, which should be searched in the item
+ *
+ * @return data-value with true, if key was found, else data-value with false
  */
 DataItem*
-containsValue(DataItem* original,
+containsValue(DataItem* item,
               DataValue* key)
 {
-    if(original == nullptr) {
+    // precheck
+    if(item == nullptr
+            || key == nullptr)
+    {
         return nullptr;
     }
 
-    if(original->isMap())
+    // in case, that the item is a map
+    if(item->isMap())
     {
-        const bool result = original->toMap()->contains(key->toString());
+        const bool result = item->toMap()->contains(key->toString());
         return new DataValue(result);
     }
 
-    if(original->isArray())
+    // in case, that the item is an array
+    if(item->isArray())
     {
-        DataArray* tempArray = original->toArray();
+        // iterate over the array in interprete all as string for easier comparing
+        DataArray* tempArray = item->toArray();
         for(uint32_t i = 0; i < tempArray->size(); i++)
         {
             if(tempArray->get(i)->toString() == key->toString()) {
@@ -149,9 +173,11 @@ containsValue(DataItem* original,
         return new DataValue(false);
     }
 
-    if(original->isValue())
+    // in case, that the item is a value
+    if(item->isValue())
     {
-        if (original->toString().find(key->toString()) != std::string::npos) {
+        // interprete this value as string and check if the substring exist in it
+        if (item->toString().find(key->toString()) != std::string::npos) {
             return new DataValue(true);
         }
 
@@ -162,46 +188,57 @@ containsValue(DataItem* original,
 }
 
 /**
- * @brief appendValue
- * @param original
- * @param value
- * @return
+ * @brief add a new object to an existing DataArray-object
+ *
+ * @param item array-item, which shluld be extended
+ * @param value data-item, which should be added
+ *
+ * @return copy of the original array-item together with the new added object
  */
-DataItem*
-appendValue(DataItem* original,
-            DataValue* value)
+DataArray*
+appendValue(DataArray* item,
+            DataItem* value)
 {
-    if(original == nullptr
-            || original->isArray() == false)
+    // precheck
+    if(item == nullptr
+            || value == nullptr)
     {
         return nullptr;
     }
 
-    original->toArray()->append(value);
+    // add oject to the map
+    DataArray* result = item->copy()->toArray();
+    result->append(value);
 
-    return original;
+    return result;
 }
 
 /**
- * @brief insertValue
- * @param original
- * @param key
- * @param value
- * @return
+ * @brief add a new key-value-pair to an existing DataMap-object
+ *
+ * @param item pointer to the map-item, where the new pair should be added
+ * @param key key of the new pair
+ * @param value value of the new pair
+ *
+ * @return copy of the original map-item together with the new added pair
  */
-DataItem*
-insertValue(DataItem* original,
+DataMap*
+insertValue(DataMap* item,
             DataValue* key,
             DataValue* value)
 {
-    if(original == nullptr
-            || original->isMap() == false)
+    // precheck
+    if(item == nullptr
+            || key == nullptr
+            || value == nullptr)
     {
         return nullptr;
     }
 
+    // insert new key-value-pair
     const std::string keyString = key->toString();
-    original->toMap()->insert(key->toString(), value, true);
+    DataMap* result = item->copy()->toMap();
+    result->insert(key->toString(), value, true);
 
-    return original;
+    return result;
 }

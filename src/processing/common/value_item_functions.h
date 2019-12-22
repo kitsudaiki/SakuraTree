@@ -25,11 +25,11 @@
 
 #include <common.h>
 
-DataItem* getValue(DataItem* original, DataValue* value);
-DataItem* splitValue(DataItem* original, DataValue* delimiter);
-DataItem* sizeValue(DataItem* original);
-DataItem* containsValue(DataItem* original, DataValue* key);
-DataItem* appendValue(DataItem* original, DataValue* value);
-DataItem* insertValue(DataItem* original, DataValue* key, DataValue* value);
+DataItem* getValue(DataItem* item, DataValue* key);
+DataArray* splitValue(DataValue* item, DataValue* delimiter);
+DataItem* sizeValue(DataItem* item);
+DataItem* containsValue(DataItem* item, DataValue* key);
+DataArray* appendValue(DataArray* item, DataItem* value);
+DataMap* insertValue(DataMap* item, DataValue* key, DataValue* value);
 
 #endif // VALUE_ITEM_FUNCTIONS_H

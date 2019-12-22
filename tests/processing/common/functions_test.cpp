@@ -214,13 +214,10 @@ ValueItemsFunctions_Test::appendValue_test()
 
     result = appendValue(&testArray, new DataValue("12345"));
 
-    result = sizeValue(&testArray);
+    result = sizeValue(result);
     TEST_EQUAL(result->toValue()->getLong(), 3);
 
     // negative tests
-    result = appendValue(new DataMap(), new DataValue("12345"));
-    checkNullptr(result);
-
     result = appendValue(nullptr, new DataValue("12345"));
     checkNullptr(result);
 }
@@ -240,14 +237,11 @@ ValueItemsFunctions_Test::insertValue_test()
 
     result = insertValue(&testMap, new DataValue("12345"), new DataValue("12345"));
 
-    result = containsValue(&testMap, new DataValue("12345"));
+    result = containsValue(result, new DataValue("12345"));
     TEST_EQUAL(result->toValue()->getBool(), true);
 
 
     // negative tests
-    result = insertValue(new DataArray(), new DataValue("12345"), new DataValue("12345"));
-    checkNullptr(result);
-
     result = insertValue(nullptr, new DataValue("12345"), new DataValue("12345"));
     checkNullptr(result);
 }

@@ -26,7 +26,7 @@
 #include <sakura_root.h>
 #include <processing/blossoms/blossom.h>
 #include <libKitsunemimiJinja2/jinja2_converter.h>
-#include <processing/common/functions.h>
+#include <processing/common/value_item_functions.h>
 
 using Kitsunemimi::Jinja2::Jinja2Converter;
 
@@ -63,7 +63,7 @@ getProcessedItem(ValueItem &original,
             }
             ValueItem arg = original.functions.at(i).arguments.at(0);
             if(fillValueItem(arg, insertValues)) {
-                original.item = splitValue(original.item, arg.item->toValue());
+                original.item = splitValue(original.item->toValue(), arg.item->toValue());
             }
             break;
         }
@@ -93,7 +93,7 @@ getProcessedItem(ValueItem &original,
             if(fillValueItem(arg1, insertValues)
                     && fillValueItem(arg2, insertValues))
             {
-                original.item = insertValue(original.item,
+                original.item = insertValue(original.item->toMap(),
                                             arg1.item->toValue(),
                                             arg2.item->toValue());
             }
@@ -106,7 +106,7 @@ getProcessedItem(ValueItem &original,
             }
             ValueItem arg = original.functions.at(i).arguments.at(0);
             if(fillValueItem(arg, insertValues)) {
-                original.item = appendValue(original.item, arg.item->toValue());
+                original.item = appendValue(original.item->toArray(), arg.item->toValue());
             }
             break;
         }

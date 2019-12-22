@@ -60,7 +60,7 @@ public:
                              const std::string &values);
 
     bool sendPlan(const std::string &address,
-                  const std::string &plan,
+                  const std::string &subtree,
                   const std::string &values);
 
     bool startClientConnection(const std::string &address,
