@@ -24,7 +24,7 @@
 #define SAKURA_ITEMS_H
 
 #include <common.h>
-#include <items/value_items.h>
+#include <items/value_item_map.h>
 
 namespace SakuraTree
 {

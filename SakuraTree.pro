@@ -117,7 +117,8 @@ HEADERS += \
     tests/processing/common/item_methods_test.h \
     tests/run_unit_tests.h \
     src/processing/common/value_item_functions.h \
-    src/converter/common_converter_methods.h
+    src/converter/common_converter_methods.h \
+    src/items/value_item_map.h
 
 SOURCES += \
     src/branch_builder/provision_branch_builder.cpp \
@@ -176,7 +177,8 @@ SOURCES += \
     tests/processing/common/functions_test.cpp \
     tests/processing/common/item_methods_test.cpp \
     tests/run_unit_tests.cpp \
-    src/converter/common_converter_methods.cpp
+    src/converter/common_converter_methods.cpp \
+    src/items/value_item_map.cpp
 
 
 
