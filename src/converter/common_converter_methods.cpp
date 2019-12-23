@@ -1,5 +1,5 @@
 /**
- * @file        common_methos.cpp
+ * @file        common_converter_methods.cpp
  *
  * @author      Tobias Anker <tobias.anker@kitsunemimi.moe>
  *
@@ -20,7 +20,7 @@
  *      limitations under the License.
  */
 
-#include "common_methods.h"
+#include "common_converter_methods.h"
 
 #include <processing/blossoms/blossom_getter.h>
 #include <processing/blossoms/blossom.h>

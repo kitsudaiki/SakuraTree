@@ -56,7 +56,7 @@ SakuraThread::run()
     m_started = true;
     while(m_abort == false)
     {
-        SubtreeQueue::SubtreeObject currentSubtree = m_queue->getSubtree();
+        SubtreeQueue::SubtreeObject currentSubtree = m_queue->getSubtreeObject();
         if(currentSubtree.subtree == nullptr)
         {
             std::this_thread::sleep_for(chronoMicroSec(10));
@@ -310,7 +310,7 @@ SakuraThread::processForEach(ForEachBranching* subtree,
             object.items = m_parentValues;
             object.hirarchy = m_hierarchy;
             object.activeCounter = counter;
-            m_queue->addSubtree(object);
+            m_queue->addSubtreeObject(object);
         }
 
         while(counter->isEqual() == false) {
@@ -372,7 +372,7 @@ SakuraThread::processFor(ForBranching* subtree,
             object.items = m_parentValues;
             object.hirarchy = m_hierarchy;
             object.activeCounter = counter;
-            m_queue->addSubtree(object);
+            m_queue->addSubtreeObject(object);
         }
 
         while(counter->isEqual() == false) {
@@ -421,7 +421,7 @@ SakuraThread::processParallelPart(Parallel *subtree)
         object.hirarchy = m_hierarchy;
         object.items = m_parentValues;
         object.activeCounter = counter;
-        m_queue->addSubtree(object);
+        m_queue->addSubtreeObject(object);
     }
 
     while(counter->isEqual() == false) {

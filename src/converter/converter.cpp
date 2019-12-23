@@ -30,7 +30,7 @@
 #include <sakura_root.h>
 #include <items/sakura_items.h>
 #include <processing/common/item_methods.h>
-#include <converter/common_methods.h>
+#include <converter/common_converter_methods.h>
 
 #include <branch_builder/provision_branch_builder.h>
 
