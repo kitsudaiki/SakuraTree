@@ -31,6 +31,7 @@ namespace SakuraTree
 
 /**
  * @brief merge two item-maps
+ *
  * @param original original item-map
  * @param override additional item-map for merging into the original one
  */
@@ -51,11 +52,12 @@ overrideItems(JsonItem &original,
 }
 
 /**
- * @brief checkForRequiredKeys
- * @param blossomItem
- * @param blossomGroupType
- * @param blossomType
- * @return
+ * @brief check if all values are set inside a blossom-item, which are required for the
+ *        requested blossom-type
+ *
+ * @param blossomItem blossom-item with the information
+ *
+ * @return true, if all necessary values are set, else false
  */
 bool
 checkForRequiredKeys(BlossomItem &blossomItem)
@@ -70,19 +72,24 @@ checkForRequiredKeys(BlossomItem &blossomItem)
 }
 
 /**
- * @brief checkForRequiredKeys
+ * @brief check if all values of a blossom-item match with a list of required keys
  *
- * @param values
- * @param requiredKeys
+ * @param blossomItem blossom-item with the information
+ * @param requiredKeys data-map with all required keys. The value behind each key is a
+ *                     boolean data-value. If this value is false, the key is optional and don't
+ *                     have to be in the values of the blossom-item
  *
- * @return
+ * @return true, if all necessary values are set, else false
  */
 bool
 checkForRequiredKeys(BlossomItem &blossomItem,
                      DataMap &requiredKeys)
 {
+    // if "*" is in the list of required key, there is more allowed as the list contains items
+    // for example the print-blossom allows all key
     if(requiredKeys.contains("*") == false)
     {
+        // check if all keys in the values of the blossom-item also exist in the required-key-list
         std::map<std::string, ValueItem>::const_iterator it;
         for(it = blossomItem.values.const_begin();
             it != blossomItem.values.const_end();
@@ -110,6 +117,7 @@ checkForRequiredKeys(BlossomItem &blossomItem,
         }
     }
 
+    // check that all keys in the required keys are also in the values of the blossom-item
     std::map<std::string, DataItem*>::const_iterator it;
     for(it = requiredKeys.m_map.begin();
         it != requiredKeys.m_map.end();
@@ -119,6 +127,8 @@ checkForRequiredKeys(BlossomItem &blossomItem,
             continue;
         }
 
+        // if values of the blossom-item doesn't contain the key and the key is not optional,
+        // then create an error-message
         if(blossomItem.values.contains(it->first) == false
                 && it->second->toValue()->getBool() == true)
         {
