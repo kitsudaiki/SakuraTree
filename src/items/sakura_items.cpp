@@ -343,12 +343,12 @@ SakuraItem *ForBranching::copy()
 //===================================================================
 // Parallel
 //===================================================================
-Parallel::Parallel()
+ParallelPart::ParallelPart()
 {
     type = PARALLEL_ITEM;
 }
 
-Parallel::~Parallel()
+ParallelPart::~ParallelPart()
 {
     for(uint32_t i = 0; i < childs.size(); i++)
     {
@@ -359,9 +359,9 @@ Parallel::~Parallel()
     }
 }
 
-SakuraItem* Parallel::copy()
+SakuraItem* ParallelPart::copy()
 {
-    Parallel* newItem = new Parallel();
+    ParallelPart* newItem = new ParallelPart();
 
     newItem->type = type;
     newItem->values = values;

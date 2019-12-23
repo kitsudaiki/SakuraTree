@@ -231,11 +231,11 @@ public:
 //===================================================================
 // Parallel
 //===================================================================
-class Parallel : public SakuraItem
+class ParallelPart : public SakuraItem
 {
 public:
-    Parallel();
-    ~Parallel();
+    ParallelPart();
+    ~ParallelPart();
     SakuraItem* copy();
 
     std::vector<SakuraItem*> childs;

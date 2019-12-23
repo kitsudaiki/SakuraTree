@@ -30,6 +30,7 @@ namespace argParser = boost::program_options;
 
 int main(int argc, char *argv[])
 {
+    // run unit-tests, if enabled by define-value
     #ifdef RUN_UNIT_TEST
     SakuraTree::RunUnitTests unitTests;
     unitTests.run();
@@ -57,7 +58,8 @@ int main(int argc, char *argv[])
             argParser::value<std::vector<std::string>>()->multitoken()->zero_tokens()->composing(),
             "set initial values"
         )
-        (
+        // TODO: enable again in 0.3.0
+        /*(
             "server-address",
             argParser::value<std::string>(),
             "address of the server"
@@ -66,7 +68,7 @@ int main(int argc, char *argv[])
             "server-port",
             argParser::value<int>(),
             "port of the server"
-        )
+        )*/
     ;
 
     argParser::variables_map vm;
@@ -118,7 +120,8 @@ int main(int argc, char *argv[])
         // start
         root->startProcess(seedPath, seedName, initialValues);
     }
-    else if(vm.count("server-address") && vm.count("server-port"))
+    // TODO: enable again in 0.3.0
+    /*else if(vm.count("server-address") && vm.count("server-port"))
     {
         SakuraTree::SakuraRoot* root = new SakuraTree::SakuraRoot(std::string(argv[0]));
         const std::string address = vm["server-address"].as<std::string>();
@@ -130,7 +133,7 @@ int main(int argc, char *argv[])
         {
             sleep(10);
         }
-    }
+    }*/
     else
     {
         std::cout << "seed-path is missing"<<std::endl;

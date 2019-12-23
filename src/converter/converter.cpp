@@ -534,7 +534,7 @@ SakuraItem*
 Converter::convertParallel(const JsonItem &subtree, bool &success)
 {
     // init new parallel-branching-item
-    Parallel* newItem = new Parallel();
+    ParallelPart* newItem = new ParallelPart();
 
     // convert parts of the tree
     const JsonItem parts = subtree.get("parts");

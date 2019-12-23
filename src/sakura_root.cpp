@@ -28,6 +28,7 @@
 #include <processing/sakura_tree_callbacks.h>
 #include <processing/thread_pool.h>
 
+// TODO: enable again in 0.3.0
 // #include <libKitsunemimiSakuraNetwork/sakura_host_handler.h>
 #include <libKitsunemimiSakuraParser/sakura_parsing.h>
 
@@ -43,18 +44,24 @@ TableItem SakuraRoot::m_errorOutput;
 Jinja2Converter* SakuraRoot::m_jinja2Converter = nullptr;
 
 /**
- * constructor
+ * @brief constructor
+ *
+ * @param executablePath path of the current executed SakuraTree-binary
  */
 SakuraRoot::SakuraRoot(const std::string &executablePath)
 {
+    // initialzed static variables
     m_root = this;
     m_executablePath = executablePath;
     m_jinja2Converter = new Jinja2Converter();
 
+    // initialize error-output
     m_errorOutput.addColumn("Field");
     m_errorOutput.addColumn("Value");
     m_errorOutput.addRow(std::vector<std::string>{"ERROR", "ERROR"});
 
+    // initialize thread-pool
+    // TODO: make the number of initialized threads configurable
     m_threadPool = new ThreadPool(8);
 
     // TODO: enable again in 0.3.0
@@ -69,6 +76,7 @@ SakuraRoot::SakuraRoot(const std::string &executablePath)
  */
 SakuraRoot::~SakuraRoot()
 {
+    // TODO: clear thread-pool and subtree-queue
     if(m_rootThread != nullptr)
     {
         m_rootThread->stopThread();
@@ -84,12 +92,13 @@ SakuraRoot::~SakuraRoot()
  */
 bool
 SakuraRoot::startProcess(const std::string &rootPath,
-                         std::string seedName,
-                         DataMap &initialValues)
+                         const std::string &seedName,
+                         const DataMap &initialValues)
 {
+    // TODO: enable again in 0.3.0
     // m_controller->createServer(1337);
 
-    // parsing
+    // parse all files and convert the into
     SakuraParsing sakuraParsing(DEBUG);
     bool parserResult = sakuraParsing.parseFiles(rootPath);
     if(parserResult == false)
@@ -98,8 +107,11 @@ SakuraRoot::startProcess(const std::string &rootPath,
         return false;
     }
 
-    // converting
+    // get the initial selected parsed file-content. if seedName is empty string, it
+    // return the first file. This is helpful, if only one file was parsed
     JsonItem tree = sakuraParsing.getParsedFileContent(seedName);
+
+    // convert json-representaion of the tree into a sakura-item-tree
     Converter converter;
     SakuraItem* processPlan = converter.convert(tree);
     if(processPlan == nullptr)
@@ -108,7 +120,8 @@ SakuraRoot::startProcess(const std::string &rootPath,
         return false;
     }
 
-    // run process
+    // run process by adding the tree as subtree-object to the subtree-queue to be processed by
+    // one of the worker-threads
     SubtreeQueue::SubtreeObject object;
     object.subtree = processPlan;
     object.items = initialValues;
@@ -116,20 +129,18 @@ SakuraRoot::startProcess(const std::string &rootPath,
     object.activeCounter->shouldCount = 1;
     m_threadPool->m_queue.addSubtreeObject(object);
 
+    // wait until the created subtree was fully processed by the worker-threads
     while(object.activeCounter->isEqual() == false) {
         std::this_thread::sleep_for(chronoMilliSec(10));
     }
 
-    // sleep(1000);
     std::cout<<"finish"<<std::endl;
 
     return true;
 }
 
 /**
- * @brief SakuraRoot::startSubtreeProcess
- * @param subtree
- * @return
+ * readded in 0.3.0
  */
 bool
 SakuraRoot::startSubtreeProcess(const std::string &subtree,
@@ -162,10 +173,7 @@ SakuraRoot::startSubtreeProcess(const std::string &subtree,
 }
 
 /**
- * @brief SakuraRoot::sendPlan
- * @param address
- * @param subtree
- * @return
+ * readded in 0.3.0
  */
 bool
 SakuraRoot::sendPlan(const std::string &address,
@@ -179,10 +187,7 @@ SakuraRoot::sendPlan(const std::string &address,
 
 
 /**
- * @brief SakuraRoot::startClientConnection
- * @param address
- * @param port
- * @return
+ * readded in 0.3.0
  */
 bool
 SakuraRoot::startClientConnection(const std::string &address,
@@ -194,7 +199,7 @@ SakuraRoot::startClientConnection(const std::string &address,
 }
 
 /**
- * @brief SakuraRoot::pringOutpue
+ * readded in 0.3.0
  */
 void
 SakuraRoot::printOutput(const BlossomItem &blossomItem)
@@ -213,12 +218,14 @@ SakuraRoot::printOutput(const BlossomItem &blossomItem)
 }
 
 /**
- * @brief SakuraRoot::pringOutput
- * @param output
+ * @brief print output-string
+ *
+ * @param output string, which should be printed
  */
 void
 SakuraRoot::printOutput(const std::string &output)
 {
+    // TODO: use logger instead
     m_mutex.lock();
     std::cout<<output<<std::endl;
     m_mutex.unlock();

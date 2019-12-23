@@ -33,9 +33,11 @@ namespace SakuraTree
 {
 
 /**
- * constructor
+ * @brief constructor
+ *
+ * @param queue pointer to the subtree-queue, where new separated subtrees should be added
  */
-SakuraThread::SakuraThread(SubtreeQueue *queue)
+SakuraThread::SakuraThread(SubtreeQueue* queue)
 {
     m_queue = queue;
 }
@@ -48,7 +50,8 @@ SakuraThread::~SakuraThread()
 }
 
 /**
- * start thread
+ * @brief run the main-loop of the thread and process each subtree, which can be taken from the
+ *        queue
  */
 void
 SakuraThread::run()
@@ -57,16 +60,19 @@ SakuraThread::run()
     while(m_abort == false)
     {
         SubtreeQueue::SubtreeObject currentSubtree = m_queue->getSubtreeObject();
+
         if(currentSubtree.subtree == nullptr)
         {
-            std::this_thread::sleep_for(chronoMicroSec(10));
+            // if subtree-queue is empty, then wait for 1 milli-seconds before asking the queue
+            // again for a new subtree
+            std::this_thread::sleep_for(chronoMilliSec(1));
         }
         else
         {
             m_hierarchy = currentSubtree.hirarchy;
             overrideItems(m_parentValues, currentSubtree.subtree->values, false);
             overrideItems(m_parentValues, currentSubtree.items, false);
-            grow(currentSubtree.subtree);
+            processSakuraItem(currentSubtree.subtree);
             if(currentSubtree.activeCounter != nullptr) {
                 currentSubtree.activeCounter->increaseCounter();
             }
@@ -78,72 +84,72 @@ SakuraThread::run()
  * central method of the thread to process the current part of the execution-tree
  */
 bool
-SakuraThread::grow(SakuraItem* subtree)
+SakuraThread::processSakuraItem(SakuraItem* sakuraItem)
 {
-    if(subtree->getType() == SakuraItem::SUBTREE_ITEM)
+    if(sakuraItem->getType() == SakuraItem::SUBTREE_ITEM)
     {
-        SubtreeItem* subtreeItem = dynamic_cast<SubtreeItem*>(subtree);
+        SubtreeItem* subtreeItem = dynamic_cast<SubtreeItem*>(sakuraItem);
         m_hierarchy.push_back("SUBTREE: " + subtreeItem->id);
         return processSubtree(subtreeItem);
     }
 
-    if(subtree->getType() == SakuraItem::BLOSSOM_ITEM)
+    if(sakuraItem->getType() == SakuraItem::BLOSSOM_ITEM)
     {
-        BlossomItem* blossomItem = dynamic_cast<BlossomItem*>(subtree);
+        BlossomItem* blossomItem = dynamic_cast<BlossomItem*>(sakuraItem);
         return processBlossom(*blossomItem);
     }
 
-    if(subtree->getType() == SakuraItem::BLOSSOM_GROUP_ITEM)
+    if(sakuraItem->getType() == SakuraItem::BLOSSOM_GROUP_ITEM)
     {
-        BlossomGroupItem* blossomGroupItem = dynamic_cast<BlossomGroupItem*>(subtree);
+        BlossomGroupItem* blossomGroupItem = dynamic_cast<BlossomGroupItem*>(sakuraItem);
         return processBlossomGroup(*blossomGroupItem);
     }
 
-    if(subtree->getType() == SakuraItem::IF_ITEM)
+    if(sakuraItem->getType() == SakuraItem::IF_ITEM)
     {
-        IfBranching* ifBranching = dynamic_cast<IfBranching*>(subtree);
+        IfBranching* ifBranching = dynamic_cast<IfBranching*>(sakuraItem);
         return processIf(ifBranching);
     }
 
-    if(subtree->getType() == SakuraItem::FOR_EACH_ITEM)
+    if(sakuraItem->getType() == SakuraItem::FOR_EACH_ITEM)
     {
-        ForEachBranching* forEachBranching = dynamic_cast<ForEachBranching*>(subtree);
+        ForEachBranching* forEachBranching = dynamic_cast<ForEachBranching*>(sakuraItem);
         return processForEach(forEachBranching, false);
     }
 
-    if(subtree->getType() == SakuraItem::FOR_ITEM)
+    if(sakuraItem->getType() == SakuraItem::FOR_ITEM)
     {
-        ForBranching* forBranching = dynamic_cast<ForBranching*>(subtree);
+        ForBranching* forBranching = dynamic_cast<ForBranching*>(sakuraItem);
         return processFor(forBranching, false);
     }
 
-    if(subtree->getType() == SakuraItem::PARALLEL_FOR_EACH_ITEM)
+    if(sakuraItem->getType() == SakuraItem::PARALLEL_FOR_EACH_ITEM)
     {
-        ForEachBranching* forEachBranching = dynamic_cast<ForEachBranching*>(subtree);
+        ForEachBranching* forEachBranching = dynamic_cast<ForEachBranching*>(sakuraItem);
         return processForEach(forEachBranching, true);
     }
 
-    if(subtree->getType() == SakuraItem::PARALLEL_FOR_ITEM)
+    if(sakuraItem->getType() == SakuraItem::PARALLEL_FOR_ITEM)
     {
-        ForBranching* forBranching = dynamic_cast<ForBranching*>(subtree);
+        ForBranching* forBranching = dynamic_cast<ForBranching*>(sakuraItem);
         return processFor(forBranching, true);
     }
 
-    if(subtree->getType() == SakuraItem::SEQUENTIELL_ITEM)
+    if(sakuraItem->getType() == SakuraItem::SEQUENTIELL_ITEM)
     {
-        Sequentiell* sequentiell = dynamic_cast<Sequentiell*>(subtree);
+        Sequentiell* sequentiell = dynamic_cast<Sequentiell*>(sakuraItem);
         return processSequeniellPart(sequentiell);
     }
 
-    if(subtree->getType() == SakuraItem::PARALLEL_ITEM)
+    if(sakuraItem->getType() == SakuraItem::PARALLEL_ITEM)
     {
-        Parallel* parallel = dynamic_cast<Parallel*>(subtree);
+        ParallelPart* parallel = dynamic_cast<ParallelPart*>(sakuraItem);
         return processParallelPart(parallel);
     }
 
-    if(subtree->getType() == SakuraItem::SEED_ITEM)
+    if(sakuraItem->getType() == SakuraItem::SEED_ITEM)
     {
-        SeedItem* forestItem = dynamic_cast<SeedItem*>(subtree);
+        SeedItem* forestItem = dynamic_cast<SeedItem*>(sakuraItem);
         SubtreeItem* branchItem = dynamic_cast<SubtreeItem*>(forestItem->child);
         return processSubtree(branchItem);
     }
@@ -152,50 +158,57 @@ SakuraThread::grow(SakuraItem* subtree)
 }
 
 /**
- * @brief SakuraThread::processBlossom
+ * @brief process single blossom
+ *
+ * @param blossomItem item with all information for the blossom
+ *
+ * @return true if successful, else false
  */
 bool
-SakuraThread::processBlossom(BlossomItem &subtree)
+SakuraThread::processBlossom(BlossomItem &blossomItem)
 {
-    const bool result = fillInputValueItemMap(subtree.values, m_parentValues);
+    // process values by filling with information of the parent-object
+    const bool result = fillInputValueItemMap(blossomItem.values, m_parentValues);
     if(result == false) {
         return false;
     }
 
-    Blossom* blossom = getBlossom(subtree.blossomGroupType,
-                                  subtree.blossomType);
-    subtree.parentValues = &m_parentValues;
-    blossom->growBlossom(subtree);
+    // get and prcess the requested blossom
+    Blossom* blossom = getBlossom(blossomItem.blossomGroupType, blossomItem.blossomType);
+    blossomItem.parentValues = &m_parentValues;
+    blossom->growBlossom(blossomItem);
     delete blossom;
 
     // send result to root
-    SakuraRoot::m_root->printOutput(subtree);
+    SakuraRoot::m_root->printOutput(blossomItem);
 
     // write processing result back to parent
-    fillOutputValueItemMap(subtree.values, subtree.blossomOutput);
+    fillOutputValueItemMap(blossomItem.values, blossomItem.blossomOutput);
 
-    overrideItems(m_parentValues, subtree.values);
+    // TODO: override only with the output-values to avoid unnecessary conflicts
+    overrideItems(m_parentValues, blossomItem.values);
 
-    return subtree.success;
+    return blossomItem.success;
 }
 
 /**
- * @brief SakuraThread::processBlossomGroup
- * @param subtree
- * @param values
- * @param hierarchy
+ * @brief process a group of blossoms
+ *
+ * @param blossomGroupItem object, which should be processed
+ *
+ * @return true if successful, else false
  */
 bool
-SakuraThread::processBlossomGroup(BlossomGroupItem &subtree)
+SakuraThread::processBlossomGroup(BlossomGroupItem &blossomGroupItem)
 {
-    for(uint32_t i = 0; i < subtree.blossoms.size(); i++)
+    for(uint32_t i = 0; i < blossomGroupItem.blossoms.size(); i++)
     {
-        BlossomItem* blossomItem = subtree.blossoms.at(i);
-        blossomItem->blossomGroupType = subtree.blossomGroupType;
+        BlossomItem* blossomItem = blossomGroupItem.blossoms.at(i);
+        blossomItem->blossomGroupType = blossomGroupItem.blossomGroupType;
         blossomItem->nameHirarchie = m_hierarchy;
-        blossomItem->nameHirarchie.push_back("BLOSSOM: " + subtree.id);
+        blossomItem->nameHirarchie.push_back("BLOSSOM: " + blossomGroupItem.id);
 
-        const bool result = grow(blossomItem);
+        const bool result = processSakuraItem(blossomItem);
         if(result == false) {
             return false;
         }
@@ -205,14 +218,18 @@ SakuraThread::processBlossomGroup(BlossomGroupItem &subtree)
 }
 
 /**
- * @brief SakuraThread::processBranch
+ * @brief process a new subtree
+ *
+ * @param subtreeItem object, which should be processed
+ *
+ * @return true if successful, else false
  */
 bool
-SakuraThread::processSubtree(SubtreeItem* subtree)
+SakuraThread::processSubtree(SubtreeItem* subtreeItem)
 {
-    for(uint32_t i = 0; i < subtree->childs.size(); i++)
+    for(uint32_t i = 0; i < subtreeItem->childs.size(); i++)
     {
-        const bool result = grow(subtree->childs.at(i));;
+        const bool result = processSakuraItem(subtreeItem->childs.at(i));;
         if(result == false) {
             return false;
         }
@@ -222,28 +239,33 @@ SakuraThread::processSubtree(SubtreeItem* subtree)
 }
 
 /**
- * @brief SakuraThread::processIf
- * @param subtree
- * @param values
- * @param hierarchy
+ * @brief process a if-else-condition
+ *
+ * @param ifCondition object, which should be processed
+ *
+ * @return true if successful, else false
  */
 bool
-SakuraThread::processIf(IfBranching* subtree)
+SakuraThread::processIf(IfBranching* ifCondition)
 {
+    // initialize
     bool ifMatch = false;
     ValueItem valueItem;
 
-    if(fillValueItem(subtree->leftSide, m_parentValues) == false) {
+    // get left side of the comparism
+    if(fillValueItem(ifCondition->leftSide, m_parentValues) == false) {
         return false;
     }
-    const std::string  leftSide = subtree->leftSide.item->toValue()->toString();
+    const std::string  leftSide = ifCondition->leftSide.item->toValue()->toString();
 
-    if(fillValueItem(subtree->rightSide, m_parentValues) == false) {
+    // get right side of the comparism
+    if(fillValueItem(ifCondition->rightSide, m_parentValues) == false) {
         return false;
     }
-    const std::string  rightSide = subtree->rightSide.item->toValue()->toString();
+    const std::string  rightSide = ifCondition->rightSide.item->toValue()->toString();
 
-    switch(subtree->ifType)
+    // compare based on the compare-type
+    switch(ifCondition->ifType)
     {
         case IfBranching::EQUAL:
             {
@@ -261,141 +283,181 @@ SakuraThread::processIf(IfBranching* subtree)
             break;
     }
 
+    // based on the result, process the if-subtree or the else-subtree
     if(ifMatch) {
-        return grow(subtree->ifContent);
+        return processSakuraItem(ifCondition->ifContent);
     } else {
-        return grow(subtree->elseContent);
+        return processSakuraItem(ifCondition->elseContent);
     }
 }
 
 /**
- * @brief SakuraThread::processForEach
- * @param subtree
- * @param values
- * @param hierarchy
+ * @brief process a for-each-loop
+ *
+ * @param subtree object, which should be processed
+ * @param parallel true, to encapsulate each cycle of the loop into a subtree-object and add these
+ *                 to the subtree-queue, to be processed by multiple worker-threads
+ *
+ * @return true if successful, else false
  */
 bool
 SakuraThread::processForEach(ForEachBranching* subtree,
                              bool parallel)
 {
-    DataMap preBalueBackup = m_parentValues;
+    // initialize the array, over twhich the loop should iterate
     fillInputValueItemMap(subtree->iterateArray, m_parentValues);
-    overrideItems(m_parentValues, subtree->values, false);
+    DataArray* array = subtree->iterateArray.get("array")->toArray();
 
+    // process content normal or parallel via worker-threads
     if(parallel == false)
     {
-        DataArray* array = subtree->iterateArray.get("array")->toArray();
+        // backup the parent-values to avoid permanent merging with loop-internal values
+        DataMap preBalueBackup = m_parentValues;
+        overrideItems(m_parentValues, subtree->values, false);
+
         for(uint32_t i = 0; i < array->size(); i++)
         {
             m_parentValues.insert(subtree->tempVarName, array->get(i), true);
-            const bool result = grow(subtree->content->copy());
+            const bool result = processSakuraItem(subtree->content->copy());
             if(result == false) {
                 return false;
             }
         }
 
+        // restore the old parent values and update only the existing values with the one form the
+        // loop. That way, variables like the counter-variable are not added to the parent.
+        DataMap postBalueBackup = m_parentValues;
+        m_parentValues = preBalueBackup;
+        overrideItems(m_parentValues, postBalueBackup);
     }
     else
     {
-        // create and initialize all threads
-        DataArray* array = subtree->iterateArray.get("array")->toArray();
+        // copy the parent-values
+        DataMap internalValues = m_parentValues;
+        overrideItems(internalValues, subtree->values, false);
+
+        // create and initialize one counter-instance for all new subtrees
         SubtreeQueue::ActiveCounter* counter = new SubtreeQueue::ActiveCounter();
         counter->shouldCount = static_cast<uint32_t>(array->size());
 
+        // iterate of all items of the array and for each item, create a subtree-object
+        // and add it to the subtree-queue for parallel processing
         for(uint32_t i = 0; i < array->size(); i++)
         {
-            m_parentValues.insert(subtree->tempVarName, array->get(i)->copy(), true);
+            internalValues.insert(subtree->tempVarName, array->get(i)->copy(), true);
             SubtreeQueue::SubtreeObject object;
             object.subtree = subtree->content->copy();
-            object.items = m_parentValues;
+            object.items = internalValues;
             object.hirarchy = m_hierarchy;
             object.activeCounter = counter;
             m_queue->addSubtreeObject(object);
         }
 
+        // wait until the created subtree was fully processed by the worker-threads
         while(counter->isEqual() == false) {
             std::this_thread::sleep_for(chronoMilliSec(10));
         }
     }
 
-    DataMap postBalueBackup = m_parentValues;
-    m_parentValues = preBalueBackup;
-    overrideItems(m_parentValues, postBalueBackup);
-
     return true;
 }
 
 /**
- * @brief SakuraThread::processFor
- * @param subtree
- * @param values
- * @param hierarchy
+ * @brief process a for-loop
+ *
+ * @param subtree object, which should be processed
+ * @param parallel true, to encapsulate each cycle of the loop into a subtree-object and add these
+ *                 to the subtree-queue, to be processed by multiple worker-threads
+ *
+ * @return true if successful, else false
  */
 bool
 SakuraThread::processFor(ForBranching* subtree,
                          bool parallel)
 {
+    // get start-value
     if(fillValueItem(subtree->start, m_parentValues) == false) {
         return false;
     }
     const long startValue = subtree->start.item->toValue()->getLong();
 
+    // get end-value
     if(fillValueItem(subtree->end, m_parentValues) == false) {
         return false;
     }
     const long endValue = subtree->end.item->toValue()->getLong();
 
-    DataMap preBalueBackup = m_parentValues;
-    overrideItems(m_parentValues, subtree->values, false);
-
+    // process content normal or parallel via worker-threads
     if(parallel == false)
     {
+        // backup the parent-values to avoid permanent merging with loop-internal values
+        DataMap preBalueBackup = m_parentValues;
+        overrideItems(m_parentValues, subtree->values, false);
+
         for(long i = startValue; i < endValue; i++)
         {
+            // add the counter-variable as new value to be accessable within the loop
             m_parentValues.insert(subtree->tempVarName, new DataValue(i), true);
-            const bool result = grow(subtree->content);
+
+            const bool result = processSakuraItem(subtree->content);
             if(result == false) {
                 return false;
             }
         }
+
+        // restore the old parent values and update only the existing values with the one form the
+        // loop. That way, variables like the counter-variable are not added to the parent.
+        DataMap postBalueBackup = m_parentValues;
+        m_parentValues = preBalueBackup;
+        overrideItems(m_parentValues, postBalueBackup);
     }
     else
     {
+        // copy the parent-values
+        DataMap internalValues = m_parentValues;
+        overrideItems(internalValues, subtree->values, false);
+
+        // create and initialize one counter-instance for all new subtrees
         SubtreeQueue::ActiveCounter* counter = new SubtreeQueue::ActiveCounter();
         counter->shouldCount = static_cast<uint32_t>(endValue - startValue);
 
         for(long i = startValue; i < endValue; i++)
         {
-            m_parentValues.insert(subtree->tempVarName, new DataValue(i), true);
+            // add the counter-variable as new value to be accessable within the loop
+            internalValues.insert(subtree->tempVarName, new DataValue(i), true);
+
+            // encapsulate the content of the loop together with the values and the counter-object
+            // as an subtree-object and add it to the subtree-queue
             SubtreeQueue::SubtreeObject object;
             object.subtree = subtree->content->copy();
-            object.items = m_parentValues;
+            object.items = internalValues;
             object.hirarchy = m_hierarchy;
             object.activeCounter = counter;
             m_queue->addSubtreeObject(object);
         }
 
+        // wait until the created subtree was fully processed by the worker-threads
         while(counter->isEqual() == false) {
             std::this_thread::sleep_for(chronoMilliSec(10));
         }
     }
 
-    DataMap postBalueBackup = m_parentValues;
-    m_parentValues = preBalueBackup;
-    overrideItems(m_parentValues, postBalueBackup);
-
     return true;
 }
 
 /**
- * @brief SakuraThread::processSequeniellPart
+ * @brief process sequentiall part
+ *
+ * @param subtree object, which should be processed
+ *
+ * @return true if successful, else false
  */
 bool
 SakuraThread::processSequeniellPart(Sequentiell* subtree)
 {
     for(uint32_t i = 0; i < subtree->childs.size(); i++)
     {
-        const bool result = grow(subtree->childs.at(i));;
+        const bool result = processSakuraItem(subtree->childs.at(i));;
         if(result == false) {
             return false;
         }
@@ -405,25 +467,32 @@ SakuraThread::processSequeniellPart(Sequentiell* subtree)
 }
 
 /**
- * @brief SakuraThread::processParallelPart
+ * @brief process parallel part via worker-threads
+ *
+ * @param parallelPart object, which should be processed
+ *
+ * @return true if successful, else false
  */
 bool
-SakuraThread::processParallelPart(Parallel *subtree)
+SakuraThread::processParallelPart(ParallelPart* parallelPart)
 {
     // create and initialize all threads
     SubtreeQueue::ActiveCounter* counter = new SubtreeQueue::ActiveCounter();
-    counter->shouldCount = static_cast<uint32_t>(subtree->childs.size());
+    counter->shouldCount = static_cast<uint32_t>(parallelPart->childs.size());
 
-    for(uint32_t i = 0; i < subtree->childs.size(); i++)
+    // encapsulate each subtree of the paralle part as subtree-object and add it to the
+    // subtree-queue for parallel processing
+    for(uint32_t i = 0; i < parallelPart->childs.size(); i++)
     {
         SubtreeQueue::SubtreeObject object;
-        object.subtree = subtree->childs.at(i);
+        object.subtree = parallelPart->childs.at(i);
         object.hirarchy = m_hierarchy;
         object.items = m_parentValues;
         object.activeCounter = counter;
         m_queue->addSubtreeObject(object);
     }
 
+    // wait until the created subtree was fully processed by the worker-threads
     while(counter->isEqual() == false) {
         std::this_thread::sleep_for(chronoMilliSec(10));
     }
