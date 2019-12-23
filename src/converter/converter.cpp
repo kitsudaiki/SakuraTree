@@ -50,9 +50,12 @@ Converter::Converter() {}
 Converter::~Converter() {}
 
 /**
- * @brief SakuraCompiler::compile
- * @param tree
- * @return
+ * @brief convert a json-item based tree into a sakura-items based version and run additional
+ *        validation checks while converting the tree
+ *
+ * @param tree tree based on json-items
+ *
+ * @return tree based on sakura-items if converting was successful, else null-pointer
  */
 SakuraItem*
 Converter::convert(const JsonItem &tree)
@@ -69,6 +72,7 @@ Converter::convert(const JsonItem &tree)
     bool success = true;
     SakuraItem* result = convertPart(tree, success);
 
+
     if(success == false)
     {
         delete result;
@@ -80,9 +84,11 @@ Converter::convert(const JsonItem &tree)
 
 /**
  * @brief SakuraCompiler::convertItemPart
+ *
  * @param resultingPart
  * @param itemInput
  * @param pairType
+ *
  * @return
  */
 bool
@@ -91,6 +97,7 @@ Converter::convertItemPart(ValueItem &resultingPart,
                            const std::string pairType,
                            bool &success)
 {
+    // convert item
     if(itemInput.isMap())
     {
         resultingPart.item = itemInput.get("item").getItemContent()->copy()->toValue();
@@ -164,6 +171,7 @@ Converter::convertItemPart(ValueItem &resultingPart,
 
 /**
  * @brief SakuraCompiler::convertValues
+ *
  * @param obj
  * @param subtree
  */
@@ -186,8 +194,10 @@ Converter::convertValues(SakuraItem* obj,
 
 /**
  * @brief convert subtree
+ *
  * @param subtree current subtree for converting
  * @param parent pointer ot the parent-branch or -tree
+ *
  * @return pointer of the current converted part
  */
 SakuraItem*
@@ -239,8 +249,10 @@ Converter::convertPart(const JsonItem &subtree, bool &success)
 
 /**
  * @brief convert blossom-group
+ *
  * @param subtree current suttree for converting
  * @param parent pointer ot the parent-branch or -tree
+ *
  * @return pointer of the current converted part
  */
 SakuraItem*
@@ -298,8 +310,10 @@ Converter::convertBlossomGroup(const JsonItem &subtree, bool &success)
 
 /**
  * @brief convert branch
+ *
  * @param subtree current suttree for converting
  * @param parent pointer ot the parent-branch or -tree
+ *
  * @return pointer of the current converted part
  */
 SakuraItem*
@@ -411,7 +425,7 @@ Converter::convertIf(const JsonItem &subtree, bool &success)
     }
 
     // create a sequentiell section to encapsulate the if-part of the if-condition
-    Sequentiell* sequentiellContentIf = new Sequentiell();
+    SequentiellPart* sequentiellContentIf = new SequentiellPart();
     for(uint32_t i = 0; i < if_parts.size(); i++)
     {
         JsonItem newMap = if_parts.get(i);
@@ -429,7 +443,7 @@ Converter::convertIf(const JsonItem &subtree, bool &success)
     }
 
     // create a sequentiell section to encapsulate the else-part of the if-condition
-    Sequentiell* sequentiellContentElse = new Sequentiell();
+    SequentiellPart* sequentiellContentElse = new SequentiellPart();
     for(uint32_t i = 0; i < else_parts.size(); i++)
     {
         JsonItem newMap = else_parts.get(i);
@@ -471,7 +485,7 @@ Converter::convertForEach(const JsonItem &subtree,
     }
 
     // create a sequentiell section to encapsulate the content of the for-loop
-    Sequentiell* sequentiellContent = new Sequentiell();
+    SequentiellPart* sequentiellContent = new SequentiellPart();
     for(uint32_t i = 0; i < parts.size(); i++)
     {
         JsonItem newMap = parts.get(i);
@@ -512,7 +526,7 @@ Converter::convertFor(const JsonItem &subtree,
     }
 
     // create a sequentiell section to encapsulate the content of the for-loop
-    Sequentiell* sequentiellContent = new Sequentiell();
+    SequentiellPart* sequentiellContent = new SequentiellPart();
     for(uint32_t i = 0; i < parts.size(); i++)
     {
         JsonItem newMap = parts.get(i);

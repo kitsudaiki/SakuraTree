@@ -69,10 +69,14 @@ SakuraThread::run()
         }
         else
         {
+            // handle subtree-object
             m_hierarchy = currentSubtree.hirarchy;
             overrideItems(m_parentValues, currentSubtree.subtree->values, false);
             overrideItems(m_parentValues, currentSubtree.items, false);
             processSakuraItem(currentSubtree.subtree);
+
+            // increase active-counter as last step, so the source subtree can check, if all
+            // spawned subtrees are finished
             if(currentSubtree.activeCounter != nullptr) {
                 currentSubtree.activeCounter->increaseCounter();
             }
@@ -81,7 +85,11 @@ SakuraThread::run()
 }
 
 /**
- * central method of the thread to process the current part of the execution-tree
+ * @brief central method of the thread to process the current part of the execution-tree
+ *
+ * @param sakuraItem subtree, which should be processed
+ *
+ * @return true if successful, else false
  */
 bool
 SakuraThread::processSakuraItem(SakuraItem* sakuraItem)
@@ -137,7 +145,7 @@ SakuraThread::processSakuraItem(SakuraItem* sakuraItem)
 
     if(sakuraItem->getType() == SakuraItem::SEQUENTIELL_ITEM)
     {
-        Sequentiell* sequentiell = dynamic_cast<Sequentiell*>(sakuraItem);
+        SequentiellPart* sequentiell = dynamic_cast<SequentiellPart*>(sakuraItem);
         return processSequeniellPart(sequentiell);
     }
 
@@ -453,7 +461,7 @@ SakuraThread::processFor(ForBranching* subtree,
  * @return true if successful, else false
  */
 bool
-SakuraThread::processSequeniellPart(Sequentiell* subtree)
+SakuraThread::processSequeniellPart(SequentiellPart* subtree)
 {
     for(uint32_t i = 0; i < subtree->childs.size(); i++)
     {

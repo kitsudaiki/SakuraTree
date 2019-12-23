@@ -156,19 +156,6 @@ public:
 };
 
 //===================================================================
-// Sequeniell
-//===================================================================
-class Sequentiell : public SakuraItem
-{
-public:
-    Sequentiell();
-    ~Sequentiell();
-    SakuraItem* copy();
-
-    std::vector<SakuraItem*> childs;
-};
-
-//===================================================================
 // IfBranching
 //===================================================================
 class IfBranching : public SakuraItem
@@ -229,7 +216,20 @@ public:
 };
 
 //===================================================================
-// Parallel
+// SequentiellPart
+//===================================================================
+class SequentiellPart : public SakuraItem
+{
+public:
+    SequentiellPart();
+    ~SequentiellPart();
+    SakuraItem* copy();
+
+    std::vector<SakuraItem*> childs;
+};
+
+//===================================================================
+// ParallelPart
 //===================================================================
 class ParallelPart : public SakuraItem
 {

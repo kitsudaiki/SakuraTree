@@ -71,8 +71,10 @@ checkForRequiredKeys(BlossomItem &blossomItem)
 
 /**
  * @brief checkForRequiredKeys
+ *
  * @param values
  * @param requiredKeys
+ *
  * @return
  */
 bool
@@ -82,14 +84,15 @@ checkForRequiredKeys(BlossomItem &blossomItem,
     if(requiredKeys.contains("*") == false)
     {
         std::map<std::string, ValueItem>::const_iterator it;
-        for(it = blossomItem.values.valueMap.begin();
-            it != blossomItem.values.valueMap.end();
+        for(it = blossomItem.values.const_begin();
+            it != blossomItem.values.const_end();
             it++)
         {
             ValueItem tempItem = blossomItem.values.getValueItem(it->first);
             if(tempItem.item == nullptr
                     && tempItem.type == ValueItem::INPUT_PAIR_TYPE)
             {
+                // build error-output
                 std::string message = "variable \""
                                       + it->first
                                       + "\" is not in the list of allowed keys";

@@ -57,7 +57,7 @@ private:
     bool processIf(IfBranching* ifCondition);
     bool processForEach(ForEachBranching* subtree, bool parallel);
     bool processFor(ForBranching* subtree, bool parallel);
-    bool processSequeniellPart(Sequentiell* subtree);
+    bool processSequeniellPart(SequentiellPart* subtree);
     bool processParallelPart(ParallelPart* parallelPart);
 
 };

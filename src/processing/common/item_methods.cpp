@@ -209,8 +209,8 @@ fillInputValueItemMap(ValueItemMap &items,
     Result result;
 
     std::map<std::string, ValueItem>::iterator it;
-    for(it = items.valueMap.begin();
-        it != items.valueMap.end();
+    for(it = items.begin();
+        it != items.end();
         it++)
     {
         if(fillValueItem(it->second, insertValues) == false) {
@@ -233,8 +233,8 @@ fillOutputValueItemMap(ValueItemMap &items,
                        DataItem *output)
 {
     std::map<std::string, ValueItem>::iterator it;
-    for(it = items.valueMap.begin();
-        it != items.valueMap.end();
+    for(it = items.begin();
+        it != items.end();
         it++)
     {
         if(it->second.type == ValueItem::OUTPUT_PAIR_TYPE)
@@ -297,8 +297,8 @@ overrideItems(DataMap &original,
     if(onlyExisting)
     {
         std::map<std::string, ValueItem>::const_iterator overrideIt;
-        for(overrideIt = override.valueMap.begin();
-            overrideIt != override.valueMap.end();
+        for(overrideIt = override.const_begin();
+            overrideIt != override.const_end();
             overrideIt++)
         {
             std::map<std::string, DataItem*>::iterator originalIt;
@@ -312,8 +312,8 @@ overrideItems(DataMap &original,
     else
     {
         std::map<std::string, ValueItem>::const_iterator overrideIt;
-        for(overrideIt = override.valueMap.begin();
-            overrideIt != override.valueMap.end();
+        for(overrideIt = override.const_begin();
+            overrideIt != override.const_end();
             overrideIt++)
         {
             original.insert(overrideIt->first, overrideIt->second.item->copy(), true);
@@ -332,8 +332,8 @@ checkItems(ValueItemMap &items)
     std::vector<std::string> result;
 
     std::map<std::string, ValueItem>::const_iterator it;
-    for(it = items.valueMap.begin();
-        it != items.valueMap.end();
+    for(it = items.const_begin();
+        it != items.const_end();
         it++)
     {
         if(it->second.item->getString() == "{{}}") {

@@ -119,8 +119,8 @@ struct ValueItemMap
     ValueItemMap(const ValueItemMap &other)
     {
         std::map<std::string, ValueItem>::const_iterator it;
-        for(it = other.valueMap.begin();
-            it != other.valueMap.end();
+        for(it = other.const_begin();
+            it != other.const_end();
             it++)
         {
             ValueItem value = it->second;
@@ -132,8 +132,8 @@ struct ValueItemMap
         if(this != &other)
         {
             std::map<std::string, ValueItem>::const_iterator it;
-            for(it = other.valueMap.begin();
-                it != other.valueMap.end();
+            for(it = other.const_begin();
+                it != other.const_end();
                 it++)
             {
                 ValueItem value = it->second;
@@ -231,6 +231,26 @@ struct ValueItemMap
     uint64_t size()
     {
         return valueMap.size();
+    }
+
+    std::map<std::string, ValueItem>::iterator begin()
+    {
+        return valueMap.begin();
+    }
+
+    std::map<std::string, ValueItem>::iterator end()
+    {
+        return valueMap.end();
+    }
+
+    std::map<std::string, ValueItem>::const_iterator const_begin() const
+    {
+        return valueMap.begin();
+    }
+
+    std::map<std::string, ValueItem>::const_iterator const_end() const
+    {
+        return valueMap.end();
     }
 };
 

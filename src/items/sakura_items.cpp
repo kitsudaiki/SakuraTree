@@ -52,7 +52,8 @@ BlossomItem::~BlossomItem()
     }
 }
 
-SakuraItem* BlossomItem::copy()
+SakuraItem*
+BlossomItem::copy()
 {
     BlossomItem* newItem = new BlossomItem();
 
@@ -104,7 +105,8 @@ BlossomGroupItem::~BlossomGroupItem()
     }
 }
 
-SakuraItem *BlossomGroupItem::copy()
+SakuraItem*
+BlossomGroupItem::copy()
 {
     BlossomGroupItem* newItem = new BlossomGroupItem();
 
@@ -142,7 +144,8 @@ SubtreeItem::~SubtreeItem()
     }
 }
 
-SakuraItem *SubtreeItem::copy()
+SakuraItem*
+SubtreeItem::copy()
 {
     SubtreeItem* newItem = new SubtreeItem();
 
@@ -173,7 +176,8 @@ SeedItem::~SeedItem()
     }
 }
 
-SakuraItem *SeedItem::copy()
+SakuraItem*
+SeedItem::copy()
 {
     SeedItem* newItem = new SeedItem();
 
@@ -189,40 +193,6 @@ SakuraItem *SeedItem::copy()
 
     if(child != nullptr) {
         newItem->child = child->copy();
-    }
-
-    return newItem;
-}
-
-//===================================================================
-// Sequeniell
-//===================================================================
-Sequentiell::Sequentiell()
-{
-    type = SEQUENTIELL_ITEM;
-}
-
-Sequentiell::~Sequentiell()
-{
-    for(uint32_t i = 0; i < childs.size(); i++)
-    {
-        SakuraItem* tempItem = childs.at(i);
-        if(tempItem != nullptr) {
-            delete tempItem;
-        }
-    }
-}
-
-SakuraItem *Sequentiell::copy()
-{
-    Sequentiell* newItem = new Sequentiell();
-
-    newItem->type = type;
-    newItem->values = values;
-
-    for(uint32_t i = 0; i < childs.size(); i++)
-    {
-        newItem->childs.push_back(childs.at(i)->copy());
     }
 
     return newItem;
@@ -247,7 +217,8 @@ IfBranching::~IfBranching()
     }
 }
 
-SakuraItem *IfBranching::copy()
+SakuraItem*
+IfBranching::copy()
 {
     IfBranching* newItem = new IfBranching();
 
@@ -287,7 +258,8 @@ ForEachBranching::~ForEachBranching()
     }
 }
 
-SakuraItem *ForEachBranching::copy()
+SakuraItem*
+ForEachBranching::copy()
 {
     ForEachBranching* newItem = new ForEachBranching();
 
@@ -322,7 +294,8 @@ ForBranching::~ForBranching()
     }
 }
 
-SakuraItem *ForBranching::copy()
+SakuraItem*
+ForBranching::copy()
 {
     ForBranching* newItem = new ForBranching();
 
@@ -341,7 +314,42 @@ SakuraItem *ForBranching::copy()
 }
 
 //===================================================================
-// Parallel
+// SequentiellPart
+//===================================================================
+SequentiellPart::SequentiellPart()
+{
+    type = SEQUENTIELL_ITEM;
+}
+
+SequentiellPart::~SequentiellPart()
+{
+    for(uint32_t i = 0; i < childs.size(); i++)
+    {
+        SakuraItem* tempItem = childs.at(i);
+        if(tempItem != nullptr) {
+            delete tempItem;
+        }
+    }
+}
+
+SakuraItem*
+SequentiellPart::copy()
+{
+    SequentiellPart* newItem = new SequentiellPart();
+
+    newItem->type = type;
+    newItem->values = values;
+
+    for(uint32_t i = 0; i < childs.size(); i++)
+    {
+        newItem->childs.push_back(childs.at(i)->copy());
+    }
+
+    return newItem;
+}
+
+//===================================================================
+// ParallelPart
 //===================================================================
 ParallelPart::ParallelPart()
 {
@@ -359,7 +367,8 @@ ParallelPart::~ParallelPart()
     }
 }
 
-SakuraItem* ParallelPart::copy()
+SakuraItem*
+ParallelPart::copy()
 {
     ParallelPart* newItem = new ParallelPart();
 

@@ -87,8 +87,8 @@ TemplateCreateBlossom::preCheck(BlossomItem &blossomItem)
 
     DataMap inputData;
     std::map<std::string, ValueItem>::iterator it;
-    for(it = blossomItem.values.valueMap.begin();
-        it != blossomItem.values.valueMap.end();
+    for(it = blossomItem.values.begin();
+        it != blossomItem.values.end();
         it++)
     {
         if(it->second.item != nullptr
