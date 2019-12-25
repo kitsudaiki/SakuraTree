@@ -33,67 +33,76 @@ using Kitsunemimi::Jinja2::Jinja2Converter;
 namespace SakuraTree
 {
 
+/**
+ * @brief process a value-item by handling its function-calls
+ *
+ * @param valueItem value-item, which should be processed
+ * @param insertValues data-map with information to fill into the jinja2-string
+ *
+ * @return false, if something went wrong while processing and filling, else true. If false
+ *         an error-message was sent directly into the sakura-root-object
+*/
 bool
-getProcessedItem(ValueItem &original,
+getProcessedItem(ValueItem &valueItem,
                  DataMap &insertValues)
 {
-    for(uint32_t i = 0; i < original.functions.size(); i++)
+    for(uint32_t i = 0; i < valueItem.functions.size(); i++)
     {
-        if(original.item == nullptr) {
+        if(valueItem.item == nullptr) {
             return false;
         }
 
-        switch(original.functions.at(i).type)
+        switch(valueItem.functions.at(i).type)
         {
         case FunctionItem::GET_FUNCTION:
         {
-            if(original.functions.at(i).arguments.size() != 1) {
+            if(valueItem.functions.at(i).arguments.size() != 1) {
                 return false;
             }
-            ValueItem arg = original.functions.at(i).arguments.at(0);
+            ValueItem arg = valueItem.functions.at(i).arguments.at(0);
             if(fillValueItem(arg, insertValues)) {
-                original.item = getValue(original.item, arg.item->toValue());
+                valueItem.item = getValue(valueItem.item, arg.item->toValue());
             }
             break;
         }
         case FunctionItem::SPLIT_FUNCTION:
         {
-            if(original.functions.at(i).arguments.size() != 1) {
+            if(valueItem.functions.at(i).arguments.size() != 1) {
                 return false;
             }
-            ValueItem arg = original.functions.at(i).arguments.at(0);
+            ValueItem arg = valueItem.functions.at(i).arguments.at(0);
             if(fillValueItem(arg, insertValues)) {
-                original.item = splitValue(original.item->toValue(), arg.item->toValue());
+                valueItem.item = splitValue(valueItem.item->toValue(), arg.item->toValue());
             }
             break;
         }
         case FunctionItem::CONTAINS_FUNCTION:
         {
-            if(original.functions.at(i).arguments.size() != 1) {
+            if(valueItem.functions.at(i).arguments.size() != 1) {
                 return false;
             }
-            ValueItem arg = original.functions.at(i).arguments.at(0);
+            ValueItem arg = valueItem.functions.at(i).arguments.at(0);
             if(fillValueItem(arg, insertValues)) {
-                original.item = containsValue(original.item, arg.item->toValue());
+                valueItem.item = containsValue(valueItem.item, arg.item->toValue());
             }
             break;
         }
         case FunctionItem::SIZE_FUNCTION:
         {
-            original.item = sizeValue(original.item);
+            valueItem.item = sizeValue(valueItem.item);
             break;
         }
         case FunctionItem::INSERT_FUNCTION:
         {
-            if(original.functions.at(i).arguments.size() != 2) {
+            if(valueItem.functions.at(i).arguments.size() != 2) {
                 return false;
             }
-            ValueItem arg1 = original.functions.at(i).arguments.at(0);
-            ValueItem arg2 = original.functions.at(i).arguments.at(0);
+            ValueItem arg1 = valueItem.functions.at(i).arguments.at(0);
+            ValueItem arg2 = valueItem.functions.at(i).arguments.at(0);
             if(fillValueItem(arg1, insertValues)
                     && fillValueItem(arg2, insertValues))
             {
-                original.item = insertValue(original.item->toMap(),
+                valueItem.item = insertValue(valueItem.item->toMap(),
                                             arg1.item->toValue(),
                                             arg2.item->toValue());
             }
@@ -101,12 +110,12 @@ getProcessedItem(ValueItem &original,
         }
         case FunctionItem::APPEND_FUNCTION:
         {
-            if(original.functions.at(i).arguments.size() != 1) {
+            if(valueItem.functions.at(i).arguments.size() != 1) {
                 return false;
             }
-            ValueItem arg = original.functions.at(i).arguments.at(0);
+            ValueItem arg = valueItem.functions.at(i).arguments.at(0);
             if(fillValueItem(arg, insertValues)) {
-                original.item = appendValue(original.item->toArray(), arg.item->toValue());
+                valueItem.item = appendValue(valueItem.item->toArray(), arg.item->toValue());
             }
             break;
         }
@@ -119,88 +128,108 @@ getProcessedItem(ValueItem &original,
 }
 
 /**
- * @brief fillIdentifierItem
- * @param resulting
- * @param original
- * @param input
- * @return
+ * @brief fill and process an identifier value by filling with incoming information and
+ *        processing it functions-calls
+ *
+ * @param valueItem value-item, which should be processed
+ * @param insertValues data-map with information to fill into the jinja2-string
+ *
+ * @return false, if something went wrong while processing and filling, else true. If false
+ *         an error-message was sent directly into the sakura-root-object
  */
 bool
-fillIdentifierItem(ValueItem &original,
+fillIdentifierItem(ValueItem &valueItem,
                    DataMap &insertValues)
 {
     // replace identifier with value from the insert-values
-    DataItem* tempItem = insertValues.get(original.item->toString());
-    if(tempItem == nullptr) {
+    DataItem* tempItem = insertValues.get(valueItem.item->toString());
+    if(tempItem == nullptr)
+    {
+        // TODO: error-message to sakura-root
         return false;
     }
 
-    delete original.item;
-    original.item = tempItem->copy();
-    original.functions = original.functions;
+    delete valueItem.item;
+    valueItem.item = tempItem->copy();
+    valueItem.functions = valueItem.functions;
 
-    getProcessedItem(original, insertValues);
+    getProcessedItem(valueItem, insertValues);
 
     return true;
 }
 
 /**
- * @brief fillJinja2Template
- * @param baseString
- * @param insertValues
- * @return
+ * @brief interprete a string as jinja2-string, parse it and fill it with incoming information
+ *
+ * @param original value-item wiht string-content, which shuold be handled as jinja2-string
+ * @param insertValues data-map with information to fill into the jinja2-string
+ *
+ * @return false, if something went wrong while processing and filling, else true. If false
+ *         an error-message was sent directly into the sakura-root-object
  */
 bool
-fillJinja2Template(ValueItem &original,
+fillJinja2Template(ValueItem &valueItem,
                    DataMap &insertValues)
 {
     // convert jinja2-string
     Jinja2Converter* converter = SakuraRoot::m_jinja2Converter;
     std::pair<bool, std::string> convertResult;
-    convertResult = converter->convert(original.item->toString(), &insertValues);
+    convertResult = converter->convert(valueItem.item->toString(), &insertValues);
 
     ValueItem returnValue;
-    if(convertResult.first == false) {
+    if(convertResult.first == false)
+    {
+        // TODO: error-message to sakura-root
         return false;
     }
 
-    delete original.item;
-    original.item = new DataValue(convertResult.second);
+    delete valueItem.item;
+    valueItem.item = new DataValue(convertResult.second);
 
     return true;
 }
 
 /**
- * @brief fillValueItem
- * @param resulting
- * @param original
- * @param input
- * @return
+ * @brief fill a single value-item with the information of the values of in incoming
+ *        data-map, which processing all functions within the value-item-map
+ *
+ * @param valueItem value-item, which should be processed and filled
+ * @param insertValues data-map with the values to fill the value-item
+ *
+ * @return false, if something went wrong while processing and filling, else true. If false
+ *         an error-message was sent directly into the sakura-root-object
  */
 bool
-fillValueItem(ValueItem &original,
+fillValueItem(ValueItem &valueItem,
               DataMap &insertValues)
 {
-    if(original.isIdentifier == false
-            && original.type != ValueItem::OUTPUT_PAIR_TYPE
-            && original.item->isStringValue())
+    // process and fill incoming string, which is interpreted as jinja2-template
+    if(valueItem.isIdentifier == false
+            && valueItem.type != ValueItem::OUTPUT_PAIR_TYPE
+            && valueItem.item->isStringValue())
     {
-        return fillJinja2Template(original, insertValues);
+        return fillJinja2Template(valueItem, insertValues);
     }
-    else if(original.isIdentifier
-            && original.type != ValueItem::OUTPUT_PAIR_TYPE)
+    // process and fill incoming identifier
+    else if(valueItem.isIdentifier
+            && valueItem.type != ValueItem::OUTPUT_PAIR_TYPE)
     {
-        return fillIdentifierItem(original, insertValues);
+        return fillIdentifierItem(valueItem, insertValues);
     }
 
+    // if value is an int-value, output-value or something else, then do nothing with the value
     return true;
 }
 
 /**
- * @brief fillItems
- * @param items
- * @param insertValues
- * @return
+ * @brief fill the entries of a value-item-map with the information of the values of in incoming
+ *        data-map, which processing all functions within the value-item-map
+ *
+ * @param items value-item-map, which should be processed and filled
+ * @param insertValues data-map with the values to fill the value-item-map
+ *
+ * @return false, if something went wrong while processing and filling, else true. If false
+ *         an error-message was sent directly into the sakura-root-object
  */
 bool
 fillInputValueItemMap(ValueItemMap &items,
@@ -221,39 +250,46 @@ fillInputValueItemMap(ValueItemMap &items,
     return true;
 }
 
-
 /**
- * @brief writeOutputBack
- * @param items
- * @param output
- * @return
+ * @brief wirte the output of a blossom-item back into a value-item-map
+ *
+ * @param items value-item-map, where the output should be inserted
+ * @param output output of the blossom-item as data-item
+ *
+ * @return true, if the output was written in at least one point of the value-item-map
  */
 bool
 fillOutputValueItemMap(ValueItemMap &items,
-                       DataItem *output)
+                       DataItem* output)
 {
+    bool found = false;
+
     std::map<std::string, ValueItem>::iterator it;
     for(it = items.begin();
         it != items.end();
         it++)
     {
+        // replace only as output-marked values
         if(it->second.type == ValueItem::OUTPUT_PAIR_TYPE)
         {
             ValueItem valueItem;
             valueItem.item = output->copy();
             valueItem.type = ValueItem::OUTPUT_PAIR_TYPE;
             it->second = valueItem;
+            found = true;
         }
     }
 
-    return true;
+    return found;
 }
 
 /**
- * @brief overrideItems
- * @param original
- * @param override
- * @param onlyExisting
+ * @brief override data of a data-map with new incoming information
+ *
+ * @param original data-map with the original key-values, which should be updates with the
+ *                 information of the override-map
+ * @param override map with the new incoming information
+ * @param onlyExisting true, of only replacing values of existing key, but not add new keys
  */
 void overrideItems(DataMap &original,
                    const DataMap &override,
@@ -287,7 +323,12 @@ void overrideItems(DataMap &original,
 }
 
 /**
- * @brief overrideItems
+ * @brief override data of a data-map with new incoming information
+ *
+ * @param original data-map with the original key-values, which should be updates with the
+ *                 information of the override-map
+ * @param override map with the new incoming information
+ * @param onlyExisting true, of only replacing values of existing key, but not add new keys
  */
 void
 overrideItems(DataMap &original,
@@ -322,7 +363,9 @@ overrideItems(DataMap &original,
 }
 
 /**
- * @brief checkItems
+ * @brief check value-item-map for uninitialized values
+ *
+ * @param items value-map to check
  *
  * @return list of not initialized values
  */
@@ -345,8 +388,11 @@ checkItems(ValueItemMap &items)
 }
 
 /**
- * @brief printOutput
- * @param blossom
+ * @brief print output of a blossom-item
+ *
+ * @param blossom item with the information to print
+ *
+ * @return output as string
  */
 const std::string
 convertBlossomOutput(const BlossomItem &blossom)
