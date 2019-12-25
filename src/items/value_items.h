@@ -24,7 +24,7 @@
 #define VALUE_ITEMS_H
 
 #include <common.h>
-#include <processing/common/functions.h>
+#include <processing/common/value_item_functions.h>
 
 //===================================================================
 // FunctionItem
@@ -105,132 +105,6 @@ struct ValueItem
             this->functions = other.functions;
         }
         return *this;
-    }
-};
-
-//===================================================================
-// ValueItemMap
-//===================================================================
-struct ValueItemMap
-{
-    std::map<std::string, ValueItem> valueMap;
-
-    ValueItemMap() {}
-    ValueItemMap(const ValueItemMap &other)
-    {
-        std::map<std::string, ValueItem>::const_iterator it;
-        for(it = other.valueMap.begin();
-            it != other.valueMap.end();
-            it++)
-        {
-            ValueItem value = it->second;
-            valueMap.insert(std::pair<std::string, ValueItem>(it->first, value));
-        }
-    }
-    ValueItemMap &operator=(const ValueItemMap &other)
-    {
-        if(this != &other)
-        {
-            std::map<std::string, ValueItem>::const_iterator it;
-            for(it = other.valueMap.begin();
-                it != other.valueMap.end();
-                it++)
-            {
-                ValueItem value = it->second;
-                this->valueMap.insert(std::pair<std::string, ValueItem>(it->first, value));
-            }
-        }
-        return *this;
-    }
-
-    bool insert(const std::string &key, DataItem* value, bool force=true)
-    {
-        ValueItem valueItem;
-        valueItem.item = value->copy();
-        return insert(key, valueItem, force);
-    }
-
-    bool insert(const std::string &key, ValueItem &value, bool force=true)
-    {
-        std::map<std::string, ValueItem>::iterator it;
-        it = valueMap.find(key);
-
-        if(it != valueMap.end()
-                && force == false)
-        {
-            return false;
-        }
-
-        if(it != valueMap.end()) {
-            it->second = value;
-        } else {
-            valueMap.insert(std::pair<std::string, ValueItem>(key, value));
-        }
-        return true;
-    }
-
-    bool contains(const std::string &key)
-    {
-        std::map<std::string, ValueItem>::const_iterator it;
-        it = valueMap.find(key);
-
-        if(it != valueMap.end())
-        {
-            return true;
-        }
-        return false;
-    }
-
-    bool remove(const std::string &key)
-    {
-        std::map<std::string, ValueItem>::const_iterator it;
-        it = valueMap.find(key);
-
-        if(it != valueMap.end())
-        {
-            valueMap.erase(it);
-            return true;
-        }
-
-        return false;
-    }
-
-    std::string getValueAsString(const std::string &key)
-    {
-        std::map<std::string, ValueItem>::const_iterator it;
-        it = valueMap.find(key);
-        if(it != valueMap.end()) {
-            return it->second.item->toString();
-        }
-
-        return "";
-    }
-
-    DataItem* get(const std::string &key)
-    {
-        std::map<std::string, ValueItem>::const_iterator it;
-        it = valueMap.find(key);
-        if(it != valueMap.end()) {
-            return it->second.item;
-        }
-
-        return nullptr;
-    }
-
-    ValueItem getValueItem(const std::string &key)
-    {
-        std::map<std::string, ValueItem>::const_iterator it;
-        it = valueMap.find(key);
-        if(it != valueMap.end()) {
-            return it->second;
-        }
-
-        return ValueItem();
-    }
-
-    uint64_t size()
-    {
-        return valueMap.size();
     }
 };
 

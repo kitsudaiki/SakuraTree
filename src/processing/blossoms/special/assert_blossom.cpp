@@ -34,10 +34,10 @@ AssertBlossom::AssertBlossom()
 }
 
 /**
- * initTask
+ * initBlossom
  */
 void
-AssertBlossom::initTask(BlossomItem &blossomItem)
+AssertBlossom::initBlossom(BlossomItem &blossomItem)
 {
     blossomItem.success = true;
 }
@@ -58,8 +58,8 @@ void
 AssertBlossom::runTask(BlossomItem &blossomItem)
 {
     std::map<std::string, ValueItem>::iterator it;
-    for(it = blossomItem.values.valueMap.begin();
-        it != blossomItem.values.valueMap.end();
+    for(it = blossomItem.values.begin();
+        it != blossomItem.values.end();
         it++)
     {
         const std::string isValue = blossomItem.parentValues->get(it->first)->toString();
@@ -90,10 +90,10 @@ AssertBlossom::postCheck(BlossomItem &blossomItem)
 }
 
 /**
- * closeTask
+ * closeBlossom
  */
 void
-AssertBlossom::closeTask(BlossomItem &blossomItem)
+AssertBlossom::closeBlossom(BlossomItem &blossomItem)
 {
     blossomItem.success = true;
 }

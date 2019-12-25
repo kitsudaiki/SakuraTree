@@ -44,11 +44,11 @@ public:
     DataMap m_requiredKeys;
 
 protected:
-    virtual void initTask(BlossomItem &blossomItem) = 0;
+    virtual void initBlossom(BlossomItem &blossomItem) = 0;
     virtual void preCheck(BlossomItem &blossomItem) = 0;
     virtual void runTask(BlossomItem &blossomItem) = 0;
     virtual void postCheck(BlossomItem &blossomItem) = 0;
-    virtual void closeTask(BlossomItem &blossomItem) = 0;
+    virtual void closeBlossom(BlossomItem &blossomItem) = 0;
 };
 
 }

@@ -1,5 +1,5 @@
 /**
- * @file        common_methos.cpp
+ * @file        common_converter_methods.cpp
  *
  * @author      Tobias Anker <tobias.anker@kitsunemimi.moe>
  *
@@ -20,7 +20,7 @@
  *      limitations under the License.
  */
 
-#include "common_methods.h"
+#include "common_converter_methods.h"
 
 #include <processing/blossoms/blossom_getter.h>
 #include <processing/blossoms/blossom.h>
@@ -31,6 +31,7 @@ namespace SakuraTree
 
 /**
  * @brief merge two item-maps
+ *
  * @param original original item-map
  * @param override additional item-map for merging into the original one
  */
@@ -51,11 +52,12 @@ overrideItems(JsonItem &original,
 }
 
 /**
- * @brief checkForRequiredKeys
- * @param blossomItem
- * @param blossomGroupType
- * @param blossomType
- * @return
+ * @brief check if all values are set inside a blossom-item, which are required for the
+ *        requested blossom-type
+ *
+ * @param blossomItem blossom-item with the information
+ *
+ * @return true, if all necessary values are set, else false
  */
 bool
 checkForRequiredKeys(BlossomItem &blossomItem)
@@ -70,26 +72,34 @@ checkForRequiredKeys(BlossomItem &blossomItem)
 }
 
 /**
- * @brief checkForRequiredKeys
- * @param values
- * @param requiredKeys
- * @return
+ * @brief check if all values of a blossom-item match with a list of required keys
+ *
+ * @param blossomItem blossom-item with the information
+ * @param requiredKeys data-map with all required keys. The value behind each key is a
+ *                     boolean data-value. If this value is false, the key is optional and don't
+ *                     have to be in the values of the blossom-item
+ *
+ * @return true, if all necessary values are set, else false
  */
 bool
 checkForRequiredKeys(BlossomItem &blossomItem,
                      DataMap &requiredKeys)
 {
+    // if "*" is in the list of required key, there is more allowed as the list contains items
+    // for example the print-blossom allows all key
     if(requiredKeys.contains("*") == false)
     {
+        // check if all keys in the values of the blossom-item also exist in the required-key-list
         std::map<std::string, ValueItem>::const_iterator it;
-        for(it = blossomItem.values.valueMap.begin();
-            it != blossomItem.values.valueMap.end();
+        for(it = blossomItem.values.const_begin();
+            it != blossomItem.values.const_end();
             it++)
         {
             ValueItem tempItem = blossomItem.values.getValueItem(it->first);
             if(tempItem.item == nullptr
                     && tempItem.type == ValueItem::INPUT_PAIR_TYPE)
             {
+                // build error-output
                 std::string message = "variable \""
                                       + it->first
                                       + "\" is not in the list of allowed keys";
@@ -107,6 +117,7 @@ checkForRequiredKeys(BlossomItem &blossomItem,
         }
     }
 
+    // check that all keys in the required keys are also in the values of the blossom-item
     std::map<std::string, DataItem*>::const_iterator it;
     for(it = requiredKeys.m_map.begin();
         it != requiredKeys.m_map.end();
@@ -116,6 +127,8 @@ checkForRequiredKeys(BlossomItem &blossomItem,
             continue;
         }
 
+        // if values of the blossom-item doesn't contain the key and the key is not optional,
+        // then create an error-message
         if(blossomItem.values.contains(it->first) == false
                 && it->second->toValue()->getBool() == true)
         {

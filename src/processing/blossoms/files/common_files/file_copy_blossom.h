@@ -36,11 +36,11 @@ public:
     FileCopyBlossom();
 
 protected:
-    void initTask(BlossomItem &blossomItem);
+    void initBlossom(BlossomItem &blossomItem);
     void preCheck(BlossomItem &blossomItem);
     void runTask(BlossomItem &blossomItem);
     void postCheck(BlossomItem &blossomItem);
-    void closeTask(BlossomItem &blossomItem);
+    void closeBlossom(BlossomItem &blossomItem);
 
 private:
     friend FileCopyBlossom_Test;

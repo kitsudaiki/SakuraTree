@@ -38,10 +38,10 @@ IniDeleteEntryBlossom::IniDeleteEntryBlossom()
 }
 
 /**
- * @brief initTask
+ * @brief initBlossom
  */
 void
-IniDeleteEntryBlossom::initTask(BlossomItem &blossomItem)
+IniDeleteEntryBlossom::initBlossom(BlossomItem &blossomItem)
 {
     m_filePath = blossomItem.values.getValueAsString("file_path");
     m_group = blossomItem.values.getValueAsString("group");
@@ -112,10 +112,10 @@ IniDeleteEntryBlossom::postCheck(BlossomItem &blossomItem)
 }
 
 /**
- * @brief closeTask
+ * @brief closeBlossom
  */
 void
-IniDeleteEntryBlossom::closeTask(BlossomItem &blossomItem)
+IniDeleteEntryBlossom::closeBlossom(BlossomItem &blossomItem)
 {
     blossomItem.success = true;
 }

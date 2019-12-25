@@ -69,7 +69,7 @@ CmdBlossom_Test::initTask_test()
 
     fakeItem.values.insert("command", new DataValue(m_command));
 
-    fakeCmdBlossom.initTask(fakeItem);
+    fakeCmdBlossom.initBlossom(fakeItem);
     TEST_EQUAL(fakeItem.success, true);
 }
 
@@ -83,7 +83,7 @@ CmdBlossom_Test::preCheck_test()
     fakeItem.values.insert("command", new DataValue(m_command));
     CmdBlossom fakeCmdBlossom;
 
-    fakeCmdBlossom.initTask(fakeItem);
+    fakeCmdBlossom.initBlossom(fakeItem);
     fakeCmdBlossom.preCheck(fakeItem);
     TEST_EQUAL(fakeItem.success, true);
 }
@@ -100,7 +100,7 @@ CmdBlossom_Test::runTask_test()
 
     TEST_EQUAL(doesPathExist(m_filePath),  false);
 
-    fakeCmdBlossom.initTask(fakeItem);
+    fakeCmdBlossom.initBlossom(fakeItem);
     fakeCmdBlossom.runTask(fakeItem);
     TEST_EQUAL(fakeItem.success, true);
     TEST_EQUAL(doesPathExist(m_filePath),  true);
@@ -118,7 +118,7 @@ CmdBlossom_Test::postCheck_test()
     fakeItem.values.insert("command", new DataValue(m_command));
     CmdBlossom fakeCmdBlossom;
 
-    fakeCmdBlossom.initTask(fakeItem);
+    fakeCmdBlossom.initBlossom(fakeItem);
     fakeCmdBlossom.postCheck(fakeItem);
     TEST_EQUAL(fakeItem.success, true);
 }
@@ -133,8 +133,8 @@ CmdBlossom_Test::closeTask_test()
     fakeItem.values.insert("command", new DataValue(m_command));
     CmdBlossom fakeCmdBlossom;
 
-    fakeCmdBlossom.initTask(fakeItem);
-    fakeCmdBlossom.closeTask(fakeItem);
+    fakeCmdBlossom.initBlossom(fakeItem);
+    fakeCmdBlossom.closeBlossom(fakeItem);
     TEST_EQUAL(fakeItem.success, true);
 }
 

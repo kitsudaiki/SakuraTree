@@ -37,11 +37,11 @@ AptPresentBlossom::AptPresentBlossom()
 }
 
 /**
- * @brief AptInstallBlossom::initTask
+ * @brief AptInstallBlossom::initBlossom
  * @return
  */
 void
-AptPresentBlossom::initTask(BlossomItem &blossomItem)
+AptPresentBlossom::initBlossom(BlossomItem &blossomItem)
 {
     DataArray* names = blossomItem.values.get("packages")->toArray();
     if(names != nullptr)
@@ -122,11 +122,11 @@ AptPresentBlossom::postCheck(BlossomItem &blossomItem)
 }
 
 /**
- * @brief AptInstallBlossom::closeTask
+ * @brief AptInstallBlossom::closeBlossom
  * @return
  */
 void
-AptPresentBlossom::closeTask(BlossomItem &blossomItem)
+AptPresentBlossom::closeBlossom(BlossomItem &blossomItem)
 {
     m_packageNames.clear();
     blossomItem.success = true;

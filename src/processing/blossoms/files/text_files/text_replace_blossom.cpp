@@ -36,10 +36,10 @@ TextReplaceBlossom::TextReplaceBlossom()
 }
 
 /**
- * @brief initTask
+ * @brief initBlossom
  */
 void
-TextReplaceBlossom::initTask(BlossomItem &blossomItem)
+TextReplaceBlossom::initBlossom(BlossomItem &blossomItem)
 {
     m_filePath = blossomItem.values.getValueAsString("file_path");
     m_oldText = blossomItem.values.getValueAsString("old_text");
@@ -104,10 +104,10 @@ TextReplaceBlossom::postCheck(BlossomItem &blossomItem)
 }
 
 /**
- * @brief closeTask
+ * @brief closeBlossom
  */
 void
-TextReplaceBlossom::closeTask(BlossomItem &blossomItem)
+TextReplaceBlossom::closeBlossom(BlossomItem &blossomItem)
 {
     blossomItem.success = true;
 }

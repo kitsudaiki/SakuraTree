@@ -25,7 +25,7 @@
 
 #include <common.h>
 #include <libKitsunemimiCommon/test.h>
-#include <processing/common/functions.h>
+#include <processing/common/value_item_functions.h>
 
 namespace SakuraTree
 {

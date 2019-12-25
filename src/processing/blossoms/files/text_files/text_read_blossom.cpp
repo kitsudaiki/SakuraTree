@@ -34,10 +34,10 @@ TextReadBlossom::TextReadBlossom()
 }
 
 /**
- * @brief initTask
+ * @brief initBlossom
  */
 void
-TextReadBlossom::initTask(BlossomItem &blossomItem)
+TextReadBlossom::initBlossom(BlossomItem &blossomItem)
 {
     m_filePath = blossomItem.values.getValueAsString("file_path");
     blossomItem.success = true;
@@ -101,10 +101,10 @@ TextReadBlossom::postCheck(BlossomItem &blossomItem)
 }
 
 /**
- * @brief closeTask
+ * @brief closeBlossom
  */
 void
-TextReadBlossom::closeTask(BlossomItem &blossomItem)
+TextReadBlossom::closeBlossom(BlossomItem &blossomItem)
 {
     blossomItem.success = true;
 }

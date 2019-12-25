@@ -36,10 +36,10 @@ FileCopyBlossom::FileCopyBlossom()
 }
 
 /**
- * @brief initTask
+ * @brief initBlossom
  */
 void
-FileCopyBlossom::initTask(BlossomItem &blossomItem)
+FileCopyBlossom::initBlossom(BlossomItem &blossomItem)
 {
     m_sourcePath = blossomItem.values.getValueAsString("source_path");
     m_destinationPath = blossomItem.values.getValueAsString("dest_path");
@@ -115,10 +115,10 @@ FileCopyBlossom::postCheck(BlossomItem &blossomItem)
 }
 
 /**
- * @brief closeTask
+ * @brief closeBlossom
  */
 void
-FileCopyBlossom::closeTask(BlossomItem &blossomItem)
+FileCopyBlossom::closeBlossom(BlossomItem &blossomItem)
 {
     blossomItem.success = true;
 }

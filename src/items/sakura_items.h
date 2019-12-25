@@ -24,7 +24,7 @@
 #define SAKURA_ITEMS_H
 
 #include <common.h>
-#include <items/value_items.h>
+#include <items/value_item_map.h>
 
 namespace SakuraTree
 {
@@ -156,19 +156,6 @@ public:
 };
 
 //===================================================================
-// Sequeniell
-//===================================================================
-class Sequentiell : public SakuraItem
-{
-public:
-    Sequentiell();
-    ~Sequentiell();
-    SakuraItem* copy();
-
-    std::vector<SakuraItem*> childs;
-};
-
-//===================================================================
 // IfBranching
 //===================================================================
 class IfBranching : public SakuraItem
@@ -229,13 +216,26 @@ public:
 };
 
 //===================================================================
-// Parallel
+// SequentiellPart
 //===================================================================
-class Parallel : public SakuraItem
+class SequentiellPart : public SakuraItem
 {
 public:
-    Parallel();
-    ~Parallel();
+    SequentiellPart();
+    ~SequentiellPart();
+    SakuraItem* copy();
+
+    std::vector<SakuraItem*> childs;
+};
+
+//===================================================================
+// ParallelPart
+//===================================================================
+class ParallelPart : public SakuraItem
+{
+public:
+    ParallelPart();
+    ~ParallelPart();
     SakuraItem* copy();
 
     std::vector<SakuraItem*> childs;

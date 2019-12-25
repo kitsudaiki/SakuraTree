@@ -26,7 +26,7 @@
 #include <sakura_root.h>
 #include <processing/blossoms/blossom.h>
 #include <libKitsunemimiJinja2/jinja2_converter.h>
-#include <processing/common/functions.h>
+#include <processing/common/value_item_functions.h>
 
 using Kitsunemimi::Jinja2::Jinja2Converter;
 
@@ -63,7 +63,7 @@ getProcessedItem(ValueItem &original,
             }
             ValueItem arg = original.functions.at(i).arguments.at(0);
             if(fillValueItem(arg, insertValues)) {
-                original.item = splitValue(original.item, arg.item->toValue());
+                original.item = splitValue(original.item->toValue(), arg.item->toValue());
             }
             break;
         }
@@ -93,7 +93,7 @@ getProcessedItem(ValueItem &original,
             if(fillValueItem(arg1, insertValues)
                     && fillValueItem(arg2, insertValues))
             {
-                original.item = insertValue(original.item,
+                original.item = insertValue(original.item->toMap(),
                                             arg1.item->toValue(),
                                             arg2.item->toValue());
             }
@@ -106,7 +106,7 @@ getProcessedItem(ValueItem &original,
             }
             ValueItem arg = original.functions.at(i).arguments.at(0);
             if(fillValueItem(arg, insertValues)) {
-                original.item = appendValue(original.item, arg.item->toValue());
+                original.item = appendValue(original.item->toArray(), arg.item->toValue());
             }
             break;
         }
@@ -209,8 +209,8 @@ fillInputValueItemMap(ValueItemMap &items,
     Result result;
 
     std::map<std::string, ValueItem>::iterator it;
-    for(it = items.valueMap.begin();
-        it != items.valueMap.end();
+    for(it = items.begin();
+        it != items.end();
         it++)
     {
         if(fillValueItem(it->second, insertValues) == false) {
@@ -233,8 +233,8 @@ fillOutputValueItemMap(ValueItemMap &items,
                        DataItem *output)
 {
     std::map<std::string, ValueItem>::iterator it;
-    for(it = items.valueMap.begin();
-        it != items.valueMap.end();
+    for(it = items.begin();
+        it != items.end();
         it++)
     {
         if(it->second.type == ValueItem::OUTPUT_PAIR_TYPE)
@@ -297,8 +297,8 @@ overrideItems(DataMap &original,
     if(onlyExisting)
     {
         std::map<std::string, ValueItem>::const_iterator overrideIt;
-        for(overrideIt = override.valueMap.begin();
-            overrideIt != override.valueMap.end();
+        for(overrideIt = override.const_begin();
+            overrideIt != override.const_end();
             overrideIt++)
         {
             std::map<std::string, DataItem*>::iterator originalIt;
@@ -312,8 +312,8 @@ overrideItems(DataMap &original,
     else
     {
         std::map<std::string, ValueItem>::const_iterator overrideIt;
-        for(overrideIt = override.valueMap.begin();
-            overrideIt != override.valueMap.end();
+        for(overrideIt = override.const_begin();
+            overrideIt != override.const_end();
             overrideIt++)
         {
             original.insert(overrideIt->first, overrideIt->second.item->copy(), true);
@@ -332,8 +332,8 @@ checkItems(ValueItemMap &items)
     std::vector<std::string> result;
 
     std::map<std::string, ValueItem>::const_iterator it;
-    for(it = items.valueMap.begin();
-        it != items.valueMap.end();
+    for(it = items.const_begin();
+        it != items.const_end();
         it++)
     {
         if(it->second.item->getString() == "{{}}") {

@@ -50,20 +50,20 @@ public:
 private:
     SakuraItem* convertPart(const JsonItem &growPlan, bool &success);
 
-    bool convertItemPart(ValueItem &resultingPart,
-                         const JsonItem &itemInput,
-                         const std::string pairType,
-                         bool &success);
-    void convertValues(SakuraItem* obj,
-                       const JsonItem &values,
-                       bool &success);
+    void convertSingleItemValue(ValueItem &resultingPart,
+                                const JsonItem &itemInput,
+                                const std::string pairType,
+                                bool &success);
+    void convertItemValues(SakuraItem* sakuraItem,
+                           const JsonItem &jsonValues,
+                           bool &success);
 
     SakuraItem* convertBlossomGroup(const JsonItem &growPlan, bool &success);
     SakuraItem* convertSubtree(const JsonItem &growPlan, bool &success);
     SakuraItem* convertSeed(const JsonItem &growPlan, bool &success);
     SakuraItem* convertIf(const JsonItem &growPlan, bool &success);
-    SakuraItem* convertForEach(const JsonItem &growPlan, bool parallel, bool &success);
-    SakuraItem* convertFor(const JsonItem &growPlan, bool parallel, bool &success);
+    SakuraItem* convertForEach(const JsonItem &growPlan, const bool parallel, bool &success);
+    SakuraItem* convertFor(const JsonItem &growPlan, const bool parallel, bool &success);
     SakuraItem* convertParallel(const JsonItem &subtree, bool &success);
 };
 

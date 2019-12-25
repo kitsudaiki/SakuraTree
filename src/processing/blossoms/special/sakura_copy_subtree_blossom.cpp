@@ -36,10 +36,10 @@ SakuraCopySubtreeBlossom::SakuraCopySubtreeBlossom()
 }
 
 /**
- * initTask
+ * initBlossom
  */
 void
-SakuraCopySubtreeBlossom::initTask(BlossomItem &blossomItem)
+SakuraCopySubtreeBlossom::initBlossom(BlossomItem &blossomItem)
 {
     blossomItem.success = true;
 }
@@ -60,10 +60,10 @@ void
 SakuraCopySubtreeBlossom::runTask(BlossomItem &blossomItem)
 {
     const std::string address = blossomItem.values.getValueAsString("address");
-    const std::string plan = blossomItem.values.getValueAsString("subtree");
+    const std::string subtree = blossomItem.values.getValueAsString("subtree");
     const std::string values = blossomItem.values.getValueAsString("values");
 
-    SakuraRoot::m_root->sendPlan(address, plan, values);
+    SakuraRoot::m_root->sendPlan(address, subtree, values);
 
     sleep(2);
 }
@@ -78,10 +78,10 @@ SakuraCopySubtreeBlossom::postCheck(BlossomItem &blossomItem)
 }
 
 /**
- * closeTask
+ * closeBlossom
  */
 void
-SakuraCopySubtreeBlossom::closeTask(BlossomItem &blossomItem)
+SakuraCopySubtreeBlossom::closeBlossom(BlossomItem &blossomItem)
 {
     blossomItem.success = true;
 }

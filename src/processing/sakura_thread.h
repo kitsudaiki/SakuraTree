@@ -49,16 +49,16 @@ private:
 
     void run();
 
-    bool grow(SakuraItem* subtree);
+    bool processSakuraItem(SakuraItem* sakuraItem);
 
-    bool processBlossom(BlossomItem &subtree);
-    bool processBlossomGroup(BlossomGroupItem &subtree);
-    bool processSubtree(SubtreeItem* subtree);
-    bool processIf(IfBranching* subtree);
+    bool processBlossom(BlossomItem &blossomItem);
+    bool processBlossomGroup(BlossomGroupItem &blossomGroupItem);
+    bool processSubtree(SubtreeItem* subtreeItem);
+    bool processIf(IfBranching* ifCondition);
     bool processForEach(ForEachBranching* subtree, bool parallel);
     bool processFor(ForBranching* subtree, bool parallel);
-    bool processSequeniellPart(Sequentiell* subtree);
-    bool processParallelPart(Parallel* subtree);
+    bool processSequeniellPart(SequentiellPart* subtree);
+    bool processParallelPart(ParallelPart* parallelPart);
 
 };
 

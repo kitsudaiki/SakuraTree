@@ -53,21 +53,25 @@ public:
     SakuraRoot(const std::string &executablePath);
     ~SakuraRoot();
 
+    // start processing
     bool startProcess(const std::string &rootPath,
-                      std::string seedName,
-                      DataMap &initialValues);
+                      const std::string &seedName,
+                      const DataMap &initialValues);
     bool startSubtreeProcess(const std::string &subtree,
                              const std::string &values);
 
+    // network-interaction
     bool sendPlan(const std::string &address,
-                  const std::string &plan,
+                  const std::string &subtree,
                   const std::string &values);
-
     bool startClientConnection(const std::string &address,
                                const int port);
+
+    // output
     void printOutput(const BlossomItem &blossomItem);
     void printOutput(const std::string &output);
 
+    // static values
     static SakuraTree::SakuraRoot* m_root;
     static std::string m_executablePath;
     static Jinja2Converter* m_jinja2Converter;

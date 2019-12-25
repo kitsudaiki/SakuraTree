@@ -32,10 +32,10 @@ ExitBlossom::ExitBlossom()
 }
 
 /**
- * initTask
+ * initBlossom
  */
 void
-ExitBlossom::initTask(BlossomItem &blossomItem)
+ExitBlossom::initBlossom(BlossomItem &blossomItem)
 {
     m_exitStatus = blossomItem.values.get("status")->toValue()->getInt();
 
@@ -72,10 +72,10 @@ ExitBlossom::postCheck(BlossomItem &blossomItem)
 }
 
 /**
- * closeTask
+ * closeBlossom
  */
 void
-ExitBlossom::closeTask(BlossomItem &blossomItem)
+ExitBlossom::closeBlossom(BlossomItem &blossomItem)
 {
     blossomItem.success = true;
 }

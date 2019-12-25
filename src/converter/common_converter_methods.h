@@ -1,5 +1,5 @@
 /**
- * @file        common_methos.h
+ * @file        common_converter_methods.h
  *
  * @author      Tobias Anker <tobias.anker@kitsunemimi.moe>
  *

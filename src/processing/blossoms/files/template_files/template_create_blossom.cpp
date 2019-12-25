@@ -38,10 +38,10 @@ TemplateCreateBlossom::TemplateCreateBlossom()
 }
 
 /**
- * initTask
+ * initBlossom
  */
 void
-TemplateCreateBlossom::initTask(BlossomItem &blossomItem)
+TemplateCreateBlossom::initBlossom(BlossomItem &blossomItem)
 {
     m_templatePath = blossomItem.values.getValueAsString("source_path");
     m_destinationPath = blossomItem.values.getValueAsString("dest_path");
@@ -87,8 +87,8 @@ TemplateCreateBlossom::preCheck(BlossomItem &blossomItem)
 
     DataMap inputData;
     std::map<std::string, ValueItem>::iterator it;
-    for(it = blossomItem.values.valueMap.begin();
-        it != blossomItem.values.valueMap.end();
+    for(it = blossomItem.values.begin();
+        it != blossomItem.values.end();
         it++)
     {
         if(it->second.item != nullptr
@@ -171,10 +171,10 @@ TemplateCreateBlossom::postCheck(BlossomItem &blossomItem)
 }
 
 /**
- * closeTask
+ * closeBlossom
  */
 void
-TemplateCreateBlossom::closeTask(BlossomItem &blossomItem)
+TemplateCreateBlossom::closeBlossom(BlossomItem &blossomItem)
 {
     blossomItem.success = true;
 }

@@ -34,10 +34,10 @@ FileChownBlossom::FileChownBlossom()
 }
 
 /**
- * @brief initTask
+ * @brief initBlossom
  */
 void
-FileChownBlossom::initTask(BlossomItem &blossomItem)
+FileChownBlossom::initBlossom(BlossomItem &blossomItem)
 {
     m_filePath = blossomItem.values.getValueAsString("file_path");
     m_owner = blossomItem.values.getValueAsString("owner");
@@ -90,10 +90,10 @@ FileChownBlossom::postCheck(BlossomItem &blossomItem)
 }
 
 /**
- * @brief closeTask
+ * @brief closeBlossom
  */
 void
-FileChownBlossom::closeTask(BlossomItem &blossomItem)
+FileChownBlossom::closeBlossom(BlossomItem &blossomItem)
 {
     blossomItem.success = true;
 }
