@@ -27,9 +27,12 @@ namespace SakuraTree
 {
 
 /**
- * @brief SakuraBlossom::runSyncProcess
+ * @brief run a programm synchrone
  *
- * @return
+ * @param blossomItem blossom-item, where the results of the run should be written back
+ * @param command command to execute as shell-command
+ *
+ * @return false, if execution failed, else true
  */
 bool
 runSyncProcess(BlossomItem &blossomItem,
@@ -44,9 +47,13 @@ runSyncProcess(BlossomItem &blossomItem,
 }
 
 /**
- * @brief Blossom::runSyncProcess
+ * @brief run a programm synchrone
  *
- * @return
+ * @param blossomItem blossom-item, where the results of the run should be written back
+ * @param programm path to the programm to execute
+ * @param args list of arguments
+ *
+ * @return false, if execution failed, else true
  */
 bool
 runSyncProcess(BlossomItem &blossomItem,
