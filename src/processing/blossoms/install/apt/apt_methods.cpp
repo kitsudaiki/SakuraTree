@@ -30,22 +30,23 @@ namespace SakuraTree
 {
 
 /**
- * @brief AptBlossom::isInstalled
- * @param paket
- * @return
+ * @brief isInstalled check for a specific package, if this is installed
+ *
+ * @param package package-name to check
+ *
+ * @return true, if package is already installed, else false
  */
 bool
-isInstalled(BlossomItem &blossomItem,
-            const std::string &paket)
+isInstalled(const std::string &package)
 {
-    if(paket.length() == 0) {
+    if(package.length() == 0) {
         return false;
     }
 
-    const std::vector<std::string> currentInstalled = getInstalledPackages(blossomItem);
+    const std::vector<std::string> currentInstalled = getInstalledPackages();
     for(uint32_t i = 0; i < currentInstalled.size(); i++)
     {
-        if(currentInstalled.at(i) == paket) {
+        if(currentInstalled.at(i) == package) {
             return true;
         }
     }
@@ -54,8 +55,11 @@ isInstalled(BlossomItem &blossomItem,
 }
 
 /**
- * @brief AptBlossom::createPackageList
- * @return
+ * @brief convert package-list into a whitespace separated string
+ *
+ * @param packageList package-list
+ *
+ * @return whitespace separated string
  */
 const std::string
 createPackageList(const std::vector<std::string> &packageList)
@@ -70,16 +74,18 @@ createPackageList(const std::vector<std::string> &packageList)
 }
 
 /**
- * @brief AptBlossom::getInstalledPackages
- * @param packageList
- * @return
+ * @brief  check for a given list of package-names, which packages are already
+ *         installed on the system
+ *
+ * @param packageList package-list for comparism
+ *
+ * @return list of packages of the given list, which are already installed
  */
 const std::vector<std::string>
-getInstalledPackages(BlossomItem &blossomItem,
-                     const std::vector<std::string> &packageList)
+getInstalledPackages(const std::vector<std::string> &packageList)
 {
     std::vector<std::string> result;
-    const std::vector<std::string> currentInstalled = getInstalledPackages(blossomItem);
+    const std::vector<std::string> currentInstalled = getInstalledPackages();
 
     for(uint32_t i = 0; i < packageList.size(); i++)
     {
@@ -88,7 +94,7 @@ getInstalledPackages(BlossomItem &blossomItem,
             if(currentInstalled.at(j) == packageList.at(i))
             {
                 result.push_back(packageList.at(i));
-                continue;
+                break;
             }
         }
     }
@@ -97,16 +103,17 @@ getInstalledPackages(BlossomItem &blossomItem,
 }
 
 /**
- * @brief AptBlossom::getAbsendPackages
- * @param packageList
- * @return
+ * @brief check for a given list of package-names, which packages are not installed on the system
+ *
+ * @param packageList package-list for comparism
+ *
+ * @return list of packages of the given list, which are not installed
  */
 const std::vector<std::string>
-getAbsendPackages(BlossomItem &blossomItem,
-                  const std::vector<std::string> &packageList)
+getAbsendPackages(const std::vector<std::string> &packageList)
 {
     std::vector<std::string> result;
-    const std::vector<std::string> currentInstalled = getInstalledPackages(blossomItem);
+    const std::vector<std::string> currentInstalled = getInstalledPackages();
 
     for(uint32_t i = 0; i < packageList.size(); i++)
     {
@@ -116,7 +123,7 @@ getAbsendPackages(BlossomItem &blossomItem,
             if(currentInstalled.at(j) == packageList.at(i))
             {
                 found = true;
-                continue;
+                break;
             }
         }
 
@@ -130,16 +137,18 @@ getAbsendPackages(BlossomItem &blossomItem,
 
 
 /**
- * @brief AptBlossom::getInstalledPackages
- * @return
+ * @brief get all with apt installed packages on the system
+ *
+ * @return list all all installed packages
  */
 const std::vector<std::string>
-getInstalledPackages(BlossomItem &blossomItem)
+getInstalledPackages()
 {
     std::string command = "dpkg --list | grep ^ii  | awk ' {print \\$2} '";
     BlossomItem tempItem;
     runSyncProcess(tempItem, command);
     const std::string output(tempItem.processOutput);
+    // TODO: check for error
     return Kitsunemimi::Common::splitStringByDelimiter(output, '\n');
 }
 

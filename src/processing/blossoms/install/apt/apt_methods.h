@@ -29,16 +29,13 @@
 namespace SakuraTree
 {
 
-bool isInstalled(BlossomItem &blossomItem,
-                 const std::string &paket);
+bool isInstalled(const std::string &package);
 
 const std::string createPackageList(const std::vector<std::string> &packageList);
 
-const std::vector<std::string> getInstalledPackages(BlossomItem &blossomItem,
-                                                    const std::vector<std::string> &packageList);
-const std::vector<std::string> getAbsendPackages(BlossomItem &blossomDataconst,
-                                                 const std::vector<std::string> &packageList);
-const std::vector<std::string> getInstalledPackages(BlossomItem &blossomItem);
+const std::vector<std::string> getInstalledPackages(const std::vector<std::string> &packageList);
+const std::vector<std::string> getAbsendPackages(const std::vector<std::string> &packageList);
+const std::vector<std::string> getInstalledPackages();
 
 }
 
