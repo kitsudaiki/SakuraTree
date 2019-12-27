@@ -28,6 +28,8 @@ namespace SakuraTree
 CmdBlossom::CmdBlossom()
     : Blossom()
 {
+    m_hasOutput = true;
+
     m_requiredKeys.insert("command", new DataValue(true));
 }
 

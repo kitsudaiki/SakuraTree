@@ -42,6 +42,7 @@ public:
     void growBlossom(BlossomItem &blossomItem);
 
     DataMap m_requiredKeys;
+    bool m_hasOutput = false;
 
 protected:
     virtual void initBlossom(BlossomItem &blossomItem) = 0;

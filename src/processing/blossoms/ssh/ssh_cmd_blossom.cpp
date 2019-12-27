@@ -28,6 +28,8 @@ namespace SakuraTree
 SshCmdBlossom::SshCmdBlossom()
     : Blossom()
 {
+    m_hasOutput = true;
+
     m_requiredKeys.insert("user", new DataValue(true));
     m_requiredKeys.insert("address", new DataValue(true));
     m_requiredKeys.insert("command", new DataValue(true));
@@ -84,6 +86,9 @@ SshCmdBlossom::runTask(BlossomItem &blossomItem)
     programm += "\"";
 
     runSyncProcess(blossomItem, programm);
+
+    blossomItem.blossomOutput = new DataValue(blossomItem.processOutput);
+    blossomItem.success = true;
 }
 
 /**

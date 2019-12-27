@@ -31,8 +31,10 @@ namespace SakuraTree
 
 void overrideItems(JsonItem &original,
                    const JsonItem &override);
-bool checkForRequiredKeys(BlossomItem &blossomItem);
-bool checkForRequiredKeys(BlossomItem &blossomItem,
+bool checkOutput(BlossomItem &blossomItem,
+                 const bool hasOutput);
+bool checkBlossomItem(BlossomItem &blossomItem);
+bool checkBlossomItem(BlossomItem &blossomItem,
                           DataMap &requiredKeys);
 
 }

@@ -30,6 +30,8 @@ namespace SakuraTree
 TextReadBlossom::TextReadBlossom()
     : Blossom()
 {
+    m_hasOutput = true;
+
     m_requiredKeys.insert("file_path", new DataValue(true));
 }
 

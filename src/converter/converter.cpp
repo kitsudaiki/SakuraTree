@@ -280,7 +280,7 @@ Converter::convertBlossomGroup(const JsonItem &subtree, bool &success)
 
             blossomGroupItem->blossoms.push_back(blossomItem);
 
-            if(checkForRequiredKeys(*blossomItem) == false) {
+            if(checkBlossomItem(*blossomItem) == false) {
                 success = false;
             }
         }
@@ -298,7 +298,7 @@ Converter::convertBlossomGroup(const JsonItem &subtree, bool &success)
         blossomGroupItem->blossomGroupType = "special";
         blossomGroupItem->blossoms.push_back(blossomItem);
 
-        if(checkForRequiredKeys(*blossomItem) == false) {
+        if(checkBlossomItem(*blossomItem) == false) {
             success = false;
         }
     }

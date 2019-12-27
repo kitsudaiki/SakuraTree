@@ -33,6 +33,8 @@ namespace SakuraTree
 IniReadEntryBlossom::IniReadEntryBlossom()
     : Blossom()
 {
+    m_hasOutput = true;
+
     m_requiredKeys.insert("file_path", new DataValue(true));
     m_requiredKeys.insert("group", new DataValue(true));
     m_requiredKeys.insert("entry", new DataValue(true));

@@ -52,23 +52,68 @@ overrideItems(JsonItem &original,
 }
 
 /**
- * @brief check if all values are set inside a blossom-item, which are required for the
- *        requested blossom-type
+ * @brief check if all values are set inside a blossom-item
  *
  * @param blossomItem blossom-item with the information
  *
  * @return true, if all necessary values are set, else false
  */
 bool
-checkForRequiredKeys(BlossomItem &blossomItem)
+checkBlossomItem(BlossomItem &blossomItem)
 {
     bool result = false;
 
     Blossom* blossom = getBlossom(blossomItem.blossomGroupType, blossomItem.blossomType);
-    result = checkForRequiredKeys(blossomItem, blossom->m_requiredKeys);
+    result = checkBlossomItem(blossomItem, blossom->m_requiredKeys);
+    if(result == true) {
+        result = checkOutput(blossomItem, blossom->m_hasOutput);
+    }
     delete blossom;
 
     return result;
+}
+
+/**
+ * @brief check, that only a output-variable is defined, when the blossom has output, which can
+ *        be written into a variable
+ *
+ * @param blossomItem blossom-item with the information
+ * @param hasOuput true, if blossom has output, which can be written into a variable
+ *
+ * @return true, if all necessary values are set, else false
+ */
+bool
+checkOutput(BlossomItem &blossomItem,
+            const bool hasOutput)
+{
+    std::map<std::string, ValueItem>::const_iterator it;
+    for(it = blossomItem.values.const_begin();
+        it != blossomItem.values.const_end();
+        it++)
+    {
+        ValueItem tempItem = blossomItem.values.getValueItem(it->first);
+        if(hasOutput == false
+                && tempItem.type == ValueItem::OUTPUT_PAIR_TYPE)
+        {
+            // build error-output
+            std::string message = "variable \""
+                                  + it->first
+                                  + "\" is declared as output-variable, but the blossom has not"
+                                    "output, which could be written into a variable.";
+            SakuraRoot::m_errorOutput.addRow(std::vector<std::string>{"ERROR", ""});
+            SakuraRoot::m_errorOutput.addRow(std::vector<std::string>{"location", "converter"});
+            SakuraRoot::m_errorOutput.addRow(std::vector<std::string>{"message", message});
+            SakuraRoot::m_errorOutput.addRow(
+                        std::vector<std::string>{"blossom-type",
+                                                 blossomItem.blossomType});
+            SakuraRoot::m_errorOutput.addRow(
+                        std::vector<std::string>{"blossom-group-type",
+                                                 blossomItem.blossomGroupType});
+            return false;
+        }
+    }
+
+    return true;
 }
 
 /**
@@ -82,7 +127,7 @@ checkForRequiredKeys(BlossomItem &blossomItem)
  * @return true, if all necessary values are set, else false
  */
 bool
-checkForRequiredKeys(BlossomItem &blossomItem,
+checkBlossomItem(BlossomItem &blossomItem,
                      DataMap &requiredKeys)
 {
     // if "*" is in the list of required key, there is more allowed as the list contains items
