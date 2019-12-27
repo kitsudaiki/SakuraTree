@@ -21,7 +21,7 @@
  */
 
 #include "file_copy_blossom.h"
-#include <processing/blossoms/files/file_methods.h>
+#include <libKitsunemimiPersistence/files/file_methods.h>
 #include <libKitsunemimiCommon/common_methods/string_methods.h>
 
 namespace SakuraTree
@@ -57,7 +57,7 @@ FileCopyBlossom::initBlossom(BlossomItem &blossomItem)
 void
 FileCopyBlossom::preCheck(BlossomItem &blossomItem)
 {
-    if(doesPathExist(m_sourcePath) == false)
+    if(Kitsunemimi::Persistence::doesPathExist(m_sourcePath) == false)
     {
         blossomItem.success = false;
         blossomItem.outputMessage = "COPY FAILED: source-path "
@@ -83,12 +83,13 @@ FileCopyBlossom::preCheck(BlossomItem &blossomItem)
 void
 FileCopyBlossom::runTask(BlossomItem &blossomItem)
 {
-    const Result copyResult = copyPath(m_sourcePath, m_destinationPath);
+    std::pair<bool, std::string> copyResult;
+    copyResult = Kitsunemimi::Persistence::copyPath(m_sourcePath, m_destinationPath);
 
-    if(copyResult.success == false)
+    if(copyResult.first == false)
     {
         blossomItem.success = false;
-        blossomItem.outputMessage = "COPY FAILED: " + copyResult.errorMessage;
+        blossomItem.outputMessage = copyResult.second;
         return;
     }
 
@@ -101,7 +102,7 @@ FileCopyBlossom::runTask(BlossomItem &blossomItem)
 void
 FileCopyBlossom::postCheck(BlossomItem &blossomItem)
 {
-    if(doesPathExist(m_destinationPath) == false)
+    if(Kitsunemimi::Persistence::doesPathExist(m_destinationPath) == false)
     {
         blossomItem.success = false;
         blossomItem.outputMessage = "was not able to copy from "

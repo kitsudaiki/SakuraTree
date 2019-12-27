@@ -21,7 +21,7 @@
  */
 
 #include "text_replace_blossom.h"
-#include <processing/blossoms/files/file_methods.h>
+#include <libKitsunemimiPersistence/files/file_methods.h>
 #include <libKitsunemimiPersistence/files/text_file.h>
 
 namespace SakuraTree
@@ -53,7 +53,7 @@ TextReplaceBlossom::initBlossom(BlossomItem &blossomItem)
 void
 TextReplaceBlossom::preCheck(BlossomItem &blossomItem)
 {
-    if(doesPathExist(m_filePath) == false)
+    if(Kitsunemimi::Persistence::doesPathExist(m_filePath) == false)
     {
         blossomItem.success = false;
         blossomItem.outputMessage = "path "
@@ -62,7 +62,7 @@ TextReplaceBlossom::preCheck(BlossomItem &blossomItem)
         return;
     }
 
-    if(doesFileExist(m_filePath) == false)
+    if(Kitsunemimi::Persistence::doesFileExist(m_filePath) == false)
     {
         blossomItem.success = false;
         blossomItem.outputMessage = "path "

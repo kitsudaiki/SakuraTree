@@ -21,7 +21,7 @@
  */
 
 #include "ini_read_entry_blossom.h"
-#include <processing/blossoms/files/file_methods.h>
+#include <libKitsunemimiPersistence/files/file_methods.h>
 #include <libKitsunemimiIni/ini_item.h>
 #include <libKitsunemimiPersistence/files/text_file.h>
 
@@ -59,7 +59,7 @@ IniReadEntryBlossom::initBlossom(BlossomItem &blossomItem)
 void
 IniReadEntryBlossom::preCheck(BlossomItem &blossomItem)
 {
-    if(doesPathExist(m_filePath) == false)
+    if(Kitsunemimi::Persistence::doesPathExist(m_filePath) == false)
     {
         blossomItem.success = false;
         blossomItem.outputMessage = "file-path "

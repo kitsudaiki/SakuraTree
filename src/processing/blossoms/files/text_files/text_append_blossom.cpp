@@ -21,7 +21,7 @@
  */
 
 #include "text_append_blossom.h"
-#include <processing/blossoms/files/file_methods.h>
+#include <libKitsunemimiPersistence/files/file_methods.h>
 #include <libKitsunemimiPersistence/files/text_file.h>
 
 namespace SakuraTree
@@ -52,7 +52,7 @@ TextAppendBlossom::initBlossom(BlossomItem &blossomItem)
 void
 TextAppendBlossom::preCheck(BlossomItem &blossomItem)
 {
-    if(doesPathExist(m_filePath) == false)
+    if(Kitsunemimi::Persistence::doesPathExist(m_filePath) == false)
     {
         blossomItem.success = false;
         blossomItem.outputMessage = "path "
@@ -61,7 +61,7 @@ TextAppendBlossom::preCheck(BlossomItem &blossomItem)
         return;
     }
 
-    if(doesFileExist(m_filePath) == false)
+    if(Kitsunemimi::Persistence::doesFileExist(m_filePath) == false)
     {
         blossomItem.success = false;
         blossomItem.outputMessage = "path "

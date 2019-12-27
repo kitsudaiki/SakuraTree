@@ -21,7 +21,7 @@
  */
 
 #include "file_rename_blossom.h"
-#include <processing/blossoms/files/file_methods.h>
+#include <libKitsunemimiPersistence/files/file_methods.h>
 #include <libKitsunemimiCommon/common_methods/string_methods.h>
 #include <libKitsunemimiCommon/common_methods/vector_methods.h>
 
@@ -64,15 +64,15 @@ FileRenameBlossom::initBlossom(BlossomItem &blossomItem)
 void
 FileRenameBlossom::preCheck(BlossomItem &blossomItem)
 {
-    if(doesPathExist(m_filePath) == false
-            && doesPathExist(m_newFilePath))
+    if(Kitsunemimi::Persistence::doesPathExist(m_filePath) == false
+            && Kitsunemimi::Persistence::doesPathExist(m_newFilePath))
     {
         blossomItem.skip = true;
         blossomItem.success = true;
         return;
     }
 
-    if(doesPathExist(m_filePath) == false)
+    if(Kitsunemimi::Persistence::doesPathExist(m_filePath) == false)
     {
         blossomItem.success = false;
         blossomItem.outputMessage = "source-path "
@@ -90,12 +90,13 @@ FileRenameBlossom::preCheck(BlossomItem &blossomItem)
 void
 FileRenameBlossom::runTask(BlossomItem &blossomItem)
 {
-    const Result renameResult = renameFileOrDir(m_filePath, m_newFilePath);
+    std::pair<bool, std::string> renameResult;
+    renameResult = Kitsunemimi::Persistence::renameFileOrDir(m_filePath, m_newFilePath);
 
-    if(renameResult.success == false)
+    if(renameResult.first == false)
     {
         blossomItem.success = false;
-        blossomItem.outputMessage = renameResult.errorMessage;
+        blossomItem.outputMessage = renameResult.second;
         return;
     }
 
@@ -108,14 +109,14 @@ FileRenameBlossom::runTask(BlossomItem &blossomItem)
 void
 FileRenameBlossom::postCheck(BlossomItem &blossomItem)
 {
-    if(doesFileExist(m_filePath))
+    if(Kitsunemimi::Persistence::doesFileExist(m_filePath))
     {
         blossomItem.success = false;
         blossomItem.outputMessage = "old object still exist";
         return;
     }
 
-    if(doesPathExist(m_newFilePath) == false)
+    if(Kitsunemimi::Persistence::doesPathExist(m_newFilePath) == false)
     {
         blossomItem.success = false;
         blossomItem.outputMessage = "was not able to rename from "

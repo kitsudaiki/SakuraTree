@@ -76,7 +76,6 @@ HEADERS += \
     src/processing/blossoms/files/text_files/text_read_blossom.h \
     src/processing/blossoms/files/text_files/text_replace_blossom.h \
     src/processing/blossoms/files/text_files/text_write_blossom.h \
-    src/processing/blossoms/files/file_methods.h \
     src/processing/blossoms/install/apt/apt_absent_blossom.h \
     src/processing/blossoms/install/apt/apt_latest_blossom.h \
     src/processing/blossoms/install/apt/apt_methods.h \
@@ -111,7 +110,6 @@ HEADERS += \
     tests/processing/blossoms/files/text_files/text_read_blossom_test.h \
     tests/processing/blossoms/files/text_files/text_replace_blossom_test.h \
     tests/processing/blossoms/files/text_files/text_write_blossom_test.h \
-    tests/processing/blossoms/files/file_methods_test.h \
     tests/processing/blossoms/special/cmd_blossom_test.h \
     tests/processing/common/functions_test.h \
     tests/processing/common/item_methods_test.h \
@@ -137,7 +135,6 @@ SOURCES += \
     src/processing/blossoms/files/text_files/text_read_blossom.cpp \
     src/processing/blossoms/files/text_files/text_replace_blossom.cpp \
     src/processing/blossoms/files/text_files/text_write_blossom.cpp \
-    src/processing/blossoms/files/file_methods.cpp \
     src/processing/blossoms/install/apt/apt_absent_blossom.cpp \
     src/processing/blossoms/install/apt/apt_latest_bossom.cpp \
     src/processing/blossoms/install/apt/apt_methods.cpp \
@@ -172,7 +169,6 @@ SOURCES += \
     tests/processing/blossoms/files/text_files/text_read_blossom_test.cpp \
     tests/processing/blossoms/files/text_files/text_replace_blossom_test.cpp \
     tests/processing/blossoms/files/text_files/text_write_blossom_test.cpp \
-    tests/processing/blossoms/files/file_methods_test.cpp \
     tests/processing/blossoms/special/cmd_blossom_test.cpp \
     tests/processing/common/functions_test.cpp \
     tests/processing/common/item_methods_test.cpp \

@@ -21,7 +21,7 @@
  */
 
 #include "template_create_blossom.h"
-#include <processing/blossoms/files/file_methods.h>
+#include <libKitsunemimiPersistence/files/file_methods.h>
 #include <sakura_root.h>
 #include <libKitsunemimiJinja2/jinja2_converter.h>
 #include <libKitsunemimiPersistence/files/text_file.h>
@@ -64,7 +64,7 @@ TemplateCreateBlossom::preCheck(BlossomItem &blossomItem)
     std::pair<bool, std::string> results;
 
     // check if path to template is valid
-    if(doesPathExist(m_templatePath) == false)
+    if(Kitsunemimi::Persistence::doesPathExist(m_templatePath) == false)
     {
         blossomItem.success = false;
         blossomItem.outputMessage = "template-path "
@@ -113,7 +113,7 @@ TemplateCreateBlossom::preCheck(BlossomItem &blossomItem)
     m_fileContent = results.second;
 
     // check if template-file already exist
-    if(doesPathExist(m_destinationPath))
+    if(Kitsunemimi::Persistence::doesPathExist(m_destinationPath))
     {
         // read the already existing file and compare it the current file-content
         results = Kitsunemimi::Persistence::readFile(m_destinationPath);
