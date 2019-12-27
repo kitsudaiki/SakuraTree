@@ -60,6 +60,7 @@ BlossomItem::copy()
     newItem->type = type;
     newItem->values = values;
 
+    newItem->blossomName = blossomName;
     newItem->blossomGroupType = blossomGroupType;
     newItem->blossomType = blossomType;
     newItem->blossomPath = blossomPath;
@@ -77,7 +78,6 @@ BlossomItem::copy()
     newItem->processError = processError;
 
     // result
-    newItem->resultState = resultState;
     newItem->nameHirarchie = nameHirarchie;
     newItem->skip = skip;
     newItem->success = success;

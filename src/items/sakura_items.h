@@ -69,22 +69,11 @@ protected:
 class BlossomItem : public SakuraItem
 {
 public:
-    enum BlossomStates
-    {
-        UNDEFINED_STATE = 0,
-        CHANGED_STATE = 1,
-        SKIPPED_STATE = 2,
-        ERROR_INIT_STATE = 3,
-        ERROR_PRECHECK_STATE = 4,
-        ERROR_EXEC_STATE = 5,
-        ERROR_POSTCHECK_STATE = 6,
-        ERROR_CLOSE_STATE = 7
-    };
-
     BlossomItem();
     ~BlossomItem();
     SakuraItem* copy();
 
+    std::string blossomName = "";
     std::string blossomGroupType = "";
     std::string blossomType = "";
     std::string blossomPath = "";
@@ -98,7 +87,6 @@ public:
     std::string processError = "";
 
     // result
-    BlossomStates resultState = UNDEFINED_STATE;
     std::vector<std::string> nameHirarchie;
     bool skip = false;
     bool success = true;

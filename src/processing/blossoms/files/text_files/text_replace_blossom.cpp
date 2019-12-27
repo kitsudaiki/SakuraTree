@@ -56,7 +56,7 @@ TextReplaceBlossom::preCheck(BlossomItem &blossomItem)
     if(doesPathExist(m_filePath) == false)
     {
         blossomItem.success = false;
-        blossomItem.outputMessage = "TEXT REPLACE FAILED: path "
+        blossomItem.outputMessage = "path "
                                    + m_filePath
                                    + " doesn't exist";
         return;
@@ -65,7 +65,7 @@ TextReplaceBlossom::preCheck(BlossomItem &blossomItem)
     if(doesFileExist(m_filePath) == false)
     {
         blossomItem.success = false;
-        blossomItem.outputMessage = "TEXT REPLACE FAILED: path "
+        blossomItem.outputMessage = "path "
                                    + m_filePath
                                    + " is not a file";
         return;
@@ -86,7 +86,7 @@ TextReplaceBlossom::runTask(BlossomItem &blossomItem)
     if(result.first == false)
     {
         blossomItem.success = false;
-        blossomItem.outputMessage = "TEXT REPLACE FAILED: " + result.second;
+        blossomItem.outputMessage = result.second;
         return;
     }
 

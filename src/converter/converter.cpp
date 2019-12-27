@@ -271,9 +271,10 @@ Converter::convertBlossomGroup(const JsonItem &subtree, bool &success)
 
             // init new blossom-item
             BlossomItem* blossomItem = new BlossomItem();
+            blossomItem->blossomName = subtree.get("name").toString();
+            blossomItem->blossomPath = subtree.get("b_path").toString();
             blossomItem->blossomType = item.get("blossom-type").toString();
             blossomItem->blossomGroupType = subtree.get("blossom-group-type").toString();
-            blossomItem->blossomPath = subtree.get("b_path").toString();
 
             convertItemValues(blossomItem, subtree.get("items-input"), success);
             convertItemValues(blossomItem, item.get("items-input"), success);
@@ -289,6 +290,7 @@ Converter::convertBlossomGroup(const JsonItem &subtree, bool &success)
     {
         // init new blossom-item
         BlossomItem* blossomItem =  new BlossomItem();
+        blossomItem->blossomName = subtree.get("name").toString();
         blossomItem->blossomPath = subtree.get("b_path").toString();
         blossomItem->blossomType = subtree.get("blossom-group-type").toString();
         blossomItem->blossomGroupType = "special";

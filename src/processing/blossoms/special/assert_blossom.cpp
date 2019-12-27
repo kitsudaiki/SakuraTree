@@ -68,7 +68,7 @@ AssertBlossom::runTask(BlossomItem &blossomItem)
         if(isValue != shouldValue)
         {
             blossomItem.success = false;
-            blossomItem.outputMessage = "ASSERT FAILES: the variable \""
+            blossomItem.outputMessage = "the variable \""
                                         + it->first
                                         + "\" has the value \""
                                         + isValue

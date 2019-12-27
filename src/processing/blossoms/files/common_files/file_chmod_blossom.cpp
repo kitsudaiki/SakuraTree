@@ -54,7 +54,7 @@ FileChmodBlossom::preCheck(BlossomItem &blossomItem)
     if(doesPathExist(m_filePath) == false)
     {
         blossomItem.success = false;
-        blossomItem.outputMessage = "CHMOD FAILED: file-path "
+        blossomItem.outputMessage = "file-path "
                                    + m_filePath
                                    + " doesn't exist";
         return;

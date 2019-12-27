@@ -104,7 +104,7 @@ FileCopyBlossom::postCheck(BlossomItem &blossomItem)
     if(doesPathExist(m_destinationPath) == false)
     {
         blossomItem.success = false;
-        blossomItem.outputMessage = "COPY FAILED: was not able to copy from "
+        blossomItem.outputMessage = "was not able to copy from "
                                    + m_sourcePath
                                    + " to "
                                    + m_destinationPath;

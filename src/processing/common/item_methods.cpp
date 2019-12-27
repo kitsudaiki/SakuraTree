@@ -411,48 +411,22 @@ convertBlossomOutput(const BlossomItem &blossom)
     output += "\n";
 
     // print executeion-state
-    switch(blossom.resultState)
-    {
-        case BlossomItem::SKIPPED_STATE:
-            output += "SKIPPED\n";
-            break;
-        case BlossomItem::CHANGED_STATE:
-            output += "CHANGED\n";
-            break;
-        case BlossomItem::ERROR_INIT_STATE:
-            output += "ERROR in init-state\n";
-            break;
-        case BlossomItem::ERROR_PRECHECK_STATE:
-            output += "ERROR in pre-check-state\n";
-            break;
-        case BlossomItem::ERROR_EXEC_STATE:
-            output += "ERROR in exec-state with error-code: "
-                    + std::to_string(blossom.execState) + "\n";
-            break;
-        case BlossomItem::ERROR_POSTCHECK_STATE:
-            output += "ERROR in post-check-state\n";
-            break;
-        case BlossomItem::ERROR_CLOSE_STATE:
-            output += "ERROR in error-state\n";
-            break;
-        default:
-            break;
+    if(blossom.skip) {
+        output += "SKIPPED\n";
+    } else {
+        output += "CHANGED\n";
     }
 
     // print error-output
-    if(blossom.outputMessage.size() > 0
-            && blossom.resultState >= 3)
+    if(blossom.success == false)
     {
         // TODO: red error output
-        output += "\n";
-        output += blossom.outputMessage + "\n";
+        output += SakuraRoot::m_root->m_errorOutput.toString(200) + "\n";
     }
 
     // print error-output
-    const bool success = blossom.resultState == BlossomItem::CHANGED_STATE
-                         || blossom.resultState == BlossomItem::SKIPPED_STATE;
     if(blossom.outputMessage.size() > 0
-            && success)
+            && blossom.success)
     {
         output += "\n";
         output += blossom.outputMessage + "\n";

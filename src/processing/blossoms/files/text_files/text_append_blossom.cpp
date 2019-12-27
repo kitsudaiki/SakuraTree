@@ -55,7 +55,7 @@ TextAppendBlossom::preCheck(BlossomItem &blossomItem)
     if(doesPathExist(m_filePath) == false)
     {
         blossomItem.success = false;
-        blossomItem.outputMessage = "TEXT APPEND FAILED: path "
+        blossomItem.outputMessage = "path "
                                    + m_filePath
                                    + " doesn't exist";
         return;
@@ -64,7 +64,7 @@ TextAppendBlossom::preCheck(BlossomItem &blossomItem)
     if(doesFileExist(m_filePath) == false)
     {
         blossomItem.success = false;
-        blossomItem.outputMessage = "TEXT APPEND FAILED: path "
+        blossomItem.outputMessage = "path "
                                    + m_filePath
                                    + " is not a file";
         return;
@@ -85,7 +85,7 @@ TextAppendBlossom::runTask(BlossomItem &blossomItem)
     if(result.first == false)
     {
         blossomItem.success = false;
-        blossomItem.outputMessage = "TEXT APPEND FAILED: " + result.second;
+        blossomItem.outputMessage = result.second;
         return;
     }
 

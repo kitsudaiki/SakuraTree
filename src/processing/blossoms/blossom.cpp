@@ -59,7 +59,9 @@ Blossom::growBlossom(BlossomItem &blossomItem)
     initBlossom(blossomItem);
     if(blossomItem.success == false)
     {
-        blossomItem.resultState = BlossomItem::ERROR_INIT_STATE;
+        SakuraRoot::m_root->createError(blossomItem,
+                                        "blossom init",
+                                        blossomItem.outputMessage);
         return;
     }
 
@@ -70,13 +72,13 @@ Blossom::growBlossom(BlossomItem &blossomItem)
     preCheck(blossomItem);
     if(blossomItem.success == false)
     {
-        blossomItem.resultState = BlossomItem::ERROR_PRECHECK_STATE;
+        SakuraRoot::m_root->createError(blossomItem,
+                                        "blossom pre-check",
+                                        blossomItem.outputMessage);
         return;
     }
 
-    if(blossomItem.skip)
-    {
-        blossomItem.resultState = BlossomItem::SKIPPED_STATE;
+    if(blossomItem.skip) {
         return;
     }
 
@@ -87,7 +89,9 @@ Blossom::growBlossom(BlossomItem &blossomItem)
     runTask(blossomItem);
     if(blossomItem.success == false)
     {
-        blossomItem.resultState = BlossomItem::ERROR_EXEC_STATE;
+        SakuraRoot::m_root->createError(blossomItem,
+                                        "blossom execute",
+                                        blossomItem.outputMessage);
         return;
     }
 
@@ -98,8 +102,9 @@ Blossom::growBlossom(BlossomItem &blossomItem)
     postCheck(blossomItem);
     if(blossomItem.success == false)
     {
-        blossomItem.resultState = BlossomItem::ERROR_POSTCHECK_STATE;
-
+        SakuraRoot::m_root->createError(blossomItem,
+                                        "blossom post-check",
+                                        blossomItem.outputMessage);
         return;
     }
     //-------------------------------
@@ -109,13 +114,14 @@ Blossom::growBlossom(BlossomItem &blossomItem)
     closeBlossom(blossomItem);
     if(blossomItem.success == false)
     {
-        blossomItem.resultState = BlossomItem::ERROR_CLOSE_STATE;
+        SakuraRoot::m_root->createError(blossomItem,
+                                        "blossom close",
+                                        blossomItem.outputMessage);
         return;
     }
 
     //-------------------------------
 
-    blossomItem.resultState = BlossomItem::CHANGED_STATE;
     return;
 }
 

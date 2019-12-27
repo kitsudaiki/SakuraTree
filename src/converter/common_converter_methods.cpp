@@ -96,19 +96,14 @@ checkOutput(BlossomItem &blossomItem,
                 && tempItem.type == ValueItem::OUTPUT_PAIR_TYPE)
         {
             // build error-output
-            std::string message = "variable \""
-                                  + it->first
-                                  + "\" is declared as output-variable, but the blossom has not"
-                                    "output, which could be written into a variable.";
-            SakuraRoot::m_errorOutput.addRow(std::vector<std::string>{"ERROR", ""});
-            SakuraRoot::m_errorOutput.addRow(std::vector<std::string>{"location", "converter"});
-            SakuraRoot::m_errorOutput.addRow(std::vector<std::string>{"message", message});
-            SakuraRoot::m_errorOutput.addRow(
-                        std::vector<std::string>{"blossom-type",
-                                                 blossomItem.blossomType});
-            SakuraRoot::m_errorOutput.addRow(
-                        std::vector<std::string>{"blossom-group-type",
-                                                 blossomItem.blossomGroupType});
+            const std::string message = "variable \""
+                                        + it->first
+                                        + "\" is declared as output-variable, "
+                                          "but the blossom has not"
+                                          "output, which could be written into a variable.";
+            SakuraRoot::m_root->createError(blossomItem,
+                                            "converter",
+                                            message);
             return false;
         }
     }
@@ -128,7 +123,7 @@ checkOutput(BlossomItem &blossomItem,
  */
 bool
 checkBlossomItem(BlossomItem &blossomItem,
-                     DataMap &requiredKeys)
+                 DataMap &requiredKeys)
 {
     // if "*" is in the list of required key, there is more allowed as the list contains items
     // for example the print-blossom allows all key
@@ -145,18 +140,12 @@ checkBlossomItem(BlossomItem &blossomItem,
                     && tempItem.type == ValueItem::INPUT_PAIR_TYPE)
             {
                 // build error-output
-                std::string message = "variable \""
-                                      + it->first
-                                      + "\" is not in the list of allowed keys";
-                SakuraRoot::m_errorOutput.addRow(std::vector<std::string>{"ERROR", ""});
-                SakuraRoot::m_errorOutput.addRow(std::vector<std::string>{"location", "converter"});
-                SakuraRoot::m_errorOutput.addRow(std::vector<std::string>{"message", message});
-                SakuraRoot::m_errorOutput.addRow(
-                            std::vector<std::string>{"blossom-type",
-                                                     blossomItem.blossomType});
-                SakuraRoot::m_errorOutput.addRow(
-                            std::vector<std::string>{"blossom-group-type",
-                                                     blossomItem.blossomGroupType});
+                const std::string message = "variable \""
+                                            + it->first
+                                            + "\" is not in the list of allowed keys";
+                SakuraRoot::m_root->createError(blossomItem,
+                                                "converter",
+                                                message);
                 return false;
             }
         }
@@ -177,18 +166,12 @@ checkBlossomItem(BlossomItem &blossomItem,
         if(blossomItem.values.contains(it->first) == false
                 && it->second->toValue()->getBool() == true)
         {
-            std::string message = "variable \""
-                                  + it->first
-                                  + "\" is required, but is not set.";
-            SakuraRoot::m_errorOutput.addRow(std::vector<std::string>{"ERROR", ""});
-            SakuraRoot::m_errorOutput.addRow(std::vector<std::string>{"location", "converter"});
-            SakuraRoot::m_errorOutput.addRow(std::vector<std::string>{"message", message});
-            SakuraRoot::m_errorOutput.addRow(
-                        std::vector<std::string>{"blossom-type",
-                                                 blossomItem.blossomType});
-            SakuraRoot::m_errorOutput.addRow(
-                        std::vector<std::string>{"blossom-group-type",
-                                                 blossomItem.blossomGroupType});
+            const std::string message = "variable \""
+                                        + it->first
+                                        + "\" is required, but is not set.";
+            SakuraRoot::m_root->createError(blossomItem,
+                                            "converter",
+                                            message);
             return false;
         }
     }

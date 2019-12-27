@@ -55,7 +55,7 @@ TextWriteBlossom::preCheck(BlossomItem &blossomItem)
     if(doesPathExist(m_filePath) == false)
     {
         blossomItem.success = false;
-        blossomItem.outputMessage = "TEXT WRITE FAILED: path "
+        blossomItem.outputMessage = "path "
                                    + m_filePath
                                    + " doesn't exist";
         return;
@@ -64,7 +64,7 @@ TextWriteBlossom::preCheck(BlossomItem &blossomItem)
     if(doesFileExist(m_filePath) == false)
     {
         blossomItem.success = false;
-        blossomItem.outputMessage = "TEXT WRITE FAILED: path "
+        blossomItem.outputMessage = "path "
                                    + m_filePath
                                    + " is not a file";
         return;
@@ -85,7 +85,7 @@ TextWriteBlossom::runTask(BlossomItem &blossomItem)
     if(result.first == false)
     {
         blossomItem.success = false;
-        blossomItem.outputMessage = "TEXT WRITE FAILED: " + result.second;
+        blossomItem.outputMessage = result.second;
         return;
     }
 
