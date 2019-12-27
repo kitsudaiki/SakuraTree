@@ -63,111 +63,108 @@ namespace SakuraTree
  * @return pointer to a new object or nullptr if type or subtype is unknown
  */
 Blossom*
-getBlossom(const std::string type,
-           const std::string subType)
+getBlossom(const std::string blossomGroupType,
+           const std::string blossomType)
 {
-    if(type == "apt")
+    if(blossomGroupType == "apt")
     {
-        if(subType == "absent") {
+        if(blossomType == "absent") {
             return new AptAbsentBlossom();
         }
-        if(subType == "latest") {
+        if(blossomType == "latest") {
             return new AptLatestBlossom();
         }
-        if(subType == "present") {
+        if(blossomType == "present") {
             return new AptPresentBlossom();
         }
-        if(subType == "update") {
+        if(blossomType == "update") {
             return new AptUdateBlossom();
         }
-        if(subType == "upgrade") {
+        if(blossomType == "upgrade") {
             return new AptUpgradeBlossom();
         }
     }
 
-    if(type == "ssh")
+    if(blossomGroupType == "ssh")
     {
-        if(subType == "cmd") {
+        if(blossomType == "cmd") {
             return new SshCmdBlossom();
         }
-        if(subType == "scp") {
+        if(blossomType == "scp") {
             return new SshScpBlossom();
         }
-        if(subType == "file_create") {
+        if(blossomType == "file_create") {
             return new SshCmdCreateFileBlossom();
         }
     }
 
-    if(type == "special")
+    if(blossomGroupType == "special")
     {
-        if(subType == "copy-subtree") {
+        if(blossomType == "copy-subtree") {
             return new SakuraCopySubtreeBlossom();
         }
-        if(subType == "print") {
+        if(blossomType == "print") {
             return new PrintBlossom();
         }
-        if(subType == "cmd") {
+        if(blossomType == "cmd") {
             return new CmdBlossom();
         }
-        if(subType == "assert") {
+        if(blossomType == "assert") {
             return new AssertBlossom();
         }
-        if(subType == "exit") {
+        if(blossomType == "exit") {
             return new ExitBlossom();
         }
     }
 
-    if(type == "template")
+    if(blossomGroupType == "template")
     {
-        if(subType == "create") {
+        if(blossomType == "create") {
             return new TemplateCreateBlossom();
         }
     }
 
-    if(type == "file")
+    if(blossomGroupType == "file")
     {
-        if(subType == "copy") {
+        if(blossomType == "copy") {
             return new FileCopyBlossom();
         }
-        if(subType == "move") {
+        if(blossomType == "move") {
             return new FileRenameBlossom();
         }
-        if(subType == "delete") {
+        if(blossomType == "delete") {
             return new FileDeleteBlossom();
         }
     }
 
-    if(type == "text_file")
+    if(blossomGroupType == "text_file")
     {
-        if(subType == "read") {
+        if(blossomType == "read") {
             return new TextReadBlossom();
         }
-        if(subType == "write") {
+        if(blossomType == "write") {
             return new TextWriteBlossom();
         }
-        if(subType == "replace") {
+        if(blossomType == "replace") {
             return new TextReplaceBlossom();
         }
-        if(subType == "append") {
+        if(blossomType == "append") {
             return new TextAppendBlossom();
         }
     }
 
-    if(type == "ini_file")
+    if(blossomGroupType == "ini_file")
     {
-        if(subType == "read") {
+        if(blossomType == "read") {
             return new IniReadEntryBlossom();
         }
-        if(subType == "set") {
+        if(blossomType == "set") {
             return new IniSetEntryBlossom();
         }
-        if(subType == "delete") {
+        if(blossomType == "delete") {
             return new IniDeleteEntryBlossom();
         }
     }
-
-
-    assert(false);
 
     return nullptr;
 }

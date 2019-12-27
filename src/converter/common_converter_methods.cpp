@@ -64,10 +64,17 @@ checkBlossomItem(BlossomItem &blossomItem)
     bool result = false;
 
     Blossom* blossom = getBlossom(blossomItem.blossomGroupType, blossomItem.blossomType);
+    if(blossom == nullptr)
+    {
+        SakuraRoot::m_root->createError(blossomItem, "converter", "unknow blossom-type");
+        return false;
+    }
+
     result = checkBlossomItem(blossomItem, blossom->m_requiredKeys);
     if(result == true) {
         result = checkOutput(blossomItem, blossom->m_hasOutput);
     }
+
     delete blossom;
 
     return result;

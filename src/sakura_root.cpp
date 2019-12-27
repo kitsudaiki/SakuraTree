@@ -215,7 +215,9 @@ SakuraRoot::createError(const std::string &errorLocation,
                         const std::string &blossomFilePath)
 {
     SakuraRoot::m_errorOutput.addRow(std::vector<std::string>{"ERROR", ""});
-    SakuraRoot::m_errorOutput.addRow(std::vector<std::string>{"location", errorLocation});
+    if(errorLocation.size() > 0) {
+        SakuraRoot::m_errorOutput.addRow(std::vector<std::string>{"location", errorLocation});
+    }
     SakuraRoot::m_errorOutput.addRow(std::vector<std::string>{"error-message", errorMessage});
 
     if(possibleSolution.size() > 0)
