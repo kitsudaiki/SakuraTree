@@ -21,7 +21,7 @@
  */
 
 #include "ini_set_entry_blossom.h"
-#include <processing/blossoms/files/file_methods.h>
+#include <libKitsunemimiPersistence/files/file_methods.h>
 #include <libKitsunemimiIni/ini_item.h>
 #include <libKitsunemimiPersistence/files/text_file.h>
 
@@ -59,10 +59,10 @@ IniSetEntryBlossom::initBlossom(BlossomItem &blossomItem)
 void
 IniSetEntryBlossom::preCheck(BlossomItem &blossomItem)
 {
-    if(doesPathExist(m_filePath) == false)
+    if(Kitsunemimi::Persistence::doesPathExist(m_filePath) == false)
     {
         blossomItem.success = false;
-        blossomItem.outputMessage = "INI-FILE FAILED: file-path "
+        blossomItem.outputMessage = "file-path "
                                    + m_filePath
                                    + " doesn't exist";
         return;
@@ -83,7 +83,7 @@ IniSetEntryBlossom::runTask(BlossomItem &blossomItem)
     if(result.first == false)
     {
         blossomItem.success = false;
-        blossomItem.outputMessage = "INI-FILE FAILED: " + result.second;
+        blossomItem.outputMessage = result.second;
         return;
     }
 
@@ -93,7 +93,7 @@ IniSetEntryBlossom::runTask(BlossomItem &blossomItem)
     if(result.first == false)
     {
         blossomItem.success = false;
-        blossomItem.outputMessage = "INI-FILE FAILED: " + result.second;
+        blossomItem.outputMessage = result.second;
         return;
     }
 

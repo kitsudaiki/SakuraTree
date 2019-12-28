@@ -29,8 +29,8 @@ namespace SakuraTree
 {
 class Blossom;
 
-Blossom* getBlossom(const std::string type,
-                    const std::string subType);
+Blossom* getBlossom(const std::string blossomGroupType,
+                    const std::string blossomType);
 
 }
 

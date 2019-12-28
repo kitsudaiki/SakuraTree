@@ -100,8 +100,8 @@ splitValue(DataValue* item,
     }
 
     // split string into string-array
-    const std::vector<std::string> array = splitStringByDelimiter(item->toString(),
-                                                                  demilimter);
+    std::vector<std::string> array;
+    splitStringByDelimiter(array, item->toString(), demilimter);
 
     // convert string-array into a DataArray-object
     DataArray* resultArray = new DataArray();
@@ -114,9 +114,11 @@ splitValue(DataValue* item,
 }
 
 /**
- * @brief sizeValue
- * @param item
- * @return
+ * @brief sizeValue get the size of an item
+ *
+ * @param item data-item, which should be checked
+ *
+ * @return data-item of int-type with the size of the incoming item as value
  */
 DataItem*
 sizeValue(DataItem* item)

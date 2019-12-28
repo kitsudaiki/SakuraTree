@@ -55,7 +55,6 @@ INCLUDEPATH += $$PWD \
                src
 
 HEADERS += \
-    src/branch_builder/provision_branch_builder.h \
     src/common/defines.h \
     src/common/enums.h \
     src/common/includes.h \
@@ -76,7 +75,6 @@ HEADERS += \
     src/processing/blossoms/files/text_files/text_read_blossom.h \
     src/processing/blossoms/files/text_files/text_replace_blossom.h \
     src/processing/blossoms/files/text_files/text_write_blossom.h \
-    src/processing/blossoms/files/file_methods.h \
     src/processing/blossoms/install/apt/apt_absent_blossom.h \
     src/processing/blossoms/install/apt/apt_latest_blossom.h \
     src/processing/blossoms/install/apt/apt_methods.h \
@@ -94,7 +92,6 @@ HEADERS += \
     src/processing/blossoms/blossom.h \
     src/processing/blossoms/blossom_getter.h \
     src/processing/common/item_methods.h \
-    src/processing/common/process_execution.h \
     src/processing/sakura_thread.h \
     src/processing/sakura_tree_callbacks.h \
     src/processing/subtree_queue.h \
@@ -111,7 +108,6 @@ HEADERS += \
     tests/processing/blossoms/files/text_files/text_read_blossom_test.h \
     tests/processing/blossoms/files/text_files/text_replace_blossom_test.h \
     tests/processing/blossoms/files/text_files/text_write_blossom_test.h \
-    tests/processing/blossoms/files/file_methods_test.h \
     tests/processing/blossoms/special/cmd_blossom_test.h \
     tests/processing/common/functions_test.h \
     tests/processing/common/item_methods_test.h \
@@ -121,7 +117,6 @@ HEADERS += \
     src/items/value_item_map.h
 
 SOURCES += \
-    src/branch_builder/provision_branch_builder.cpp \
     src/converter/converter.cpp \
     src/items/sakura_items.cpp \
     src/processing/blossoms/files/common_files/file_chmod_blossom.cpp \
@@ -137,7 +132,6 @@ SOURCES += \
     src/processing/blossoms/files/text_files/text_read_blossom.cpp \
     src/processing/blossoms/files/text_files/text_replace_blossom.cpp \
     src/processing/blossoms/files/text_files/text_write_blossom.cpp \
-    src/processing/blossoms/files/file_methods.cpp \
     src/processing/blossoms/install/apt/apt_absent_blossom.cpp \
     src/processing/blossoms/install/apt/apt_latest_bossom.cpp \
     src/processing/blossoms/install/apt/apt_methods.cpp \
@@ -155,7 +149,6 @@ SOURCES += \
     src/processing/blossoms/blossom.cpp \
     src/processing/blossoms/blossom_getter.cpp \
     src/processing/common/item_methods.cpp \
-    src/processing/common/process_execution.cpp \
     src/processing/common/value_item_functions.cpp \
     src/processing/sakura_thread.cpp \
     src/processing/subtree_queue.cpp \
@@ -172,7 +165,6 @@ SOURCES += \
     tests/processing/blossoms/files/text_files/text_read_blossom_test.cpp \
     tests/processing/blossoms/files/text_files/text_replace_blossom_test.cpp \
     tests/processing/blossoms/files/text_files/text_write_blossom_test.cpp \
-    tests/processing/blossoms/files/file_methods_test.cpp \
     tests/processing/blossoms/special/cmd_blossom_test.cpp \
     tests/processing/common/functions_test.cpp \
     tests/processing/common/item_methods_test.cpp \

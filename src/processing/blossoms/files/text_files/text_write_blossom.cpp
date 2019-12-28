@@ -21,7 +21,7 @@
  */
 
 #include "text_write_blossom.h"
-#include <processing/blossoms/files/file_methods.h>
+#include <libKitsunemimiPersistence/files/file_methods.h>
 #include <libKitsunemimiPersistence/files/text_file.h>
 
 namespace SakuraTree
@@ -52,19 +52,19 @@ TextWriteBlossom::initBlossom(BlossomItem &blossomItem)
 void
 TextWriteBlossom::preCheck(BlossomItem &blossomItem)
 {
-    if(doesPathExist(m_filePath) == false)
+    if(Kitsunemimi::Persistence::doesPathExist(m_filePath) == false)
     {
         blossomItem.success = false;
-        blossomItem.outputMessage = "TEXT WRITE FAILED: path "
+        blossomItem.outputMessage = "path "
                                    + m_filePath
                                    + " doesn't exist";
         return;
     }
 
-    if(doesFileExist(m_filePath) == false)
+    if(Kitsunemimi::Persistence::doesFileExist(m_filePath) == false)
     {
         blossomItem.success = false;
-        blossomItem.outputMessage = "TEXT WRITE FAILED: path "
+        blossomItem.outputMessage = "path "
                                    + m_filePath
                                    + " is not a file";
         return;
@@ -85,7 +85,7 @@ TextWriteBlossom::runTask(BlossomItem &blossomItem)
     if(result.first == false)
     {
         blossomItem.success = false;
-        blossomItem.outputMessage = "TEXT WRITE FAILED: " + result.second;
+        blossomItem.outputMessage = result.second;
         return;
     }
 

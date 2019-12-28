@@ -86,7 +86,8 @@ AptLatestBlossom::runTask(BlossomItem &blossomItem)
     }
 
     const std::string programm = "sudo apt-get install -y " + appendedList;
-    runSyncProcess(blossomItem, programm);
+    blossomItem.processResult = runSyncProcess(programm);
+    blossomItem.success = blossomItem.processResult.success;
     blossomItem.outputMessage = "";
 }
 
@@ -97,7 +98,7 @@ AptLatestBlossom::runTask(BlossomItem &blossomItem)
 void
 AptLatestBlossom::postCheck(BlossomItem &blossomItem)
 {
-    m_packageNames = getAbsendPackages(blossomItem, m_packageNames);
+    m_packageNames = getAbsendPackages(m_packageNames);
     if(m_packageNames.size() > 0)
     {
         std::string output = "couldn't install following packages: \n";

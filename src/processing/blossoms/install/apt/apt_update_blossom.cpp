@@ -53,8 +53,9 @@ AptUdateBlossom::preCheck(BlossomItem &blossomItem)
 void
 AptUdateBlossom::runTask(BlossomItem &blossomItem)
 {
-    std::string programm = "sudo apt-get update";
-    runSyncProcess(blossomItem, programm);
+    const std::string programm = "sudo apt-get update";
+    blossomItem.processResult = runSyncProcess(programm);
+    blossomItem.success = blossomItem.processResult.success;
     blossomItem.outputMessage = "";
 }
 

@@ -21,7 +21,7 @@
  */
 
 #include "file_chmod_blossom.h"
-#include <processing/blossoms/files/file_methods.h>
+#include <libKitsunemimiPersistence/files/file_methods.h>
 
 namespace SakuraTree
 {
@@ -51,10 +51,10 @@ FileChmodBlossom::initBlossom(BlossomItem &blossomItem)
 void
 FileChmodBlossom::preCheck(BlossomItem &blossomItem)
 {
-    if(doesPathExist(m_filePath) == false)
+    if(Kitsunemimi::Persistence::doesPathExist(m_filePath) == false)
     {
         blossomItem.success = false;
-        blossomItem.outputMessage = "CHMOD FAILED: file-path "
+        blossomItem.outputMessage = "file-path "
                                    + m_filePath
                                    + " doesn't exist";
         return;
@@ -70,14 +70,14 @@ void
 FileChmodBlossom::runTask(BlossomItem &blossomItem)
 {
     std::string command = "chmod ";
-    if(doesDirExist(m_filePath)) {
+    if(Kitsunemimi::Persistence::doesDirExist(m_filePath)) {
         command += "-R ";
     }
     command += m_permission + " ";
     command += m_filePath;
 
-    runSyncProcess(blossomItem, command);
-    blossomItem.success = true;
+    blossomItem.processResult = runSyncProcess(command);
+    blossomItem.success = blossomItem.processResult.success;
 }
 
 /**

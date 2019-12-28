@@ -37,11 +37,11 @@ using Kitsunemimi::Common::DataMap;
 namespace SakuraTree
 {
 
-bool getProcessedItem(ValueItem &original, DataMap &insertValues);
+bool getProcessedItem(ValueItem &valueItem, DataMap &insertValues);
 
-bool fillIdentifierItem(ValueItem &original, DataMap &insertValues);
-bool fillJinja2Template(ValueItem &original, DataMap &insertValues);
-bool fillValueItem(ValueItem &original, DataMap &insertValues);
+bool fillIdentifierItem(ValueItem &valueItem, DataMap &insertValues);
+bool fillJinja2Template(ValueItem &valueItem, DataMap &insertValues);
+bool fillValueItem(ValueItem &valueItem, DataMap &insertValues);
 bool fillInputValueItemMap(ValueItemMap &items, DataMap &insertValues);
 bool fillOutputValueItemMap(ValueItemMap &items, DataItem* output);
 

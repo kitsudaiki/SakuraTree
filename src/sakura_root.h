@@ -60,6 +60,19 @@ public:
     bool startSubtreeProcess(const std::string &subtree,
                              const std::string &values);
 
+    // error-output
+    void createError(const BlossomItem &blossomItem,
+                     const std::string &errorLocation,
+                     const std::string &errorMessage,
+                     const std::string &possibleSolution="");
+    void createError(const std::string &errorLocation,
+                     const std::string &errorMessage,
+                     const std::string &possibleSolution="",
+                     const std::string &blossomType="",
+                     const std::string &blossomGroupType="",
+                     const std::string &blossomName="",
+                     const std::string &blossomFilePath="");
+
     // network-interaction
     bool sendPlan(const std::string &address,
                   const std::string &subtree,

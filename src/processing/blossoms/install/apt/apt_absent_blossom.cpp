@@ -67,7 +67,7 @@ AptAbsentBlossom::initBlossom(BlossomItem &blossomItem)
 void
 AptAbsentBlossom::preCheck(BlossomItem &blossomItem)
 {
-    m_packageNames = getInstalledPackages(blossomItem, m_packageNames);
+    m_packageNames = getInstalledPackages(m_packageNames);
     if(m_packageNames.size() == 0) {
         blossomItem.skip = true;
     }
@@ -87,8 +87,9 @@ AptAbsentBlossom::runTask(BlossomItem &blossomItem)
         appendedList += m_packageNames.at(i) + " ";
     }
 
-    std::string programm = "sudo apt-get remove -y " + appendedList;
-    runSyncProcess(blossomItem, programm);
+    const std::string programm = "sudo apt-get remove -y " + appendedList;
+    blossomItem.processResult = runSyncProcess(programm);
+    blossomItem.success = blossomItem.processResult.success;
     blossomItem.outputMessage = "";
 }
 
@@ -98,7 +99,7 @@ AptAbsentBlossom::runTask(BlossomItem &blossomItem)
 void
 AptAbsentBlossom::postCheck(BlossomItem &blossomItem)
 {
-    m_packageNames = getInstalledPackages(blossomItem, m_packageNames);
+    m_packageNames = getInstalledPackages(m_packageNames);
     if(m_packageNames.size() > 0)
     {
         std::string output = "couldn't remove following packages: \n";

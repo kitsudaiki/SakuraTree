@@ -21,7 +21,6 @@
  */
 
 #include "sakura_copy_subtree_blossom.h"
-#include <processing/common/process_execution.h>
 #include <sakura_root.h>
 
 namespace SakuraTree

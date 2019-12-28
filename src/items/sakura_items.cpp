@@ -60,6 +60,7 @@ BlossomItem::copy()
     newItem->type = type;
     newItem->values = values;
 
+    newItem->blossomName = blossomName;
     newItem->blossomGroupType = blossomGroupType;
     newItem->blossomType = blossomType;
     newItem->blossomPath = blossomPath;
@@ -72,12 +73,12 @@ BlossomItem::copy()
     }
 
     // process
-    newItem->execState = execState;
-    newItem->processOutput = processOutput;
-    newItem->processError = processError;
+    newItem->processResult.success = processResult.success;
+    newItem->processResult.exitStatus = processResult.exitStatus;
+    newItem->processResult.errorMessage = processResult.errorMessage;
+    newItem->processResult.processOutput = processResult.processOutput;
 
     // result
-    newItem->resultState = resultState;
     newItem->nameHirarchie = nameHirarchie;
     newItem->skip = skip;
     newItem->success = success;

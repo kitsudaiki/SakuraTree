@@ -21,7 +21,6 @@
  */
 
 #include "text_read_blossom_test.h"
-#include <processing/common/process_execution.h>
 #include <items/sakura_items.h>
 #include <processing/blossoms/files/text_files/text_read_blossom.h>
 #include <libKitsunemimiPersistence/files/text_file.h>
@@ -47,7 +46,7 @@ TextReadBlossom_Test::initTestCase()
     m_text = "this is a test-string";
 
     BlossomItem fakeItem;
-    runSyncProcess(fakeItem, "rm " + m_path);
+    runSyncProcess("rm " + m_path);
 }
 
 /**
@@ -82,20 +81,20 @@ TextReadBlossom_Test::preCheck_test()
     TEST_EQUAL(blossomItem.success, false);
     TEST_EQUAL(blossomItem.skip, false);
 
-    runSyncProcess(blossomItem, "mkdir " + m_path);
+    runSyncProcess("mkdir " + m_path);
 
     readBlossom.preCheck(blossomItem);
     TEST_EQUAL(blossomItem.success, false);
     TEST_EQUAL(blossomItem.skip, false);
 
-    runSyncProcess(blossomItem, "rm -r " + m_path);
-    runSyncProcess(blossomItem, "touch " + m_path);
+    runSyncProcess("rm -r " + m_path);
+    runSyncProcess("touch " + m_path);
 
     readBlossom.preCheck(blossomItem);
     TEST_EQUAL(blossomItem.success, true);
     TEST_EQUAL(blossomItem.skip, false);
 
-    runSyncProcess(blossomItem, "rm " + m_path);
+    runSyncProcess("rm " + m_path);
 }
 
 /**
@@ -115,7 +114,7 @@ TextReadBlossom_Test::runTask_test()
     TEST_EQUAL(blossomItem.success, true);
     TEST_EQUAL(blossomItem.blossomOutput->toString(), m_text);
 
-    runSyncProcess(blossomItem, "rm " + m_path);
+    runSyncProcess("rm " + m_path);
 }
 
 /**

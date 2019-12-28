@@ -58,7 +58,6 @@ SakuraRoot::SakuraRoot(const std::string &executablePath)
     // initialize error-output
     m_errorOutput.addColumn("Field");
     m_errorOutput.addColumn("Value");
-    m_errorOutput.addRow(std::vector<std::string>{"ERROR", "ERROR"});
 
     // initialize thread-pool
     // TODO: make the number of initialized threads configurable
@@ -170,6 +169,88 @@ SakuraRoot::startSubtreeProcess(const std::string &subtree,
     std::cout<<"finish"<<std::endl;
 
     return true;
+}
+
+/**
+ * @brief create an error-output
+ *
+ * @param blossomItem blossom-item with information of the error-location
+ * @param errorLocation location where the error appeared
+ * @param errorMessage message to describe, what was wrong
+ * @param possibleSolution message with a possible solution to solve the problem
+ */
+void
+SakuraRoot::createError(const BlossomItem &blossomItem,
+                        const std::string &errorLocation,
+                        const std::string &errorMessage,
+                        const std::string &possibleSolution)
+{
+    createError(errorLocation,
+                errorMessage,
+                possibleSolution,
+                blossomItem.blossomType,
+                blossomItem.blossomGroupType,
+                blossomItem.blossomName,
+                blossomItem.blossomPath);
+}
+
+/**
+ * @brief create an error-output
+ *
+ * @param errorLocation location where the error appeared
+ * @param errorMessage message to describe, what was wrong
+ * @param possibleSolution message with a possible solution to solve the problem
+ * @param blossomType type of the blossom, where the error appeared
+ * @param blossomGroup type of the blossom-group, where the error appeared
+ * @param blossomName name of the blossom in the script to specify the location
+ * @param blossomFilePath file-path, where the error had appeared
+ */
+void
+SakuraRoot::createError(const std::string &errorLocation,
+                        const std::string &errorMessage,
+                        const std::string &possibleSolution,
+                        const std::string &blossomType,
+                        const std::string &blossomGroupType,
+                        const std::string &blossomName,
+                        const std::string &blossomFilePath)
+{
+    SakuraRoot::m_errorOutput.addRow(std::vector<std::string>{"ERROR", ""});
+    if(errorLocation.size() > 0) {
+        SakuraRoot::m_errorOutput.addRow(std::vector<std::string>{"location", errorLocation});
+    }
+    SakuraRoot::m_errorOutput.addRow(std::vector<std::string>{"error-message", errorMessage});
+
+    if(possibleSolution.size() > 0)
+    {
+        SakuraRoot::m_errorOutput.addRow(
+                    std::vector<std::string>{"possible solution",
+                                             possibleSolution});
+    }
+    if(blossomType.size() > 0)
+    {
+        SakuraRoot::m_errorOutput.addRow(
+                    std::vector<std::string>{"blossom-type",
+                                             blossomType});
+    }
+    if(blossomGroupType.size() > 0)
+    {
+        SakuraRoot::m_errorOutput.addRow(
+                    std::vector<std::string>{"blossom-group-type",
+                                             blossomGroupType});
+    }
+    if(blossomName.size() > 0)
+    {
+        SakuraRoot::m_errorOutput.addRow(
+                    std::vector<std::string>{"blossom-name",
+                                             blossomName});
+    }
+    if(blossomFilePath.size() > 0)
+    {
+        SakuraRoot::m_errorOutput.addRow(
+                    std::vector<std::string>{"blossom-file-path",
+                                             blossomFilePath});
+    }
+    SakuraRoot::m_errorOutput.addRow(std::vector<std::string>{"", ""});
 }
 
 /**

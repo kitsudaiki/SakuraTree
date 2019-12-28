@@ -28,6 +28,8 @@ namespace SakuraTree
 CmdBlossom::CmdBlossom()
     : Blossom()
 {
+    m_hasOutput = true;
+
     m_requiredKeys.insert("command", new DataValue(true));
 }
 
@@ -57,9 +59,10 @@ CmdBlossom::preCheck(BlossomItem &blossomItem)
 void
 CmdBlossom::runTask(BlossomItem &blossomItem)
 {
-    runSyncProcess(blossomItem, m_command);
+    blossomItem.processResult = runSyncProcess(m_command);
+    blossomItem.success = blossomItem.processResult.success;
 
-    blossomItem.blossomOutput = new DataValue(blossomItem.processOutput);
+    blossomItem.blossomOutput = new DataValue(blossomItem.processResult.processOutput);
     blossomItem.success = true;
 }
 

@@ -183,6 +183,12 @@ SakuraThread::processBlossom(BlossomItem &blossomItem)
 
     // get and prcess the requested blossom
     Blossom* blossom = getBlossom(blossomItem.blossomGroupType, blossomItem.blossomType);
+    if(blossom == nullptr)
+    {
+        SakuraRoot::m_root->createError(blossomItem, "processing", "unknow blossom-type");
+        blossomItem.success = false;
+        return blossomItem.success;
+    }
     blossomItem.parentValues = &m_parentValues;
     blossom->growBlossom(blossomItem);
     delete blossom;

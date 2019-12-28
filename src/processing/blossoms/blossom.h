@@ -25,10 +25,8 @@
 
 #include <common.h>
 #include <items/sakura_items.h>
+#include <sakura_root.h>
 #include <processing/common/item_methods.h>
-#include <processing/common/process_execution.h>
-
-using Kitsunemimi::Common::DataMap;
 
 namespace SakuraTree
 {
@@ -42,6 +40,7 @@ public:
     void growBlossom(BlossomItem &blossomItem);
 
     DataMap m_requiredKeys;
+    bool m_hasOutput = false;
 
 protected:
     virtual void initBlossom(BlossomItem &blossomItem) = 0;

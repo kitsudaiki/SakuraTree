@@ -21,7 +21,7 @@
  */
 
 #include "file_delete_blossom.h"
-#include <processing/blossoms/files/file_methods.h>
+#include <libKitsunemimiPersistence/files/file_methods.h>
 
 namespace SakuraTree
 {
@@ -49,7 +49,7 @@ FileDeleteBlossom::initBlossom(BlossomItem &blossomItem)
 void
 FileDeleteBlossom::preCheck(BlossomItem &blossomItem)
 {
-    if(doesFileExist(m_filePath) == false)
+    if(Kitsunemimi::Persistence::doesFileExist(m_filePath) == false)
     {
         blossomItem.success = false;
         blossomItem.outputMessage = "file doesn't exist: " + m_filePath;
@@ -65,7 +65,7 @@ FileDeleteBlossom::preCheck(BlossomItem &blossomItem)
 void
 FileDeleteBlossom::runTask(BlossomItem &blossomItem)
 {
-    const bool result = deleteFileOrDir(m_filePath);
+    const bool result = Kitsunemimi::Persistence::deleteFileOrDir(m_filePath);
 
     if(result == false)
     {
@@ -83,7 +83,7 @@ FileDeleteBlossom::runTask(BlossomItem &blossomItem)
 void
 FileDeleteBlossom::postCheck(BlossomItem &blossomItem)
 {
-    if(doesFileExist(m_filePath))
+    if(Kitsunemimi::Persistence::doesFileExist(m_filePath))
     {
         blossomItem.success = false;
         blossomItem.outputMessage = "file still exist: " + m_filePath;

@@ -21,10 +21,9 @@
  */
 
 #include "cmd_blossom_test.h"
-#include <processing/common/process_execution.h>
 #include <items/sakura_items.h>
 #include <processing/blossoms/special/cmd_blossom.h>
-#include <processing/blossoms/files/file_methods.h>
+#include <libKitsunemimiPersistence/files/file_methods.h>
 
 namespace SakuraTree
 {
@@ -54,7 +53,7 @@ CmdBlossom_Test::initTestCase()
     m_command = "touch " + m_filePath;
 
     BlossomItem fakeItem;
-    runSyncProcess(fakeItem, "rm " + m_filePath);
+    runSyncProcess("rm " + m_filePath);
 }
 
 /**
@@ -98,14 +97,14 @@ CmdBlossom_Test::runTask_test()
     fakeItem.values.insert("command", new DataValue(m_command));
     CmdBlossom fakeCmdBlossom;
 
-    TEST_EQUAL(doesPathExist(m_filePath),  false);
+    TEST_EQUAL(Kitsunemimi::Persistence::doesPathExist(m_filePath),  false);
 
     fakeCmdBlossom.initBlossom(fakeItem);
     fakeCmdBlossom.runTask(fakeItem);
     TEST_EQUAL(fakeItem.success, true);
-    TEST_EQUAL(doesPathExist(m_filePath),  true);
+    TEST_EQUAL(Kitsunemimi::Persistence::doesPathExist(m_filePath),  true);
 
-    runSyncProcess(fakeItem, "rm " + m_filePath);
+    runSyncProcess("rm " + m_filePath);
 }
 
 /**

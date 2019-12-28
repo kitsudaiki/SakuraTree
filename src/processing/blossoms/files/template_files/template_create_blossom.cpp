@@ -21,7 +21,7 @@
  */
 
 #include "template_create_blossom.h"
-#include <processing/blossoms/files/file_methods.h>
+#include <libKitsunemimiPersistence/files/file_methods.h>
 #include <sakura_root.h>
 #include <libKitsunemimiJinja2/jinja2_converter.h>
 #include <libKitsunemimiPersistence/files/text_file.h>
@@ -64,10 +64,10 @@ TemplateCreateBlossom::preCheck(BlossomItem &blossomItem)
     std::pair<bool, std::string> results;
 
     // check if path to template is valid
-    if(doesPathExist(m_templatePath) == false)
+    if(Kitsunemimi::Persistence::doesPathExist(m_templatePath) == false)
     {
         blossomItem.success = false;
-        blossomItem.outputMessage = "CREATE FROM TEMPLATE FAILED: template-path "
+        blossomItem.outputMessage = "template-path "
                                    + m_templatePath
                                    + " doesn't exist";
         return;
@@ -78,7 +78,7 @@ TemplateCreateBlossom::preCheck(BlossomItem &blossomItem)
     if(results.first == false)
     {
         blossomItem.success = false;
-        blossomItem.outputMessage = "CREATE FROM TEMPLATE FAILED: couldn't read template-file "
+        blossomItem.outputMessage = "couldn't read template-file "
                                    + m_templatePath +
                                    " with reason: "
                                    + results.second;
@@ -104,7 +104,7 @@ TemplateCreateBlossom::preCheck(BlossomItem &blossomItem)
     if(results.first == false)
     {
         blossomItem.success = false;
-        blossomItem.outputMessage = "CREATE FROM TEMPLATE FAILED: couldn't convert template-file "
+        blossomItem.outputMessage = "couldn't convert template-file "
                                    + m_templatePath +
                                    " with reason: "
                                    + results.second;
@@ -113,7 +113,7 @@ TemplateCreateBlossom::preCheck(BlossomItem &blossomItem)
     m_fileContent = results.second;
 
     // check if template-file already exist
-    if(doesPathExist(m_destinationPath))
+    if(Kitsunemimi::Persistence::doesPathExist(m_destinationPath))
     {
         // read the already existing file and compare it the current file-content
         results = Kitsunemimi::Persistence::readFile(m_destinationPath);
@@ -142,7 +142,7 @@ TemplateCreateBlossom::runTask(BlossomItem &blossomItem)
     if(results.first == false)
     {
         blossomItem.success = false;
-        blossomItem.outputMessage = "CREATE FROM TEMPLATE FAILED: couldn't write file "
+        blossomItem.outputMessage = "couldn't write file "
                                    + m_destinationPath +
                                    " with reason: "
                                    + results.second;

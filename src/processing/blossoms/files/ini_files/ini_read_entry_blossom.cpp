@@ -21,7 +21,7 @@
  */
 
 #include "ini_read_entry_blossom.h"
-#include <processing/blossoms/files/file_methods.h>
+#include <libKitsunemimiPersistence/files/file_methods.h>
 #include <libKitsunemimiIni/ini_item.h>
 #include <libKitsunemimiPersistence/files/text_file.h>
 
@@ -33,6 +33,8 @@ namespace SakuraTree
 IniReadEntryBlossom::IniReadEntryBlossom()
     : Blossom()
 {
+    m_hasOutput = true;
+
     m_requiredKeys.insert("file_path", new DataValue(true));
     m_requiredKeys.insert("group", new DataValue(true));
     m_requiredKeys.insert("entry", new DataValue(true));
@@ -57,10 +59,10 @@ IniReadEntryBlossom::initBlossom(BlossomItem &blossomItem)
 void
 IniReadEntryBlossom::preCheck(BlossomItem &blossomItem)
 {
-    if(doesPathExist(m_filePath) == false)
+    if(Kitsunemimi::Persistence::doesPathExist(m_filePath) == false)
     {
         blossomItem.success = false;
-        blossomItem.outputMessage = "INI-FILE FAILED: file-path "
+        blossomItem.outputMessage = "file-path "
                                    + m_filePath
                                    + " doesn't exist";
         return;
@@ -81,7 +83,7 @@ IniReadEntryBlossom::runTask(BlossomItem &blossomItem)
     if(result.first == false)
     {
         blossomItem.success = false;
-        blossomItem.outputMessage = "INI-FILE FAILED: " + result.second;
+        blossomItem.outputMessage = result.second;
         return;
     }
 
@@ -91,7 +93,7 @@ IniReadEntryBlossom::runTask(BlossomItem &blossomItem)
     if(result.first == false)
     {
         blossomItem.success = false;
-        blossomItem.outputMessage = "INI-FILE FAILED: " + result.second;
+        blossomItem.outputMessage = result.second;
         return;
     }
 

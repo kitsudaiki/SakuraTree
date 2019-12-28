@@ -32,8 +32,6 @@
 #include <processing/common/item_methods.h>
 #include <converter/common_converter_methods.h>
 
-#include <branch_builder/provision_branch_builder.h>
-
 using Kitsunemimi::Json::JsonItem;
 
 namespace SakuraTree
@@ -271,16 +269,17 @@ Converter::convertBlossomGroup(const JsonItem &subtree, bool &success)
 
             // init new blossom-item
             BlossomItem* blossomItem = new BlossomItem();
+            blossomItem->blossomName = subtree.get("name").toString();
+            blossomItem->blossomPath = subtree.get("b_path").toString();
             blossomItem->blossomType = item.get("blossom-type").toString();
             blossomItem->blossomGroupType = subtree.get("blossom-group-type").toString();
-            blossomItem->blossomPath = subtree.get("b_path").toString();
 
             convertItemValues(blossomItem, subtree.get("items-input"), success);
             convertItemValues(blossomItem, item.get("items-input"), success);
 
             blossomGroupItem->blossoms.push_back(blossomItem);
 
-            if(checkForRequiredKeys(*blossomItem) == false) {
+            if(checkBlossomItem(*blossomItem) == false) {
                 success = false;
             }
         }
@@ -289,6 +288,7 @@ Converter::convertBlossomGroup(const JsonItem &subtree, bool &success)
     {
         // init new blossom-item
         BlossomItem* blossomItem =  new BlossomItem();
+        blossomItem->blossomName = subtree.get("name").toString();
         blossomItem->blossomPath = subtree.get("b_path").toString();
         blossomItem->blossomType = subtree.get("blossom-group-type").toString();
         blossomItem->blossomGroupType = "special";
@@ -298,7 +298,7 @@ Converter::convertBlossomGroup(const JsonItem &subtree, bool &success)
         blossomGroupItem->blossomGroupType = "special";
         blossomGroupItem->blossoms.push_back(blossomItem);
 
-        if(checkForRequiredKeys(*blossomItem) == false) {
+        if(checkBlossomItem(*blossomItem) == false) {
             success = false;
         }
     }
@@ -364,7 +364,8 @@ Converter::convertSeed(const JsonItem &subtree, bool &)
 
     // generate new branch-item based on the information
     const JsonItem connectionInfos = subtree.get("connection");
-    SubtreeItem* provisioningBranch = createProvisionBranch
+    // TODO: enable again in 0.3.0
+    /*SubtreeItem* provisioningBranch = createProvisionBranch
             (
                 connectionInfos.get("address").getString(),
                 connectionInfos.get("ssh_port").getInt(),
@@ -375,7 +376,7 @@ Converter::convertSeed(const JsonItem &subtree, bool &)
                 subtree.get("subtree").getString()
             );
 
-    seedItem->child = provisioningBranch;
+    seedItem->child = provisioningBranch;*/
 
     return seedItem;
 }

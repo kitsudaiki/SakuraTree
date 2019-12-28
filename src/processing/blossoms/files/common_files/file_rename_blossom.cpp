@@ -21,7 +21,7 @@
  */
 
 #include "file_rename_blossom.h"
-#include <processing/blossoms/files/file_methods.h>
+#include <libKitsunemimiPersistence/files/file_methods.h>
 #include <libKitsunemimiCommon/common_methods/string_methods.h>
 #include <libKitsunemimiCommon/common_methods/vector_methods.h>
 
@@ -45,7 +45,8 @@ FileRenameBlossom::initBlossom(BlossomItem &blossomItem)
     m_filePath = blossomItem.values.getValueAsString("file_path");
     m_newFileName = blossomItem.values.getValueAsString("new_name");
 
-    std::vector<std::string> stringParts = splitStringByDelimiter(m_filePath, '/');
+    std::vector<std::string> stringParts;
+    splitStringByDelimiter(stringParts, m_filePath, '/');
     stringParts[stringParts.size()-1] = m_newFileName;
 
     Kitsunemimi::Common::removeEmptyStrings(&stringParts);
@@ -64,18 +65,18 @@ FileRenameBlossom::initBlossom(BlossomItem &blossomItem)
 void
 FileRenameBlossom::preCheck(BlossomItem &blossomItem)
 {
-    if(doesPathExist(m_filePath) == false
-            && doesPathExist(m_newFilePath))
+    if(Kitsunemimi::Persistence::doesPathExist(m_filePath) == false
+            && Kitsunemimi::Persistence::doesPathExist(m_newFilePath))
     {
         blossomItem.skip = true;
         blossomItem.success = true;
         return;
     }
 
-    if(doesPathExist(m_filePath) == false)
+    if(Kitsunemimi::Persistence::doesPathExist(m_filePath) == false)
     {
         blossomItem.success = false;
-        blossomItem.outputMessage = "RENAME FAILED: source-path "
+        blossomItem.outputMessage = "source-path "
                                    + m_filePath
                                    + " doesn't exist";
         return;
@@ -90,12 +91,13 @@ FileRenameBlossom::preCheck(BlossomItem &blossomItem)
 void
 FileRenameBlossom::runTask(BlossomItem &blossomItem)
 {
-    const Result renameResult = renameFileOrDir(m_filePath, m_newFilePath);
+    std::pair<bool, std::string> renameResult;
+    renameResult = Kitsunemimi::Persistence::renameFileOrDir(m_filePath, m_newFilePath);
 
-    if(renameResult.success == false)
+    if(renameResult.first == false)
     {
         blossomItem.success = false;
-        blossomItem.outputMessage = "RENAME FAILED: " + renameResult.errorMessage;
+        blossomItem.outputMessage = renameResult.second;
         return;
     }
 
@@ -108,17 +110,17 @@ FileRenameBlossom::runTask(BlossomItem &blossomItem)
 void
 FileRenameBlossom::postCheck(BlossomItem &blossomItem)
 {
-    if(doesFileExist(m_filePath))
+    if(Kitsunemimi::Persistence::doesFileExist(m_filePath))
     {
         blossomItem.success = false;
-        blossomItem.outputMessage = "RENAME FAILED: old object still exist";
+        blossomItem.outputMessage = "old object still exist";
         return;
     }
 
-    if(doesPathExist(m_newFilePath) == false)
+    if(Kitsunemimi::Persistence::doesPathExist(m_newFilePath) == false)
     {
         blossomItem.success = false;
-        blossomItem.outputMessage = "RENAME FAILED: was not able to rename from "
+        blossomItem.outputMessage = "was not able to rename from "
                                    + m_filePath
                                    + " to "
                                    + m_newFileName;
