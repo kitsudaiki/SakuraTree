@@ -73,9 +73,10 @@ BlossomItem::copy()
     }
 
     // process
-    newItem->execState = execState;
-    newItem->processOutput = processOutput;
-    newItem->processError = processError;
+    newItem->processResult.success = processResult.success;
+    newItem->processResult.exitStatus = processResult.exitStatus;
+    newItem->processResult.errorMessage = processResult.errorMessage;
+    newItem->processResult.processOutput = processResult.processOutput;
 
     // result
     newItem->nameHirarchie = nameHirarchie;

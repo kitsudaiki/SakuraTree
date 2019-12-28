@@ -21,7 +21,6 @@
  */
 
 #include "template_create_blossom_test.h"
-#include <processing/common/process_execution.h>
 #include <items/sakura_items.h>
 #include <processing/blossoms/files/template_files/template_create_blossom.h>
 #include <libKitsunemimiPersistence/files/text_file.h>
@@ -58,9 +57,9 @@ TemplateCreateBlossom_Test::initTestCase()
     m_destinationFile = "/tmp/TemplateCreateBlossom_Test_testfile_destination";
 
     BlossomItem fakeItem;
-    runSyncProcess(fakeItem, "mkdir /tmp/templates");
-    runSyncProcess(fakeItem, "rm " + m_templatePath);
-    runSyncProcess(fakeItem, "rm " + m_destinationFile);
+    runSyncProcess("mkdir /tmp/templates");
+    runSyncProcess("rm " + m_templatePath);
+    runSyncProcess("rm " + m_destinationFile);
 }
 
 /**
@@ -82,8 +81,8 @@ TemplateCreateBlossom_Test::initTask_test()
     TEST_EQUAL(fakeCreateBlossom.m_templatePath, m_templatePath);
     TEST_EQUAL(fakeCreateBlossom.m_destinationPath, m_destinationFile);
 
-    runSyncProcess(fakeItem, "rm " + m_templatePath);
-    runSyncProcess(fakeItem, "rm " + m_destinationFile);
+    runSyncProcess("rm " + m_templatePath);
+    runSyncProcess("rm " + m_destinationFile);
 }
 
 /**
@@ -127,7 +126,7 @@ TemplateCreateBlossom_Test::preCheck_test()
     TEST_EQUAL(fakeItem.success, true);
     TEST_EQUAL(fakeItem.skip, true);
 
-    runSyncProcess(fakeItem, "rm " + m_destinationFile);
+    runSyncProcess("rm " + m_destinationFile);
 }
 
 /**
@@ -146,7 +145,7 @@ TemplateCreateBlossom_Test::runTask_test()
     fakeCopyBlossom.runTask(fakeItem);
     TEST_EQUAL(fakeItem.success, true);
 
-    runSyncProcess(fakeItem, "rm " + m_templatePath);
+    runSyncProcess("rm " + m_templatePath);
 }
 
 /**
@@ -165,7 +164,7 @@ TemplateCreateBlossom_Test::postCheck_test()
     fakeCopyBlossom.runTask(fakeItem);
     TEST_EQUAL(fakeItem.success, true);
 
-    runSyncProcess(fakeItem, "rm " + m_destinationFile);
+    runSyncProcess("rm " + m_destinationFile);
 
     fakeCopyBlossom.postCheck(fakeItem);
     TEST_EQUAL(fakeItem.success, false);

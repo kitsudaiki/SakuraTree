@@ -46,11 +46,16 @@
 #include <libKitsunemimiCommon/common_items/data_items.h>
 #include <libKitsunemimiJson/json_item.h>
 
+#include <libKitsunemimiCommon/process_execution.h>
+
 using Kitsunemimi::Common::DataItem;
 using Kitsunemimi::Common::DataArray;
 using Kitsunemimi::Common::DataValue;
 using Kitsunemimi::Common::DataMap;
 
 using Kitsunemimi::Json::JsonItem;
+
+using Kitsunemimi::Common::ProcressResult;
+using Kitsunemimi::Common::runSyncProcess;
 
 #endif // INCLUDES_H

@@ -21,7 +21,6 @@
  */
 
 #include "file_copy_blossom_test.h"
-#include <processing/common/process_execution.h>
 #include <items/sakura_items.h>
 #include <processing/blossoms/files/common_files/file_copy_blossom.h>
 
@@ -49,8 +48,8 @@ FileCopyBlossom_Test::initTestCase()
     m_destinationFile = "/tmp/FileCopyBlossom_Test_testfile_destination";
 
     BlossomItem fakeItem;
-    runSyncProcess(fakeItem, "rm " + m_sourceFile);
-    runSyncProcess(fakeItem, "rm " + m_destinationFile);
+    runSyncProcess("rm " + m_sourceFile);
+    runSyncProcess("rm " + m_destinationFile);
 }
 
 /**
@@ -89,19 +88,19 @@ FileCopyBlossom_Test::preCheck_test()
     TEST_EQUAL(fakeItem.success, false);
     TEST_EQUAL(fakeItem.skip, false);
 
-    runSyncProcess(fakeItem, "touch " + m_sourceFile);
+    runSyncProcess("touch " + m_sourceFile);
 
     fakeCopyBlossom.preCheck(fakeItem);
     TEST_EQUAL(fakeItem.success, true);
     TEST_EQUAL(fakeItem.skip, false);
 
-    runSyncProcess(fakeItem, "touch " + m_destinationFile);
+    runSyncProcess("touch " + m_destinationFile);
 
     fakeCopyBlossom.preCheck(fakeItem);
     TEST_EQUAL(fakeItem.success, true);
     TEST_EQUAL(fakeItem.skip, false);
 
-    runSyncProcess(fakeItem, "rm " + m_destinationFile);
+    runSyncProcess("rm " + m_destinationFile);
 }
 
 /**
@@ -120,7 +119,7 @@ FileCopyBlossom_Test::runTask_test()
     fakeCopyBlossom.runTask(fakeItem);
     TEST_EQUAL(fakeItem.success, true);
 
-    runSyncProcess(fakeItem, "rm " + m_sourceFile);
+    runSyncProcess("rm " + m_sourceFile);
 
     fakeCopyBlossom.runTask(fakeItem);
     TEST_EQUAL(fakeItem.success, false);
@@ -139,11 +138,11 @@ FileCopyBlossom_Test::postCheck_test()
     FileCopyBlossom fakeCopyBlossom;
 
     fakeCopyBlossom.initBlossom(fakeItem);
-    runSyncProcess(fakeItem, "touch " + m_destinationFile);
+    runSyncProcess("touch " + m_destinationFile);
     fakeCopyBlossom.postCheck(fakeItem);
     TEST_EQUAL(fakeItem.success, true);
 
-    runSyncProcess(fakeItem, "rm " + m_destinationFile);
+    runSyncProcess("rm " + m_destinationFile);
 
     fakeCopyBlossom.postCheck(fakeItem);
     TEST_EQUAL(fakeItem.success, false);

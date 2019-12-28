@@ -106,8 +106,8 @@ int main(int argc, char *argv[])
             std::vector<std::string> envs = vm["input"].as<std::vector<std::string>>();
             for(uint32_t i = 0; i < envs.size(); i++)
             {
-                const std::vector<std::string> pair =
-                        Kitsunemimi::Common::splitStringByDelimiter(envs.at(i), '=');
+                std::vector<std::string> pair;
+                Kitsunemimi::Common::splitStringByDelimiter(pair, envs.at(i), '=');
                 if(pair.size() != 2)
                 {
                     std::cout << "'"<<envs.at(i)<<"' is not a valid pair"<<std::endl;

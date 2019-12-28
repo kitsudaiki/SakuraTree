@@ -82,9 +82,7 @@ public:
     DataMap* parentValues = nullptr;
 
     // process
-    int execState = 0;
-    std::string processOutput = "";
-    std::string processError = "";
+    ProcressResult processResult;
 
     // result
     std::vector<std::string> nameHirarchie;

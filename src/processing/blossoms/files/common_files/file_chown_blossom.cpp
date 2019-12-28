@@ -76,8 +76,8 @@ FileChownBlossom::runTask(BlossomItem &blossomItem)
     command += m_owner + ":" + m_owner + " ";
     command += m_filePath;
 
-    runSyncProcess(blossomItem, command);
-    blossomItem.success = true;
+    blossomItem.processResult = runSyncProcess(command);
+    blossomItem.success = blossomItem.processResult.success;
 }
 
 /**

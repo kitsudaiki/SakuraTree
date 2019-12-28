@@ -21,7 +21,6 @@
  */
 
 #include "ssh_cmd_create_file_blossom.h"
-#include <processing/common/process_execution.h>
 
 namespace SakuraTree
 {
@@ -87,8 +86,8 @@ SshCmdCreateFileBlossom::runTask(BlossomItem &blossomItem)
     programm += m_filePath;
     programm += "\"";
 
-    runSyncProcess(blossomItem, programm);
-
+    blossomItem.processResult = runSyncProcess(programm);
+    blossomItem.success = blossomItem.processResult.success;
 
     programm = "";
 
@@ -113,7 +112,8 @@ SshCmdCreateFileBlossom::runTask(BlossomItem &blossomItem)
     programm += m_filePath;
     programm += "\"";
 
-    runSyncProcess(blossomItem, programm);
+    blossomItem.processResult = runSyncProcess(programm);
+    blossomItem.success = blossomItem.processResult.success;
 }
 
 /**

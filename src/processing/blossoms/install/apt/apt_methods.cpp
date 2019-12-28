@@ -24,7 +24,6 @@
 
 #include <libKitsunemimiCommon/common_methods/string_methods.h>
 #include <libKitsunemimiCommon/common_items/data_items.h>
-#include <processing/common/process_execution.h>
 
 namespace SakuraTree
 {
@@ -144,12 +143,12 @@ getAbsendPackages(const std::vector<std::string> &packageList)
 const std::vector<std::string>
 getInstalledPackages()
 {
-    std::string command = "dpkg --list | grep ^ii  | awk ' {print \\$2} '";
-    BlossomItem tempItem;
-    runSyncProcess(tempItem, command);
-    const std::string output(tempItem.processOutput);
+    const std::string command = "dpkg --list | grep ^ii  | awk ' {print \\$2} '";
+    const ProcressResult processResult = runSyncProcess(command);
     // TODO: check for error
-    return Kitsunemimi::Common::splitStringByDelimiter(output, '\n');
+    std::vector<std::string> result;
+    Kitsunemimi::Common::splitStringByDelimiter(result, processResult.processOutput, '\n');
+    return result;
 }
 
 }

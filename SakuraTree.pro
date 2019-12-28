@@ -93,7 +93,6 @@ HEADERS += \
     src/processing/blossoms/blossom.h \
     src/processing/blossoms/blossom_getter.h \
     src/processing/common/item_methods.h \
-    src/processing/common/process_execution.h \
     src/processing/sakura_thread.h \
     src/processing/sakura_tree_callbacks.h \
     src/processing/subtree_queue.h \
@@ -152,7 +151,6 @@ SOURCES += \
     src/processing/blossoms/blossom.cpp \
     src/processing/blossoms/blossom_getter.cpp \
     src/processing/common/item_methods.cpp \
-    src/processing/common/process_execution.cpp \
     src/processing/common/value_item_functions.cpp \
     src/processing/sakura_thread.cpp \
     src/processing/subtree_queue.cpp \

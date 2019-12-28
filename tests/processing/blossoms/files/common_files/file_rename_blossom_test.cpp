@@ -21,7 +21,6 @@
  */
 
 #include "file_rename_blossom_test.h"
-#include <processing/common/process_execution.h>
 #include <items/sakura_items.h>
 #include <processing/blossoms/files/common_files/file_rename_blossom.h>
 
@@ -50,8 +49,8 @@ FileRenameBlossom_Test::initTestCase()
     m_destinationFile = "/tmp/FileRenameBlossom_Test_testfile_destination";
 
     BlossomItem fakeItem;
-    runSyncProcess(fakeItem, "rm " + m_sourceFile);
-    runSyncProcess(fakeItem, "rm " + m_destinationFile);
+    runSyncProcess("rm " + m_sourceFile);
+    runSyncProcess("rm " + m_destinationFile);
 }
 
 /**
@@ -90,23 +89,23 @@ FileRenameBlossom_Test::preCheck_test()
     TEST_EQUAL(fakeItem.success, false);
     TEST_EQUAL(fakeItem.skip, false);
 
-    runSyncProcess(fakeItem, "touch " + m_sourceFile);
+    runSyncProcess("touch " + m_sourceFile);
 
     fakeRenameBlossom.preCheck(fakeItem);
     TEST_EQUAL(fakeItem.success, true);
     TEST_EQUAL(fakeItem.skip, false);
 
-    runSyncProcess(fakeItem, "touch " + m_destinationFile);
+    runSyncProcess("touch " + m_destinationFile);
     fakeRenameBlossom.preCheck(fakeItem);
     TEST_EQUAL(fakeItem.success, true);
     TEST_EQUAL(fakeItem.skip, false);
 
-    runSyncProcess(fakeItem, "rm " + m_sourceFile);
+    runSyncProcess("rm " + m_sourceFile);
     fakeRenameBlossom.preCheck(fakeItem);
     TEST_EQUAL(fakeItem.success, true);
     TEST_EQUAL(fakeItem.skip, true);
 
-    runSyncProcess(fakeItem, "rm " + m_destinationFile);
+    runSyncProcess("rm " + m_destinationFile);
 }
 
 /**
@@ -121,14 +120,14 @@ FileRenameBlossom_Test::runTask_test()
 
     FileRenameBlossom fakeRenameBlossom;
 
-    runSyncProcess(fakeItem, "touch " + m_sourceFile);
-    runSyncProcess(fakeItem, "rm " + m_destinationFile);
+    runSyncProcess("touch " + m_sourceFile);
+    runSyncProcess("rm " + m_destinationFile);
 
     fakeRenameBlossom.initBlossom(fakeItem);
     fakeRenameBlossom.runTask(fakeItem);
     TEST_EQUAL(fakeItem.success, true);
 
-    runSyncProcess(fakeItem, "rm " + m_sourceFile);
+    runSyncProcess("rm " + m_sourceFile);
 
     fakeRenameBlossom.runTask(fakeItem);
     TEST_EQUAL(fakeItem.success, false);
@@ -150,12 +149,12 @@ FileRenameBlossom_Test::postCheck_test()
     fakeRenameBlossom.postCheck(fakeItem);
     TEST_EQUAL(fakeItem.success, true);
 
-    runSyncProcess(fakeItem, "touch " + m_sourceFile);
+    runSyncProcess("touch " + m_sourceFile);
     fakeRenameBlossom.postCheck(fakeItem);
     TEST_EQUAL(fakeItem.success, false);
 
-    runSyncProcess(fakeItem, "rm " + m_sourceFile);
-    runSyncProcess(fakeItem, "rm " + m_destinationFile);
+    runSyncProcess("rm " + m_sourceFile);
+    runSyncProcess("rm " + m_destinationFile);
 
     fakeRenameBlossom.postCheck(fakeItem);
     TEST_EQUAL(fakeItem.success, false);

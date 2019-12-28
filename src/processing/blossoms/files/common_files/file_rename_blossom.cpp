@@ -45,7 +45,8 @@ FileRenameBlossom::initBlossom(BlossomItem &blossomItem)
     m_filePath = blossomItem.values.getValueAsString("file_path");
     m_newFileName = blossomItem.values.getValueAsString("new_name");
 
-    std::vector<std::string> stringParts = splitStringByDelimiter(m_filePath, '/');
+    std::vector<std::string> stringParts;
+    splitStringByDelimiter(stringParts, m_filePath, '/');
     stringParts[stringParts.size()-1] = m_newFileName;
 
     Kitsunemimi::Common::removeEmptyStrings(&stringParts);

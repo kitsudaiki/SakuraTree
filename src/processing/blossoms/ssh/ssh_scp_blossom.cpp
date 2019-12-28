@@ -21,7 +21,6 @@
  */
 
 #include "ssh_scp_blossom.h"
-#include <processing/common/process_execution.h>
 
 namespace SakuraTree
 {
@@ -86,7 +85,8 @@ SshScpBlossom::runTask(BlossomItem &blossomItem)
     programm += ":";
     programm += m_targetPath;
 
-    runSyncProcess(blossomItem, programm);
+    blossomItem.processResult = runSyncProcess(programm);
+    blossomItem.success = blossomItem.processResult.success;
 }
 
 /**

@@ -21,7 +21,6 @@
  */
 
 #include "file_delete_blossom_test.h"
-#include <processing/common/process_execution.h>
 #include <items/sakura_items.h>
 #include <processing/blossoms/files/common_files/file_delete_blossom.h>
 
@@ -45,7 +44,7 @@ FileDeleteBlossom_Test::initTestCase()
     m_path = "/tmp/FileDeleteBlossom_Test_testfile";
 
     BlossomItem fakeItem;
-    runSyncProcess(fakeItem, "rm " + m_path);
+    runSyncProcess("rm " + m_path);
 }
 
 /**
@@ -80,12 +79,12 @@ FileDeleteBlossom_Test::preCheck_test()
     fakeDeleteBlossom.preCheck(fakeItem);
     TEST_EQUAL(fakeItem.success, false);
 
-    runSyncProcess(fakeItem, "touch " + m_path);
+    runSyncProcess("touch " + m_path);
 
     fakeDeleteBlossom.preCheck(fakeItem);
     TEST_EQUAL(fakeItem.success, true);
 
-    runSyncProcess(fakeItem, "rm " + m_path);
+    runSyncProcess("rm " + m_path);
 }
 
 /**
@@ -103,7 +102,7 @@ FileDeleteBlossom_Test::runTask_test()
     fakeDeleteBlossom.runTask(fakeItem);
     TEST_EQUAL(fakeItem.success, false);
 
-    runSyncProcess(fakeItem, "touch " + m_path);
+    runSyncProcess("touch " + m_path);
 
     fakeDeleteBlossom.runTask(fakeItem);
     TEST_EQUAL(fakeItem.success, true);
@@ -127,11 +126,11 @@ FileDeleteBlossom_Test::postCheck_test()
     fakeDeleteBlossom.postCheck(fakeItem);
     TEST_EQUAL(fakeItem.success, true);
 
-    runSyncProcess(fakeItem, "touch " + m_path);
+    runSyncProcess("touch " + m_path);
     fakeDeleteBlossom.postCheck(fakeItem);
     TEST_EQUAL(fakeItem.success, false);
 
-    runSyncProcess(fakeItem, "rm " + m_path);
+    runSyncProcess("rm " + m_path);
 }
 
 /**

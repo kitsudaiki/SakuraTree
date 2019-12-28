@@ -76,8 +76,8 @@ FileChmodBlossom::runTask(BlossomItem &blossomItem)
     command += m_permission + " ";
     command += m_filePath;
 
-    runSyncProcess(blossomItem, command);
-    blossomItem.success = true;
+    blossomItem.processResult = runSyncProcess(command);
+    blossomItem.success = blossomItem.processResult.success;
 }
 
 /**

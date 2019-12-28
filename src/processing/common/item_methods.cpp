@@ -54,6 +54,7 @@ getProcessedItem(ValueItem &valueItem,
 
         switch(valueItem.functions.at(i).type)
         {
+        //==========================================================================================
         case FunctionItem::GET_FUNCTION:
         {
             if(valueItem.functions.at(i).arguments.size() != 1) {
@@ -65,6 +66,7 @@ getProcessedItem(ValueItem &valueItem,
             }
             break;
         }
+        //==========================================================================================
         case FunctionItem::SPLIT_FUNCTION:
         {
             if(valueItem.functions.at(i).arguments.size() != 1) {
@@ -76,6 +78,7 @@ getProcessedItem(ValueItem &valueItem,
             }
             break;
         }
+        //==========================================================================================
         case FunctionItem::CONTAINS_FUNCTION:
         {
             if(valueItem.functions.at(i).arguments.size() != 1) {
@@ -87,11 +90,13 @@ getProcessedItem(ValueItem &valueItem,
             }
             break;
         }
+        //==========================================================================================
         case FunctionItem::SIZE_FUNCTION:
         {
             valueItem.item = sizeValue(valueItem.item);
             break;
         }
+        //==========================================================================================
         case FunctionItem::INSERT_FUNCTION:
         {
             if(valueItem.functions.at(i).arguments.size() != 2) {
@@ -108,6 +113,7 @@ getProcessedItem(ValueItem &valueItem,
             }
             break;
         }
+        //==========================================================================================
         case FunctionItem::APPEND_FUNCTION:
         {
             if(valueItem.functions.at(i).arguments.size() != 1) {
@@ -119,6 +125,7 @@ getProcessedItem(ValueItem &valueItem,
             }
             break;
         }
+        //==========================================================================================
         default:
             break;
         }

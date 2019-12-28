@@ -100,8 +100,8 @@ splitValue(DataValue* item,
     }
 
     // split string into string-array
-    const std::vector<std::string> array = splitStringByDelimiter(item->toString(),
-                                                                  demilimter);
+    std::vector<std::string> array;
+    splitStringByDelimiter(array, item->toString(), demilimter);
 
     // convert string-array into a DataArray-object
     DataArray* resultArray = new DataArray();
