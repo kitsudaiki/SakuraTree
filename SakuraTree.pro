@@ -55,7 +55,6 @@ INCLUDEPATH += $$PWD \
                src
 
 HEADERS += \
-    src/branch_builder/provision_branch_builder.h \
     src/common/defines.h \
     src/common/enums.h \
     src/common/includes.h \
@@ -118,7 +117,6 @@ HEADERS += \
     src/items/value_item_map.h
 
 SOURCES += \
-    src/branch_builder/provision_branch_builder.cpp \
     src/converter/converter.cpp \
     src/items/sakura_items.cpp \
     src/processing/blossoms/files/common_files/file_chmod_blossom.cpp \

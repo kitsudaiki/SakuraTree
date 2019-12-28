@@ -32,8 +32,6 @@
 #include <processing/common/item_methods.h>
 #include <converter/common_converter_methods.h>
 
-#include <branch_builder/provision_branch_builder.h>
-
 using Kitsunemimi::Json::JsonItem;
 
 namespace SakuraTree
@@ -366,7 +364,8 @@ Converter::convertSeed(const JsonItem &subtree, bool &)
 
     // generate new branch-item based on the information
     const JsonItem connectionInfos = subtree.get("connection");
-    SubtreeItem* provisioningBranch = createProvisionBranch
+    // TODO: enable again in 0.3.0
+    /*SubtreeItem* provisioningBranch = createProvisionBranch
             (
                 connectionInfos.get("address").getString(),
                 connectionInfos.get("ssh_port").getInt(),
@@ -377,7 +376,7 @@ Converter::convertSeed(const JsonItem &subtree, bool &)
                 subtree.get("subtree").getString()
             );
 
-    seedItem->child = provisioningBranch;
+    seedItem->child = provisioningBranch;*/
 
     return seedItem;
 }
