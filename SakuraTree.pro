@@ -49,7 +49,7 @@ LIBS += -L../libKitsunemimiSakuraParser/src/debug -lKitsunemimiSakuraParser
 LIBS += -L../libKitsunemimiSakuraParser/src/release -lKitsunemimiSakuraParser
 INCLUDEPATH += ../libKitsunemimiSakuraParser/include
 
-LIBS +=  -lboost_filesystem -lboost_system -lboost_program_options  -lssl -lcrypt
+LIBS +=  -lboost_filesystem -lboost_system -lboost_program_options
 
 INCLUDEPATH += $$PWD \
                src
