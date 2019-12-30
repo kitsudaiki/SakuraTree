@@ -1,11 +1,11 @@
-image: registry.gitlab.com/kitsune_other/kitsune_docker_unittest:0.1.2
+image: registry.gitlab.com/tobiasanker/kitsunemimi-docker-files/ci_runner_unittest:1.0.0
 
 build:
   script:
     - echo Working on branch $CI_COMMIT_REF_NAME
 
     - apt-get update
-    - apt-get install -y libboost-filesystem-dev libsqlite3-dev libboost-program-options-dev
+    - apt-get install -y libboost-filesystem-dev libboost-program-options-dev libsqlite3-dev
 
     - cd /builds/tobiasanker/SakuraTree
     - ./build.sh test
