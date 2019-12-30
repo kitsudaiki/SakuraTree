@@ -39,9 +39,11 @@
 #include <processing/blossoms/special/assert_blossom.h>
 #include <processing/blossoms/special/exit_blossom.h>
 
-#include <processing/blossoms/files/common_files/file_copy_blossom.h>
-#include <processing/blossoms/files/common_files/file_delete_blossom.h>
-#include <processing/blossoms/files/common_files/file_rename_blossom.h>
+#include <processing/blossoms/files/common_files/path_copy_blossom.h>
+#include <processing/blossoms/files/common_files/path_delete_blossom.h>
+#include <processing/blossoms/files/common_files/path_rename_blossom.h>
+#include <processing/blossoms/files/common_files/path_chmod_blossom.h>
+#include <processing/blossoms/files/common_files/path_chown_blossom.h>
 
 #include <processing/blossoms/files/template_files/template_create_blossom.h>
 
@@ -124,16 +126,22 @@ getBlossom(const std::string blossomGroupType,
         }
     }
 
-    if(blossomGroupType == "file")
+    if(blossomGroupType == "path")
     {
+        if(blossomType == "chmod") {
+            return new PathChmodBlossom();
+        }
+        if(blossomType == "chown") {
+            return new PathChownBlossom();
+        }
         if(blossomType == "copy") {
-            return new FileCopyBlossom();
+            return new PathCopyBlossom();
         }
         if(blossomType == "move") {
-            return new FileRenameBlossom();
+            return new PathRenameBlossom();
         }
         if(blossomType == "delete") {
-            return new FileDeleteBlossom();
+            return new PathDeleteBlossom();
         }
     }
 

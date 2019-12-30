@@ -1,5 +1,5 @@
 /**
- * @file        file_chown_blossom.cpp
+ * @file        path_chmod_blossom.cpp
  *
  * @author      Tobias Anker <tobias.anker@kitsunemimi.moe>
  *
@@ -20,27 +20,27 @@
  *      limitations under the License.
  */
 
-#include "file_chown_blossom.h"
+#include "path_chmod_blossom.h"
 #include <libKitsunemimiPersistence/files/file_methods.h>
 
 namespace SakuraTree
 {
 
-FileChownBlossom::FileChownBlossom()
+PathChmodBlossom::PathChmodBlossom()
     : Blossom()
 {
     m_requiredKeys.insert("file_path", new DataValue(true));
-    m_requiredKeys.insert("owner", new DataValue(true));
+    m_requiredKeys.insert("permission", new DataValue(true));
 }
 
 /**
  * @brief initBlossom
  */
 void
-FileChownBlossom::initBlossom(BlossomItem &blossomItem)
+PathChmodBlossom::initBlossom(BlossomItem &blossomItem)
 {
     m_filePath = blossomItem.values.getValueAsString("file_path");
-    m_owner = blossomItem.values.getValueAsString("owner");
+    m_permission = blossomItem.values.getValueAsString("permission");
 
     blossomItem.success = true;
 }
@@ -49,7 +49,7 @@ FileChownBlossom::initBlossom(BlossomItem &blossomItem)
  * @brief preCheck
  */
 void
-FileChownBlossom::preCheck(BlossomItem &blossomItem)
+PathChmodBlossom::preCheck(BlossomItem &blossomItem)
 {
     if(Kitsunemimi::Persistence::doesPathExist(m_filePath) == false)
     {
@@ -67,13 +67,13 @@ FileChownBlossom::preCheck(BlossomItem &blossomItem)
  * @brief runTask
  */
 void
-FileChownBlossom::runTask(BlossomItem &blossomItem)
+PathChmodBlossom::runTask(BlossomItem &blossomItem)
 {
-    std::string command = "chown ";
+    std::string command = "chmod ";
     if(Kitsunemimi::Persistence::doesDirExist(m_filePath)) {
         command += "-R ";
     }
-    command += m_owner + ":" + m_owner + " ";
+    command += m_permission + " ";
     command += m_filePath;
 
     blossomItem.processResult = runSyncProcess(command);
@@ -84,7 +84,7 @@ FileChownBlossom::runTask(BlossomItem &blossomItem)
  * @brief postCheck
  */
 void
-FileChownBlossom::postCheck(BlossomItem &blossomItem)
+PathChmodBlossom::postCheck(BlossomItem &blossomItem)
 {
     blossomItem.success = true;
 }
@@ -93,7 +93,7 @@ FileChownBlossom::postCheck(BlossomItem &blossomItem)
  * @brief closeBlossom
  */
 void
-FileChownBlossom::closeBlossom(BlossomItem &blossomItem)
+PathChmodBlossom::closeBlossom(BlossomItem &blossomItem)
 {
     blossomItem.success = true;
 }

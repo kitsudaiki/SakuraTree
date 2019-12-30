@@ -25,11 +25,11 @@
 #include <tests/processing/common/item_methods_test.h>
 #include <tests/processing/common/functions_test.h>
 
-#include <tests/processing/blossoms/files/common_files/file_chmod_blossom_test.h>
-#include <tests/processing/blossoms/files/common_files/file_chown_blossom_test.h>
-#include <tests/processing/blossoms/files/common_files/file_copy_blossom_test.h>
-#include <tests/processing/blossoms/files/common_files/file_delete_blossom_test.h>
-#include <tests/processing/blossoms/files/common_files/file_rename_blossom_test.h>
+#include <tests/processing/blossoms/files/common_files/path_chmod_blossom_test.h>
+#include <tests/processing/blossoms/files/common_files/path_chown_blossom_test.h>
+#include <tests/processing/blossoms/files/common_files/path_copy_blossom_test.h>
+#include <tests/processing/blossoms/files/common_files/path_delete_blossom_test.h>
+#include <tests/processing/blossoms/files/common_files/path_rename_blossom_test.h>
 
 #include <tests/processing/blossoms/files/template_files/template_create_blossom_test.h>
 #include <tests/processing/blossoms/special/cmd_blossom_test.h>
@@ -53,11 +53,11 @@ RunUnitTests::run()
     #ifdef RUN_UNIT_TEST
     SakuraTree::ValueItemsFunctions_Test();
     SakuraTree::ItemMethods_Test();
-    //SakuraTree::FileChmodBlossom_Test();
-    //SakuraTree::FileChownBlossom_Test();
-    SakuraTree::FileCopyBlossom_Test();
-    SakuraTree::FileDeleteBlossom_Test();
-    SakuraTree::FileRenameBlossom_Test();
+    //SakuraTree::PathChmodBlossom_Test();
+    //SakuraTree::PathChownBlossom_Test();
+    SakuraTree::PathCopyBlossom_Test();
+    SakuraTree::PathDeleteBlossom_Test();
+    SakuraTree::PathRenameBlossom_Test();
     SakuraTree::TemplateCreateBlossom_Test();
     SakuraTree::CmdBlossom_Test();
     SakuraTree::TextReadBlossom_Test();

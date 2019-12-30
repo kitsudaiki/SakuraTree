@@ -1,5 +1,5 @@
 /**
- * @file        file_rename_blossom_test.h
+ * @file        path_delete_blossom_test.h
  *
  * @author      Tobias Anker <tobias.anker@kitsunemimi.moe>
  *
@@ -20,8 +20,8 @@
  *      limitations under the License.
  */
 
-#ifndef FILE_RENAME_BLOSSOM_TEST_H
-#define FILE_RENAME_BLOSSOM_TEST_H
+#ifndef PATH_DELETE_BLOSSOM_TEST_H
+#define PATH_DELETE_BLOSSOM_TEST_H
 
 #include <common.h>
 #include <libKitsunemimiCommon/test.h>
@@ -29,11 +29,11 @@
 namespace SakuraTree
 {
 
-class FileRenameBlossom_Test
+class PathDeleteBlossom_Test
         : public Kitsunemimi::Common::Test
 {
 public:
-    FileRenameBlossom_Test();
+    PathDeleteBlossom_Test();
 
 private:
     void initTestCase();
@@ -43,11 +43,9 @@ private:
     void postCheck_test();
     void closeTask_test();
 
-    std::string m_sourceFile = "";
-    std::string m_destinationFileName = "";
-    std::string m_destinationFile = "";
+    std::string m_path = "";
 };
 
 }
 
-#endif // FILE_RENAME_BLOSSOM_TEST_H
+#endif // PATH_DELETE_BLOSSOM_TEST_H

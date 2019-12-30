@@ -1,5 +1,5 @@
 /**
- * @file        file_rename_blossom_test.cpp
+ * @file        path_rename_blossom_test.cpp
  *
  * @author      Tobias Anker <tobias.anker@kitsunemimi.moe>
  *
@@ -20,14 +20,14 @@
  *      limitations under the License.
  */
 
-#include "file_rename_blossom_test.h"
+#include "path_rename_blossom_test.h"
 #include <items/sakura_items.h>
-#include <processing/blossoms/files/common_files/file_rename_blossom.h>
+#include <processing/blossoms/files/common_files/path_rename_blossom.h>
 
 namespace SakuraTree
 {
 
-FileRenameBlossom_Test::FileRenameBlossom_Test()
+PathRenameBlossom_Test::PathRenameBlossom_Test()
     : Kitsunemimi::Common::Test("FileRenameBlossom_Test")
 {
     initTestCase();
@@ -42,7 +42,7 @@ FileRenameBlossom_Test::FileRenameBlossom_Test()
  * @brief initTestCase
  */
 void
-FileRenameBlossom_Test::initTestCase()
+PathRenameBlossom_Test::initTestCase()
 {
     m_sourceFile = "/tmp/FileRenameBlossom_Test_testfile_source";
     m_destinationFileName = "FileRenameBlossom_Test_testfile_destination";
@@ -57,10 +57,10 @@ FileRenameBlossom_Test::initTestCase()
  * @brief initTask_test
  */
 void
-FileRenameBlossom_Test::initTask_test()
+PathRenameBlossom_Test::initTask_test()
 {
     BlossomItem fakeItem;
-    FileRenameBlossom fakeRenameBlossom;
+    PathRenameBlossom fakeRenameBlossom;
 
     fakeItem.values.insert("file_path", new DataValue(m_sourceFile));
     fakeItem.values.insert("new_name", new DataValue(m_destinationFileName));
@@ -76,13 +76,13 @@ FileRenameBlossom_Test::initTask_test()
  * @brief preCheck_test
  */
 void
-FileRenameBlossom_Test::preCheck_test()
+PathRenameBlossom_Test::preCheck_test()
 {
     BlossomItem fakeItem;
     fakeItem.values.insert("file_path", new DataValue(m_sourceFile));
     fakeItem.values.insert("new_name", new DataValue(m_destinationFileName));
 
-    FileRenameBlossom fakeRenameBlossom;
+    PathRenameBlossom fakeRenameBlossom;
 
     fakeRenameBlossom.initBlossom(fakeItem);
     fakeRenameBlossom.preCheck(fakeItem);
@@ -112,13 +112,13 @@ FileRenameBlossom_Test::preCheck_test()
  * @brief runTask_test
  */
 void
-FileRenameBlossom_Test::runTask_test()
+PathRenameBlossom_Test::runTask_test()
 {
     BlossomItem fakeItem;
     fakeItem.values.insert("file_path", new DataValue(m_sourceFile));
     fakeItem.values.insert("new_name", new DataValue(m_destinationFileName));
 
-    FileRenameBlossom fakeRenameBlossom;
+    PathRenameBlossom fakeRenameBlossom;
 
     runSyncProcess("touch " + m_sourceFile);
     runSyncProcess("rm " + m_destinationFile);
@@ -137,13 +137,13 @@ FileRenameBlossom_Test::runTask_test()
  * @brief postCheck_test
  */
 void
-FileRenameBlossom_Test::postCheck_test()
+PathRenameBlossom_Test::postCheck_test()
 {
     BlossomItem fakeItem;
     fakeItem.values.insert("file_path", new DataValue(m_sourceFile));
     fakeItem.values.insert("new_name", new DataValue(m_destinationFileName));
 
-    FileRenameBlossom fakeRenameBlossom;
+    PathRenameBlossom fakeRenameBlossom;
 
     fakeRenameBlossom.initBlossom(fakeItem);
     fakeRenameBlossom.postCheck(fakeItem);
@@ -164,13 +164,13 @@ FileRenameBlossom_Test::postCheck_test()
  * @brief closeTask_test
  */
 void
-FileRenameBlossom_Test::closeTask_test()
+PathRenameBlossom_Test::closeTask_test()
 {
     BlossomItem fakeItem;
     fakeItem.values.insert("file_path", new DataValue(m_sourceFile));
     fakeItem.values.insert("new_name", new DataValue(m_destinationFileName));
 
-    FileRenameBlossom fakeRenameBlossom;
+    PathRenameBlossom fakeRenameBlossom;
 
     fakeRenameBlossom.initBlossom(fakeItem);
     fakeRenameBlossom.closeBlossom(fakeItem);

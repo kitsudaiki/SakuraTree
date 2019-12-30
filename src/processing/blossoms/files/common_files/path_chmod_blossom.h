@@ -1,5 +1,5 @@
 /**
- * @file        file_chmod_blossom_test.h
+ * @file        path_chmod_blossom.h
  *
  * @author      Tobias Anker <tobias.anker@kitsunemimi.moe>
  *
@@ -20,29 +20,32 @@
  *      limitations under the License.
  */
 
-#ifndef FILE_CHMOD_BLOSSOM_TEST_H
-#define FILE_CHMOD_BLOSSOM_TEST_H
+#ifndef PATH_CHMOD_BLOSSOM_H
+#define PATH_CHMOD_BLOSSOM_H
 
-#include <common.h>
-#include <libKitsunemimiCommon/test.h>
+#include <processing/blossoms/blossom.h>
 
 namespace SakuraTree
 {
 
-class FileChmodBlossom_Test
-        : public Kitsunemimi::Common::Test
+class PathChmodBlossom
+        : public Blossom
 {
 public:
-    FileChmodBlossom_Test();
+    PathChmodBlossom();
+
+protected:
+    void initBlossom(BlossomItem &blossomItem);
+    void preCheck(BlossomItem &blossomItem);
+    void runTask(BlossomItem &blossomItem);
+    void postCheck(BlossomItem &blossomItem);
+    void closeBlossom(BlossomItem &blossomItem);
 
 private:
-    void initTask_test();
-    void preCheck_test();
-    void runTask_test();
-    void postCheck_test();
-    void closeTask_test();
+    std::string m_filePath = "";
+    std::string m_permission = "";
 };
 
 }
 
-#endif // FILE_CHMOD_BLOSSOM_TEST_H
+#endif // PATH_CHMOD_BLOSSOM_H

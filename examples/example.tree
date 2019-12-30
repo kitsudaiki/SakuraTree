@@ -13,7 +13,7 @@ if(test_output == "test")
     assert("test-assert")
     - test_output == "test"
 
-    file("copy a testfile")
+    path("copy a testfile")
     -> copy:
        - source_path = "test_file"
        - dest_path = "/tmp/test_file"

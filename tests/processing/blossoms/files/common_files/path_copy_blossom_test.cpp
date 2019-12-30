@@ -1,5 +1,5 @@
 /**
- * @file        file_copy_blossom_test.cpp
+ * @file        path_copy_blossom_test.cpp
  *
  * @author      Tobias Anker <tobias.anker@kitsunemimi.moe>
  *
@@ -20,14 +20,14 @@
  *      limitations under the License.
  */
 
-#include "file_copy_blossom_test.h"
+#include "path_copy_blossom_test.h"
 #include <items/sakura_items.h>
-#include <processing/blossoms/files/common_files/file_copy_blossom.h>
+#include <processing/blossoms/files/common_files/path_copy_blossom.h>
 
 namespace SakuraTree
 {
 
-FileCopyBlossom_Test::FileCopyBlossom_Test()
+PathCopyBlossom_Test::PathCopyBlossom_Test()
     : Kitsunemimi::Common::Test("FileCopyBlossom_Test")
 {
     initTestCase();
@@ -42,7 +42,7 @@ FileCopyBlossom_Test::FileCopyBlossom_Test()
  * @brief initTestCase
  */
 void
-FileCopyBlossom_Test::initTestCase()
+PathCopyBlossom_Test::initTestCase()
 {
     m_sourceFile = "/tmp/FileCopyBlossom_Test_testfile_source";
     m_destinationFile = "/tmp/FileCopyBlossom_Test_testfile_destination";
@@ -56,10 +56,10 @@ FileCopyBlossom_Test::initTestCase()
  * @brief initTask_test
  */
 void
-FileCopyBlossom_Test::initTask_test()
+PathCopyBlossom_Test::initTask_test()
 {
     BlossomItem fakeItem;
-    FileCopyBlossom fakeCopyBlossom;
+    PathCopyBlossom fakeCopyBlossom;
 
     fakeItem.values.insert("source_path", new DataValue(m_sourceFile));
     fakeItem.values.insert("dest_path", new DataValue(m_destinationFile));
@@ -75,13 +75,13 @@ FileCopyBlossom_Test::initTask_test()
  * @brief preCheck_test
  */
 void
-FileCopyBlossom_Test::preCheck_test()
+PathCopyBlossom_Test::preCheck_test()
 {
     BlossomItem fakeItem;
     fakeItem.values.insert("source_path", new DataValue(m_sourceFile));
     fakeItem.values.insert("dest_path", new DataValue(m_destinationFile));
 
-    FileCopyBlossom fakeCopyBlossom;
+    PathCopyBlossom fakeCopyBlossom;
 
     fakeCopyBlossom.initBlossom(fakeItem);
     fakeCopyBlossom.preCheck(fakeItem);
@@ -107,13 +107,13 @@ FileCopyBlossom_Test::preCheck_test()
  * @brief runTask_test
  */
 void
-FileCopyBlossom_Test::runTask_test()
+PathCopyBlossom_Test::runTask_test()
 {
     BlossomItem fakeItem;
     fakeItem.values.insert("source_path", new DataValue(m_sourceFile));
     fakeItem.values.insert("dest_path", new DataValue(m_destinationFile));
 
-    FileCopyBlossom fakeCopyBlossom;
+    PathCopyBlossom fakeCopyBlossom;
 
     fakeCopyBlossom.initBlossom(fakeItem);
     fakeCopyBlossom.runTask(fakeItem);
@@ -129,13 +129,13 @@ FileCopyBlossom_Test::runTask_test()
  * @brief postCheck_test
  */
 void
-FileCopyBlossom_Test::postCheck_test()
+PathCopyBlossom_Test::postCheck_test()
 {
     BlossomItem fakeItem;
     fakeItem.values.insert("source_path", new DataValue(m_sourceFile));
     fakeItem.values.insert("dest_path", new DataValue(m_destinationFile));
 
-    FileCopyBlossom fakeCopyBlossom;
+    PathCopyBlossom fakeCopyBlossom;
 
     fakeCopyBlossom.initBlossom(fakeItem);
     runSyncProcess("touch " + m_destinationFile);
@@ -152,13 +152,13 @@ FileCopyBlossom_Test::postCheck_test()
  * @brief closeTask_test
  */
 void
-FileCopyBlossom_Test::closeTask_test()
+PathCopyBlossom_Test::closeTask_test()
 {
     BlossomItem fakeItem;
     fakeItem.values.insert("source_path", new DataValue(m_sourceFile));
     fakeItem.values.insert("dest_path", new DataValue(m_destinationFile));
 
-    FileCopyBlossom fakeCopyBlossom;
+    PathCopyBlossom fakeCopyBlossom;
 
     fakeCopyBlossom.initBlossom(fakeItem);
     fakeCopyBlossom.closeBlossom(fakeItem);

@@ -1,5 +1,5 @@
 /**
- * @file        file_chown_blossom.h
+ * @file        path_copy_blossom.h
  *
  * @author      Tobias Anker <tobias.anker@kitsunemimi.moe>
  *
@@ -20,19 +20,20 @@
  *      limitations under the License.
  */
 
-#ifndef FILE_CHOWN_BLOSSOM_H
-#define FILE_CHOWN_BLOSSOM_H
+#ifndef PATH_COPY_BLOSSOM_H
+#define PATH_COPY_BLOSSOM_H
 
 #include <processing/blossoms/blossom.h>
 
 namespace SakuraTree
 {
+class PathCopyBlossom_Test;
 
-class FileChownBlossom
+class PathCopyBlossom
         : public Blossom
 {
 public:
-    FileChownBlossom();
+    PathCopyBlossom();
 
 protected:
     void initBlossom(BlossomItem &blossomItem);
@@ -42,10 +43,12 @@ protected:
     void closeBlossom(BlossomItem &blossomItem);
 
 private:
-    std::string m_filePath = "";
-    std::string m_owner = "";
+    friend PathCopyBlossom_Test;
+
+    std::string m_sourcePath = "";
+    std::string m_destinationPath = "";
 };
 
 }
 
-#endif // FILE_CHOWN_BLOSSOM_H
+#endif // PATH_COPY_BLOSSOM_H
