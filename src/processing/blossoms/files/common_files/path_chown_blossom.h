@@ -1,5 +1,5 @@
 /**
- * @file        file_chmod_blossom.h
+ * @file        path_chown_blossom.h
  *
  * @author      Tobias Anker <tobias.anker@kitsunemimi.moe>
  *
@@ -20,19 +20,19 @@
  *      limitations under the License.
  */
 
-#ifndef FILE_CHMOD_BLOSSOM_H
-#define FILE_CHMOD_BLOSSOM_H
+#ifndef PATH_CHOWN_BLOSSOM_H
+#define PATH_CHOWN_BLOSSOM_H
 
 #include <processing/blossoms/blossom.h>
 
 namespace SakuraTree
 {
 
-class FileChmodBlossom
+class PathChownBlossom
         : public Blossom
 {
 public:
-    FileChmodBlossom();
+    PathChownBlossom();
 
 protected:
     void initBlossom(BlossomItem &blossomItem);
@@ -43,9 +43,9 @@ protected:
 
 private:
     std::string m_filePath = "";
-    std::string m_permission = "";
+    std::string m_owner = "";
 };
 
 }
 
-#endif // FILE_CHMOD_BLOSSOM_H
+#endif // PATH_CHOWN_BLOSSOM_H

@@ -20,8 +20,8 @@
  *      limitations under the License.
  */
 
-#ifndef SSH_CREATE_FILE_BLOSSOM_H
-#define SSH_CREATE_FILE_BLOSSOM_H
+#ifndef SSH_CREATE_PATH_BLOSSOM_H
+#define SSH_CREATE_PATH_BLOSSOM_H
 
 #include <processing/blossoms/blossom.h>
 #include <unistd.h>
@@ -53,4 +53,4 @@ private:
 
 }
 
-#endif // SSH_CREATE_FILE_BLOSSOM_H
+#endif // SSH_CREATE_PATH_BLOSSOM_H

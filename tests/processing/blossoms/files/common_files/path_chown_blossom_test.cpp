@@ -1,5 +1,5 @@
 /**
- * @file        file_rename_blossom.h
+ * @file        path_chown_blossom_test.cpp
  *
  * @author      Tobias Anker <tobias.anker@kitsunemimi.moe>
  *
@@ -20,36 +20,64 @@
  *      limitations under the License.
  */
 
-#ifndef FILE_RENAME_BLOSSOM_H
-#define FILE_RENAME_BLOSSOM_H
-
-#include <processing/blossoms/blossom.h>
+#include "path_chown_blossom_test.h"
 
 namespace SakuraTree
 {
-class FileRenameBlossom_Test;
 
-class FileRenameBlossom
-        : public Blossom
+PathChownBlossom_Test::PathChownBlossom_Test()
+    : Kitsunemimi::Common::Test("FileChownBlossom_Test")
 {
-public:
-    FileRenameBlossom();
+    initTask_test();
+    preCheck_test();
+    runTask_test();
+    postCheck_test();
+    closeTask_test();
+}
 
-protected:
-    void initBlossom(BlossomItem &blossomItem);
-    void preCheck(BlossomItem &blossomItem);
-    void runTask(BlossomItem &blossomItem);
-    void postCheck(BlossomItem &blossomItem);
-    void closeBlossom(BlossomItem &blossomItem);
-
-private:
-    friend FileRenameBlossom_Test;
-
-    std::string m_filePath = "";
-    std::string m_newFileName = "";
-    std::string m_newFilePath = "";
-};
+/**
+ * @brief initTask_test
+ */
+void
+PathChownBlossom_Test::initTask_test()
+{
 
 }
 
-#endif // FILE_RENAME_BLOSSOM_H
+/**
+ * @brief preCheck_test
+ */
+void
+PathChownBlossom_Test::preCheck_test()
+{
+
+}
+
+/**
+ * @brief runTask_test
+ */
+void
+PathChownBlossom_Test::runTask_test()
+{
+
+}
+
+/**
+ * @brief postCheck_test
+ */
+void
+PathChownBlossom_Test::postCheck_test()
+{
+
+}
+
+/**
+ * @brief closeTask_test
+ */
+void
+PathChownBlossom_Test::closeTask_test()
+{
+
+}
+
+}

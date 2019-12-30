@@ -1,5 +1,5 @@
 /**
- * @file        file_copy_blossom.cpp
+ * @file        path_copy_blossom.cpp
  *
  * @author      Tobias Anker <tobias.anker@kitsunemimi.moe>
  *
@@ -20,7 +20,7 @@
  *      limitations under the License.
  */
 
-#include "file_copy_blossom.h"
+#include "path_copy_blossom.h"
 #include <libKitsunemimiPersistence/files/file_methods.h>
 #include <libKitsunemimiCommon/common_methods/string_methods.h>
 
@@ -28,7 +28,7 @@ namespace SakuraTree
 {
 using Kitsunemimi::Common::splitStringByDelimiter;
 
-FileCopyBlossom::FileCopyBlossom()
+PathCopyBlossom::PathCopyBlossom()
     : Blossom()
 {
     m_requiredKeys.insert("source_path", new DataValue(true));
@@ -39,7 +39,7 @@ FileCopyBlossom::FileCopyBlossom()
  * @brief initBlossom
  */
 void
-FileCopyBlossom::initBlossom(BlossomItem &blossomItem)
+PathCopyBlossom::initBlossom(BlossomItem &blossomItem)
 {
     m_sourcePath = blossomItem.values.getValueAsString("source_path");
     m_destinationPath = blossomItem.values.getValueAsString("dest_path");
@@ -55,7 +55,7 @@ FileCopyBlossom::initBlossom(BlossomItem &blossomItem)
  * @brief preCheck
  */
 void
-FileCopyBlossom::preCheck(BlossomItem &blossomItem)
+PathCopyBlossom::preCheck(BlossomItem &blossomItem)
 {
     if(Kitsunemimi::Persistence::doesPathExist(m_sourcePath) == false)
     {
@@ -81,7 +81,7 @@ FileCopyBlossom::preCheck(BlossomItem &blossomItem)
  * @brief runTask
  */
 void
-FileCopyBlossom::runTask(BlossomItem &blossomItem)
+PathCopyBlossom::runTask(BlossomItem &blossomItem)
 {
     std::pair<bool, std::string> copyResult;
     copyResult = Kitsunemimi::Persistence::copyPath(m_sourcePath, m_destinationPath);
@@ -100,7 +100,7 @@ FileCopyBlossom::runTask(BlossomItem &blossomItem)
  * @brief postCheck
  */
 void
-FileCopyBlossom::postCheck(BlossomItem &blossomItem)
+PathCopyBlossom::postCheck(BlossomItem &blossomItem)
 {
     if(Kitsunemimi::Persistence::doesPathExist(m_destinationPath) == false)
     {
@@ -119,7 +119,7 @@ FileCopyBlossom::postCheck(BlossomItem &blossomItem)
  * @brief closeBlossom
  */
 void
-FileCopyBlossom::closeBlossom(BlossomItem &blossomItem)
+PathCopyBlossom::closeBlossom(BlossomItem &blossomItem)
 {
     blossomItem.success = true;
 }

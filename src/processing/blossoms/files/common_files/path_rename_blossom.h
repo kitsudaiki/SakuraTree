@@ -1,5 +1,5 @@
 /**
- * @file        file_delete_blossom.h
+ * @file        path_rename_blossom.h
  *
  * @author      Tobias Anker <tobias.anker@kitsunemimi.moe>
  *
@@ -20,20 +20,20 @@
  *      limitations under the License.
  */
 
-#ifndef FILE_DELETE_BLOSSOM_H
-#define FILE_DELETE_BLOSSOM_H
+#ifndef PATH_RENAME_BLOSSOM_H
+#define PATH_RENAME_BLOSSOM_H
 
 #include <processing/blossoms/blossom.h>
 
 namespace SakuraTree
 {
-class FileDeleteBlossom_Test;
+class PathRenameBlossom_Test;
 
-class FileDeleteBlossom
+class PathRenameBlossom
         : public Blossom
 {
 public:
-    FileDeleteBlossom();
+    PathRenameBlossom();
 
 protected:
     void initBlossom(BlossomItem &blossomItem);
@@ -43,11 +43,13 @@ protected:
     void closeBlossom(BlossomItem &blossomItem);
 
 private:
-    friend FileDeleteBlossom_Test;
+    friend PathRenameBlossom_Test;
 
     std::string m_filePath = "";
+    std::string m_newFileName = "";
+    std::string m_newFilePath = "";
 };
 
 }
 
-#endif // FILE_DELETE_BLOSSOM_H
+#endif // PATH_RENAME_BLOSSOM_H

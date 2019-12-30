@@ -1,5 +1,5 @@
 /**
- * @file        file_rename_blossom.cpp
+ * @file        path_rename_blossom.cpp
  *
  * @author      Tobias Anker <tobias.anker@kitsunemimi.moe>
  *
@@ -20,7 +20,7 @@
  *      limitations under the License.
  */
 
-#include "file_rename_blossom.h"
+#include "path_rename_blossom.h"
 #include <libKitsunemimiPersistence/files/file_methods.h>
 #include <libKitsunemimiCommon/common_methods/string_methods.h>
 #include <libKitsunemimiCommon/common_methods/vector_methods.h>
@@ -29,7 +29,7 @@ namespace SakuraTree
 {
 using Kitsunemimi::Common::splitStringByDelimiter;
 
-FileRenameBlossom::FileRenameBlossom()
+PathRenameBlossom::PathRenameBlossom()
     : Blossom()
 {
     m_requiredKeys.insert("file_path", new DataValue(true));
@@ -40,7 +40,7 @@ FileRenameBlossom::FileRenameBlossom()
  * @brief initBlossom
  */
 void
-FileRenameBlossom::initBlossom(BlossomItem &blossomItem)
+PathRenameBlossom::initBlossom(BlossomItem &blossomItem)
 {
     m_filePath = blossomItem.values.getValueAsString("file_path");
     m_newFileName = blossomItem.values.getValueAsString("new_name");
@@ -63,7 +63,7 @@ FileRenameBlossom::initBlossom(BlossomItem &blossomItem)
  * @brief preCheck
  */
 void
-FileRenameBlossom::preCheck(BlossomItem &blossomItem)
+PathRenameBlossom::preCheck(BlossomItem &blossomItem)
 {
     if(Kitsunemimi::Persistence::doesPathExist(m_filePath) == false
             && Kitsunemimi::Persistence::doesPathExist(m_newFilePath))
@@ -89,7 +89,7 @@ FileRenameBlossom::preCheck(BlossomItem &blossomItem)
  * @brief runTask
  */
 void
-FileRenameBlossom::runTask(BlossomItem &blossomItem)
+PathRenameBlossom::runTask(BlossomItem &blossomItem)
 {
     std::pair<bool, std::string> renameResult;
     renameResult = Kitsunemimi::Persistence::renameFileOrDir(m_filePath, m_newFilePath);
@@ -108,7 +108,7 @@ FileRenameBlossom::runTask(BlossomItem &blossomItem)
  * @brief postCheck
  */
 void
-FileRenameBlossom::postCheck(BlossomItem &blossomItem)
+PathRenameBlossom::postCheck(BlossomItem &blossomItem)
 {
     if(Kitsunemimi::Persistence::doesFileExist(m_filePath))
     {
@@ -134,7 +134,7 @@ FileRenameBlossom::postCheck(BlossomItem &blossomItem)
  * @brief closeBlossom
  */
 void
-FileRenameBlossom::closeBlossom(BlossomItem &blossomItem)
+PathRenameBlossom::closeBlossom(BlossomItem &blossomItem)
 {
     blossomItem.success = true;
 }

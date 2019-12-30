@@ -1,5 +1,5 @@
 /**
- * @file        file_chmod_blossom_test.cpp
+ * @file        path_chmod_blossom_test.h
  *
  * @author      Tobias Anker <tobias.anker@kitsunemimi.moe>
  *
@@ -20,64 +20,29 @@
  *      limitations under the License.
  */
 
-#include "file_chmod_blossom_test.h"
+#ifndef PATH_CHMOD_BLOSSOM_TEST_H
+#define PATH_CHMOD_BLOSSOM_TEST_H
+
+#include <common.h>
+#include <libKitsunemimiCommon/test.h>
 
 namespace SakuraTree
 {
 
-FileChmodBlossom_Test::FileChmodBlossom_Test()
-    : Kitsunemimi::Common::Test("FileChmodBlossom_Test")
+class PathChmodBlossom_Test
+        : public Kitsunemimi::Common::Test
 {
-    initTask_test();
-    preCheck_test();
-    runTask_test();
-    postCheck_test();
-    closeTask_test();
-}
+public:
+    PathChmodBlossom_Test();
 
-/**
- * @brief initTask_test
- */
-void
-FileChmodBlossom_Test::initTask_test()
-{
+private:
+    void initTask_test();
+    void preCheck_test();
+    void runTask_test();
+    void postCheck_test();
+    void closeTask_test();
+};
 
 }
 
-/**
- * @brief preCheck_test
- */
-void
-FileChmodBlossom_Test::preCheck_test()
-{
-
-}
-
-/**
- * @brief runTask_test
- */
-void
-FileChmodBlossom_Test::runTask_test()
-{
-
-}
-
-/**
- * @brief postCheck_test
- */
-void
-FileChmodBlossom_Test::postCheck_test()
-{
-
-}
-
-/**
- * @brief closeTask_test
- */
-void
-FileChmodBlossom_Test::closeTask_test()
-{
-
-}
-
-}
+#endif // PATH_CHMOD_BLOSSOM_TEST_H

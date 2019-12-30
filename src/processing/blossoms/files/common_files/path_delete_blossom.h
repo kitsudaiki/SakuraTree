@@ -1,5 +1,5 @@
 /**
- * @file        file_chown_blossom_test.h
+ * @file        path_delete_blossom.h
  *
  * @author      Tobias Anker <tobias.anker@kitsunemimi.moe>
  *
@@ -20,29 +20,34 @@
  *      limitations under the License.
  */
 
-#ifndef FILE_CHOWN_BLOSSOM_TEST_H
-#define FILE_CHOWN_BLOSSOM_TEST_H
+#ifndef PATH_DELETE_BLOSSOM_H
+#define PATH_DELETE_BLOSSOM_H
 
-#include <common.h>
-#include <libKitsunemimiCommon/test.h>
+#include <processing/blossoms/blossom.h>
 
 namespace SakuraTree
 {
+class PathDeleteBlossom_Test;
 
-class FileChownBlossom_Test
-        : public Kitsunemimi::Common::Test
+class PathDeleteBlossom
+        : public Blossom
 {
 public:
-    FileChownBlossom_Test();
+    PathDeleteBlossom();
+
+protected:
+    void initBlossom(BlossomItem &blossomItem);
+    void preCheck(BlossomItem &blossomItem);
+    void runTask(BlossomItem &blossomItem);
+    void postCheck(BlossomItem &blossomItem);
+    void closeBlossom(BlossomItem &blossomItem);
 
 private:
-    void initTask_test();
-    void preCheck_test();
-    void runTask_test();
-    void postCheck_test();
-    void closeTask_test();
+    friend PathDeleteBlossom_Test;
+
+    std::string m_filePath = "";
 };
 
 }
 
-#endif // FILE_CHOWN_BLOSSOM_TEST_H
+#endif // PATH_DELETE_BLOSSOM_H

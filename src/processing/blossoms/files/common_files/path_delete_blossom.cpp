@@ -1,5 +1,5 @@
 /**
- * @file        file_delete_blossom.cpp
+ * @file        path_delete_blossom.cpp
  *
  * @author      Tobias Anker <tobias.anker@kitsunemimi.moe>
  *
@@ -20,13 +20,13 @@
  *      limitations under the License.
  */
 
-#include "file_delete_blossom.h"
+#include "path_delete_blossom.h"
 #include <libKitsunemimiPersistence/files/file_methods.h>
 
 namespace SakuraTree
 {
 
-FileDeleteBlossom::FileDeleteBlossom()
+PathDeleteBlossom::PathDeleteBlossom()
     : Blossom()
 {
     m_requiredKeys.insert("file_path", new DataValue(true));
@@ -36,7 +36,7 @@ FileDeleteBlossom::FileDeleteBlossom()
  * @brief initBlossom
  */
 void
-FileDeleteBlossom::initBlossom(BlossomItem &blossomItem)
+PathDeleteBlossom::initBlossom(BlossomItem &blossomItem)
 {
     m_filePath = blossomItem.values.getValueAsString("file_path");
 
@@ -47,7 +47,7 @@ FileDeleteBlossom::initBlossom(BlossomItem &blossomItem)
  * @brief preCheck
  */
 void
-FileDeleteBlossom::preCheck(BlossomItem &blossomItem)
+PathDeleteBlossom::preCheck(BlossomItem &blossomItem)
 {
     if(Kitsunemimi::Persistence::doesFileExist(m_filePath) == false)
     {
@@ -63,7 +63,7 @@ FileDeleteBlossom::preCheck(BlossomItem &blossomItem)
  * @brief runTask
  */
 void
-FileDeleteBlossom::runTask(BlossomItem &blossomItem)
+PathDeleteBlossom::runTask(BlossomItem &blossomItem)
 {
     const bool result = Kitsunemimi::Persistence::deleteFileOrDir(m_filePath);
 
@@ -81,7 +81,7 @@ FileDeleteBlossom::runTask(BlossomItem &blossomItem)
  * @brief postCheck
  */
 void
-FileDeleteBlossom::postCheck(BlossomItem &blossomItem)
+PathDeleteBlossom::postCheck(BlossomItem &blossomItem)
 {
     if(Kitsunemimi::Persistence::doesFileExist(m_filePath))
     {
@@ -97,7 +97,7 @@ FileDeleteBlossom::postCheck(BlossomItem &blossomItem)
  * @brief closeBlossom
  */
 void
-FileDeleteBlossom::closeBlossom(BlossomItem &blossomItem)
+PathDeleteBlossom::closeBlossom(BlossomItem &blossomItem)
 {
     blossomItem.success = true;
 }
