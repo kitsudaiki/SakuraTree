@@ -88,12 +88,19 @@ I write my projects with the Qt-creator, but without Qt itself.
 
 ### Requirements
 
-#### Official repositories
+#### required tools to build
 
 paket | version
 --- | ---
 g++ | 6.3.0
 qt5-qmake | 5.7.1
+bison | 3.0.4
+flex | 2.6.1 
+
+#### required official libraries
+
+paket | version
+--- | ---
 libboost-program-options-dev | 1.62
 libboost-filesystem-dev | 1.62
 libsqlite3-dev | 3.16.2
@@ -115,7 +122,7 @@ libKitsunemimiIni | master |  https://github.com/tobiasanker/libKitsunemimiIni.g
 libKitsunemimiSakuraParser | master |  https://github.com/tobiasanker/libKitsunemimiSakuraParser.git
 
 
-### build library
+### build programm
 
 In all of my repositories you will find a `build.sh`. You only have to run this script. It doesn't required sudo, because you have to install required tool via apt, for example, by yourself. But if other projects from me are required, it download them from github and build them in the correct version too. This script is also use by the ci-pipeline, so its tested with every commit.
 
