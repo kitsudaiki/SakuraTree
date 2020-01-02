@@ -90,21 +90,32 @@ I write my projects with the Qt-creator, but without Qt itself.
 
 #### required tools to build
 
-paket | version
---- | ---
-g++ | 6.3.0
-qt5-qmake | 5.7.1
-bison | 3.0.4
-flex | 2.6.1 
+name | repository | version | task
+--- | --- | --- | ---
+g++ | g++ | 6.3.0 | Compiler for the C++ code.
+qmake | qt5-qmake | 5.7.1 | This package provides the tool qmake, which is similar to cmake and create the make-file for compilation.
+FLEX | flex | 2.6.1 | Build the lexer-code for all used parser.
+GNU Bison | bison | 3.0.4 | Build the parser-code together with the lexer-code.
+
+Installation on Ubuntu/Debian:
+
+```bash
+sudo apt-get install g++ qt5-qmake bison flex
+```
 
 #### required official libraries
 
-paket | version
---- | ---
-libboost-program-options-dev | 1.62
-libboost-filesystem-dev | 1.62
-libsqlite3-dev | 3.16.2
+repository-name | version | task
+--- | --- | ---
+libboost-program-options-dev | 1.62 | Provides the argument-parser for the CLI input.
+libboost-filesystem-dev | 1.62 | Use for file-interactions like for example listing files in a directory or check if a path exist.
+libsqlite3-dev | 3.16.2 | Privides a Interaction with SQLite-Databases. Its a requirement of the used library libKitsunemimiPersistence, but its not used by this project now.
 
+Installation on Ubuntu/Debian:
+
+```bash
+sudo apt-get install libboost-program-options-dev libboost-filesystem-dev libsqlite3-dev
+```
 
 This are the version I have installed under Debian Stable via apt. Some older or newer version should work as well. I write my projects with the Qt-creator, but without Qt itself. Thats why qmake is required to build my projects.
 
