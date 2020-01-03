@@ -60,7 +60,7 @@ TextAppendBlossom_Test::initTask_test()
     BlossomItem blossomItem;
 
     blossomItem.values.insert("file_path", new DataValue(m_path));
-    blossomItem.values.insert("new_text", new DataValue(m_newText));
+    blossomItem.values.insert("text", new DataValue(m_newText));
 
     appendBlossom.initBlossom(blossomItem);
     TEST_EQUAL(blossomItem.success, true);
@@ -78,7 +78,7 @@ TextAppendBlossom_Test::preCheck_test()
     TextAppendBlossom appendBlossom;
     BlossomItem blossomItem;
     blossomItem.values.insert("file_path", new DataValue(m_path));
-    blossomItem.values.insert("new_text", new DataValue(m_newText));
+    blossomItem.values.insert("text", new DataValue(m_newText));
 
     appendBlossom.initBlossom(blossomItem);
     appendBlossom.preCheck(blossomItem);
@@ -110,7 +110,7 @@ TextAppendBlossom_Test::runTask_test()
     TextAppendBlossom appendBlossom;
     BlossomItem blossomItem;
     blossomItem.values.insert("file_path", new DataValue(m_path));
-    blossomItem.values.insert("new_text", new DataValue(m_newText));
+    blossomItem.values.insert("text", new DataValue(m_newText));
 
     Kitsunemimi::Persistence::writeFile(m_path, m_text, true);
 
@@ -134,7 +134,7 @@ TextAppendBlossom_Test::postCheck_test()
     TextAppendBlossom appendBlossom;
     BlossomItem blossomItem;
     blossomItem.values.insert("file_path", new DataValue(m_path));
-    blossomItem.values.insert("new_text", new DataValue(m_newText));
+    blossomItem.values.insert("text", new DataValue(m_newText));
 
     appendBlossom.initBlossom(blossomItem);
     appendBlossom.postCheck(blossomItem);
@@ -150,7 +150,7 @@ TextAppendBlossom_Test::closeTask_test()
     TextAppendBlossom appendBlossom;
     BlossomItem blossomItem;
     blossomItem.values.insert("file_path", new DataValue(m_path));
-    blossomItem.values.insert("new_text", new DataValue(m_newText));
+    blossomItem.values.insert("text", new DataValue(m_newText));
 
     appendBlossom.initBlossom(blossomItem);
     appendBlossom.closeBlossom(blossomItem);

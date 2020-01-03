@@ -56,12 +56,12 @@ PathDeleteBlossom_Test::initTask_test()
     BlossomItem fakeItem;
     PathDeleteBlossom fakeDeleteBlossom;
 
-    fakeItem.values.insert("file_path", new DataValue(m_path));
+    fakeItem.values.insert("path", new DataValue(m_path));
 
     fakeDeleteBlossom.initBlossom(fakeItem);
     TEST_EQUAL(fakeItem.success, true);
 
-    TEST_EQUAL(fakeDeleteBlossom.m_filePath, m_path);
+    TEST_EQUAL(fakeDeleteBlossom.m_path, m_path);
 }
 
 /**
@@ -71,7 +71,7 @@ void
 PathDeleteBlossom_Test::preCheck_test()
 {
     BlossomItem fakeItem;
-    fakeItem.values.insert("file_path", new DataValue(m_path));
+    fakeItem.values.insert("path", new DataValue(m_path));
 
     PathDeleteBlossom fakeDeleteBlossom;
 
@@ -94,7 +94,7 @@ void
 PathDeleteBlossom_Test::runTask_test()
 {
     BlossomItem fakeItem;
-    fakeItem.values.insert("file_path", new DataValue(m_path));
+    fakeItem.values.insert("path", new DataValue(m_path));
 
     PathDeleteBlossom fakeDeleteBlossom;
 
@@ -118,7 +118,7 @@ void
 PathDeleteBlossom_Test::postCheck_test()
 {
     BlossomItem fakeItem;
-    fakeItem.values.insert("file_path", new DataValue(m_path));
+    fakeItem.values.insert("path", new DataValue(m_path));
 
     PathDeleteBlossom fakeDeleteBlossom;
 
@@ -140,7 +140,7 @@ void
 PathDeleteBlossom_Test::closeTask_test()
 {
     BlossomItem fakeItem;
-    fakeItem.values.insert("file_path", new DataValue(m_path));
+    fakeItem.values.insert("path", new DataValue(m_path));
 
     PathDeleteBlossom fakeDeleteBlossom;
 

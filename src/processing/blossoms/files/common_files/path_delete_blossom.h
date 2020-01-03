@@ -45,7 +45,7 @@ protected:
 private:
     friend PathDeleteBlossom_Test;
 
-    std::string m_filePath = "";
+    std::string m_path = "";
 };
 
 }

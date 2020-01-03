@@ -191,17 +191,12 @@ This is only a simple first example, which I used for my current tests. Its a bo
 - test_output = "test"
 - test_output2 = "test"
 
-apt("update and install")  
--> update
--> present:
-    - names = packages
-
 if(test_output == "test")
 {
     assert("test-assert")
     - test_output == "test"
 
-    file("copy a testfile")
+    path("copy a testfile")
     -> copy:
        - source_path = "test_file"
        - dest_path = "/tmp/test_file"
@@ -288,13 +283,12 @@ else
 {
     apt("first apt in else")
     -> absent:
-       - names = packages
+       - packages = packages
 
     apt("second apt in else")
     -> present:
-       - names = packages
+       - packages = packages
 }
-
 
 ```
 

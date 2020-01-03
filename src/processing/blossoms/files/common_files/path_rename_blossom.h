@@ -45,7 +45,7 @@ protected:
 private:
     friend PathRenameBlossom_Test;
 
-    std::string m_filePath = "";
+    std::string m_path = "";
     std::string m_newFileName = "";
     std::string m_newFilePath = "";
 };

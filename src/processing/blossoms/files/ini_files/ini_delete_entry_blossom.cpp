@@ -35,6 +35,7 @@ IniDeleteEntryBlossom::IniDeleteEntryBlossom()
 {
     m_requiredKeys.insert("file_path", new DataValue(true));
     m_requiredKeys.insert("group", new DataValue(true));
+    m_requiredKeys.insert("entry", new DataValue(false));
 }
 
 /**
