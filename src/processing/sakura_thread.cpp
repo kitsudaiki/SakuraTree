@@ -241,6 +241,18 @@ SakuraThread::processBlossomGroup(BlossomGroupItem &blossomGroupItem)
 bool
 SakuraThread::processSubtree(SubtreeItem* subtreeItem)
 {
+    const std::vector<std::string> uninitItems = checkItems(subtreeItem->values);
+    if(uninitItems.size() > 0)
+    {
+        std::string message = "The following items are not initialized: \n";
+        for(uint32_t i = 0; i < uninitItems.size(); i++)
+        {
+            message += uninitItems.at(i) + "\n";
+        }
+        SakuraRoot::m_root->createError("processing", message);
+        return false;
+    }
+
     for(uint32_t i = 0; i < subtreeItem->childs.size(); i++)
     {
         const bool result = processSakuraItem(subtreeItem->childs.at(i));;
@@ -499,7 +511,7 @@ SakuraThread::processParallelPart(ParallelPart* parallelPart)
     for(uint32_t i = 0; i < parallelPart->childs.size(); i++)
     {
         SubtreeQueue::SubtreeObject object;
-        object.subtree = parallelPart->childs.at(i);
+        object.subtree = parallelPart->childs.at(i)->copy();
         object.hirarchy = m_hierarchy;
         object.items = m_parentValues;
         object.activeCounter = counter;

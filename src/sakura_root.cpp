@@ -133,6 +133,14 @@ SakuraRoot::startProcess(const std::string &rootPath,
         std::this_thread::sleep_for(chronoMilliSec(10));
     }
 
+    // error-output
+    // TODO: better solution necessary instead of checking the number of rows
+    if(m_errorOutput.getNumberOfRows() > 0)
+    {
+        std::cout<<m_errorOutput.toString()<<std::endl;
+        return false;
+    }
+
     std::cout<<"finish"<<std::endl;
 
     return true;
