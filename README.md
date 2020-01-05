@@ -6,17 +6,31 @@
 ![C++Version](https://img.shields.io/badge/c%2B%2B-14-blue?style=flat-square)
 ![Platform](https://img.shields.io/badge/platform-Linux--x64-lightgrey?style=flat-square)
 
+<p align="center">
+  <img src=".pictures/logo.png?raw=true" alt="Logo"/>
+</p>
+
+
 ## Description
 
-WIP: This is/should become a simple-to-use and fast automation tool to deploy tools and files multiple nodes.
+This is/should become a simple-to-use and fast automation tool to deploy tools and files on multiple nodes. 
 
-Primary goals are:
+The primary goals are:
 
-- easy to use
-- fast execution
-- fast debugging
+* easy to use
+* fast execution
+* fast debugging
 
-If you are interested in this project, then keep an eye on it or feel free to help me.
+
+## Documentation
+
+Documentation for version 0.2.0: 
+
+https://gitlab.com/tobiasanker/Sakura-Project-Documentation/-/jobs/394246432/artifacts/browse
+
+Documentation for latest master-version: 
+
+https://gitlab.com/tobiasanker/Sakura-Project-Documentation/builds/artifacts/master/browse?job=build
 
 ## Build
 
@@ -59,6 +73,8 @@ IMPORTANT: All my projects are only tested on Linux.
 
 #### Kitsunemimi-repositories
 
+These repositories will be downloaded automatically by the build script of the tool itself (see next section). This list here is only as information to give an overview of all used Kitsunemimi libraries in this project.
+
 Repository-Name | Version-Tag | Download-Path
 --- | --- | ---
 libKitsunemimiCommon | v0.9.0 |  https://github.com/tobiasanker/libKitsunemimiCommon.git
@@ -71,7 +87,7 @@ libKitsunemimiSakuraParser | v0.2.0 |  https://github.com/tobiasanker/libKitsune
 
 ### build programm
 
-In all of my repositories you will find a `build.sh`. You only have to run this script. It doesn't required sudo, because you have to install required tool via apt, for example, by yourself. But if other projects from me are required, it download them from github and build them in the correct version too. This script is also use by the ci-pipeline, so its tested with every commit.
+In all of my repositories you will find a `build.sh`. You only have to run this script. It doesn't require sudo, because you have to install the required tools manually beforehand, for example via apt. But if other projects of mine are required, it downloads them from GitHub and builds them in the correct version too. This script is also used by the CI pipeline, so it's tested with every commit.
 
 Before running the build-script:
 
@@ -107,15 +123,20 @@ After running the build-script:
     └─── SakuraTree
 ```
 
-It create automatic a `build` and `result` directory in the directory, where you have cloned the project. At first it build all into the `build`-directory and after all build-steps are finished, it copy the final binary into the `result`-directory. 
+It automatically creates a `build` and `result` directory in the directory where you have cloned the project. At first it builds all into the build directory and after all build steps are finished, it copies the final binary into the result directory.
 
-The build-script links all Kitsunemimi-libraries static into the final binary.
+The build script links all Kitsunemimi libraries statically into the final binary.
 
-Tested on Debian and Ubuntu. If you use Centos, Arch, etc and the build-script fails on your machine, then please write me a mail and I will try to fix the script.
+Tested on Debian and Ubuntu. If you use CentOS, Arch, etc and the build script fails on your machine, then please write me a message or file a GitHub issue and I will try to fix the script.
+
 
 ## Contributing
 
-Please give me as many inputs as possible: Bugs, bad code style, bad documentation and so on.
+Please give me as many inputs as possible: feature suggestions, bugs, bad code style, bad documentation, bad spelling and so on. 
+
+I know that my code is far away from being perfect. Its fast, but has only a little amount of functionality and, I'm sure, that it still has a huge amount of unhandled error-cases and bugs. This is mostly the result of working alone for this project. Beside this, I have unfortunately nearly no knowledge, how to work in an open-source project. So I would be grateful for any help. :)
+
+Feel free to contact me under tobias.anker@kitsunemimi.moe
 
 ## License
 
