@@ -186,7 +186,7 @@ fillJinja2Template(ValueItem &valueItem,
     ValueItem returnValue;
     if(convertResult.first == false)
     {
-        // TODO: error-message to sakura-root
+        SakuraRoot::m_root->createError("jinja2-converter", convertResult.second);
         return false;
     }
 
