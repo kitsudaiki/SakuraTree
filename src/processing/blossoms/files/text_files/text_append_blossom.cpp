@@ -31,7 +31,7 @@ TextAppendBlossom::TextAppendBlossom()
     : Blossom()
 {
     m_requiredKeys.insert("file_path", new DataValue(true));
-    m_requiredKeys.insert("new_text", new DataValue(true));
+    m_requiredKeys.insert("text", new DataValue(true));
 }
 
 /**
@@ -41,7 +41,7 @@ void
 TextAppendBlossom::initBlossom(BlossomItem &blossomItem)
 {
     m_filePath = blossomItem.values.getValueAsString("file_path");
-    m_newText = blossomItem.values.getValueAsString("new_text");
+    m_newText = blossomItem.values.getValueAsString("text");
 
     blossomItem.success = true;
 }

@@ -42,7 +42,7 @@ protected:
     void closeBlossom(BlossomItem &blossomItem);
 
 private:
-    std::string m_filePath = "";
+    std::string m_path = "";
     std::string m_owner = "";
 };
 

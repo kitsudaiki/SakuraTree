@@ -3,11 +3,6 @@
 - test_output = "test"
 - test_output2 = "test"
 
-apt("update and install")  
--> update
--> present:
-    - packages = packages
-
 if(test_output == "test")
 {
     assert("test-assert")

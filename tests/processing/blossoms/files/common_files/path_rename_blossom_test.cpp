@@ -62,13 +62,13 @@ PathRenameBlossom_Test::initTask_test()
     BlossomItem fakeItem;
     PathRenameBlossom fakeRenameBlossom;
 
-    fakeItem.values.insert("file_path", new DataValue(m_sourceFile));
+    fakeItem.values.insert("path", new DataValue(m_sourceFile));
     fakeItem.values.insert("new_name", new DataValue(m_destinationFileName));
 
     fakeRenameBlossom.initBlossom(fakeItem);
     TEST_EQUAL(fakeItem.success, true);
 
-    TEST_EQUAL(fakeRenameBlossom.m_filePath, m_sourceFile);
+    TEST_EQUAL(fakeRenameBlossom.m_path, m_sourceFile);
     TEST_EQUAL(fakeRenameBlossom.m_newFilePath, m_destinationFile);
 }
 
@@ -79,7 +79,7 @@ void
 PathRenameBlossom_Test::preCheck_test()
 {
     BlossomItem fakeItem;
-    fakeItem.values.insert("file_path", new DataValue(m_sourceFile));
+    fakeItem.values.insert("path", new DataValue(m_sourceFile));
     fakeItem.values.insert("new_name", new DataValue(m_destinationFileName));
 
     PathRenameBlossom fakeRenameBlossom;
@@ -115,7 +115,7 @@ void
 PathRenameBlossom_Test::runTask_test()
 {
     BlossomItem fakeItem;
-    fakeItem.values.insert("file_path", new DataValue(m_sourceFile));
+    fakeItem.values.insert("path", new DataValue(m_sourceFile));
     fakeItem.values.insert("new_name", new DataValue(m_destinationFileName));
 
     PathRenameBlossom fakeRenameBlossom;
@@ -140,7 +140,7 @@ void
 PathRenameBlossom_Test::postCheck_test()
 {
     BlossomItem fakeItem;
-    fakeItem.values.insert("file_path", new DataValue(m_sourceFile));
+    fakeItem.values.insert("path", new DataValue(m_sourceFile));
     fakeItem.values.insert("new_name", new DataValue(m_destinationFileName));
 
     PathRenameBlossom fakeRenameBlossom;
@@ -167,7 +167,7 @@ void
 PathRenameBlossom_Test::closeTask_test()
 {
     BlossomItem fakeItem;
-    fakeItem.values.insert("file_path", new DataValue(m_sourceFile));
+    fakeItem.values.insert("path", new DataValue(m_sourceFile));
     fakeItem.values.insert("new_name", new DataValue(m_destinationFileName));
 
     PathRenameBlossom fakeRenameBlossom;

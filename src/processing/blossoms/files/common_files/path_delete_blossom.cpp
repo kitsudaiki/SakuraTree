@@ -29,7 +29,7 @@ namespace SakuraTree
 PathDeleteBlossom::PathDeleteBlossom()
     : Blossom()
 {
-    m_requiredKeys.insert("file_path", new DataValue(true));
+    m_requiredKeys.insert("path", new DataValue(true));
 }
 
 /**
@@ -38,7 +38,7 @@ PathDeleteBlossom::PathDeleteBlossom()
 void
 PathDeleteBlossom::initBlossom(BlossomItem &blossomItem)
 {
-    m_filePath = blossomItem.values.getValueAsString("file_path");
+    m_path = blossomItem.values.getValueAsString("path");
 
     blossomItem.success = true;
 }
@@ -49,10 +49,10 @@ PathDeleteBlossom::initBlossom(BlossomItem &blossomItem)
 void
 PathDeleteBlossom::preCheck(BlossomItem &blossomItem)
 {
-    if(Kitsunemimi::Persistence::doesFileExist(m_filePath) == false)
+    if(Kitsunemimi::Persistence::doesFileExist(m_path) == false)
     {
         blossomItem.success = false;
-        blossomItem.outputMessage = "file doesn't exist: " + m_filePath;
+        blossomItem.outputMessage = "path doesn't exist: " + m_path;
         return;
     }
 
@@ -65,12 +65,12 @@ PathDeleteBlossom::preCheck(BlossomItem &blossomItem)
 void
 PathDeleteBlossom::runTask(BlossomItem &blossomItem)
 {
-    const bool result = Kitsunemimi::Persistence::deleteFileOrDir(m_filePath);
+    const bool result = Kitsunemimi::Persistence::deleteFileOrDir(m_path);
 
     if(result == false)
     {
         blossomItem.success = false;
-        blossomItem.outputMessage = "wasn't able to delete file: " + m_filePath;
+        blossomItem.outputMessage = "wasn't able to delete target: " + m_path;
         return;
     }
 
@@ -83,10 +83,10 @@ PathDeleteBlossom::runTask(BlossomItem &blossomItem)
 void
 PathDeleteBlossom::postCheck(BlossomItem &blossomItem)
 {
-    if(Kitsunemimi::Persistence::doesFileExist(m_filePath))
+    if(Kitsunemimi::Persistence::doesFileExist(m_path))
     {
         blossomItem.success = false;
-        blossomItem.outputMessage = "file still exist: " + m_filePath;
+        blossomItem.outputMessage = "path still exist: " + m_path;
         return;
     }
 

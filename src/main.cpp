@@ -46,17 +46,17 @@ int main(int argc, char *argv[])
         (
             "seed-path",
             argParser::value<std::string>(),
-            "set the path to the initial seed-file or the directory with the files"
+            "path to the initial seed-file"
         )
-        (
+        /*(
             "seed-name",
             argParser::value<std::string>(),
             "set name initial seed-file"
-        )
+        )*/
         (
             "input,i",
             argParser::value<std::vector<std::string>>()->multitoken()->zero_tokens()->composing(),
-            "set initial values"
+            "key-value-pairs to override the initial values inside of the file"
         )
         // TODO: enable again in 0.3.0
         /*(

@@ -52,23 +52,7 @@ TextWriteBlossom::initBlossom(BlossomItem &blossomItem)
 void
 TextWriteBlossom::preCheck(BlossomItem &blossomItem)
 {
-    if(Kitsunemimi::Persistence::doesPathExist(m_filePath) == false)
-    {
-        blossomItem.success = false;
-        blossomItem.outputMessage = "path "
-                                   + m_filePath
-                                   + " doesn't exist";
-        return;
-    }
-
-    if(Kitsunemimi::Persistence::doesFileExist(m_filePath) == false)
-    {
-        blossomItem.success = false;
-        blossomItem.outputMessage = "path "
-                                   + m_filePath
-                                   + " is not a file";
-        return;
-    }
+    // TODO: check if directory exist
 
     blossomItem.success = true;
 }

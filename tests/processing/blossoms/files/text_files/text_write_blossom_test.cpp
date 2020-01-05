@@ -79,17 +79,6 @@ TextWriteBlossom_Test::preCheck_test()
     blossomItem.values.insert("file_path", new DataValue(m_path));
     blossomItem.values.insert("text", new DataValue(m_text));
 
-    writeBlossom.initBlossom(blossomItem);
-    writeBlossom.preCheck(blossomItem);
-    TEST_EQUAL(blossomItem.success, false);
-    TEST_EQUAL(blossomItem.skip, false);
-
-    runSyncProcess("mkdir " + m_path);
-
-    writeBlossom.preCheck(blossomItem);
-    TEST_EQUAL(blossomItem.success, false);
-    TEST_EQUAL(blossomItem.skip, false);
-
     runSyncProcess("rm -r " + m_path);
     runSyncProcess("touch " + m_path);
 

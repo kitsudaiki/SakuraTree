@@ -29,7 +29,7 @@ namespace SakuraTree
 PathChownBlossom::PathChownBlossom()
     : Blossom()
 {
-    m_requiredKeys.insert("file_path", new DataValue(true));
+    m_requiredKeys.insert("path", new DataValue(true));
     m_requiredKeys.insert("owner", new DataValue(true));
 }
 
@@ -39,7 +39,7 @@ PathChownBlossom::PathChownBlossom()
 void
 PathChownBlossom::initBlossom(BlossomItem &blossomItem)
 {
-    m_filePath = blossomItem.values.getValueAsString("file_path");
+    m_path = blossomItem.values.getValueAsString("path");
     m_owner = blossomItem.values.getValueAsString("owner");
 
     blossomItem.success = true;
@@ -51,11 +51,11 @@ PathChownBlossom::initBlossom(BlossomItem &blossomItem)
 void
 PathChownBlossom::preCheck(BlossomItem &blossomItem)
 {
-    if(Kitsunemimi::Persistence::doesPathExist(m_filePath) == false)
+    if(Kitsunemimi::Persistence::doesPathExist(m_path) == false)
     {
         blossomItem.success = false;
-        blossomItem.outputMessage = "file-path "
-                                   + m_filePath
+        blossomItem.outputMessage = "path "
+                                   + m_path
                                    + " doesn't exist";
         return;
     }
@@ -70,11 +70,11 @@ void
 PathChownBlossom::runTask(BlossomItem &blossomItem)
 {
     std::string command = "chown ";
-    if(Kitsunemimi::Persistence::doesDirExist(m_filePath)) {
+    if(Kitsunemimi::Persistence::doesDirExist(m_path)) {
         command += "-R ";
     }
     command += m_owner + ":" + m_owner + " ";
-    command += m_filePath;
+    command += m_path;
 
     blossomItem.processResult = runSyncProcess(command);
     blossomItem.success = blossomItem.processResult.success;
