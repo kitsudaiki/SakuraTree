@@ -1,5 +1,45 @@
 # Changelog
 
+## [0.2.0] - 2020-01-05
+
+### Changed
+- complete syntax-rework
+
+### Added
+- documentation
+
+Added new blossom-types:
+
+- `path`-blossoms for copy, delete, rename, chown and chmod for files and direcotries
+- `ini_file`-blossoms to set, get, and delete single entries and group in ini-files
+- `template`-blossom to create text-files based on simple jinja2-templates
+- `test_file`-blossoms to read, write, append and replace text in text-files
+- `print`-blossom to print single items
+- `assert`-blossom to check items for a specific content
+- `cmd`-blossom to run custom shell-commands
+- `exit`-blossom to quit the current run, if necessary
+- `ssh`-blossoms to run shell-commands over ssh and to copy files over scp
+
+Added new functions-types:
+
+- get(...) to get an item from a map or an array
+- size() to get the size of a map, array or stirng
+- contains(...) to check, if a map or array contains a specific item
+- append(...) to add new items to existing arrays
+- split(...) to convert strings into array
+
+Other new structures:
+
+- if-conditions
+- parallel-sections
+- for-loops
+- for-each-loops
+- parallel-for-loops
+- parallel-for-each-loops
+
+### Depricated
+- the apt-blossoms, which were introduced in the PoC-state of version 0.1.0, are deprecated and will be reworked with version 0.3.0
+
 
 ## [0.1.0] - 2019-08-17
 
