@@ -27,6 +27,7 @@
 #include <processing/blossoms/blossom.h>
 #include <processing/blossoms/blossom_getter.h>
 #include <processing/subtree_queue.h>
+
 #include <libKitsunemimiJinja2/jinja2_converter.h>
 
 namespace SakuraTree
@@ -220,7 +221,18 @@ SakuraThread::processBlossomGroup(BlossomGroupItem &blossomGroupItem)
         BlossomItem* blossomItem = blossomGroupItem.blossoms.at(i);
         blossomItem->blossomGroupType = blossomGroupItem.blossomGroupType;
         blossomItem->nameHirarchie = m_hierarchy;
-        blossomItem->nameHirarchie.push_back("BLOSSOM: " + blossomGroupItem.id);
+
+        // convert name as jinja2-string
+        Jinja2Converter* converter = SakuraRoot::m_jinja2Converter;
+        std::pair<bool, std::string> convertResult;
+        convertResult = converter->convert(blossomGroupItem.id, &m_parentValues);
+        if(convertResult.first == false)
+        {
+            SakuraRoot::m_root->createError("jinja2-converter", convertResult.second);
+            return false;
+        }
+
+        blossomItem->nameHirarchie.push_back("BLOSSOM: " + convertResult.second);
 
         const bool result = processSakuraItem(blossomItem);
         if(result == false) {

@@ -82,7 +82,7 @@ if(test_output == "test")
     	- answer = "yeah again"
     }
 
-    assert("test-assert")
+    assert("test-assert {{test_output2}}")
     - test_output2 == "123456789"
 
     if(test_output2.contains("345") == true)
