@@ -103,13 +103,13 @@ getProcessedItem(ValueItem &valueItem,
                 return false;
             }
             ValueItem arg1 = valueItem.functions.at(i).arguments.at(0);
-            ValueItem arg2 = valueItem.functions.at(i).arguments.at(0);
+            ValueItem arg2 = valueItem.functions.at(i).arguments.at(1);
             if(fillValueItem(arg1, insertValues)
                     && fillValueItem(arg2, insertValues))
             {
                 valueItem.item = insertValue(valueItem.item->toMap(),
                                             arg1.item->toValue(),
-                                            arg2.item->toValue());
+                                            arg2.item);
             }
             break;
         }
@@ -128,6 +128,10 @@ getProcessedItem(ValueItem &valueItem,
         //==========================================================================================
         default:
             break;
+        }
+
+        if(valueItem.item == nullptr) {
+            return false;
         }
     }
 
@@ -160,9 +164,7 @@ fillIdentifierItem(ValueItem &valueItem,
     valueItem.item = tempItem->copy();
     valueItem.functions = valueItem.functions;
 
-    getProcessedItem(valueItem, insertValues);
-
-    return true;
+    return getProcessedItem(valueItem, insertValues);
 }
 
 /**

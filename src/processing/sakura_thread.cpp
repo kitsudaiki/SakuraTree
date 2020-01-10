@@ -178,7 +178,11 @@ SakuraThread::processBlossom(BlossomItem &blossomItem)
 {
     // process values by filling with information of the parent-object
     const bool result = fillInputValueItemMap(blossomItem.values, m_parentValues);
-    if(result == false) {
+    if(result == false)
+    {
+        SakuraRoot::m_root->createError(blossomItem, "processing",
+                                        "error while processing blossom items");
+        blossomItem.success = false;
         return false;
     }
 

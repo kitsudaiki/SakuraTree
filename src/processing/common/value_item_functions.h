@@ -30,6 +30,6 @@ DataArray* splitValue(DataValue* item, DataValue* delimiter);
 DataItem* sizeValue(DataItem* item);
 DataItem* containsValue(DataItem* item, DataValue* key);
 DataArray* appendValue(DataArray* item, DataItem* value);
-DataMap* insertValue(DataMap* item, DataValue* key, DataValue* value);
+DataMap* insertValue(DataMap* item, DataValue* key, DataItem* value);
 
 #endif // VALUE_ITEM_FUNCTIONS_H

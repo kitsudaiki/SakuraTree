@@ -2,6 +2,7 @@
 - packages = [ "nano", "vim" ]
 - test_output = "test"
 - test_output2 = "test"
+- test_map = { "test": ["poi1", "poi2"]}
 
 if(test_output == "test")
 {
@@ -90,6 +91,11 @@ if(test_output == "test")
     	print("contains in string successful")
     	- answer = "yeah again again"
     }
+
+    
+    print("test-output")
+    - size = test_map.size()
+    - content = test_map.insert("asdf", test_map).get("asdf")
 }
 else
 {

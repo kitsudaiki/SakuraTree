@@ -95,9 +95,14 @@ Converter::convertSingleItemValue(ValueItem &resultingPart,
                                   bool &success)
 {
     // convert item
-    if(itemInput.isMap())
+    if(itemInput.isMap()
+            && itemInput.contains("item"))
     {
         resultingPart.item = itemInput.get("item").getItemContent()->copy()->toValue();
+    }
+    else if (itemInput.isMap())
+    {
+        resultingPart.item = itemInput.getItemContent()->copy();
     }
     else if (itemInput.isArray())
     {

@@ -227,7 +227,7 @@ appendValue(DataArray* item,
 DataMap*
 insertValue(DataMap* item,
             DataValue* key,
-            DataValue* value)
+            DataItem* value)
 {
     // precheck
     if(item == nullptr
@@ -240,7 +240,7 @@ insertValue(DataMap* item,
     // insert new key-value-pair
     const std::string keyString = key->toString();
     DataMap* result = item->copy()->toMap();
-    result->insert(key->toString(), value, true);
+    result->insert(key->toString(), value->copy(), true);
 
     return result;
 }
