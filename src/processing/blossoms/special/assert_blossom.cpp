@@ -21,8 +21,6 @@
  */
 
 #include "assert_blossom.h"
-#include <libKitsunemimiCommon/common_items/table_item.h>
-#include <libKitsunemimiPersistence/files/text_file.h>
 
 namespace SakuraTree
 {
