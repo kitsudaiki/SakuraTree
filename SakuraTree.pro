@@ -114,7 +114,8 @@ HEADERS += \
     tests/processing/blossoms/files/common_files/path_delete_blossom_test.h \
     tests/processing/blossoms/files/common_files/path_copy_blossom_test.h \
     tests/processing/blossoms/files/common_files/path_chmod_blossom_test.h \
-    tests/processing/blossoms/files/common_files/path_chown_blossom_test.h
+    tests/processing/blossoms/files/common_files/path_chown_blossom_test.h \
+    src/processing/blossoms/special/item_update_blossom.h
 
 SOURCES += \
     src/converter/converter.cpp \
@@ -170,7 +171,8 @@ SOURCES += \
     tests/processing/blossoms/files/common_files/path_chown_blossom_test.cpp \
     tests/processing/blossoms/files/common_files/path_copy_blossom_test.cpp \
     tests/processing/blossoms/files/common_files/path_delete_blossom_test.cpp \
-    tests/processing/blossoms/files/common_files/path_rename_blossom_test.cpp
+    tests/processing/blossoms/files/common_files/path_rename_blossom_test.cpp \
+    src/processing/blossoms/special/item_update_blossom.cpp
 
 
 
