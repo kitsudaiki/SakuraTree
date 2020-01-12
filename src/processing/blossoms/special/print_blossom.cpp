@@ -68,7 +68,7 @@ PrintBlossom::runTask(BlossomItem &blossomItem)
         it != blossomItem.values.end();
         it++)
     {
-        tableItem.addRow(std::vector<std::string>{it->first, it->second.item->toString()});
+        tableItem.addRow(std::vector<std::string>{it->first, it->second.item->toString(true)});
     }
 
     blossomItem.outputMessage = tableItem.toString(150);
