@@ -40,6 +40,8 @@
 #include <istream>
 #include <iterator>
 #include <queue>
+#include <sys/ioctl.h>
+#include <unistd.h>
 
 #include <boost/filesystem.hpp>
 

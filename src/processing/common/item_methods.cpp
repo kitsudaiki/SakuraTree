@@ -406,8 +406,14 @@ checkItems(ValueItemMap &items)
 const std::string
 convertBlossomOutput(const BlossomItem &blossom)
 {
-    std::string output = "";
-    output += "+++++++++++++++++++++++++++++++++++++++++++++++++\n";
+    struct winsize size;
+    ioctl(STDOUT_FILENO, TIOCGWINSZ, &size);
+
+    /* size.ws_row is the number of rows, size.ws_col is the number of columns. */
+
+    std::string output(size.ws_col, '=');
+    output += "\n\n";
+
     // print call-hierarchy
     for(uint32_t i = 0; i < blossom.nameHirarchie.size(); i++)
     {
@@ -417,13 +423,10 @@ convertBlossomOutput(const BlossomItem &blossom)
         }
         output += blossom.nameHirarchie.at(i) + "\n";
     }
-    output += "\n";
 
     // print executeion-state
     if(blossom.skip) {
         output += "SKIPPED\n";
-    } else {
-        output += "CHANGED\n";
     }
 
     // print error-output
@@ -440,9 +443,6 @@ convertBlossomOutput(const BlossomItem &blossom)
         output += "\n";
         output += blossom.outputMessage + "\n";
     }
-
-    output += "-------------------------------------------------\n";
-    output += "\n";
 
     return output;
 }
