@@ -91,12 +91,12 @@ public:
         std::vector<std::string> hirarchy;
     };
 
-    void addSubtreeObject(const SubtreeObject &newObject);
-    SubtreeObject getSubtreeObject();
+    void addSubtreeObject(SubtreeObject* newObject);
+    SubtreeObject* getSubtreeObject();
 
 private:
     std::mutex m_lock;
-    std::queue<SubtreeObject> m_queue;
+    std::queue<SubtreeObject*> m_queue;
 
 };
 

@@ -36,7 +36,7 @@ SubtreeQueue::SubtreeQueue() {}
  * @param newObject the new subtree-object, which should be added to the queue
  */
 void
-SubtreeQueue::addSubtreeObject(const SubtreeObject &newObject)
+SubtreeQueue::addSubtreeObject(SubtreeObject* newObject)
 {
     m_lock.lock();
     m_queue.push(newObject);
@@ -48,10 +48,10 @@ SubtreeQueue::addSubtreeObject(const SubtreeObject &newObject)
  *
  * @return first object in the queue or an empty-object, if nothing is in the queue
  */
-SubtreeQueue::SubtreeObject
+SubtreeQueue::SubtreeObject*
 SubtreeQueue::getSubtreeObject()
 {
-    SubtreeObject subtree;
+    SubtreeObject* subtree = nullptr;
 
     m_lock.lock();
     if(m_queue.empty() == false)

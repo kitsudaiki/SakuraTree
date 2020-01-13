@@ -121,15 +121,15 @@ SakuraRoot::startProcess(const std::string &rootPath,
 
     // run process by adding the tree as subtree-object to the subtree-queue to be processed by
     // one of the worker-threads
-    SubtreeQueue::SubtreeObject object;
-    object.subtree = processPlan;
-    object.items = initialValues;
-    object.activeCounter = new SubtreeQueue::ActiveCounter();
-    object.activeCounter->shouldCount = 1;
+    SubtreeQueue::SubtreeObject* object = new SubtreeQueue::SubtreeObject();
+    object->subtree = processPlan;
+    object->items = initialValues;
+    object->activeCounter = new SubtreeQueue::ActiveCounter();
+    object->activeCounter->shouldCount = 1;
     m_threadPool->m_queue.addSubtreeObject(object);
 
     // wait until the created subtree was fully processed by the worker-threads
-    while(object.activeCounter->isEqual() == false) {
+    while(object->activeCounter->isEqual() == false) {
         std::this_thread::sleep_for(chronoMilliSec(10));
     }
 

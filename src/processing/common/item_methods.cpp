@@ -162,6 +162,7 @@ fillIdentifierItem(ValueItem &valueItem,
 
     delete valueItem.item;
     valueItem.item = tempItem->copy();
+    valueItem.isIdentifier = false;
     valueItem.functions = valueItem.functions;
 
     return getProcessedItem(valueItem, insertValues);
@@ -224,6 +225,10 @@ fillValueItem(ValueItem &valueItem,
             && valueItem.type != ValueItem::OUTPUT_PAIR_TYPE)
     {
         return fillIdentifierItem(valueItem, insertValues);
+    }
+    else if(valueItem.type != ValueItem::OUTPUT_PAIR_TYPE)
+    {
+        return getProcessedItem(valueItem, insertValues);
     }
 
     // if value is an int-value, output-value or something else, then do nothing with the value
