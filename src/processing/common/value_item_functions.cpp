@@ -210,7 +210,7 @@ appendValue(DataArray* item,
 
     // add oject to the map
     DataArray* result = item->copy()->toArray();
-    result->append(value);
+    result->append(value->copy());
 
     return result;
 }

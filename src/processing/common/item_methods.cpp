@@ -406,12 +406,13 @@ checkItems(ValueItemMap &items)
 const std::string
 convertBlossomOutput(const BlossomItem &blossom)
 {
+    // get width of the termial to draw the separator-line
     struct winsize size;
     ioctl(STDOUT_FILENO, TIOCGWINSZ, &size);
+    const uint32_t terminalWidth = size.ws_col;
 
-    /* size.ws_row is the number of rows, size.ws_col is the number of columns. */
-
-    std::string output(size.ws_col, '=');
+    // draw separator line
+    std::string output(terminalWidth, '=');
     output += "\n\n";
 
     // print call-hierarchy
