@@ -216,6 +216,35 @@ appendValue(DataArray* item,
 }
 
 /**
+ * @brief delete all empty entries from an array-item
+ *
+ * @param item array-item, which shluld be cleared
+ *
+ * @return copy of the original array-item together with the new added object
+ */
+DataArray*
+clearEmpty(DataArray* item)
+{
+    // precheck
+    if(item == nullptr) {
+        return nullptr;
+    }
+
+    // add oject to the map
+    DataArray* result = item->copy()->toArray();
+    for(uint32_t i = 0; i < result->size(); i++)
+    {
+        if(result->get(i)->toString() == "")
+        {
+            result->remove(i);
+            i--;
+        }
+    }
+
+    return result;
+}
+
+/**
  * @brief add a new key-value-pair to an existing DataMap-object
  *
  * @param item pointer to the map-item, where the new pair should be added

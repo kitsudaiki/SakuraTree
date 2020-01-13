@@ -126,6 +126,15 @@ getProcessedItem(ValueItem &valueItem,
             break;
         }
         //==========================================================================================
+        case FunctionItem::CLEAR_EMPTY_FUNCTION:
+        {
+            if(valueItem.functions.at(i).arguments.size() != 0) {
+                return false;
+            }
+            valueItem.item = clearEmpty(valueItem.item->toArray());
+            break;
+        }
+        //==========================================================================================
         default:
             break;
         }

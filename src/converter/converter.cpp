@@ -155,6 +155,9 @@ Converter::convertSingleItemValue(ValueItem &resultingPart,
         if(functions.get(f).get("b_type").toString() == "append") {
             functionItem.type = FunctionItem::APPEND_FUNCTION;
         }
+        if(functions.get(f).get("b_type").toString() == "clear_empty") {
+            functionItem.type = FunctionItem::CLEAR_EMPTY_FUNCTION;
+        }
 
         // get argument-list
         JsonItem arguments = functions.get(f).get("args");
