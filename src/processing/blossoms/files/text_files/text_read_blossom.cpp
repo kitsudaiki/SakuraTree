@@ -60,7 +60,7 @@ TextReadBlossom::preCheck(BlossomItem &blossomItem)
         return;
     }
 
-    if(Kitsunemimi::Persistence::doesFileExist(m_filePath) == false)
+    if(Kitsunemimi::Persistence::isFile(m_filePath) == false)
     {
         blossomItem.success = false;
         blossomItem.outputMessage = "path "
@@ -79,12 +79,13 @@ void
 TextReadBlossom::runTask(BlossomItem &blossomItem)
 {
     std::pair<bool, std::string> result;
-    result = Kitsunemimi::Persistence::readFile(m_filePath);
+    std::string errorMessage = "";
+    result = Kitsunemimi::Persistence::readFile(m_filePath, errorMessage);
 
     if(result.first == false)
     {
         blossomItem.success = false;
-        blossomItem.outputMessage = result.second;
+        blossomItem.outputMessage = errorMessage;
         return;
     }
 

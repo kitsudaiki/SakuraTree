@@ -78,29 +78,41 @@ void
 IniSetEntryBlossom::runTask(BlossomItem &blossomItem)
 {
     std::pair<bool, std::string> result;
-    result = Kitsunemimi::Persistence::readFile(m_filePath);
+    std::string errorMessage = "";
+    result = Kitsunemimi::Persistence::readFile(m_filePath, errorMessage);
 
     if(result.first == false)
     {
         blossomItem.success = false;
-        blossomItem.outputMessage = result.second;
+        blossomItem.outputMessage = errorMessage;
         return;
     }
 
     IniItem iniItem;
-    result = iniItem.parse(result.second);
+    errorMessage.clear();
+    bool parseResult = iniItem.parse(result.second, errorMessage);
 
-    if(result.first == false)
+    if(parseResult == false)
     {
         blossomItem.success = false;
-        blossomItem.outputMessage = result.second;
+        blossomItem.outputMessage = errorMessage;
         return;
     }
 
     iniItem.set(m_group, m_entry, m_value, true);
 
     const std::string newFileContent = iniItem.toString();
-    result = Kitsunemimi::Persistence::writeFile(m_filePath, newFileContent, true);
+    errorMessage.clear();
+    bool writeResult = Kitsunemimi::Persistence::writeFile(m_filePath,
+                                                           newFileContent,
+                                                           errorMessage,
+                                                           true);
+    if(writeResult == false)
+    {
+        blossomItem.success = false;
+        blossomItem.outputMessage = errorMessage;
+        return;
+    }
 
     blossomItem.success = true;
 }

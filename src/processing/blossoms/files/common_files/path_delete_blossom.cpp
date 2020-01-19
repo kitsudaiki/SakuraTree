@@ -49,7 +49,7 @@ PathDeleteBlossom::initBlossom(BlossomItem &blossomItem)
 void
 PathDeleteBlossom::preCheck(BlossomItem &blossomItem)
 {
-    if(Kitsunemimi::Persistence::doesFileExist(m_path) == false)
+    if(Kitsunemimi::Persistence::isFile(m_path) == false)
     {
         blossomItem.success = false;
         blossomItem.outputMessage = "path doesn't exist: " + m_path;
@@ -65,7 +65,8 @@ PathDeleteBlossom::preCheck(BlossomItem &blossomItem)
 void
 PathDeleteBlossom::runTask(BlossomItem &blossomItem)
 {
-    const bool result = Kitsunemimi::Persistence::deleteFileOrDir(m_path);
+    std::string errorMessage = "";
+    const bool result = Kitsunemimi::Persistence::deleteFileOrDir(m_path, errorMessage);
 
     if(result == false)
     {
@@ -83,7 +84,7 @@ PathDeleteBlossom::runTask(BlossomItem &blossomItem)
 void
 PathDeleteBlossom::postCheck(BlossomItem &blossomItem)
 {
-    if(Kitsunemimi::Persistence::doesFileExist(m_path))
+    if(Kitsunemimi::Persistence::isFile(m_path))
     {
         blossomItem.success = false;
         blossomItem.outputMessage = "path still exist: " + m_path;

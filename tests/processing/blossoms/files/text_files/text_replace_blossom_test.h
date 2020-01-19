@@ -30,7 +30,7 @@ namespace SakuraTree
 {
 
 class TextReplaceBlossom_Test
-        : public Kitsunemimi::Common::Test
+        : public Kitsunemimi::Test
 {
 public:
     TextReplaceBlossom_Test();

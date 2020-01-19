@@ -31,7 +31,7 @@ namespace SakuraTree
 {
 
 class TemplateCreateBlossom_Test
-        : public Kitsunemimi::Common::Test
+        : public Kitsunemimi::Test
 {
 public:
     TemplateCreateBlossom_Test();

@@ -30,7 +30,7 @@ namespace SakuraTree
 {
 
 class TextReadBlossom_Test
-        : public Kitsunemimi::Common::Test
+        : public Kitsunemimi::Test
 {
 public:
     TextReadBlossom_Test();

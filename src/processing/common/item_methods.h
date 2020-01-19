@@ -33,7 +33,7 @@ class Jinja2Converter;
 }
 }
 
-using Kitsunemimi::Common::DataMap;
+using Kitsunemimi::DataMap;
 namespace SakuraTree
 {
 

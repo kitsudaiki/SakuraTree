@@ -77,12 +77,12 @@ These repositories will be downloaded automatically by the build script of the t
 
 Repository-Name | Version-Tag | Download-Path
 --- | --- | ---
-libKitsunemimiCommon | v0.9.0 |  https://github.com/tobiasanker/libKitsunemimiCommon.git
-libKitsunemimiPersistence | v0.6.1 |  https://github.com/tobiasanker/libKitsunemimiPersistence.git
-libKitsunemimiJson | v0.9.0 |  https://github.com/tobiasanker/libKitsunemimiJson.git
-libKitsunemimiJinja2 | v0.6.2 |  https://github.com/tobiasanker/libKitsunemimiJinja2.git
-libKitsunemimiIni | v0.3.2 |  https://github.com/tobiasanker/libKitsunemimiIni.git
-libKitsunemimiSakuraParser | v0.2.0 |  https://github.com/tobiasanker/libKitsunemimiSakuraParser.git
+libKitsunemimiCommon | v0.10.1 |  https://github.com/tobiasanker/libKitsunemimiCommon.git
+libKitsunemimiPersistence | v0.7.0 |  https://github.com/tobiasanker/libKitsunemimiPersistence.git
+libKitsunemimiJson | v0.10.0 |  https://github.com/tobiasanker/libKitsunemimiJson.git
+libKitsunemimiJinja2 | v0.7.0 |  https://github.com/tobiasanker/libKitsunemimiJinja2.git
+libKitsunemimiIni | v0.4.0 |  https://github.com/tobiasanker/libKitsunemimiIni.git
+libKitsunemimiSakuraParser | master |  https://github.com/tobiasanker/libKitsunemimiSakuraParser.git
 
 
 ### build programm

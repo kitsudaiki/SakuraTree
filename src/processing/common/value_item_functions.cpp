@@ -23,7 +23,7 @@
 #include <processing/common/value_item_functions.h>
 #include <libKitsunemimiCommon/common_methods/string_methods.h>
 
-using Kitsunemimi::Common::splitStringByDelimiter;
+using Kitsunemimi::splitStringByDelimiter;
 
 /**
  * @brief request a value from a map- or array-item

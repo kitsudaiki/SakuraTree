@@ -70,7 +70,7 @@ void
 PathChownBlossom::runTask(BlossomItem &blossomItem)
 {
     std::string command = "chown ";
-    if(Kitsunemimi::Persistence::doesDirExist(m_path)) {
+    if(Kitsunemimi::Persistence::isDir(m_path)) {
         command += "-R ";
     }
     command += m_owner + ":" + m_owner + " ";

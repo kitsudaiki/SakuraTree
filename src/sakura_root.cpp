@@ -156,7 +156,8 @@ SakuraRoot::startSubtreeProcess(const std::string &subtree,
     std::cout<<"startSubtreeProcess"<<std::endl;
     // parsing
     JsonItem completePlan;
-    completePlan.parse(subtree);
+    std::string errorMessage = "";
+    completePlan.parse(subtree, errorMessage);
 
     Converter converter;
     SakuraItem* processPlan = converter.convert(completePlan);
@@ -166,7 +167,8 @@ SakuraRoot::startSubtreeProcess(const std::string &subtree,
 
     // run process
     JsonItem valuesJson;
-    valuesJson.parse(values);
+    errorMessage.clear();
+    valuesJson.parse(values, errorMessage);
     // TODO: enable again in 0.3.0
     // m_rootThread = new SakuraThread(processPlan,
     //                                 *valuesJson.getItemContent()->copy()->toMap(),

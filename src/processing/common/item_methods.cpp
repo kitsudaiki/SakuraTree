@@ -193,7 +193,8 @@ fillJinja2Template(ValueItem &valueItem,
     // convert jinja2-string
     Jinja2Converter* converter = SakuraRoot::m_jinja2Converter;
     std::pair<bool, std::string> convertResult;
-    convertResult = converter->convert(valueItem.item->toString(), &insertValues);
+    std::string errorMessage = "";
+    convertResult = converter->convert(valueItem.item->toString(), &insertValues, errorMessage);
 
     ValueItem returnValue;
     if(convertResult.first == false)

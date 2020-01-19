@@ -28,7 +28,7 @@ namespace SakuraTree
 {
 
 PathRenameBlossom_Test::PathRenameBlossom_Test()
-    : Kitsunemimi::Common::Test("FileRenameBlossom_Test")
+    : Kitsunemimi::Test("PathRenameBlossom_Test")
 {
     initTestCase();
     initTask_test();

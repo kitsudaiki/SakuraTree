@@ -224,6 +224,8 @@ SakuraThread::processBlossom(BlossomItem &blossomItem)
 bool
 SakuraThread::processBlossomGroup(BlossomGroupItem &blossomGroupItem)
 {
+    std::string errorMessage = "";
+
     for(uint32_t i = 0; i < blossomGroupItem.blossoms.size(); i++)
     {
         BlossomItem* blossomItem = blossomGroupItem.blossoms.at(i);
@@ -233,7 +235,7 @@ SakuraThread::processBlossomGroup(BlossomGroupItem &blossomGroupItem)
         // convert name as jinja2-string
         Jinja2Converter* converter = SakuraRoot::m_jinja2Converter;
         std::pair<bool, std::string> convertResult;
-        convertResult = converter->convert(blossomGroupItem.id, &m_parentValues);
+        convertResult = converter->convert(blossomGroupItem.id, &m_parentValues, errorMessage);
         if(convertResult.first == false)
         {
             SakuraRoot::m_root->createError("jinja2-converter", convertResult.second);

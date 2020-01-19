@@ -27,7 +27,7 @@
 
 namespace SakuraTree
 {
-using Kitsunemimi::Common::splitStringByDelimiter;
+using Kitsunemimi::splitStringByDelimiter;
 
 PathRenameBlossom::PathRenameBlossom()
     : Blossom()
@@ -49,7 +49,7 @@ PathRenameBlossom::initBlossom(BlossomItem &blossomItem)
     splitStringByDelimiter(stringParts, m_path, '/');
     stringParts[stringParts.size()-1] = m_newFileName;
 
-    Kitsunemimi::Common::removeEmptyStrings(&stringParts);
+    Kitsunemimi::removeEmptyStrings(&stringParts);
     for(uint32_t i = 0; i < stringParts.size(); i++)
     {
         m_newFilePath += "/";
@@ -91,13 +91,15 @@ PathRenameBlossom::preCheck(BlossomItem &blossomItem)
 void
 PathRenameBlossom::runTask(BlossomItem &blossomItem)
 {
-    std::pair<bool, std::string> renameResult;
-    renameResult = Kitsunemimi::Persistence::renameFileOrDir(m_path, m_newFilePath);
+    std::string errorMessage = "";
+    bool renameResult = Kitsunemimi::Persistence::renameFileOrDir(m_path,
+                                                                  m_newFilePath,
+                                                                  errorMessage);
 
-    if(renameResult.first == false)
+    if(renameResult == false)
     {
         blossomItem.success = false;
-        blossomItem.outputMessage = renameResult.second;
+        blossomItem.outputMessage = errorMessage;
         return;
     }
 
@@ -110,7 +112,7 @@ PathRenameBlossom::runTask(BlossomItem &blossomItem)
 void
 PathRenameBlossom::postCheck(BlossomItem &blossomItem)
 {
-    if(Kitsunemimi::Persistence::doesFileExist(m_path))
+    if(Kitsunemimi::Persistence::isFile(m_path))
     {
         blossomItem.success = false;
         blossomItem.outputMessage = "old object still exist";

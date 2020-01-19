@@ -26,7 +26,7 @@
 
 namespace SakuraTree
 {
-using Kitsunemimi::Common::splitStringByDelimiter;
+using Kitsunemimi::splitStringByDelimiter;
 
 PathCopyBlossom::PathCopyBlossom()
     : Blossom()
@@ -83,13 +83,15 @@ PathCopyBlossom::preCheck(BlossomItem &blossomItem)
 void
 PathCopyBlossom::runTask(BlossomItem &blossomItem)
 {
-    std::pair<bool, std::string> copyResult;
-    copyResult = Kitsunemimi::Persistence::copyPath(m_sourcePath, m_destinationPath);
+    std::string errorMessage = "";
+    bool copyResult = Kitsunemimi::Persistence::copyPath(m_sourcePath,
+                                                         m_destinationPath,
+                                                         errorMessage);
 
-    if(copyResult.first == false)
+    if(copyResult == false)
     {
         blossomItem.success = false;
-        blossomItem.outputMessage = copyResult.second;
+        blossomItem.outputMessage = errorMessage;
         return;
     }
 

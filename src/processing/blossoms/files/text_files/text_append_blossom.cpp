@@ -61,7 +61,7 @@ TextAppendBlossom::preCheck(BlossomItem &blossomItem)
         return;
     }
 
-    if(Kitsunemimi::Persistence::doesFileExist(m_filePath) == false)
+    if(Kitsunemimi::Persistence::isFile(m_filePath) == false)
     {
         blossomItem.success = false;
         blossomItem.outputMessage = "path "
@@ -79,13 +79,13 @@ TextAppendBlossom::preCheck(BlossomItem &blossomItem)
 void
 TextAppendBlossom::runTask(BlossomItem &blossomItem)
 {
-    std::pair<bool, std::string> result;
-    result = Kitsunemimi::Persistence::appendText(m_filePath, m_newText);
+    std::string errorMessage = "";
+    bool result = Kitsunemimi::Persistence::appendText(m_filePath, m_newText, errorMessage);
 
-    if(result.first == false)
+    if(result == false)
     {
         blossomItem.success = false;
-        blossomItem.outputMessage = result.second;
+        blossomItem.outputMessage = errorMessage;
         return;
     }
 

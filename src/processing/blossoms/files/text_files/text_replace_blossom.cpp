@@ -62,7 +62,7 @@ TextReplaceBlossom::preCheck(BlossomItem &blossomItem)
         return;
     }
 
-    if(Kitsunemimi::Persistence::doesFileExist(m_filePath) == false)
+    if(Kitsunemimi::Persistence::isFile(m_filePath) == false)
     {
         blossomItem.success = false;
         blossomItem.outputMessage = "path "
@@ -80,13 +80,16 @@ TextReplaceBlossom::preCheck(BlossomItem &blossomItem)
 void
 TextReplaceBlossom::runTask(BlossomItem &blossomItem)
 {
-    std::pair<bool, std::string> result;
-    result = Kitsunemimi::Persistence::replaceContent(m_filePath, m_oldText, m_newText);
+    std::string errorMessage = "";
+    bool result = Kitsunemimi::Persistence::replaceContent(m_filePath,
+                                                           m_oldText,
+                                                           m_newText,
+                                                           errorMessage);
 
-    if(result.first == false)
+    if(result == false)
     {
         blossomItem.success = false;
-        blossomItem.outputMessage = result.second;
+        blossomItem.outputMessage = errorMessage;
         return;
     }
 
