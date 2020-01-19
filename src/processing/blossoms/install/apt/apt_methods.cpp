@@ -147,7 +147,7 @@ getInstalledPackages()
     const ProcressResult processResult = runSyncProcess(command);
     // TODO: check for error
     std::vector<std::string> result;
-    Kitsunemimi::Common::splitStringByDelimiter(result, processResult.processOutput, '\n');
+    Kitsunemimi::splitStringByDelimiter(result, processResult.processOutput, '\n');
     return result;
 }
 

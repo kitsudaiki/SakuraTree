@@ -27,14 +27,14 @@
 #include <libKitsunemimiCommon/threading/thread.h>
 #include <items/sakura_items.h>
 
-using namespace Kitsunemimi::Common;
+using namespace Kitsunemimi;
 
 namespace SakuraTree
 {
 class SubtreeQueue;
 
 class SakuraThread
-        : public Kitsunemimi::Common::Thread
+        : public Kitsunemimi::Thread
 {
 public:
     SakuraThread(SubtreeQueue* queue);

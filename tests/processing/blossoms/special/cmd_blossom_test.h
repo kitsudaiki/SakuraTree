@@ -30,7 +30,7 @@ namespace SakuraTree
 {
 
 class CmdBlossom_Test
-        : public Kitsunemimi::Common::Test
+        : public Kitsunemimi::Test
 {
 public:
     CmdBlossom_Test();

@@ -32,7 +32,7 @@ namespace SakuraTree
 class SakuraRoot;
 
 class ItemMethods_Test
-        : public Kitsunemimi::Common::Test
+        : public Kitsunemimi::Test
 {
 public:
     ItemMethods_Test();

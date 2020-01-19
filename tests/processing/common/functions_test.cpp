@@ -29,7 +29,7 @@ namespace SakuraTree
  * @brief constructor
  */
 ValueItemsFunctions_Test::ValueItemsFunctions_Test()
-    : Kitsunemimi::Common::Test("ValueItemsFunctions_Test")
+    : Kitsunemimi::Test("ValueItemsFunctions_Test")
 {
     getValue_test();
     splitValue_test();

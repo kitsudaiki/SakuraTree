@@ -29,7 +29,7 @@ namespace SakuraTree
 {
 
 TemplateCreateBlossom_Test::TemplateCreateBlossom_Test()
-    : Kitsunemimi::Common::Test("TemplateCreateBlossom_Test")
+    : Kitsunemimi::Test("TemplateCreateBlossom_Test")
 {
     m_root = new SakuraRoot(std::string("test"));
 
@@ -91,6 +91,8 @@ TemplateCreateBlossom_Test::initTask_test()
 void
 TemplateCreateBlossom_Test::preCheck_test()
 {
+    std::string errorMessage = "";
+
     BlossomItem fakeItem;
     fakeItem.blossomPath = "/tmp/";
     fakeItem.values.insert("source_path", new DataValue(m_localTemplatePath));
@@ -102,7 +104,7 @@ TemplateCreateBlossom_Test::preCheck_test()
     TEST_EQUAL(fakeItem.success, false);
     TEST_EQUAL(fakeItem.skip, false);
 
-    Kitsunemimi::Persistence::writeFile(m_templatePath, "poi {{asdf}}", true);
+    Kitsunemimi::Persistence::writeFile(m_templatePath, "poi {{asdf}}", errorMessage, true);
 
     fakeCopyBlossom.preCheck(fakeItem);
     TEST_EQUAL(fakeItem.success, false);
@@ -114,13 +116,13 @@ TemplateCreateBlossom_Test::preCheck_test()
     TEST_EQUAL(fakeItem.success, true);
     TEST_EQUAL(fakeItem.skip, false);
 
-    Kitsunemimi::Persistence::writeFile(m_destinationFile, "poi", true);
+    Kitsunemimi::Persistence::writeFile(m_destinationFile, "poi", errorMessage, true);
 
     fakeCopyBlossom.preCheck(fakeItem);
     TEST_EQUAL(fakeItem.success, true);
     TEST_EQUAL(fakeItem.skip, false);
 
-    Kitsunemimi::Persistence::writeFile(m_destinationFile, "poi poi", true);
+    Kitsunemimi::Persistence::writeFile(m_destinationFile, "poi poi", errorMessage, true);
 
     fakeCopyBlossom.preCheck(fakeItem);
     TEST_EQUAL(fakeItem.success, true);

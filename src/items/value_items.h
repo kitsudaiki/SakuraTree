@@ -41,7 +41,8 @@ struct FunctionItem
         CONTAINS_FUNCTION = 3,
         SIZE_FUNCTION = 4,
         INSERT_FUNCTION = 5,
-        APPEND_FUNCTION = 6
+        APPEND_FUNCTION = 6,
+        CLEAR_EMPTY_FUNCTION = 7
     };
 
     FunctionType type = UNDEFINED_FUNCTION;

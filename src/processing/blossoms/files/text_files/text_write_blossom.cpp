@@ -63,13 +63,13 @@ TextWriteBlossom::preCheck(BlossomItem &blossomItem)
 void
 TextWriteBlossom::runTask(BlossomItem &blossomItem)
 {
-    std::pair<bool, std::string> result;
-    result = Kitsunemimi::Persistence::writeFile(m_filePath, m_text, true);
+    std::string errorMessage = "";
+    bool result = Kitsunemimi::Persistence::writeFile(m_filePath, m_text, errorMessage, true);
 
-    if(result.first == false)
+    if(result == false)
     {
         blossomItem.success = false;
-        blossomItem.outputMessage = result.second;
+        blossomItem.outputMessage = errorMessage;
         return;
     }
 

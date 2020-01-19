@@ -23,7 +23,7 @@
 #include <processing/common/value_item_functions.h>
 #include <libKitsunemimiCommon/common_methods/string_methods.h>
 
-using Kitsunemimi::Common::splitStringByDelimiter;
+using Kitsunemimi::splitStringByDelimiter;
 
 /**
  * @brief request a value from a map- or array-item
@@ -210,7 +210,36 @@ appendValue(DataArray* item,
 
     // add oject to the map
     DataArray* result = item->copy()->toArray();
-    result->append(value);
+    result->append(value->copy());
+
+    return result;
+}
+
+/**
+ * @brief delete all empty entries from an array-item
+ *
+ * @param item array-item, which shluld be cleared
+ *
+ * @return copy of the original array-item together with the new added object
+ */
+DataArray*
+clearEmpty(DataArray* item)
+{
+    // precheck
+    if(item == nullptr) {
+        return nullptr;
+    }
+
+    // add oject to the map
+    DataArray* result = item->copy()->toArray();
+    for(uint32_t i = 0; i < result->size(); i++)
+    {
+        if(result->get(i)->toString() == "")
+        {
+            result->remove(i);
+            i--;
+        }
+    }
 
     return result;
 }

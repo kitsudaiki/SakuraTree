@@ -28,7 +28,7 @@ namespace SakuraTree
 {
 
 PathCopyBlossom_Test::PathCopyBlossom_Test()
-    : Kitsunemimi::Common::Test("FileCopyBlossom_Test")
+    : Kitsunemimi::Test("PathCopyBlossom_Test")
 {
     initTestCase();
     initTask_test();

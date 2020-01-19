@@ -31,5 +31,6 @@ DataItem* sizeValue(DataItem* item);
 DataItem* containsValue(DataItem* item, DataValue* key);
 DataArray* appendValue(DataArray* item, DataItem* value);
 DataMap* insertValue(DataMap* item, DataValue* key, DataItem* value);
+DataArray* clearEmpty(DataArray* item);
 
 #endif // VALUE_ITEM_FUNCTIONS_H

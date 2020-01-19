@@ -26,7 +26,7 @@ namespace SakuraTree
 {
 
 PathChownBlossom_Test::PathChownBlossom_Test()
-    : Kitsunemimi::Common::Test("FileChownBlossom_Test")
+    : Kitsunemimi::Test("PathChownBlossom_Test")
 {
     initTask_test();
     preCheck_test();

@@ -30,7 +30,7 @@
 namespace SakuraTree
 {
 class ValueItemsFunctions_Test
-        : public Kitsunemimi::Common::Test
+        : public Kitsunemimi::Test
 {
 public:
     ValueItemsFunctions_Test();

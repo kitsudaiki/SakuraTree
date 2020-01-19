@@ -29,7 +29,7 @@ namespace SakuraTree
 {
 
 TextReplaceBlossom_Test::TextReplaceBlossom_Test()
-    : Kitsunemimi::Common::Test("TextReplaceBlossom_Test")
+    : Kitsunemimi::Test("TextReplaceBlossom_Test")
 {
     initTestCase();
     initTask_test();
@@ -112,19 +112,22 @@ TextReplaceBlossom_Test::preCheck_test()
 void
 TextReplaceBlossom_Test::runTask_test()
 {
+    std::string errorMessage = "";
+
     TextReplaceBlossom replaceBlossom;
     BlossomItem blossomItem;
     blossomItem.values.insert("file_path", new DataValue(m_path));
     blossomItem.values.insert("old_text", new DataValue(m_oldText));
     blossomItem.values.insert("new_text", new DataValue(m_newText));
 
-    Kitsunemimi::Persistence::writeFile(m_path, m_oldCompleteText, true);
+    Kitsunemimi::Persistence::writeFile(m_path, m_oldCompleteText, errorMessage, true);
 
     replaceBlossom.initBlossom(blossomItem);
     replaceBlossom.runTask(blossomItem);
     TEST_EQUAL(blossomItem.success, true);
 
-    const std::pair<bool, std::string> result = Kitsunemimi::Persistence::readFile(m_path);
+    const std::pair<bool, std::string> result = Kitsunemimi::Persistence::readFile(m_path,
+                                                                                   errorMessage);
     TEST_EQUAL(result.first, true);
     TEST_EQUAL(result.second, m_newCompleteText);
 

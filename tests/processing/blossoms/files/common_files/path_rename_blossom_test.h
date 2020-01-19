@@ -30,7 +30,7 @@ namespace SakuraTree
 {
 
 class PathRenameBlossom_Test
-        : public Kitsunemimi::Common::Test
+        : public Kitsunemimi::Test
 {
 public:
     PathRenameBlossom_Test();

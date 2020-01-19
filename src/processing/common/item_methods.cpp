@@ -126,6 +126,15 @@ getProcessedItem(ValueItem &valueItem,
             break;
         }
         //==========================================================================================
+        case FunctionItem::CLEAR_EMPTY_FUNCTION:
+        {
+            if(valueItem.functions.at(i).arguments.size() != 0) {
+                return false;
+            }
+            valueItem.item = clearEmpty(valueItem.item->toArray());
+            break;
+        }
+        //==========================================================================================
         default:
             break;
         }
@@ -162,6 +171,7 @@ fillIdentifierItem(ValueItem &valueItem,
 
     delete valueItem.item;
     valueItem.item = tempItem->copy();
+    valueItem.isIdentifier = false;
     valueItem.functions = valueItem.functions;
 
     return getProcessedItem(valueItem, insertValues);
@@ -183,7 +193,8 @@ fillJinja2Template(ValueItem &valueItem,
     // convert jinja2-string
     Jinja2Converter* converter = SakuraRoot::m_jinja2Converter;
     std::pair<bool, std::string> convertResult;
-    convertResult = converter->convert(valueItem.item->toString(), &insertValues);
+    std::string errorMessage = "";
+    convertResult = converter->convert(valueItem.item->toString(), &insertValues, errorMessage);
 
     ValueItem returnValue;
     if(convertResult.first == false)
@@ -224,6 +235,10 @@ fillValueItem(ValueItem &valueItem,
             && valueItem.type != ValueItem::OUTPUT_PAIR_TYPE)
     {
         return fillIdentifierItem(valueItem, insertValues);
+    }
+    else if(valueItem.type != ValueItem::OUTPUT_PAIR_TYPE)
+    {
+        return getProcessedItem(valueItem, insertValues);
     }
 
     // if value is an int-value, output-value or something else, then do nothing with the value
@@ -406,12 +421,13 @@ checkItems(ValueItemMap &items)
 const std::string
 convertBlossomOutput(const BlossomItem &blossom)
 {
+    // get width of the termial to draw the separator-line
     struct winsize size;
     ioctl(STDOUT_FILENO, TIOCGWINSZ, &size);
+    const uint32_t terminalWidth = size.ws_col;
 
-    /* size.ws_row is the number of rows, size.ws_col is the number of columns. */
-
-    std::string output(size.ws_col, '=');
+    // draw separator line
+    std::string output(terminalWidth, '=');
     output += "\n\n";
 
     // print call-hierarchy

@@ -29,7 +29,7 @@ namespace SakuraTree
 {
 
 TextWriteBlossom_Test::TextWriteBlossom_Test()
-    : Kitsunemimi::Common::Test("TextWriteBlossom_Test")
+    : Kitsunemimi::Test("TextWriteBlossom_Test")
 {
     initTestCase();
     initTask_test();
@@ -95,6 +95,8 @@ TextWriteBlossom_Test::preCheck_test()
 void
 TextWriteBlossom_Test::runTask_test()
 {
+    std::string errorMessage = "";
+
     TextWriteBlossom writeBlossom;
     BlossomItem blossomItem;
     blossomItem.values.insert("file_path", new DataValue(m_path));
@@ -104,7 +106,8 @@ TextWriteBlossom_Test::runTask_test()
     writeBlossom.runTask(blossomItem);
     TEST_EQUAL(blossomItem.success, true);
 
-    const std::pair<bool, std::string> result = Kitsunemimi::Persistence::readFile(m_path);
+    const std::pair<bool, std::string> result = Kitsunemimi::Persistence::readFile(m_path,
+                                                                                   errorMessage);
     TEST_EQUAL(result.first, true);
     TEST_EQUAL(result.second, m_text);
 

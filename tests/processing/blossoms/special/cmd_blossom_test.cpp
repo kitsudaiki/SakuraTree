@@ -29,7 +29,7 @@ namespace SakuraTree
 {
 
 CmdBlossom_Test::CmdBlossom_Test()
-    : Kitsunemimi::Common::Test("CmdBlossom_Test")
+    : Kitsunemimi::Test("CmdBlossom_Test")
 {
     initTestCase();
     initTask_test();

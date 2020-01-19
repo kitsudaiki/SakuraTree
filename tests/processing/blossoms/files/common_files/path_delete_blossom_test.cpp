@@ -28,7 +28,7 @@ namespace SakuraTree
 {
 
 PathDeleteBlossom_Test::PathDeleteBlossom_Test()
-    : Kitsunemimi::Common::Test("FileDeleteBlossom_Test")
+    : Kitsunemimi::Test("PathDeleteBlossom_Test")
 {
     initTestCase();
     initTask_test();
@@ -100,7 +100,7 @@ PathDeleteBlossom_Test::runTask_test()
 
     fakeDeleteBlossom.initBlossom(fakeItem);
     fakeDeleteBlossom.runTask(fakeItem);
-    TEST_EQUAL(fakeItem.success, false);
+    TEST_EQUAL(fakeItem.success, true);
 
     runSyncProcess("touch " + m_path);
 
@@ -108,7 +108,7 @@ PathDeleteBlossom_Test::runTask_test()
     TEST_EQUAL(fakeItem.success, true);
 
     fakeDeleteBlossom.runTask(fakeItem);
-    TEST_EQUAL(fakeItem.success, false);
+    TEST_EQUAL(fakeItem.success, true);
 }
 
 /**

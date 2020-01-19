@@ -75,8 +75,9 @@ void
 IniDeleteEntryBlossom::runTask(BlossomItem &blossomItem)
 {
     std::pair<bool, std::string> result;
+    std::string errorMessage = "";
+    result = Kitsunemimi::Persistence::readFile(m_filePath, errorMessage);
 
-    result = Kitsunemimi::Persistence::readFile(m_filePath);
     if(result.first == false)
     {
         blossomItem.success = false;
@@ -85,12 +86,13 @@ IniDeleteEntryBlossom::runTask(BlossomItem &blossomItem)
     }
 
     IniItem iniItem;
-    result = iniItem.parse(result.second);
+    errorMessage.clear();
+    bool parseSuccess = iniItem.parse(result.second, errorMessage);
 
-    if(result.first == false)
+    if(parseSuccess == false)
     {
         blossomItem.success = false;
-        blossomItem.outputMessage = result.second;
+        blossomItem.outputMessage = errorMessage;
         return;
     }
 

@@ -59,7 +59,7 @@ void
 PrintBlossom::runTask(BlossomItem &blossomItem)
 {
     std::string output = "";
-    Kitsunemimi::Common::TableItem tableItem;
+    Kitsunemimi::TableItem tableItem;
     tableItem.addColumn("key", "Item-Name");
     tableItem.addColumn("value", "Value");
 

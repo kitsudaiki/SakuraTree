@@ -70,7 +70,7 @@ void
 PathChmodBlossom::runTask(BlossomItem &blossomItem)
 {
     std::string command = "chmod ";
-    if(Kitsunemimi::Persistence::doesDirExist(m_path)) {
+    if(Kitsunemimi::Persistence::isDir(m_path)) {
         command += "-R ";
     }
     command += m_permission + " ";
