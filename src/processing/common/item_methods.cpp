@@ -38,13 +38,15 @@ namespace SakuraTree
  *
  * @param valueItem value-item, which should be processed
  * @param insertValues data-map with information to fill into the jinja2-string
+ * @param errorMessage error-message for output
  *
  * @return false, if something went wrong while processing and filling, else true. If false
  *         an error-message was sent directly into the sakura-root-object
 */
 bool
 getProcessedItem(ValueItem &valueItem,
-                 DataMap &insertValues)
+                 DataMap &insertValues,
+                 std::string &errorMessage)
 {
     for(uint32_t i = 0; i < valueItem.functions.size(); i++)
     {
@@ -54,89 +56,109 @@ getProcessedItem(ValueItem &valueItem,
 
         switch(valueItem.functions.at(i).type)
         {
-        //==========================================================================================
-        case FunctionItem::GET_FUNCTION:
-        {
-            if(valueItem.functions.at(i).arguments.size() != 1) {
-                return false;
-            }
-            ValueItem arg = valueItem.functions.at(i).arguments.at(0);
-            if(fillValueItem(arg, insertValues)) {
-                valueItem.item = getValue(valueItem.item, arg.item->toValue());
-            }
-            break;
-        }
-        //==========================================================================================
-        case FunctionItem::SPLIT_FUNCTION:
-        {
-            if(valueItem.functions.at(i).arguments.size() != 1) {
-                return false;
-            }
-            ValueItem arg = valueItem.functions.at(i).arguments.at(0);
-            if(fillValueItem(arg, insertValues)) {
-                valueItem.item = splitValue(valueItem.item->toValue(), arg.item->toValue());
-            }
-            break;
-        }
-        //==========================================================================================
-        case FunctionItem::CONTAINS_FUNCTION:
-        {
-            if(valueItem.functions.at(i).arguments.size() != 1) {
-                return false;
-            }
-            ValueItem arg = valueItem.functions.at(i).arguments.at(0);
-            if(fillValueItem(arg, insertValues)) {
-                valueItem.item = containsValue(valueItem.item, arg.item->toValue());
-            }
-            break;
-        }
-        //==========================================================================================
-        case FunctionItem::SIZE_FUNCTION:
-        {
-            valueItem.item = sizeValue(valueItem.item);
-            break;
-        }
-        //==========================================================================================
-        case FunctionItem::INSERT_FUNCTION:
-        {
-            if(valueItem.functions.at(i).arguments.size() != 2) {
-                return false;
-            }
-            ValueItem arg1 = valueItem.functions.at(i).arguments.at(0);
-            ValueItem arg2 = valueItem.functions.at(i).arguments.at(1);
-            if(fillValueItem(arg1, insertValues)
-                    && fillValueItem(arg2, insertValues))
+            //======================================================================================
+            case FunctionItem::GET_FUNCTION:
             {
-                valueItem.item = insertValue(valueItem.item->toMap(),
-                                            arg1.item->toValue(),
-                                            arg2.item);
+                if(valueItem.functions.at(i).arguments.size() != 1) {
+                    return false;
+                }
+
+                ValueItem arg = valueItem.functions.at(i).arguments.at(0);
+                if(fillValueItem(arg, insertValues, errorMessage))
+                {
+                    valueItem.item = getValue(valueItem.item,
+                                              arg.item->toValue(),
+                                              errorMessage);
+                }
+                break;
             }
-            break;
-        }
-        //==========================================================================================
-        case FunctionItem::APPEND_FUNCTION:
-        {
-            if(valueItem.functions.at(i).arguments.size() != 1) {
-                return false;
+            //======================================================================================
+            case FunctionItem::SPLIT_FUNCTION:
+            {
+                if(valueItem.functions.at(i).arguments.size() != 1) {
+                    return false;
+                }
+
+                ValueItem arg = valueItem.functions.at(i).arguments.at(0);
+                if(fillValueItem(arg, insertValues, errorMessage))
+                {
+                    valueItem.item = splitValue(valueItem.item->toValue(),
+                                                arg.item->toValue(),
+                                                errorMessage);
+                }
+                break;
             }
-            ValueItem arg = valueItem.functions.at(i).arguments.at(0);
-            if(fillValueItem(arg, insertValues)) {
-                valueItem.item = appendValue(valueItem.item->toArray(), arg.item->toValue());
+            //======================================================================================
+            case FunctionItem::CONTAINS_FUNCTION:
+            {
+                if(valueItem.functions.at(i).arguments.size() != 1) {
+                    return false;
+                }
+
+                ValueItem arg = valueItem.functions.at(i).arguments.at(0);
+                if(fillValueItem(arg, insertValues, errorMessage))
+                {
+                    valueItem.item = containsValue(valueItem.item,
+                                                   arg.item->toValue(),
+                                                   errorMessage);
+                }
+                break;
             }
-            break;
-        }
-        //==========================================================================================
-        case FunctionItem::CLEAR_EMPTY_FUNCTION:
-        {
-            if(valueItem.functions.at(i).arguments.size() != 0) {
-                return false;
+            //======================================================================================
+            case FunctionItem::SIZE_FUNCTION:
+            {
+                valueItem.item = sizeValue(valueItem.item, errorMessage);
+                break;
             }
-            valueItem.item = clearEmpty(valueItem.item->toArray());
-            break;
-        }
-        //==========================================================================================
-        default:
-            break;
+            //======================================================================================
+            case FunctionItem::INSERT_FUNCTION:
+            {
+                if(valueItem.functions.at(i).arguments.size() != 2) {
+                    return false;
+                }
+
+                ValueItem arg1 = valueItem.functions.at(i).arguments.at(0);
+                ValueItem arg2 = valueItem.functions.at(i).arguments.at(1);
+
+                if(fillValueItem(arg1, insertValues, errorMessage)
+                        && fillValueItem(arg2, insertValues, errorMessage))
+                {
+                    valueItem.item = insertValue(valueItem.item->toMap(),
+                                                arg1.item->toValue(),
+                                                arg2.item,
+                                                 errorMessage);
+                }
+                break;
+            }
+            //======================================================================================
+            case FunctionItem::APPEND_FUNCTION:
+            {
+                if(valueItem.functions.at(i).arguments.size() != 1) {
+                    return false;
+                }
+
+                ValueItem arg = valueItem.functions.at(i).arguments.at(0);
+                if(fillValueItem(arg, insertValues, errorMessage))
+                {
+                    valueItem.item = appendValue(valueItem.item->toArray(),
+                                                 arg.item->toValue(),
+                                                 errorMessage);
+                }
+                break;
+            }
+            //======================================================================================
+            case FunctionItem::CLEAR_EMPTY_FUNCTION:
+            {
+                if(valueItem.functions.at(i).arguments.size() != 0) {
+                    return false;
+                }
+                valueItem.item = clearEmpty(valueItem.item->toArray(),
+                                            errorMessage);
+                break;
+            }
+            //======================================================================================
+            default:
+                break;
         }
 
         if(valueItem.item == nullptr) {
@@ -153,13 +175,15 @@ getProcessedItem(ValueItem &valueItem,
  *
  * @param valueItem value-item, which should be processed
  * @param insertValues data-map with information to fill into the jinja2-string
+ * @param errorMessage error-message for output
  *
  * @return false, if something went wrong while processing and filling, else true. If false
  *         an error-message was sent directly into the sakura-root-object
  */
 bool
 fillIdentifierItem(ValueItem &valueItem,
-                   DataMap &insertValues)
+                   DataMap &insertValues,
+                   std::string &errorMessage)
 {
     // replace identifier with value from the insert-values
     DataItem* tempItem = insertValues.get(valueItem.item->toString());
@@ -174,7 +198,7 @@ fillIdentifierItem(ValueItem &valueItem,
     valueItem.isIdentifier = false;
     valueItem.functions = valueItem.functions;
 
-    return getProcessedItem(valueItem, insertValues);
+    return getProcessedItem(valueItem, insertValues, errorMessage);
 }
 
 /**
@@ -182,18 +206,19 @@ fillIdentifierItem(ValueItem &valueItem,
  *
  * @param original value-item wiht string-content, which shuold be handled as jinja2-string
  * @param insertValues data-map with information to fill into the jinja2-string
+ * @param errorMessage error-message for output
  *
  * @return false, if something went wrong while processing and filling, else true. If false
  *         an error-message was sent directly into the sakura-root-object
  */
 bool
 fillJinja2Template(ValueItem &valueItem,
-                   DataMap &insertValues)
+                   DataMap &insertValues,
+                   std::string &errorMessage)
 {
     // convert jinja2-string
     Jinja2Converter* converter = SakuraRoot::m_jinja2Converter;
     std::pair<bool, std::string> convertResult;
-    std::string errorMessage = "";
     convertResult = converter->convert(valueItem.item->toString(), &insertValues, errorMessage);
 
     ValueItem returnValue;
@@ -215,30 +240,32 @@ fillJinja2Template(ValueItem &valueItem,
  *
  * @param valueItem value-item, which should be processed and filled
  * @param insertValues data-map with the values to fill the value-item
+ * @param errorMessage error-message for output
  *
  * @return false, if something went wrong while processing and filling, else true. If false
  *         an error-message was sent directly into the sakura-root-object
  */
 bool
 fillValueItem(ValueItem &valueItem,
-              DataMap &insertValues)
+              DataMap &insertValues,
+              std::string &errorMessage)
 {
     // process and fill incoming string, which is interpreted as jinja2-template
     if(valueItem.isIdentifier == false
             && valueItem.type != ValueItem::OUTPUT_PAIR_TYPE
             && valueItem.item->isStringValue())
     {
-        return fillJinja2Template(valueItem, insertValues);
+        return fillJinja2Template(valueItem, insertValues, errorMessage);
     }
     // process and fill incoming identifier
     else if(valueItem.isIdentifier
             && valueItem.type != ValueItem::OUTPUT_PAIR_TYPE)
     {
-        return fillIdentifierItem(valueItem, insertValues);
+        return fillIdentifierItem(valueItem, insertValues, errorMessage);
     }
     else if(valueItem.type != ValueItem::OUTPUT_PAIR_TYPE)
     {
-        return getProcessedItem(valueItem, insertValues);
+        return getProcessedItem(valueItem, insertValues, errorMessage);
     }
 
     // if value is an int-value, output-value or something else, then do nothing with the value
@@ -251,13 +278,15 @@ fillValueItem(ValueItem &valueItem,
  *
  * @param items value-item-map, which should be processed and filled
  * @param insertValues data-map with the values to fill the value-item-map
+ * @param errorMessage error-message for output
  *
  * @return false, if something went wrong while processing and filling, else true. If false
  *         an error-message was sent directly into the sakura-root-object
  */
 bool
 fillInputValueItemMap(ValueItemMap &items,
-                      DataMap &insertValues)
+                      DataMap &insertValues,
+                      std::string &errorMessage)
 {
     Result result;
 
@@ -266,7 +295,7 @@ fillInputValueItemMap(ValueItemMap &items,
         it != items.end();
         it++)
     {
-        if(fillValueItem(it->second, insertValues) == false) {
+        if(fillValueItem(it->second, insertValues, errorMessage) == false) {
             return false;
         }
     }

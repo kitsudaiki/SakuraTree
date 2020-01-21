@@ -37,13 +37,24 @@ using Kitsunemimi::DataMap;
 namespace SakuraTree
 {
 
-bool getProcessedItem(ValueItem &valueItem, DataMap &insertValues);
+bool getProcessedItem(ValueItem &valueItem,
+                      DataMap &insertValues,
+                      std::string &errorMessage);
 
-bool fillIdentifierItem(ValueItem &valueItem, DataMap &insertValues);
-bool fillJinja2Template(ValueItem &valueItem, DataMap &insertValues);
-bool fillValueItem(ValueItem &valueItem, DataMap &insertValues);
-bool fillInputValueItemMap(ValueItemMap &items, DataMap &insertValues);
-bool fillOutputValueItemMap(ValueItemMap &items, DataItem* output);
+bool fillIdentifierItem(ValueItem &valueItem,
+                        DataMap &insertValues,
+                        std::string &errorMessage);
+bool fillJinja2Template(ValueItem &valueItem,
+                        DataMap &insertValues,
+                        std::string &errorMessage);
+bool fillValueItem(ValueItem &valueItem,
+                   DataMap &insertValues,
+                   std::string &errorMessage);
+bool fillInputValueItemMap(ValueItemMap &items,
+                           DataMap &insertValues,
+                           std::string &errorMessage);
+bool fillOutputValueItemMap(ValueItemMap &items,
+                            DataItem* output);
 
 void overrideItems(DataMap &original,
                    const DataMap &override,

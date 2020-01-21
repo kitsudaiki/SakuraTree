@@ -35,12 +35,14 @@ using Kitsunemimi::splitStringByDelimiter;
  */
 DataItem*
 getValue(DataItem* item,
-         DataValue* key)
+         DataValue* key,
+         std::string &errorMessage)
 {
     // precheck
     if(item == nullptr
             || key == nullptr)
     {
+        errorMessage = "inputs for get-function are invalid";
         return nullptr;
     }
 
@@ -55,9 +57,14 @@ getValue(DataItem* item,
     if(item->isArray())
     {
         // check that value for access is an integer
-        if(key->isIntValue() == false
-                || key->getLong() < 0)
+        if(key->isIntValue() == false)
         {
+            errorMessage = "input for the get-function is not an integer-typed value-item";
+            return nullptr;
+        }
+        if(key->getLong() < 0)
+        {
+            errorMessage = "input for the get-function has a negative value";
             return nullptr;
         }
 
@@ -65,6 +72,7 @@ getValue(DataItem* item,
         return resultItem;
     }
 
+    errorMessage = "item for calling the get-function is a value-item";
     return nullptr;
 }
 
@@ -73,17 +81,20 @@ getValue(DataItem* item,
  *
  * @param item value-item, which should be splited
  * @param delimiter delimiter as string-value to identify the positions, where to split
+ * @param errorMessage error-message for output
  *
  * @return array-item with the splitted content
  */
 DataArray*
 splitValue(DataValue* item,
-           DataValue* delimiter)
+           DataValue* delimiter,
+           std::string &errorMessage)
 {
     // precheck
     if(item == nullptr
             || delimiter == nullptr)
     {
+        errorMessage = "inputs for get-function are invalid";
         return nullptr;
     }
 
@@ -117,14 +128,18 @@ splitValue(DataValue* item,
  * @brief sizeValue get the size of an item
  *
  * @param item data-item, which should be checked
+ * @param errorMessage error-message for output
  *
  * @return data-item of int-type with the size of the incoming item as value
  */
 DataItem*
-sizeValue(DataItem* item)
+sizeValue(DataItem* item,
+          std::string &errorMessage)
 {
     // precheck
-    if(item == nullptr) {
+    if(item == nullptr)
+    {
+        errorMessage = "inputs for get-function are invalid";
         return nullptr;
     }
 
@@ -139,17 +154,20 @@ sizeValue(DataItem* item)
  *
  * @param item data-item, which should be checked
  * @param key value, which should be searched in the item
+ * @param errorMessage error-message for output
  *
  * @return data-value with true, if key was found, else data-value with false
  */
 DataItem*
 containsValue(DataItem* item,
-              DataValue* key)
+              DataValue* key,
+              std::string &errorMessage)
 {
     // precheck
     if(item == nullptr
             || key == nullptr)
     {
+        errorMessage = "inputs for get-function are invalid";
         return nullptr;
     }
 
@@ -186,6 +204,7 @@ containsValue(DataItem* item,
         return new DataValue(false);
     }
 
+    // will never be reached
     return nullptr;
 }
 
@@ -194,17 +213,26 @@ containsValue(DataItem* item,
  *
  * @param item array-item, which shluld be extended
  * @param value data-item, which should be added
+ * @param errorMessage error-message for output
  *
  * @return copy of the original array-item together with the new added object
  */
 DataArray*
 appendValue(DataArray* item,
-            DataItem* value)
+            DataItem* value,
+            std::string &errorMessage)
 {
     // precheck
     if(item == nullptr
             || value == nullptr)
     {
+        errorMessage = "inputs for get-function are invalid";
+        return nullptr;
+    }
+
+    if(item->isArray() == false)
+    {
+        errorMessage = "item, where the item should be added, is not an array-item";
         return nullptr;
     }
 
@@ -216,17 +244,67 @@ appendValue(DataArray* item,
 }
 
 /**
+ * @brief add a new key-value-pair to an existing DataMap-object
+ *
+ * @param item pointer to the map-item, where the new pair should be added
+ * @param key key of the new pair
+ * @param value value of the new pair
+ * @param errorMessage error-message for output
+ *
+ * @return copy of the original map-item together with the new added pair
+ */
+DataMap*
+insertValue(DataMap* item,
+            DataValue* key,
+            DataItem* value,
+            std::string &errorMessage)
+{
+    // precheck
+    if(item == nullptr
+            || key == nullptr
+            || value == nullptr)
+    {
+        errorMessage = "inputs for get-function are invalid";
+        return nullptr;
+    }
+
+    if(item->isMap() == false)
+    {
+        errorMessage = "item, where the new key-value-pair should be added, is not a map-item";
+        return nullptr;
+    }
+
+    // insert new key-value-pair
+    const std::string keyString = key->toString();
+    DataMap* result = item->copy()->toMap();
+    result->insert(key->toString(), value->copy(), true);
+
+    return result;
+}
+
+
+/**
  * @brief delete all empty entries from an array-item
  *
  * @param item array-item, which shluld be cleared
+ * @param errorMessage error-message for output
  *
  * @return copy of the original array-item together with the new added object
  */
 DataArray*
-clearEmpty(DataArray* item)
+clearEmpty(DataArray* item,
+           std::string &errorMessage)
 {
     // precheck
-    if(item == nullptr) {
+    if(item == nullptr)
+    {
+        errorMessage = "inputs for get-function are invalid";
+        return nullptr;
+    }
+
+    if(item->isArray() == false)
+    {
+        errorMessage = "item, which should be cleared, is not an array-item";
         return nullptr;
     }
 
@@ -240,36 +318,6 @@ clearEmpty(DataArray* item)
             i--;
         }
     }
-
-    return result;
-}
-
-/**
- * @brief add a new key-value-pair to an existing DataMap-object
- *
- * @param item pointer to the map-item, where the new pair should be added
- * @param key key of the new pair
- * @param value value of the new pair
- *
- * @return copy of the original map-item together with the new added pair
- */
-DataMap*
-insertValue(DataMap* item,
-            DataValue* key,
-            DataItem* value)
-{
-    // precheck
-    if(item == nullptr
-            || key == nullptr
-            || value == nullptr)
-    {
-        return nullptr;
-    }
-
-    // insert new key-value-pair
-    const std::string keyString = key->toString();
-    DataMap* result = item->copy()->toMap();
-    result->insert(key->toString(), value->copy(), true);
 
     return result;
 }

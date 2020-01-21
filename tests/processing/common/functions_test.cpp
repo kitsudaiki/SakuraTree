@@ -52,11 +52,13 @@ ValueItemsFunctions_Test::checkNullptr(DataItem* value)
 void
 ValueItemsFunctions_Test::getValue_test()
 {
+    std::string errorMessage = "";
+
     DataArray testArray;
     testArray.append(new DataValue("poi"));
     testArray.append(new DataValue(42));
 
-    DataItem* result = getValue(&testArray, new DataValue(1));
+    DataItem* result = getValue(&testArray, new DataValue(1), errorMessage);
 
     TEST_EQUAL(result->isIntValue(), true);
     TEST_EQUAL(result->toString(), "42");
@@ -65,20 +67,20 @@ ValueItemsFunctions_Test::getValue_test()
     testMap.insert("asdf", new DataValue("poi"));
     testMap.insert("xyz", new DataValue(42));
 
-    result = getValue(&testMap, new DataValue("asdf"));
+    result = getValue(&testMap, new DataValue("asdf"), errorMessage);
 
     TEST_EQUAL(result->isStringValue(), true);
     TEST_EQUAL(result->toString(), "poi");
 
 
     // negative tests
-    result = getValue(nullptr, new DataValue("asdf"));
+    result = getValue(nullptr, new DataValue("asdf"), errorMessage);
     checkNullptr(result);
 
-    result = getValue(&testArray, new DataValue("asdf"));
+    result = getValue(&testArray, new DataValue("asdf"), errorMessage);
     checkNullptr(result);
 
-    result = getValue(&testMap, new DataValue(1));
+    result = getValue(&testMap, new DataValue(1), errorMessage);
     checkNullptr(result);
 }
 
@@ -88,9 +90,11 @@ ValueItemsFunctions_Test::getValue_test()
 void
 ValueItemsFunctions_Test::splitValue_test()
 {
+    std::string errorMessage = "";
+
     DataValue testValue("this is a test string");
 
-    DataItem* result = splitValue(&testValue, new DataValue(" "));
+    DataItem* result = splitValue(&testValue, new DataValue(" "), errorMessage);
 
     TEST_EQUAL(result->isArray(), true);
     TEST_EQUAL(result->toArray()->size(), 5);
@@ -98,10 +102,10 @@ ValueItemsFunctions_Test::splitValue_test()
 
 
     // negative tests
-    result = splitValue(nullptr, new DataValue(""));
+    result = splitValue(nullptr, new DataValue(""), errorMessage);
     checkNullptr(result);
 
-    result = splitValue(&testValue, new DataValue(""));
+    result = splitValue(&testValue, new DataValue(""), errorMessage);
     checkNullptr(result);
 }
 
@@ -111,11 +115,13 @@ ValueItemsFunctions_Test::splitValue_test()
 void
 ValueItemsFunctions_Test::sizeValue_test()
 {
+    std::string errorMessage = "";
+
     DataArray testArray;
     testArray.append(new DataValue("poi"));
     testArray.append(new DataValue(42));
 
-    DataItem* result = sizeValue(&testArray);
+    DataItem* result = sizeValue(&testArray, errorMessage);
 
     TEST_EQUAL(result->isIntValue(), true);
     TEST_EQUAL(result->toValue()->getLong(), 2);
@@ -124,14 +130,14 @@ ValueItemsFunctions_Test::sizeValue_test()
     testMap.insert("asdf", new DataValue("poi"));
     testMap.insert("xyz", new DataValue(42));
 
-    result = sizeValue(&testMap);
+    result = sizeValue(&testMap, errorMessage);
 
     TEST_EQUAL(result->isIntValue(), true);
     TEST_EQUAL(result->toValue()->getLong(), 2);
 
 
     // negative tests
-    result = sizeValue(nullptr);
+    result = sizeValue(nullptr, errorMessage);
     checkNullptr(result);
 }
 
@@ -141,6 +147,7 @@ ValueItemsFunctions_Test::sizeValue_test()
 void
 ValueItemsFunctions_Test::containsValue_test()
 {
+    std::string errorMessage = "";
     DataItem* result = nullptr;
 
     // map-type
@@ -148,12 +155,12 @@ ValueItemsFunctions_Test::containsValue_test()
     testMap.insert("asdf", new DataValue("poi"));
     testMap.insert("xyz", new DataValue(42));
 
-    result = containsValue(&testMap, new DataValue("asdf"));
+    result = containsValue(&testMap, new DataValue("asdf"), errorMessage);
 
     TEST_EQUAL(result->isBoolValue(), true);
     TEST_EQUAL(result->toValue()->getBool(), true);
 
-    result = containsValue(&testMap, new DataValue("12345"));
+    result = containsValue(&testMap, new DataValue("12345"), errorMessage);
 
     TEST_EQUAL(result->isBoolValue(), true);
     TEST_EQUAL(result->toValue()->getBool(), false);
@@ -164,17 +171,17 @@ ValueItemsFunctions_Test::containsValue_test()
     testArray.append(new DataValue("poi"));
     testArray.append(new DataValue(42));
 
-    result = containsValue(&testArray, new DataValue("poi"));
+    result = containsValue(&testArray, new DataValue("poi"), errorMessage);
 
     TEST_EQUAL(result->isBoolValue(), true);
     TEST_EQUAL(result->toValue()->getBool(), true);
 
-    result = containsValue(&testArray, new DataValue("42"));
+    result = containsValue(&testArray, new DataValue("42"), errorMessage);
 
     TEST_EQUAL(result->isBoolValue(), true);
     TEST_EQUAL(result->toValue()->getBool(), true);
 
-    result = containsValue(&testArray, new DataValue("12345"));
+    result = containsValue(&testArray, new DataValue("12345"), errorMessage);
 
     TEST_EQUAL(result->isBoolValue(), true);
     TEST_EQUAL(result->toValue()->getBool(), false);
@@ -183,17 +190,17 @@ ValueItemsFunctions_Test::containsValue_test()
     // value-type
     DataValue testValue("this is a test-string");
 
-    result = containsValue(&testValue, new DataValue("this"));
+    result = containsValue(&testValue, new DataValue("this"), errorMessage);
 
     TEST_EQUAL(result->isBoolValue(), true);
     TEST_EQUAL(result->toValue()->getBool(), true);
 
-    result = containsValue(&testValue, new DataValue("is a test-s"));
+    result = containsValue(&testValue, new DataValue("is a test-s"), errorMessage);
 
     TEST_EQUAL(result->isBoolValue(), true);
     TEST_EQUAL(result->toValue()->getBool(), true);
 
-    result = containsValue(&testValue, new DataValue("12345"));
+    result = containsValue(&testValue, new DataValue("12345"), errorMessage);
 
     TEST_EQUAL(result->isBoolValue(), true);
     TEST_EQUAL(result->toValue()->getBool(), false);
@@ -205,20 +212,22 @@ ValueItemsFunctions_Test::containsValue_test()
 void
 ValueItemsFunctions_Test::appendValue_test()
 {
+    std::string errorMessage = "";
+
     DataArray testArray;
     testArray.append(new DataValue("poi"));
     testArray.append(new DataValue(42));
 
-    DataItem* result = sizeValue(&testArray);
+    DataItem* result = sizeValue(&testArray, errorMessage);
     TEST_EQUAL(result->toValue()->getLong(), 2);
 
-    result = appendValue(&testArray, new DataValue("12345"));
+    result = appendValue(&testArray, new DataValue("12345"), errorMessage);
 
-    result = sizeValue(result);
+    result = sizeValue(result, errorMessage);
     TEST_EQUAL(result->toValue()->getLong(), 3);
 
     // negative tests
-    result = appendValue(nullptr, new DataValue("12345"));
+    result = appendValue(nullptr, new DataValue("12345"), errorMessage);
     checkNullptr(result);
 }
 
@@ -228,21 +237,23 @@ ValueItemsFunctions_Test::appendValue_test()
 void
 ValueItemsFunctions_Test::insertValue_test()
 {
+    std::string errorMessage = "";
+
     DataMap testMap;
     testMap.insert("asdf", new DataValue("poi"));
     testMap.insert("xyz", new DataValue(42));
 
-    DataItem* result = containsValue(&testMap, new DataValue("12345"));
+    DataItem* result = containsValue(&testMap, new DataValue("12345"), errorMessage);
     TEST_EQUAL(result->toValue()->getBool(), false);
 
-    result = insertValue(&testMap, new DataValue("12345"), new DataValue("12345"));
+    result = insertValue(&testMap, new DataValue("12345"), new DataValue("12345"), errorMessage);
 
-    result = containsValue(result, new DataValue("12345"));
+    result = containsValue(result, new DataValue("12345"), errorMessage);
     TEST_EQUAL(result->toValue()->getBool(), true);
 
 
     // negative tests
-    result = insertValue(nullptr, new DataValue("12345"), new DataValue("12345"));
+    result = insertValue(nullptr, new DataValue("12345"), new DataValue("12345"), errorMessage);
     checkNullptr(result);
 }
 

@@ -181,11 +181,13 @@ bool
 SakuraThread::processBlossom(BlossomItem &blossomItem)
 {
     // process values by filling with information of the parent-object
-    const bool result = fillInputValueItemMap(blossomItem.values, m_parentValues);
+    std::string errorMessage = "";
+    const bool result = fillInputValueItemMap(blossomItem.values, m_parentValues, errorMessage);
     if(result == false)
     {
         SakuraRoot::m_root->createError(blossomItem, "processing",
-                                        "error while processing blossom items");
+                                        "error while processing blossom items:\n    "
+                                        + errorMessage);
         blossomItem.success = false;
         return false;
     }
@@ -297,17 +299,22 @@ bool
 SakuraThread::processIf(IfBranching* ifCondition)
 {
     // initialize
+    std::string errorMessage = "";
     bool ifMatch = false;
     ValueItem valueItem;
 
     // get left side of the comparism
-    if(fillValueItem(ifCondition->leftSide, m_parentValues) == false) {
+    if(fillValueItem(ifCondition->leftSide, m_parentValues, errorMessage) == false)
+    {
+        // TODO: error-message
         return false;
     }
     const std::string  leftSide = ifCondition->leftSide.item->toValue()->toString();
 
     // get right side of the comparism
-    if(fillValueItem(ifCondition->rightSide, m_parentValues) == false) {
+    if(fillValueItem(ifCondition->rightSide, m_parentValues, errorMessage) == false)
+    {
+        // TODO: error-message
         return false;
     }
     const std::string  rightSide = ifCondition->rightSide.item->toValue()->toString();
@@ -352,8 +359,14 @@ bool
 SakuraThread::processForEach(ForEachBranching* subtree,
                              bool parallel)
 {
+    std::string errorMessage = "";
+
     // initialize the array, over twhich the loop should iterate
-    fillInputValueItemMap(subtree->iterateArray, m_parentValues);
+    if(fillInputValueItemMap(subtree->iterateArray, m_parentValues, errorMessage) == false)
+    {
+        // TODO: error-message
+        return false;
+    }
     DataArray* array = subtree->iterateArray.get("array")->toArray();
 
     // process content normal or parallel via worker-threads
@@ -410,8 +423,14 @@ SakuraThread::processForEach(ForEachBranching* subtree,
         // post-processing and cleanup
         for(uint32_t i = 0; i < array->size(); i++)
         {
-            fillInputValueItemMap(subtree->values,
-                                  spawnedObjects.at(static_cast<uint32_t>(i))->items);
+            std::string errorMessage = "";
+            if(fillInputValueItemMap(subtree->values,
+                                     spawnedObjects.at(static_cast<uint32_t>(i))->items,
+                                     errorMessage) == false)
+            {
+                // TODO: error-message
+                return false;
+            }
         }
         overrideItems(m_parentValues, subtree->values, true);
     }
@@ -432,14 +451,20 @@ bool
 SakuraThread::processFor(ForBranching* subtree,
                          bool parallel)
 {
+    std::string errorMessage = "";
+
     // get start-value
-    if(fillValueItem(subtree->start, m_parentValues) == false) {
+    if(fillValueItem(subtree->start, m_parentValues, errorMessage) == false)
+    {
+        // TODO: error-message
         return false;
     }
     const long startValue = subtree->start.item->toValue()->getLong();
 
     // get end-value
-    if(fillValueItem(subtree->end, m_parentValues) == false) {
+    if(fillValueItem(subtree->end, m_parentValues, errorMessage) == false)
+    {
+        // TODO: error-message
         return false;
     }
     const long endValue = subtree->end.item->toValue()->getLong();
@@ -501,8 +526,14 @@ SakuraThread::processFor(ForBranching* subtree,
         // post-processing and cleanup
         for(long i = startValue; i < endValue; i++)
         {
-            fillInputValueItemMap(subtree->values,
-                                  spawnedObjects.at(static_cast<uint32_t>(i))->items);
+            std::string errorMessage = "";
+            if(fillInputValueItemMap(subtree->values,
+                                     spawnedObjects.at(static_cast<uint32_t>(i))->items,
+                                     errorMessage) == false)
+            {
+                // TODO: error-message
+                return false;
+            }
         }
         overrideItems(m_parentValues, subtree->values, true);
     }
