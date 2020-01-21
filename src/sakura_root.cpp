@@ -28,8 +28,7 @@
 #include <processing/sakura_tree_callbacks.h>
 #include <processing/thread_pool.h>
 
-// TODO: enable again in 0.3.0
-// #include <libKitsunemimiSakuraNetwork/sakura_host_handler.h>
+#include <libKitsunemimiSakuraNetwork/sakura_host_handler.h>
 #include <libKitsunemimiSakuraParser/sakura_parsing.h>
 
 #include <libKitsunemimiJson/json_item.h>
@@ -63,11 +62,10 @@ SakuraRoot::SakuraRoot(const std::string &executablePath)
     // TODO: make the number of initialized threads configurable
     m_threadPool = new ThreadPool(8);
 
-    // TODO: enable again in 0.3.0
-    // m_controller = new Kitsunemimi::Sakura::SakuraHostHandler(this,
-    //                                                           &sessionCallback,
-    //                                                           &dataCallback,
-    //                                                           &blossomOutputCallback);
+    m_controller = new Kitsunemimi::Sakura::SakuraHostHandler(this,
+                                                              &sessionCallback,
+                                                              &dataCallback,
+                                                              &blossomOutputCallback);
 }
 
 /**
@@ -94,8 +92,7 @@ SakuraRoot::startProcess(const std::string &rootPath,
                          const std::string &seedName,
                          const DataMap &initialValues)
 {
-    // TODO: enable again in 0.3.0
-    // m_controller->createServer(1337);
+    m_controller->createServer(1337);
 
     // parse all files and convert the into
     SakuraParsing sakuraParsing(DEBUG);
@@ -147,7 +144,10 @@ SakuraRoot::startProcess(const std::string &rootPath,
 }
 
 /**
- * readded in 0.3.0
+ * @brief SakuraRoot::startSubtreeProcess
+ * @param subtree
+ * @param values
+ * @return
  */
 bool
 SakuraRoot::startSubtreeProcess(const std::string &subtree,
@@ -169,12 +169,20 @@ SakuraRoot::startSubtreeProcess(const std::string &subtree,
     JsonItem valuesJson;
     errorMessage.clear();
     valuesJson.parse(values, errorMessage);
-    // TODO: enable again in 0.3.0
-    // m_rootThread = new SakuraThread(processPlan,
-    //                                 *valuesJson.getItemContent()->copy()->toMap(),
-    //                                 std::vector<std::string>());
-    // m_rootThread->startThread();
-    // m_rootThread->waitUntilStarted();
+
+    // run process by adding the tree as subtree-object to the subtree-queue to be processed by
+    // one of the worker-threads
+    SubtreeQueue::SubtreeObject* object = new SubtreeQueue::SubtreeObject();
+    object->subtree = processPlan;
+    object->items = *valuesJson.getItemContent()->copy()->toMap();
+    object->activeCounter = new SubtreeQueue::ActiveCounter();
+    object->activeCounter->shouldCount = 1;
+    m_threadPool->m_queue.addSubtreeObject(object);
+
+    // wait until the created subtree was fully processed by the worker-threads
+    while(object->activeCounter->isEqual() == false) {
+        std::this_thread::sleep_for(chronoMilliSec(10));
+    }
 
     std::cout<<"finish"<<std::endl;
 
@@ -264,33 +272,36 @@ SakuraRoot::createError(const std::string &errorLocation,
 }
 
 /**
- * readded in 0.3.0
+ * @brief SakuraRoot::sendPlan
+ * @param address
+ * @param subtree
+ * @param values
+ * @return
  */
 bool
 SakuraRoot::sendPlan(const std::string &address,
                      const std::string &subtree,
                      const std::string &values)
 {
-    // TODO: enable again in 0.3.0
-    // return m_controller->sendGrowPlan(address, subtree, values);
-    return false;
+    return m_controller->sendGrowPlan(address, subtree, values);
 }
 
-
 /**
- * readded in 0.3.0
+ * @brief SakuraRoot::startClientConnection
+ * @param address
+ * @param port
+ * @return
  */
 bool
 SakuraRoot::startClientConnection(const std::string &address,
                                   const int port)
 {
-    // TODO: enable again in 0.3.0
-    // return m_controller->startTcpSession(address, static_cast<uint16_t>(port));
-    return false;
+    return m_controller->startTcpSession(address, static_cast<uint16_t>(port));
 }
 
 /**
- * readded in 0.3.0
+ * @brief SakuraRoot::printOutput
+ * @param blossomItem
  */
 void
 SakuraRoot::printOutput(const BlossomItem &blossomItem)
@@ -301,8 +312,7 @@ SakuraRoot::printOutput(const BlossomItem &blossomItem)
     std::string output = convertBlossomOutput(blossomItem);
 
     // only for prototyping hardcoded
-    // TODO: enable again in 0.3.0
-    // m_controller->sendBlossomOuput("127.0.0.1", output);
+    m_controller->sendBlossomOuput("127.0.0.1", output);
     std::cout<<output<<std::endl;
 
     m_mutex.unlock();
