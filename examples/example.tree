@@ -108,5 +108,3 @@ else
        - packages = packages
 }
 
-exit("kill current run")
-- status = 42

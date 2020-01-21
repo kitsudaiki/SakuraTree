@@ -58,12 +58,14 @@ ItemMethods_Test::initTestCase()
 void
 ItemMethods_Test::fillItems_test()
 {
+    std::string errorMessage = "";
+
     ValueItemMap items;
     items.insert("x", new DataValue("{{test}}"));
     DataMap insertValues;
     insertValues.insert("test", new DataValue("hmmm"));
 
-    const bool result = fillInputValueItemMap(items, insertValues);
+    const bool result = fillInputValueItemMap(items, insertValues, errorMessage);
 
     TEST_EQUAL(result, true);
     TEST_EQUAL(items.get("x")->toString(), "hmmm");
