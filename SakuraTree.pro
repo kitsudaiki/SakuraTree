@@ -175,5 +175,18 @@ SOURCES += \
     src/processing/blossoms/special/item_update_blossom.cpp
 
 
+SAKURA_PROVISIONING_SUBTREE = src/predefined_subtrees/sakura_provisionoing_subtree.tree
+
+OTHER_FILES +=  \
+    $$SAKURA_PROVISIONING_SUBTREE
+
+sakura_provisioning_subtree.input = SAKURA_PROVISIONING_SUBTREE
+sakura_provisioning_subtree.output = ${QMAKE_FILE_BASE}.h
+sakura_provisioning_subtree.commands = xxd -i ${QMAKE_FILE_IN} ${QMAKE_FILE_BASE}.h
+sakura_provisioning_subtree.variable_out = HEADERS
+sakura_provisioning_subtree.CONFIG += target_predeps no_link
+
+QMAKE_EXTRA_COMPILERS += sakura_provisioning_subtree
+
 
 
