@@ -1,0 +1,15 @@
+["test-remote installation"]
+- ip_address = "192.168.178.25"
+- ssh_key_path = "~/.ssh/sakura_test"
+- ssh_user = "sakura"
+- ssh_port = 22
+- target_path = "/tmp/"
+
+test_node("")
+- type = ["test-node"]
+-> ssh_provisioning:
+	- ip_address = ip_address
+	- ssh_key_path = ssh_key_path
+	- ssh_user = ssh_user
+	- ssh_port = ssh_port
+	- target_path = target_path

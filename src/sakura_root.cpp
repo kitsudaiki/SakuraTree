@@ -64,7 +64,8 @@ SakuraRoot::SakuraRoot(const std::string &executablePath)
 
     m_controller = new Kitsunemimi::Sakura::SakuraHostHandler(this,
                                                               &sessionCallback,
-                                                              &dataCallback,
+                                                              &treeTransferCallback,
+                                                              &seedTriggerCallback,
                                                               &blossomOutputCallback);
 }
 
@@ -85,30 +86,39 @@ SakuraRoot::~SakuraRoot()
 /**
  * initialize and start rollout-process
  *
+ * @param initialTreePath
+ * @param seedPath
+ * @param initialValues
+ * @param serverAddress
+ * @param port
+ *
  * @return true if successful, else false
  */
 bool
-SakuraRoot::startProcess(const std::string &rootPath,
-                         const std::string &seedName,
-                         const DataMap &initialValues)
+SakuraRoot::startProcess(const std::string &initialTreePath,
+                         const std::string &seedPath,
+                         const DataMap &initialValues,
+                         const std::string &serverAddress,
+                         const uint16_t port)
 {
-    m_controller->createServer(1337);
+    SakuraParsing sakuraParsing(DEBUG);
+    Converter converter;
+
+
+    m_controller->createServer(port);
 
     // parse all files and convert the into
-    SakuraParsing sakuraParsing(DEBUG);
-    bool parserResult = sakuraParsing.parseFiles(rootPath);
+    const bool parserResult = sakuraParsing.parseFiles(initialTreePath);
     if(parserResult == false)
     {
         std::cout<<sakuraParsing.getError().toString()<<std::endl;
         return false;
     }
 
-    // get the initial selected parsed file-content. if seedName is empty string, it
-    // return the first file. This is helpful, if only one file was parsed
-    JsonItem tree = sakuraParsing.getParsedFileContent(seedName);
+    // get the initial selected parsed file-content
+    const JsonItem tree = sakuraParsing.getParsedFileContent();
 
     // convert json-representaion of the tree into a sakura-item-tree
-    Converter converter;
     SakuraItem* processPlan = converter.convert(tree);
     if(processPlan == nullptr)
     {
@@ -279,11 +289,11 @@ SakuraRoot::createError(const std::string &errorLocation,
  * @return
  */
 bool
-SakuraRoot::sendPlan(const std::string &address,
-                     const std::string &subtree,
-                     const std::string &values)
+SakuraRoot::sendTreefile(const std::string &address,
+                         const std::string &subtree,
+                         const std::string &values)
 {
-    return m_controller->sendGrowPlan(address, subtree, values);
+    return m_controller->sendTreePlan(address, subtree, values);
 }
 
 /**
@@ -296,7 +306,7 @@ bool
 SakuraRoot::startClientConnection(const std::string &address,
                                   const int port)
 {
-    return m_controller->startTcpSession(address, static_cast<uint16_t>(port));
+    return m_controller->createClientConnection(address, static_cast<uint16_t>(port));
 }
 
 /**
@@ -312,7 +322,7 @@ SakuraRoot::printOutput(const BlossomItem &blossomItem)
     std::string output = convertBlossomOutput(blossomItem);
 
     // only for prototyping hardcoded
-    m_controller->sendBlossomOuput("127.0.0.1", output);
+    m_controller->sendBlossomOuput("127.0.0.1", "", output);
     std::cout<<output<<std::endl;
 
     m_mutex.unlock();

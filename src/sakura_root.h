@@ -54,9 +54,11 @@ public:
     ~SakuraRoot();
 
     // start processing
-    bool startProcess(const std::string &rootPath,
-                      const std::string &seedName,
-                      const DataMap &initialValues);
+    bool startProcess(const std::string &initialTreePath,
+                      const std::string &seedPath,
+                      const DataMap &initialValues,
+                      const std::string &serverAddress="127.0.0.1",
+                      const uint16_t port=1337);
     bool startSubtreeProcess(const std::string &subtree,
                              const std::string &values);
 
@@ -74,9 +76,9 @@ public:
                      const std::string &blossomFilePath="");
 
     // network-interaction
-    bool sendPlan(const std::string &address,
-                  const std::string &subtree,
-                  const std::string &values);
+    bool sendTreefile(const std::string &address,
+                      const std::string &subtree,
+                      const std::string &values);
     bool startClientConnection(const std::string &address,
                                const int port);
 
