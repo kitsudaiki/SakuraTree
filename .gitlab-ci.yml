@@ -5,7 +5,7 @@ build:
     - echo Working on branch $CI_COMMIT_REF_NAME
 
     - apt-get update
-    - apt-get install -y libboost-filesystem-dev libboost-program-options-dev libsqlite3-dev
+    - apt-get install -y libboost-filesystem-dev libboost-program-options-dev libsqlite3-dev libssl-dev
 
     - cd /builds/tobiasanker/SakuraTree
     - ./build.sh test
