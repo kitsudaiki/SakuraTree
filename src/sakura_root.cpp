@@ -21,18 +21,20 @@
  */
 
 #include "sakura_root.h"
-#include <converter/converter.h>
+#include <tree_handler.h>
 
 #include <processing/common/item_methods.h>
 #include <processing/sakura_thread.h>
 #include <processing/sakura_tree_callbacks.h>
 #include <processing/thread_pool.h>
 
-#include <libKitsunemimiSakuraNetwork/sakura_host_handler.h>
+#include <libKitsunemimiSakuraNetwork/sakura_network.h>
 #include <libKitsunemimiSakuraParser/sakura_parsing.h>
-
-#include <libKitsunemimiJson/json_item.h>
 #include <libKitsunemimiJinja2/jinja2_converter.h>
+#include <libKitsunemimiJson/json_item.h>
+
+#include <items/sakura_items.h>
+#include <converter/converter.h>
 
 namespace SakuraTree
 {
@@ -41,6 +43,7 @@ SakuraRoot* SakuraRoot::m_root = nullptr;
 std::string SakuraRoot::m_executablePath = "";
 TableItem SakuraRoot::m_errorOutput;
 Jinja2Converter* SakuraRoot::m_jinja2Converter = nullptr;
+TreeHandler* SakuraRoot::m_treeHandler = nullptr;
 
 /**
  * @brief constructor
@@ -53,6 +56,7 @@ SakuraRoot::SakuraRoot(const std::string &executablePath)
     m_root = this;
     m_executablePath = executablePath;
     m_jinja2Converter = new Jinja2Converter();
+    m_treeHandler = new TreeHandler();
 
     // initialize error-output
     m_errorOutput.addColumn("Field");
@@ -62,11 +66,11 @@ SakuraRoot::SakuraRoot(const std::string &executablePath)
     // TODO: make the number of initialized threads configurable
     m_threadPool = new ThreadPool(8);
 
-    m_controller = new Kitsunemimi::Sakura::SakuraHostHandler(this,
-                                                              &sessionCallback,
-                                                              &treeTransferCallback,
-                                                              &seedTriggerCallback,
-                                                              &blossomOutputCallback);
+    m_networking = new Kitsunemimi::Sakura::SakuraNetwork(this,
+                                                          &sessionCallback,
+                                                          &treeTransferCallback,
+                                                          &seedTriggerCallback,
+                                                          &blossomOutputCallback);
 }
 
 /**
@@ -101,15 +105,37 @@ SakuraRoot::startProcess(const std::string &initialTreePath,
                          const std::string &serverAddress,
                          const uint16_t port)
 {
-    SakuraParsing sakuraParsing(DEBUG);
+    Kitsunemimi::Sakura::SakuraParsing sakuraParsing(DEBUG);
     Converter converter;
 
+    if(seedPath != "")
+    {
+        // parse seed-file
+        const bool seedParseResult = sakuraParsing.parseFiles(seedPath);
+        if(seedParseResult == false)
+        {
+            std::cout<<sakuraParsing.getError().toString()<<std::endl;
+            return false;
+        }
 
-    m_controller->createServer(port);
+        // convert seed
+        const JsonItem seed = sakuraParsing.getParsedFileContent();
+        SakuraItem* convertedSeed = converter.convert(seed, true);
+        if(convertedSeed == nullptr)
+        {
+            std::cout<<m_errorOutput.toString()<<std::endl;
+            return false;
+        }
+
+        // create server
+        if(serverAddress != "") {
+            m_networking->createServer(port);
+        }
+    }
 
     // parse all files and convert the into
-    const bool parserResult = sakuraParsing.parseFiles(initialTreePath);
-    if(parserResult == false)
+    const bool treeParseResult = sakuraParsing.parseFiles(initialTreePath);
+    if(treeParseResult == false)
     {
         std::cout<<sakuraParsing.getError().toString()<<std::endl;
         return false;
@@ -293,7 +319,7 @@ SakuraRoot::sendTreefile(const std::string &address,
                          const std::string &subtree,
                          const std::string &values)
 {
-    return m_controller->sendTreePlan(address, subtree, values);
+    return m_networking->sendTreePlanToHost(address, subtree, values);
 }
 
 /**
@@ -306,7 +332,7 @@ bool
 SakuraRoot::startClientConnection(const std::string &address,
                                   const int port)
 {
-    return m_controller->createClientConnection(address, static_cast<uint16_t>(port));
+    //return m_networking->createClientConnection(address, static_cast<uint16_t>(port));
 }
 
 /**
@@ -322,7 +348,7 @@ SakuraRoot::printOutput(const BlossomItem &blossomItem)
     std::string output = convertBlossomOutput(blossomItem);
 
     // only for prototyping hardcoded
-    m_controller->sendBlossomOuput("127.0.0.1", "", output);
+    //m_networking->sendBlossomOuput("127.0.0.1", "", output);
     std::cout<<output<<std::endl;
 
     m_mutex.unlock();

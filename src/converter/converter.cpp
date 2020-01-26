@@ -56,7 +56,8 @@ Converter::~Converter() {}
  * @return tree based on sakura-items if converting was successful, else null-pointer
  */
 SakuraItem*
-Converter::convert(const JsonItem &tree)
+Converter::convert(const JsonItem &tree,
+                   const bool isSeed)
 {
     // debug-output
     if(DEBUG)
@@ -67,6 +68,7 @@ Converter::convert(const JsonItem &tree)
         std::cout<<"-----------------------------------------------------"<<std::endl;
     }
 
+    m_isSeed = isSeed;
     bool success = true;
     SakuraItem* result = convertPart(tree, success);
 
@@ -265,6 +267,19 @@ Converter::convertBlossomGroup(const JsonItem &subtree, bool &success)
     // init new blossom-group-item
     BlossomGroupItem* blossomGroupItem =  new BlossomGroupItem();
     blossomGroupItem->id = subtree.get("name").toString();
+
+    // set group-type
+    if(m_isSeed)
+    {
+        blossomGroupItem->blossomGroupType = "sakura_provision";
+        const std::string hostName = subtree.get("blossom-group-type").toString();
+        blossomGroupItem->values.insert("host_name", new DataValue(hostName));
+    }
+    else
+    {
+        blossomGroupItem->blossomGroupType = subtree.get("blossom-group-type").toString();
+    }
+
     blossomGroupItem->blossomGroupType = subtree.get("blossom-group-type").toString();
 
     // convert all blossoms of the group
@@ -280,14 +295,23 @@ Converter::convertBlossomGroup(const JsonItem &subtree, bool &success)
             blossomItem->blossomName = subtree.get("name").toString();
             blossomItem->blossomPath = subtree.get("b_path").toString();
             blossomItem->blossomType = item.get("blossom-type").toString();
-            blossomItem->blossomGroupType = subtree.get("blossom-group-type").toString();
 
+            // values
             convertItemValues(blossomItem, subtree.get("items-input"), success);
             convertItemValues(blossomItem, item.get("items-input"), success);
 
+            // set group-type
+            if(m_isSeed) {
+                blossomItem->blossomGroupType = "sakura_provision";
+            } else {
+                blossomItem->blossomGroupType = subtree.get("blossom-group-type").toString();
+            }
+
             blossomGroupItem->blossoms.push_back(blossomItem);
 
-            if(checkBlossomItem(*blossomItem) == false) {
+            // optional check of blossom-requirements
+            if(m_isSeed == false
+                    && checkBlossomItem(*blossomItem) == false) {
                 success = false;
             }
         }
@@ -299,14 +323,23 @@ Converter::convertBlossomGroup(const JsonItem &subtree, bool &success)
         blossomItem->blossomName = subtree.get("name").toString();
         blossomItem->blossomPath = subtree.get("b_path").toString();
         blossomItem->blossomType = subtree.get("blossom-group-type").toString();
-        blossomItem->blossomGroupType = "special";
 
         convertItemValues(blossomItem, subtree.get("items-input"), success);
 
-        blossomGroupItem->blossomGroupType = "special";
+        // set group-type
+        if(m_isSeed) {
+            blossomItem->blossomGroupType = "sakura_provision";
+            blossomGroupItem->blossomGroupType = "sakura_provision";
+        } else {
+            blossomItem->blossomGroupType = "special";
+            blossomGroupItem->blossomGroupType = "special";
+        }
+
         blossomGroupItem->blossoms.push_back(blossomItem);
 
-        if(checkBlossomItem(*blossomItem) == false) {
+        // optional check of blossom-requirements
+        if(m_isSeed == false
+                && checkBlossomItem(*blossomItem) == false) {
             success = false;
         }
     }

@@ -115,7 +115,8 @@ HEADERS += \
     tests/processing/blossoms/files/common_files/path_copy_blossom_test.h \
     tests/processing/blossoms/files/common_files/path_chmod_blossom_test.h \
     tests/processing/blossoms/files/common_files/path_chown_blossom_test.h \
-    src/processing/blossoms/special/item_update_blossom.h
+    src/processing/blossoms/special/item_update_blossom.h \
+    src/tree_handler.h
 
 SOURCES += \
     src/converter/converter.cpp \
@@ -172,7 +173,8 @@ SOURCES += \
     tests/processing/blossoms/files/common_files/path_copy_blossom_test.cpp \
     tests/processing/blossoms/files/common_files/path_delete_blossom_test.cpp \
     tests/processing/blossoms/files/common_files/path_rename_blossom_test.cpp \
-    src/processing/blossoms/special/item_update_blossom.cpp
+    src/processing/blossoms/special/item_update_blossom.cpp \
+    src/tree_handler.cpp
 
 
 SAKURA_PROVISIONING_SUBTREE = src/predefined_subtrees/sakura_provisioning_subtree.tree

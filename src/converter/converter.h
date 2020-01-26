@@ -45,9 +45,12 @@ public:
     Converter();
     ~Converter();
 
-    SakuraItem* convert(const JsonItem &tree);
+    SakuraItem* convert(const JsonItem &tree,
+                        const bool isSeed=false);
 
 private:
+    bool m_isSeed = true;
+
     SakuraItem* convertPart(const JsonItem &growPlan, bool &success);
 
     void convertSingleItemValue(ValueItem &resultingPart,

@@ -25,7 +25,7 @@
 
 #include <common.h>
 #include <unistd.h>
-#include <libKitsunemimiSakuraParser/sakura_parsing.h>
+#include <libKitsunemimiCommon/common_items/table_item.h>
 
 namespace Kitsunemimi
 {
@@ -33,17 +33,17 @@ namespace Jinja2 {
 class Jinja2Converter;
 }
 namespace Sakura {
-class SakuraHostHandler;
+class SakuraNetwork;
 }
 }
 
-using Kitsunemimi::Sakura::SakuraParsing;
 using Kitsunemimi::Jinja2::Jinja2Converter;
 
 namespace SakuraTree
 {
 class SakuraThread;
 class ThreadPool;
+class TreeHandler;
 struct BlossomItem;
 
 class SakuraRoot
@@ -90,10 +90,11 @@ public:
     static SakuraTree::SakuraRoot* m_root;
     static std::string m_executablePath;
     static Jinja2Converter* m_jinja2Converter;
-    static TableItem m_errorOutput;
+    static Kitsunemimi::TableItem m_errorOutput;
+    static SakuraTree::TreeHandler* m_treeHandler;
 
 private:
-    Kitsunemimi::Sakura::SakuraHostHandler* m_controller = nullptr;
+    Kitsunemimi::Sakura::SakuraNetwork* m_networking = nullptr;
     SakuraThread* m_rootThread = nullptr;
     ThreadPool* m_threadPool = nullptr;
 
