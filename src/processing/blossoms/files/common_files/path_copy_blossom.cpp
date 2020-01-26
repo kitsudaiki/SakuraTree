@@ -44,8 +44,10 @@ PathCopyBlossom::initBlossom(BlossomItem &blossomItem)
     m_sourcePath = blossomItem.values.getValueAsString("source_path");
     m_destinationPath = blossomItem.values.getValueAsString("dest_path");
 
-    if(m_sourcePath.at(0) != '/') {
-        m_sourcePath = blossomItem.blossomPath + "/files/" + m_sourcePath;
+    if(m_sourcePath.at(0) != '/')
+    {
+        const std::string parentPath = Kitsunemimi::Persistence::getParent(blossomItem.blossomPath);
+        m_sourcePath = parentPath + "/files/" + m_sourcePath;
     }
 
     blossomItem.success = true;

@@ -47,10 +47,8 @@ TemplateCreateBlossom::initBlossom(BlossomItem &blossomItem)
     m_destinationPath = blossomItem.values.getValueAsString("dest_path");
 
     // create source-path
-    if(blossomItem.blossomPath.at(blossomItem.blossomPath.size()-1) != '/') {
-        blossomItem.blossomPath += "/";
-    }
-    m_templatePath = blossomItem.blossomPath + "templates/" + m_templatePath;
+    const std::string parentPath = Kitsunemimi::Persistence::getParent(blossomItem.blossomPath);
+    m_templatePath = parentPath + "/templates/" + m_templatePath;
 
     blossomItem.success = true;
 }

@@ -19,33 +19,34 @@ TreeHandler::TreeHandler()
 
 /**
  * @brief TreeHandler::addTree
- * @param treeId
- * @param tree
+ * @param treePath
  * @return
  */
 bool
-TreeHandler::addTree(const std::string &treeId,
-                     const std::string &tree)
+TreeHandler::addTree(const std::string &treePath)
 {
     // parse all files and convert the into
-    const bool treeParseResult = m_parser->parseFiles(tree);
+    const bool treeParseResult = m_parser->parseFiles(treePath);
     if(treeParseResult == false)
     {
         std::cout<<m_parser->getError().toString()<<std::endl;
         return false;
     }
 
-    // parsing
-    JsonItem completePlan;
-    std::string errorMessage = "";
-    completePlan.parse(tree, errorMessage);
+    for(uint32_t i = 0; i < m_parser->m_fileContents.size(); i++)
+    {
+        // parsing
+        SakuraItem* processPlan = m_converter->convert(m_parser->m_fileContents.at(i).second);
+        if(processPlan == nullptr) {
+            return false;
+        }
 
-    SakuraItem* processPlan = m_converter->convert(completePlan);
-    if(processPlan == nullptr) {
-        return false;
+        if(addTree(m_parser->m_fileContents.at(i).first, processPlan) == false) {
+            return false;
+        }
     }
 
-    return addTree(treeId, processPlan);
+    return true;
 }
 
 /**

@@ -20,8 +20,7 @@ class TreeHandler
 public:
     TreeHandler();
 
-    bool addTree(const std::string &treeId,
-                 const std::string &tree);
+    bool addTree(const std::string &treePath);
     bool addTree(const std::string &treeId,
                  SakuraItem* tree);
     SakuraItem* getTree(const std::string &treeId);

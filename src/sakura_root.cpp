@@ -119,12 +119,15 @@ SakuraRoot::startProcess(const std::string &initialTreePath,
         }
     }
 
-    if(m_treeHandler->addTree("test", initialTreePath) == false) {
-        return false;
-    }
+    if(initialTreePath != "")
+    {
+        if(m_treeHandler->addTree(initialTreePath) == false) {
+            return false;
+        }
 
-    if(runProcess(m_treeHandler->getTree("test"), initialValues) == false) {
-        return false;
+        if(runProcess(m_treeHandler->getTree(initialTreePath), initialValues) == false) {
+            return false;
+        }
     }
 
     std::cout<<"finish"<<std::endl;
