@@ -44,6 +44,7 @@ namespace SakuraTree
 class SakuraThread;
 class ThreadPool;
 class TreeHandler;
+class SakuraItem;
 struct BlossomItem;
 
 class SakuraRoot
@@ -99,6 +100,12 @@ private:
     ThreadPool* m_threadPool = nullptr;
 
     std::mutex m_mutex;
+
+    bool runProcess(SakuraItem* item,
+                    const DataMap &initialValues);
+    SakuraItem* prepareSeed(const std::string &seedPath,
+                            const std::string &serverAddress,
+                            const uint16_t port);
 };
 
 }
