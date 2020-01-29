@@ -40,16 +40,16 @@ public:
         UNDEFINED_ITEM = 0,
         BLOSSOM_ITEM = 1,
         BLOSSOM_GROUP_ITEM = 2,
-        SUBTREE_ITEM = 3,
         TREE_ITEM = 4,
-        SEED_ITEM = 5,
-        SEQUENTIELL_ITEM = 6,
-        PARALLEL_ITEM = 7,
-        IF_ITEM = 8,
-        FOR_EACH_ITEM = 9,
-        FOR_ITEM = 10,
-        PARALLEL_FOR_EACH_ITEM = 11,
-        PARALLEL_FOR_ITEM = 12
+        SUBTREE_ITEM = 5,
+        SEED_ITEM = 6,
+        SEQUENTIELL_ITEM = 7,
+        PARALLEL_ITEM = 8,
+        IF_ITEM = 9,
+        FOR_EACH_ITEM = 10,
+        FOR_ITEM = 11,
+        PARALLEL_FOR_EACH_ITEM = 12,
+        PARALLEL_FOR_ITEM = 13
     };
 
     SakuraItem();
@@ -130,6 +130,20 @@ public:
 //===================================================================
 // BranchItem
 //===================================================================
+class TreeItem : public SakuraItem
+{
+public:
+    TreeItem();
+    ~TreeItem();
+    SakuraItem* copy();
+
+    std::string id = "";
+    std::vector<SakuraItem*> childs;
+};
+
+//===================================================================
+// SubtreeItem
+//===================================================================
 class SubtreeItem : public SakuraItem
 {
 public:
@@ -137,8 +151,13 @@ public:
     ~SubtreeItem();
     SakuraItem* copy();
 
-    std::string id = "";
-    std::vector<SakuraItem*> childs;
+    std::string nameOrPath = "";
+    std::map<std::string, ValueItemMap> internalSubtrees;
+
+    DataMap* parentValues = nullptr;
+
+    // result
+    std::vector<std::string> nameHirarchie;
 };
 
 //===================================================================

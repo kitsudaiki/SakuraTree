@@ -359,7 +359,7 @@ SakuraItem*
 Converter::convertSubtree(const JsonItem &subtree, bool &success)
 {
     // init new branch-item
-    SubtreeItem* branchItem = new SubtreeItem();
+    TreeItem* branchItem = new TreeItem();
     branchItem->id = subtree.get("b_id").toString();
 
     // fill values with the input of the upper level and convert the result

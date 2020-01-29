@@ -99,10 +99,10 @@ SakuraThread::run()
 bool
 SakuraThread::processSakuraItem(SakuraItem* sakuraItem)
 {
-    if(sakuraItem->getType() == SakuraItem::SUBTREE_ITEM)
+    if(sakuraItem->getType() == SakuraItem::TREE_ITEM)
     {
-        SubtreeItem* subtreeItem = dynamic_cast<SubtreeItem*>(sakuraItem);
-        m_hierarchy.push_back("SUBTREE: " + subtreeItem->id);
+        TreeItem* subtreeItem = dynamic_cast<TreeItem*>(sakuraItem);
+        m_hierarchy.push_back("TREE: " + subtreeItem->id);
         return processSubtree(subtreeItem);
     }
 
@@ -163,7 +163,7 @@ SakuraThread::processSakuraItem(SakuraItem* sakuraItem)
     if(sakuraItem->getType() == SakuraItem::SEED_ITEM)
     {
         SeedItem* forestItem = dynamic_cast<SeedItem*>(sakuraItem);
-        SubtreeItem* branchItem = dynamic_cast<SubtreeItem*>(forestItem->child);
+        TreeItem* branchItem = dynamic_cast<TreeItem*>(forestItem->child);
         return processSubtree(branchItem);
     }
 
@@ -263,7 +263,7 @@ SakuraThread::processBlossomGroup(BlossomGroupItem &blossomGroupItem)
  * @return true if successful, else false
  */
 bool
-SakuraThread::processSubtree(SubtreeItem* subtreeItem)
+SakuraThread::processSubtree(TreeItem* subtreeItem)
 {
     const std::vector<std::string> uninitItems = checkItems(subtreeItem->values);
     if(uninitItems.size() > 0)
