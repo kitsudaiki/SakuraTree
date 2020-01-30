@@ -103,7 +103,7 @@ SakuraThread::processSakuraItem(SakuraItem* sakuraItem)
     {
         TreeItem* subtreeItem = dynamic_cast<TreeItem*>(sakuraItem);
         m_hierarchy.push_back("TREE: " + subtreeItem->id);
-        return processSubtree(subtreeItem);
+        return processTree(subtreeItem);
     }
 
     if(sakuraItem->getType() == SakuraItem::BLOSSOM_ITEM)
@@ -164,7 +164,7 @@ SakuraThread::processSakuraItem(SakuraItem* sakuraItem)
     {
         SeedItem* forestItem = dynamic_cast<SeedItem*>(sakuraItem);
         TreeItem* branchItem = dynamic_cast<TreeItem*>(forestItem->child);
-        return processSubtree(branchItem);
+        return processTree(branchItem);
     }
 
     return false;
@@ -256,16 +256,16 @@ SakuraThread::processBlossomGroup(BlossomGroupItem &blossomGroupItem)
 }
 
 /**
- * @brief process a new subtree
+ * @brief process a new tree
  *
- * @param subtreeItem object, which should be processed
+ * @param treeItem object, which should be processed
  *
  * @return true if successful, else false
  */
 bool
-SakuraThread::processSubtree(TreeItem* subtreeItem)
+SakuraThread::processTree(TreeItem* treeItem)
 {
-    const std::vector<std::string> uninitItems = checkItems(subtreeItem->values);
+    const std::vector<std::string> uninitItems = checkItems(treeItem->values);
     if(uninitItems.size() > 0)
     {
         std::string message = "The following items are not initialized: \n";
@@ -277,12 +277,35 @@ SakuraThread::processSubtree(TreeItem* subtreeItem)
         return false;
     }
 
-    for(uint32_t i = 0; i < subtreeItem->childs.size(); i++)
+    for(uint32_t i = 0; i < treeItem->childs.size(); i++)
     {
-        const bool result = processSakuraItem(subtreeItem->childs.at(i));;
+        const bool result = processSakuraItem(treeItem->childs.at(i));;
         if(result == false) {
             return false;
         }
+    }
+
+    return true;
+}
+
+/**
+ * @brief process a new subtree
+ *
+ * @param subtreeItem object, which should be processed
+ *
+ * @return true if successful, else false
+ */
+bool
+SakuraThread::processSubtree(SubtreeItem *subtreeItem)
+{
+    std::string errorMessage = "";
+    const bool result = fillInputValueItemMap(subtreeItem->values, m_parentValues, errorMessage);
+    if(result == false)
+    {
+        SakuraRoot::m_root->createError("subtree-processing",
+                                        "error while processing blossom items:\n    "
+                                        + errorMessage);
+        return false;
     }
 
     return true;
