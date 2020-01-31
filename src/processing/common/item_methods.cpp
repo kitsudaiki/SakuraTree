@@ -416,6 +416,46 @@ overrideItems(DataMap &original,
 }
 
 /**
+ * @brief override data of a value-item-map with new incoming information
+ *
+ * @param original map with the original key-values, which should be updates with the
+ *                 information of the override-map
+ * @param override map with the new incoming information
+ * @param onlyExisting true, of only replacing values of existing key, but not add new keys
+ */
+void
+overrideItems(ValueItemMap &original,
+              const ValueItemMap &override,
+              bool onlyExisting)
+{
+    if(onlyExisting)
+    {
+        std::map<std::string, ValueItem>::const_iterator overrideIt;
+        for(overrideIt = override.const_begin();
+            overrideIt != override.const_end();
+            overrideIt++)
+        {
+            std::map<std::string, ValueItem>::iterator originalIt;
+            originalIt = original.find(overrideIt->first);
+
+            if(originalIt != original.end()) {
+                original.insert(overrideIt->first, overrideIt->second.item->copy(), true);
+            }
+        }
+    }
+    else
+    {
+        std::map<std::string, ValueItem>::const_iterator overrideIt;
+        for(overrideIt = override.const_begin();
+            overrideIt != override.const_end();
+            overrideIt++)
+        {
+            original.insert(overrideIt->first, overrideIt->second.item->copy(), true);
+        }
+    }
+}
+
+/**
  * @brief check value-item-map for uninitialized values
  *
  * @param items value-map to check

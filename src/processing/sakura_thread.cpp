@@ -23,6 +23,8 @@
 #include "sakura_thread.h"
 
 #include <sakura_root.h>
+#include <tree_handler.h>
+
 #include <processing/common/item_methods.h>
 #include <processing/blossoms/blossom.h>
 #include <processing/blossoms/blossom_getter.h>
@@ -302,7 +304,7 @@ SakuraThread::processTree(TreeItem* treeItem)
  * @return true if successful, else false
  */
 bool
-SakuraThread::processSubtree(SubtreeItem *subtreeItem)
+SakuraThread::processSubtree(SubtreeItem* subtreeItem)
 {
     std::string errorMessage = "";
     const bool result = fillInputValueItemMap(subtreeItem->values, m_parentValues, errorMessage);
@@ -313,6 +315,10 @@ SakuraThread::processSubtree(SubtreeItem *subtreeItem)
                                         + errorMessage);
         return false;
     }
+
+    SakuraItem* newSubtree = SakuraRoot::m_root->m_treeHandler->getTree(subtreeItem->nameOrPath);
+    overrideItems(newSubtree->values, subtreeItem->values, false);
+    processSakuraItem(newSubtree);
 
     return true;
 }

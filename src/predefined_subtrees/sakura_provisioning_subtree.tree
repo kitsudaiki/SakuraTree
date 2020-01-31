@@ -9,10 +9,10 @@
 - server_port = 1337
 
 ssh("prepare remote-node")
-- ip_address = ip_address
-- ssh_user = ssh_user
-- ssh_port = ssh_port
-- ssh_key_path = ssh_key_path
+- address = ip_address
+- user = ssh_user
+- port = ssh_port
+- ssh_key = ssh_key_path
 -> cmd:
     - command = "sudo apt-get update"
 -> cmd:
