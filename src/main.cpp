@@ -25,17 +25,11 @@
 #include <tests/run_unit_tests.h>
 #include <boost/program_options.hpp>
 #include <libKitsunemimiCommon/common_methods/string_methods.h>
-//#include <sakura_provisionoing_subtree.h>
 
 namespace argParser = boost::program_options;
 
 int main(int argc, char *argv[])
 {
-    //std::string test(reinterpret_cast<char*>(sakura_provisionoing_subtree_tree),
-    //                 sakura_provisionoing_subtree_tree_len);
-    //Kitsunemimi::replaceSubstring(test, "\\n", "\n");
-    //std::cout<<"test: "<<test<<std::endl;
-    //return 0;
     // run unit-tests, if enabled by define-value
     #ifdef RUN_UNIT_TEST
     SakuraTree::RunUnitTests unitTests;

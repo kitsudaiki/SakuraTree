@@ -106,6 +106,12 @@ SakuraThread::processSakuraItem(SakuraItem* sakuraItem)
         return processTree(subtreeItem);
     }
 
+    if(sakuraItem->getType() == SakuraItem::SUBTREE_ITEM)
+    {
+        SubtreeItem* subtreeItem = dynamic_cast<SubtreeItem*>(sakuraItem);
+        return processSubtree(subtreeItem);
+    }
+
     if(sakuraItem->getType() == SakuraItem::BLOSSOM_ITEM)
     {
         BlossomItem* blossomItem = dynamic_cast<BlossomItem*>(sakuraItem);

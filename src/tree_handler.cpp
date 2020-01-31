@@ -4,6 +4,9 @@
 #include <libKitsunemimiSakuraParser/sakura_parsing.h>
 #include <libKitsunemimiJson/json_item.h>
 #include <converter/converter.h>
+#include <libKitsunemimiCommon/common_methods/string_methods.h>
+
+#include <sakura_provisioning_subtree.h>
 
 namespace SakuraTree
 {
@@ -15,6 +18,8 @@ TreeHandler::TreeHandler()
 {
     m_converter = new Converter();
     m_parser = new Kitsunemimi::Sakura::SakuraParsing(DEBUG);
+
+    loadPredefinedSubtrees();
 }
 
 /**
@@ -87,6 +92,24 @@ TreeHandler::getTree(const std::string &treeId)
     }
 
     return nullptr;
+}
+
+/**
+ * @brief TreeHandler::loadPredefinedSubtrees
+ */
+void
+TreeHandler::loadPredefinedSubtrees()
+{
+    std::string provisioningSubtree(reinterpret_cast<char*>(sakura_provisioning_subtree_tree),
+                                    sakura_provisioning_subtree_tree_len);
+    Kitsunemimi::replaceSubstring(provisioningSubtree, "\\n", "\n");
+
+    JsonItem parsedProvisioningSubtree;
+    m_parser->parseString(parsedProvisioningSubtree, provisioningSubtree);
+
+    SakuraItem* convertedProvisioningSubtree = m_converter->convert(parsedProvisioningSubtree);
+
+    addTree("sakura_provisioning", convertedProvisioningSubtree);
 }
 
 }
