@@ -378,7 +378,9 @@ SakuraThread::processIf(IfBranching* ifCondition)
     // get left side of the comparism
     if(fillValueItem(ifCondition->leftSide, m_parentValues, errorMessage) == false)
     {
-        // TODO: error-message
+        SakuraRoot::m_root->createError("subtree-processing",
+                                        "error processing if-condition:\n"
+                                        + errorMessage);
         return false;
     }
     const std::string  leftSide = ifCondition->leftSide.item->toValue()->toString();
@@ -386,7 +388,9 @@ SakuraThread::processIf(IfBranching* ifCondition)
     // get right side of the comparism
     if(fillValueItem(ifCondition->rightSide, m_parentValues, errorMessage) == false)
     {
-        // TODO: error-message
+        SakuraRoot::m_root->createError("subtree-processing",
+                                        "error processing if-condition:\n"
+                                        + errorMessage);
         return false;
     }
     const std::string  rightSide = ifCondition->rightSide.item->toValue()->toString();
@@ -436,7 +440,9 @@ SakuraThread::processForEach(ForEachBranching* subtree,
     // initialize the array, over twhich the loop should iterate
     if(fillInputValueItemMap(subtree->iterateArray, m_parentValues, errorMessage) == false)
     {
-        // TODO: error-message
+        SakuraRoot::m_root->createError("subtree-processing",
+                                        "error processing for-loop:\n"
+                                        + errorMessage);
         return false;
     }
     DataArray* array = subtree->iterateArray.get("array")->toArray();
@@ -500,7 +506,9 @@ SakuraThread::processForEach(ForEachBranching* subtree,
                                      spawnedObjects.at(static_cast<uint32_t>(i))->items,
                                      errorMessage) == false)
             {
-                // TODO: error-message
+                SakuraRoot::m_root->createError("subtree-processing",
+                                                "error processing post-aggregation of for-loop:\n"
+                                                + errorMessage);
                 return false;
             }
         }
@@ -528,7 +536,9 @@ SakuraThread::processFor(ForBranching* subtree,
     // get start-value
     if(fillValueItem(subtree->start, m_parentValues, errorMessage) == false)
     {
-        // TODO: error-message
+        SakuraRoot::m_root->createError("subtree-processing",
+                                        "error processing for-loop:\n"
+                                        + errorMessage);
         return false;
     }
     const long startValue = subtree->start.item->toValue()->getLong();
@@ -536,7 +546,9 @@ SakuraThread::processFor(ForBranching* subtree,
     // get end-value
     if(fillValueItem(subtree->end, m_parentValues, errorMessage) == false)
     {
-        // TODO: error-message
+        SakuraRoot::m_root->createError("subtree-processing",
+                                        "error processing for-loop:\n"
+                                        + errorMessage);
         return false;
     }
     const long endValue = subtree->end.item->toValue()->getLong();
@@ -603,7 +615,9 @@ SakuraThread::processFor(ForBranching* subtree,
                                      spawnedObjects.at(static_cast<uint32_t>(i))->items,
                                      errorMessage) == false)
             {
-                // TODO: error-message
+                SakuraRoot::m_root->createError("subtree-processing",
+                                                "error processing post-aggregation of for-loop:\n"
+                                                + errorMessage);
                 return false;
             }
         }
