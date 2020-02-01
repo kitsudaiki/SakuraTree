@@ -324,7 +324,6 @@ SakuraThread::processSubtree(SubtreeItem* subtreeItem)
     overrideItems(newSubtree->values, subtreeItem->values, false);
 
     // fill internal maps
-    DataMap* internalMap = new DataMap();
     std::map<std::string, ValueItemMap>::iterator mapIt;
     for(mapIt = subtreeItem->internalSubtrees.begin();
         mapIt != subtreeItem->internalSubtrees.end();
@@ -350,11 +349,10 @@ SakuraThread::processSubtree(SubtreeItem* subtreeItem)
             tempMap->insert(valueIt->first, valueIt->second.item->copy());
         }
 
-        internalMap->insert(mapIt->first, tempMap);
+        newSubtree->values.insert(mapIt->first, tempMap);
     }
 
     overrideItems(newSubtree->values, subtreeItem->values, false);
-    newSubtree->values.insert("internal_subtypes", internalMap);
     overrideItems(m_parentValues, newSubtree->values, false);
 
     return processSakuraItem(newSubtree);
@@ -383,7 +381,7 @@ SakuraThread::processIf(IfBranching* ifCondition)
                                         + errorMessage);
         return false;
     }
-    const std::string leftSide = ifCondition->leftSide.item->toValue()->toString();
+    const std::string leftSide = ifCondition->leftSide.item->toString();
 
     // get right side of the comparism
     if(fillValueItem(ifCondition->rightSide, m_parentValues, errorMessage) == false)
@@ -393,7 +391,7 @@ SakuraThread::processIf(IfBranching* ifCondition)
                                         + errorMessage);
         return false;
     }
-    const std::string rightSide = ifCondition->rightSide.item->toValue()->toString();
+    const std::string rightSide = ifCondition->rightSide.item->toString();
 
     // compare based on the compare-type
     switch(ifCondition->ifType)
