@@ -413,10 +413,7 @@ Converter::convertSubtree(const JsonItem &subtree,
         const JsonItem item = subTypeArray.get(i);
         BlossomItem* blossomItem = new BlossomItem();
 
-        // values
-        convertItemValues(blossomItem, subtree.get("items-input"), success);
         convertItemValues(blossomItem, item.get("items-input"), success);
-
         const std::string subtype = item.get("blossom-type").toString();
         subtreeItem->internalSubtrees.insert(
                     std::pair<std::string, ValueItemMap>(subtype, blossomItem->values));

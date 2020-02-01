@@ -194,7 +194,7 @@ SakuraThread::processBlossom(BlossomItem &blossomItem)
     if(result == false)
     {
         SakuraRoot::m_root->createError(blossomItem, "processing",
-                                        "error while processing blossom items:\n    "
+                                        "error while processing blossom items:\n"
                                         + errorMessage);
         blossomItem.success = false;
         return false;
@@ -307,20 +307,57 @@ bool
 SakuraThread::processSubtree(SubtreeItem* subtreeItem)
 {
     std::string errorMessage = "";
-    const bool result = fillInputValueItemMap(subtreeItem->values, m_parentValues, errorMessage);
-    if(result == false)
+    bool fillResult = false;
+
+    SakuraItem* newSubtree = SakuraRoot::m_root->m_treeHandler->getTree(subtreeItem->nameOrPath);
+
+
+    // fill normal map
+    fillResult = fillInputValueItemMap(subtreeItem->values, m_parentValues, errorMessage);
+    if(fillResult == false)
     {
         SakuraRoot::m_root->createError("subtree-processing",
-                                        "error while processing blossom items:\n    "
+                                        "error while processing blossom items:\n"
                                         + errorMessage);
         return false;
     }
-
-    SakuraItem* newSubtree = SakuraRoot::m_root->m_treeHandler->getTree(subtreeItem->nameOrPath);
     overrideItems(newSubtree->values, subtreeItem->values, false);
-    processSakuraItem(newSubtree);
 
-    return true;
+    // fill internal maps
+    DataMap* internalMap = new DataMap();
+    std::map<std::string, ValueItemMap>::iterator mapIt;
+    for(mapIt = subtreeItem->internalSubtrees.begin();
+        mapIt != subtreeItem->internalSubtrees.end();
+        mapIt++)
+    {
+        DataMap* tempMap = new DataMap();
+
+        std::map<std::string, ValueItem>::iterator valueIt;
+        for(valueIt = mapIt->second.begin();
+            valueIt != mapIt->second.end();
+            valueIt++)
+        {
+            errorMessage = "";
+            fillResult =  fillValueItem(valueIt->second, m_parentValues, errorMessage);
+            if(fillResult == false)
+            {
+                SakuraRoot::m_root->createError("subtree-processing",
+                                                "error while processing blossom items:\n"
+                                                + errorMessage);
+                return false;
+            }
+
+            tempMap->insert(valueIt->first, valueIt->second.item->copy());
+        }
+
+        internalMap->insert(mapIt->first, tempMap);
+    }
+
+    overrideItems(newSubtree->values, subtreeItem->values, false);
+    newSubtree->values.insert("internal_subtypes", internalMap);
+    overrideItems(m_parentValues, newSubtree->values, false);
+
+    return processSakuraItem(newSubtree);
 }
 
 /**
