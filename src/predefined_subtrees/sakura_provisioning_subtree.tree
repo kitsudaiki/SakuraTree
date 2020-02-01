@@ -3,7 +3,6 @@
 - host_name = ""
 - internal_subtypes = {}
 
-
 if(internal_subtypes.contains("ssh_provisioning") == true)
 {
     print("debug-print")

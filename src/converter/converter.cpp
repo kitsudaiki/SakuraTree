@@ -137,29 +137,7 @@ Converter::convertSingleItemValue(ValueItem &resultingPart,
     for(uint32_t f = 0; f < functions.size(); f++)
     {
         FunctionItem functionItem;
-
-        // get function-type
-        if(functions.get(f).get("b_type").toString() == "get") {
-            functionItem.type = FunctionItem::GET_FUNCTION;
-        }
-        if(functions.get(f).get("b_type").toString() == "split") {
-            functionItem.type = FunctionItem::SPLIT_FUNCTION;
-        }
-        if(functions.get(f).get("b_type").toString() == "contains") {
-            functionItem.type = FunctionItem::CONTAINS_FUNCTION;
-        }
-        if(functions.get(f).get("b_type").toString() == "size") {
-            functionItem.type = FunctionItem::SIZE_FUNCTION;
-        }
-        if(functions.get(f).get("b_type").toString() == "insert") {
-            functionItem.type = FunctionItem::INSERT_FUNCTION;
-        }
-        if(functions.get(f).get("b_type").toString() == "append") {
-            functionItem.type = FunctionItem::APPEND_FUNCTION;
-        }
-        if(functions.get(f).get("b_type").toString() == "clear_empty") {
-            functionItem.type = FunctionItem::CLEAR_EMPTY_FUNCTION;
-        }
+        functionItem.type  = functions.get(f).get("b_type").toString();
 
         // get argument-list
         JsonItem arguments = functions.get(f).get("args");

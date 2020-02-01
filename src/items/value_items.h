@@ -33,19 +33,7 @@ struct ValueItem;
 
 struct FunctionItem
 {
-    enum FunctionType
-    {
-        UNDEFINED_FUNCTION = 0,
-        GET_FUNCTION = 1,
-        SPLIT_FUNCTION = 2,
-        CONTAINS_FUNCTION = 3,
-        SIZE_FUNCTION = 4,
-        INSERT_FUNCTION = 5,
-        APPEND_FUNCTION = 6,
-        CLEAR_EMPTY_FUNCTION = 7
-    };
-
-    FunctionType type = UNDEFINED_FUNCTION;
+    std::string type = "";
     std::vector<ValueItem> arguments;
 };
 

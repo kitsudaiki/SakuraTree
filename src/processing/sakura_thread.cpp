@@ -383,7 +383,7 @@ SakuraThread::processIf(IfBranching* ifCondition)
                                         + errorMessage);
         return false;
     }
-    const std::string  leftSide = ifCondition->leftSide.item->toValue()->toString();
+    const std::string leftSide = ifCondition->leftSide.item->toValue()->toString();
 
     // get right side of the comparism
     if(fillValueItem(ifCondition->rightSide, m_parentValues, errorMessage) == false)
@@ -393,7 +393,7 @@ SakuraThread::processIf(IfBranching* ifCondition)
                                         + errorMessage);
         return false;
     }
-    const std::string  rightSide = ifCondition->rightSide.item->toValue()->toString();
+    const std::string rightSide = ifCondition->rightSide.item->toValue()->toString();
 
     // compare based on the compare-type
     switch(ifCondition->ifType)

@@ -27,8 +27,8 @@
 
 DataItem* getValue(DataItem* item, DataValue* key, std::string &errorMessage);
 DataArray* splitValue(DataValue* item, DataValue* delimiter, std::string &errorMessage);
-DataItem* sizeValue(DataItem* item, std::string &errorMessage);
-DataItem* containsValue(DataItem* item, DataValue* key, std::string &errorMessage);
+DataValue* sizeValue(DataItem* item, std::string &errorMessage);
+DataValue* containsValue(DataItem* item, DataValue* key, std::string &errorMessage);
 DataArray* appendValue(DataArray* item, DataItem* value, std::string &errorMessage);
 DataMap* insertValue(DataMap* item, DataValue* key, DataItem* value, std::string &errorMessage);
 DataArray* clearEmpty(DataArray* item, std::string &errorMessage);
