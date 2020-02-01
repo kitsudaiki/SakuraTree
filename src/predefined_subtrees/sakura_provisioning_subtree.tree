@@ -1,17 +1,28 @@
 ["sakura provisioning"]
 - type = ""
 - host_name = ""
+- source_path = ""
+- server_address = ""
+- server_port = ""
 - internal_subtypes = {}
 
 if(internal_subtypes.contains("ssh_provisioning") == true)
 {
-    print("debug-print")
-    - type = type
-    - host_name = host_name
-    - internal_subtypes = internal_subtypes
-}
-else
-{
-    print("fail")
-    - fail = "fail"
+    ssh("prepare remote-node")
+    - address = internal_subtypes.get("ssh_provisioning").get("ip_address")
+    - user = internal_subtypes.get("ssh_provisioning").get("ssh_user")
+    - port = internal_subtypes.get("ssh_provisioning").get("ssh_port")
+    - ssh_key = internal_subtypes.get("ssh_provisioning").get("ssh_key_path")
+    -> cmd:
+        - command = "sudo apt-get update"
+    -> cmd:
+        - command = "sudo apt-get install -y libboost-filesystem-dev libsqlite3-dev libboost-program-options-dev"
+    -> scp:
+        - source_path = source_path
+        - target_path = internal_subtypes.get("ssh_provisioning").get("target_path")
+    -> file_create:
+        - file_path = "/etc/systemd/system/sakura_tree.service"
+        - file_content = "[Unit]\nDescription=SakuraTree-Test\nStartLimitIntervalSec=0\n\n[Service]\nType=simple\nRestart=always\nRestartSec=1\nUser=neptune\nExecStart={{internal_subtypes.ssh_provisioning.target_path}}SakuraTree --server-address {{server_address}} --server-port {{server_port}}\n\n[Install]\nWantedBy=multi-user.target\n"
+    -> cmd:
+        - command = "sudo systemctl start sakura_tree"
 }

@@ -103,13 +103,18 @@ SakuraRoot::startProcess(const std::string &initialTreePath,
                          const std::string &seedPath,
                          const DataMap &initialValues,
                          const std::string &serverAddress,
-                         const uint16_t port)
+                         const uint16_t serverPort)
 {
-
+    if(m_treeHandler->loadPredefinedSubtrees() == false) {
+        return false;
+    }
 
     if(seedPath != "")
     {
-        SakuraItem* seedItem = prepareSeed(seedPath, serverAddress, port);
+        SakuraItem* seedItem = prepareSeed(seedPath,
+                                           m_executablePath,
+                                           serverAddress,
+                                           serverPort);
         if(seedItem == nullptr) {
             return false;
         }
@@ -366,6 +371,7 @@ SakuraRoot::runProcess(SakuraItem* item,
  */
 SakuraItem*
 SakuraRoot::prepareSeed(const std::string &seedPath,
+                        const std::string &executablePath,
                         const std::string &serverAddress,
                         const uint16_t port)
 {
@@ -388,6 +394,10 @@ SakuraRoot::prepareSeed(const std::string &seedPath,
         std::cout<<m_errorOutput.toString()<<std::endl;
         return nullptr;
     }
+
+    convertedSeed->values.insert("source_path", new DataValue(executablePath));
+    convertedSeed->values.insert("server_address", new DataValue(serverAddress));
+    convertedSeed->values.insert("server_port", new DataValue(port));
 
     // create server
     if(serverAddress != "") {

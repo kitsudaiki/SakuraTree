@@ -18,8 +18,6 @@ TreeHandler::TreeHandler()
 {
     m_converter = new Converter();
     m_parser = new Kitsunemimi::Sakura::SakuraParsing(DEBUG);
-
-    loadPredefinedSubtrees();
 }
 
 /**
@@ -97,7 +95,7 @@ TreeHandler::getTree(const std::string &treeId)
 /**
  * @brief TreeHandler::loadPredefinedSubtrees
  */
-void
+bool
 TreeHandler::loadPredefinedSubtrees()
 {
     std::string provisioningSubtree(reinterpret_cast<char*>(sakura_provisioning_subtree_tree),
@@ -106,11 +104,16 @@ TreeHandler::loadPredefinedSubtrees()
 
     JsonItem parsedProvisioningSubtree;
     m_parser->parseString(parsedProvisioningSubtree, provisioningSubtree);
+    if(parsedProvisioningSubtree.isValid() == false)
+    {
+        std::cout<<m_parser->getError().toString()<<std::endl;
+        return false;
+    }
 
     SakuraItem* convertedProvisioningSubtree = m_converter->convert(parsedProvisioningSubtree);
-
-
     addTree("sakura_provisioning", convertedProvisioningSubtree);
+
+    return true;
 }
 
 }

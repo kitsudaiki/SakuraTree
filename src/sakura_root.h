@@ -59,7 +59,7 @@ public:
                       const std::string &seedPath,
                       const DataMap &initialValues,
                       const std::string &serverAddress="127.0.0.1",
-                      const uint16_t port=1337);
+                      const uint16_t serverPort=1337);
     bool startSubtreeProcess(const std::string &subtree,
                              const std::string &values);
 
@@ -104,6 +104,7 @@ private:
     bool runProcess(SakuraItem* item,
                     const DataMap &initialValues);
     SakuraItem* prepareSeed(const std::string &seedPath,
+                            const std::string &executablePath,
                             const std::string &serverAddress,
                             const uint16_t port);
 };

@@ -25,12 +25,11 @@ public:
                  SakuraItem* tree);
     SakuraItem* getTree(const std::string &treeId);
 
+    bool loadPredefinedSubtrees();
 private:
     std::map<std::string, SakuraItem*> m_trees;
     Converter* m_converter = nullptr;
     Kitsunemimi::Sakura::SakuraParsing* m_parser = nullptr;
-
-    void loadPredefinedSubtrees();
 };
 
 }
