@@ -59,11 +59,11 @@ get_required_kitsune_lib_repo "libKitsunemimiIni" "v0.4.0" 1
 
 get_required_kitsune_lib_repo "libKitsunemimiJinja2" "v0.7.0" 1
 
-get_required_kitsune_lib_repo "libKitsunemimiSakuraParser" "readd-and-complete-multi-file-and-multi-node" 1
+get_required_kitsune_lib_repo "libKitsunemimiSakuraParser" "master" 1
 
 get_required_kitsune_lib_repo "libKitsunemimiProjectNetwork" "master" 4
 
-get_required_kitsune_lib_repo "libKitsunemimiSakuraNetwork" "readd-and-complete-multi-file-and-multi-node" 4
+get_required_kitsune_lib_repo "libKitsunemimiSakuraNetwork" "master" 4
 
 #-----------------------------------------------------------------------------------------------------------------
 
