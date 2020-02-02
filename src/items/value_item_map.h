@@ -53,6 +53,7 @@ public:
     std::map<std::string, ValueItem>::iterator end();
     std::map<std::string, ValueItem>::const_iterator const_begin() const;
     std::map<std::string, ValueItem>::const_iterator const_end() const;
+    std::map<std::string, ValueItem>::iterator find(const std::string key);
 
 private:
     std::map<std::string, ValueItem> m_valueMap;

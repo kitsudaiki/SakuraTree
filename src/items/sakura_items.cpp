@@ -127,14 +127,14 @@ BlossomGroupItem::copy()
 
 
 //===================================================================
-// BranchItem
+// TreeItem
 //===================================================================
-SubtreeItem::SubtreeItem()
+TreeItem::TreeItem()
 {
-    type = SUBTREE_ITEM;
+    type = TREE_ITEM;
 }
 
-SubtreeItem::~SubtreeItem()
+TreeItem::~TreeItem()
 {
     for(uint32_t i = 0; i < childs.size(); i++)
     {
@@ -146,9 +146,9 @@ SubtreeItem::~SubtreeItem()
 }
 
 SakuraItem*
-SubtreeItem::copy()
+TreeItem::copy()
 {
-    SubtreeItem* newItem = new SubtreeItem();
+    TreeItem* newItem = new TreeItem();
 
     newItem->type = type;
     newItem->values = values;
@@ -158,6 +158,30 @@ SubtreeItem::copy()
     {
         newItem->childs.push_back(childs.at(i)->copy());
     }
+
+    return newItem;
+}
+
+//===================================================================
+// SubtreeItem
+//===================================================================
+SubtreeItem::SubtreeItem()
+{
+    type = SUBTREE_ITEM;
+}
+
+SubtreeItem::~SubtreeItem() {}
+
+SakuraItem*
+SubtreeItem::copy()
+{
+    SubtreeItem* newItem = new SubtreeItem();
+
+    newItem->type = type;
+    newItem->values = values;
+
+    newItem->nameOrPath = nameOrPath;
+    newItem->internalSubtrees = internalSubtrees;
 
     return newItem;
 }

@@ -45,10 +45,13 @@ public:
     Converter();
     ~Converter();
 
-    SakuraItem* convert(const JsonItem &tree);
+    SakuraItem* convert(const JsonItem &tree,
+                        const bool isSeed=false);
 
 private:
-    SakuraItem* convertPart(const JsonItem &growPlan, bool &success);
+    bool m_isSeed = true;
+
+    SakuraItem* convertPart(const JsonItem &subtree, bool &success);
 
     void convertSingleItemValue(ValueItem &resultingPart,
                                 const JsonItem &itemInput,
@@ -58,12 +61,13 @@ private:
                            const JsonItem &jsonValues,
                            bool &success);
 
-    SakuraItem* convertBlossomGroup(const JsonItem &growPlan, bool &success);
-    SakuraItem* convertSubtree(const JsonItem &growPlan, bool &success);
-    SakuraItem* convertSeed(const JsonItem &growPlan, bool &success);
-    SakuraItem* convertIf(const JsonItem &growPlan, bool &success);
-    SakuraItem* convertForEach(const JsonItem &growPlan, const bool parallel, bool &success);
-    SakuraItem* convertFor(const JsonItem &growPlan, const bool parallel, bool &success);
+    SakuraItem* convertBlossomGroup(const JsonItem &subtree, bool &success);
+    SakuraItem* convertTree(const JsonItem &subtree, bool &success);
+    SakuraItem* convertSubtree(const JsonItem &subtree, bool &success);
+    SakuraItem* convertSeed(const JsonItem &subtree, bool &success);
+    SakuraItem* convertIf(const JsonItem &subtree, bool &success);
+    SakuraItem* convertForEach(const JsonItem &subtree, const bool parallel, bool &success);
+    SakuraItem* convertFor(const JsonItem &subtree, const bool parallel, bool &success);
     SakuraItem* convertParallel(const JsonItem &subtree, bool &success);
 };
 

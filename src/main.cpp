@@ -44,31 +44,30 @@ int main(int argc, char *argv[])
             "produce help message"
         )
         (
-            "seed-path",
+            "init-tree",
             argParser::value<std::string>(),
-            "path to the initial seed-file"
+            "path to the initial tree-file"
         )
-        /*(
-            "seed-name",
+        (
+            "seed",
             argParser::value<std::string>(),
-            "set name initial seed-file"
-        )*/
+            "path to the seed-file"
+        )
         (
             "input,i",
             argParser::value<std::vector<std::string>>()->multitoken()->zero_tokens()->composing(),
             "key-value-pairs to override the initial values inside of the file"
         )
-        // TODO: enable again in 0.3.0
-        /*(
+        (
             "server-address",
             argParser::value<std::string>(),
             "address of the server"
         )
         (
             "server-port",
-            argParser::value<int>(),
+            argParser::value<uint16_t>(),
             "port of the server"
-        )*/
+        )
     ;
 
     argParser::variables_map vm;
@@ -82,58 +81,78 @@ int main(int argc, char *argv[])
         return 0;
     }
 
-    // seed-path-arg
-    if(vm.count("seed-path"))
+    std::string initialTreePath = "";
+    std::string seedPath = "";
+    DataMap initialValues;
+    std::string serverAddress = "";
+    uint16_t port = 0;
+
+    // initial tree-file
+    if(vm.count("init-tree"))
     {
-        std::cout << "seed-path: "
-                  << vm["seed-path"].as<std::string>()
-                  << std::endl;
-        SakuraTree::SakuraRoot* root = new SakuraTree::SakuraRoot(std::string(argv[0]));
-
-        // seed-path
-        const std::string seedPath = vm["seed-path"].as<std::string>();
-
-        // seed-name
-        std::string seedName = "";
-        if(vm.count("seed-name")) {
-            seedName = vm["seed-name"].as<std::string>();
-        }
-
-        // input-values
-        DataMap initialValues;
-        if(vm.count("input"))
-        {
-            std::vector<std::string> envs = vm["input"].as<std::vector<std::string>>();
-            for(uint32_t i = 0; i < envs.size(); i++)
-            {
-                std::vector<std::string> pair;
-                Kitsunemimi::splitStringByDelimiter(pair, envs.at(i), '=');
-                if(pair.size() != 2)
-                {
-                    std::cout << "'"<<envs.at(i)<<"' is not a valid pair"<<std::endl;
-                    return 1;
-                }
-                initialValues.insert(pair.at(0), new DataValue(pair.at(1)));
-            }
-        }
-
-        // start
-        root->startProcess(seedPath, seedName, initialValues);
+        initialTreePath = vm["init-tree"].as<std::string>();
+        std::cout << "init-tree: " << initialTreePath << std::endl;
     }
-    // TODO: enable again in 0.3.0
-    /*else if(vm.count("server-address") && vm.count("server-port"))
+
+    // seed-file
+    if(vm.count("seed"))
+    {
+        seedPath = vm["seed"].as<std::string>();
+        std::cout << "seed: " << seedPath << std::endl;
+    }
+
+    // input-values
+    if(vm.count("input"))
+    {
+        std::vector<std::string> envs = vm["input"].as<std::vector<std::string>>();
+        for(uint32_t i = 0; i < envs.size(); i++)
+        {
+            std::vector<std::string> pair;
+            Kitsunemimi::splitStringByDelimiter(pair, envs.at(i), '=');
+            if(pair.size() != 2)
+            {
+                std::cout << "'"<<envs.at(i)<<"' is not a valid pair"<<std::endl;
+                return 1;
+            }
+            initialValues.insert(pair.at(0), new DataValue(pair.at(1)));
+        }
+    }
+
+    // server-address
+    if(vm.count("server-address"))
+    {
+        serverAddress = vm["server-address"].as<std::string>();
+        std::cout << "server-address: " << serverAddress << std::endl;
+    }
+
+    // server-port
+    if(vm.count("server-port"))
+    {
+        port = vm["server-port"].as<uint16_t>();
+        std::cout << "server-port: " << port << std::endl;
+    }
+
+    if(vm.count("init-tree"))
     {
         SakuraTree::SakuraRoot* root = new SakuraTree::SakuraRoot(std::string(argv[0]));
-        const std::string address = vm["server-address"].as<std::string>();
-        const int port = vm["server-port"].as<int>();
-
-        root->startClientConnection(address, port);
+        root->startProcess(initialTreePath,
+                           seedPath,
+                           initialValues,
+                           serverAddress,
+                           port);
+    }
+    else if(vm.count("server-address")
+            && vm.count("server-port"))
+    {
+        SakuraTree::SakuraRoot* root = new SakuraTree::SakuraRoot(std::string(argv[0]));
+        root->startClientConnection(serverAddress,
+                                    port);
 
         while(true)
         {
             sleep(10);
         }
-    }*/
+    }
     else
     {
         std::cout << "seed-path is missing"<<std::endl;

@@ -56,7 +56,8 @@ Converter::~Converter() {}
  * @return tree based on sakura-items if converting was successful, else null-pointer
  */
 SakuraItem*
-Converter::convert(const JsonItem &tree)
+Converter::convert(const JsonItem &tree,
+                   const bool isSeed)
 {
     // debug-output
     if(DEBUG)
@@ -67,6 +68,7 @@ Converter::convert(const JsonItem &tree)
         std::cout<<"-----------------------------------------------------"<<std::endl;
     }
 
+    m_isSeed = isSeed;
     bool success = true;
     SakuraItem* result = convertPart(tree, success);
 
@@ -135,29 +137,7 @@ Converter::convertSingleItemValue(ValueItem &resultingPart,
     for(uint32_t f = 0; f < functions.size(); f++)
     {
         FunctionItem functionItem;
-
-        // get function-type
-        if(functions.get(f).get("b_type").toString() == "get") {
-            functionItem.type = FunctionItem::GET_FUNCTION;
-        }
-        if(functions.get(f).get("b_type").toString() == "split") {
-            functionItem.type = FunctionItem::SPLIT_FUNCTION;
-        }
-        if(functions.get(f).get("b_type").toString() == "contains") {
-            functionItem.type = FunctionItem::CONTAINS_FUNCTION;
-        }
-        if(functions.get(f).get("b_type").toString() == "size") {
-            functionItem.type = FunctionItem::SIZE_FUNCTION;
-        }
-        if(functions.get(f).get("b_type").toString() == "insert") {
-            functionItem.type = FunctionItem::INSERT_FUNCTION;
-        }
-        if(functions.get(f).get("b_type").toString() == "append") {
-            functionItem.type = FunctionItem::APPEND_FUNCTION;
-        }
-        if(functions.get(f).get("b_type").toString() == "clear_empty") {
-            functionItem.type = FunctionItem::CLEAR_EMPTY_FUNCTION;
-        }
+        functionItem.type  = functions.get(f).get("b_type").toString();
 
         // get argument-list
         JsonItem arguments = functions.get(f).get("args");
@@ -213,6 +193,10 @@ Converter::convertPart(const JsonItem &subtree, bool &success)
         return convertBlossomGroup(subtree, success);
     }
 
+    if(typeName == "tree") {
+        return convertTree(subtree, success);
+    }
+
     if(typeName == "subtree") {
         return convertSubtree(subtree, success);
     }
@@ -262,6 +246,30 @@ Converter::convertPart(const JsonItem &subtree, bool &success)
 SakuraItem*
 Converter::convertBlossomGroup(const JsonItem &subtree, bool &success)
 {
+    // special handling for seed-input
+    if(m_isSeed)
+    {
+        DataMap* content = subtree.getItemContent()->toMap();
+
+        // set new values
+        content->insert("b_id", new DataValue("sakura_provisioning"), true);
+        content->insert("b_type", new DataValue("subtree"), true);
+
+        // set host-name as new item
+        DataMap* hostNameItem = new DataMap();
+        hostNameItem->insert("b_type", new DataValue("assign"));
+        hostNameItem->insert("key", new DataValue("host_name"));
+        hostNameItem->insert("value", new DataMap());
+        hostNameItem->get("value")->toMap()->insert("b_type", new DataValue("value"));
+        hostNameItem->get("value")->toMap()->insert("functions", new DataArray());
+        const std::string hostName = subtree.get("blossom-group-type").toString();
+        hostNameItem->get("value")->toMap()->insert("item", new DataValue(hostName));
+
+        content->get("items-input")->toArray()->append(hostNameItem);
+
+        return convertSubtree(subtree, success);
+    }
+
     // init new blossom-group-item
     BlossomGroupItem* blossomGroupItem =  new BlossomGroupItem();
     blossomGroupItem->id = subtree.get("name").toString();
@@ -280,13 +288,15 @@ Converter::convertBlossomGroup(const JsonItem &subtree, bool &success)
             blossomItem->blossomName = subtree.get("name").toString();
             blossomItem->blossomPath = subtree.get("b_path").toString();
             blossomItem->blossomType = item.get("blossom-type").toString();
-            blossomItem->blossomGroupType = subtree.get("blossom-group-type").toString();
 
+            // values
             convertItemValues(blossomItem, subtree.get("items-input"), success);
             convertItemValues(blossomItem, item.get("items-input"), success);
 
+            blossomItem->blossomGroupType = subtree.get("blossom-group-type").toString();
             blossomGroupItem->blossoms.push_back(blossomItem);
 
+            // optional check of blossom-requirements
             if(checkBlossomItem(*blossomItem) == false) {
                 success = false;
             }
@@ -299,13 +309,16 @@ Converter::convertBlossomGroup(const JsonItem &subtree, bool &success)
         blossomItem->blossomName = subtree.get("name").toString();
         blossomItem->blossomPath = subtree.get("b_path").toString();
         blossomItem->blossomType = subtree.get("blossom-group-type").toString();
-        blossomItem->blossomGroupType = "special";
 
         convertItemValues(blossomItem, subtree.get("items-input"), success);
 
+        // set group-type
+        blossomItem->blossomGroupType = "special";
         blossomGroupItem->blossomGroupType = "special";
+
         blossomGroupItem->blossoms.push_back(blossomItem);
 
+        // optional check of blossom-requirements
         if(checkBlossomItem(*blossomItem) == false) {
             success = false;
         }
@@ -315,7 +328,7 @@ Converter::convertBlossomGroup(const JsonItem &subtree, bool &success)
 }
 
 /**
- * @brief convert branch
+ * @brief convert tree
  *
  * @param subtree current suttree for converting
  * @param success reference to the success-status-value
@@ -323,36 +336,70 @@ Converter::convertBlossomGroup(const JsonItem &subtree, bool &success)
  * @return pointer of the current converted part
  */
 SakuraItem*
-Converter::convertSubtree(const JsonItem &subtree, bool &success)
+Converter::convertTree(const JsonItem &subtree, bool &success)
 {
-    // init new branch-item
-    SubtreeItem* branchItem = new SubtreeItem();
-    branchItem->id = subtree.get("b_id").toString();
+    // init new tree-item
+    TreeItem* treeItem = new TreeItem();
+    treeItem->id = subtree.get("b_id").toString();
 
     // fill values with the input of the upper level and convert the result
-    JsonItem items = subtree.get("items");
-    if(subtree.contains("items-input")) {
-        overrideItems(items, subtree.get("items-input"));
-    }
-    convertItemValues(branchItem, items, success);
+    const JsonItem items = subtree.get("items");
+    convertItemValues(treeItem, items, success);
 
-    // convert parts of the branch
+    // convert parts of the tree
     const JsonItem parts = subtree.get("parts");
     if(parts.isValid() == false)
     {
         success = false;
-        return  branchItem;
+        return  treeItem;
     }
 
-    // convert parts of the subtree
+    // convert parts of the tree
     for(uint32_t i = 0; i < parts.size(); i++)
     {
         JsonItem newMap = parts.get(i);
         newMap.insert("b_path", subtree.get("b_path"));
-        branchItem->childs.push_back(convertPart(newMap, success));
+        treeItem->childs.push_back(convertPart(newMap, success));
     }
 
-    return branchItem;
+    return treeItem;
+}
+
+/**
+ * @brief convert subtree-object
+ *
+ * @param subtree current suttree for converting
+ * @param success reference to the success-status-value
+ *
+ * @return pointer of the current converted part
+ */
+SakuraItem*
+Converter::convertSubtree(const JsonItem &subtree,
+                          bool &success)
+{
+    SubtreeItem* subtreeItem = new SubtreeItem();
+    subtreeItem->nameOrPath = subtree.get("b_id").toString();
+
+    // fill values with the input of the upper level and convert the result
+    const JsonItem items = subtree.get("items-input");
+    convertItemValues(subtreeItem, items, success);
+
+    // convert all blossoms of the group
+    const JsonItem subTypeArray = subtree.get("blossoms");
+    for(uint32_t i = 0; i < subTypeArray.size(); i++)
+    {
+        const JsonItem item = subTypeArray.get(i);
+        BlossomItem* blossomItem = new BlossomItem();
+
+        convertItemValues(blossomItem, item.get("items-input"), success);
+        const std::string subtype = item.get("blossom-type").toString();
+        subtreeItem->internalSubtrees.insert(
+                    std::pair<std::string, ValueItemMap>(subtype, blossomItem->values));
+
+        delete blossomItem;
+    }
+
+    return subtreeItem;
 }
 
 /**

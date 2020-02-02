@@ -261,4 +261,13 @@ ValueItemMap::const_end() const
     return m_valueMap.end();
 }
 
+/**
+ * @brief find
+ */
+std::map<std::string, ValueItem>::iterator
+ValueItemMap::find(const std::string key)
+{
+    return m_valueMap.find(key);
+}
+
 }

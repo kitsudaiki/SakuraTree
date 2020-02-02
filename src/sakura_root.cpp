@@ -21,19 +21,20 @@
  */
 
 #include "sakura_root.h"
-#include <converter/converter.h>
+#include <tree_handler.h>
 
 #include <processing/common/item_methods.h>
 #include <processing/sakura_thread.h>
 #include <processing/sakura_tree_callbacks.h>
 #include <processing/thread_pool.h>
 
-// TODO: enable again in 0.3.0
-// #include <libKitsunemimiSakuraNetwork/sakura_host_handler.h>
+#include <libKitsunemimiSakuraNetwork/sakura_network.h>
 #include <libKitsunemimiSakuraParser/sakura_parsing.h>
-
-#include <libKitsunemimiJson/json_item.h>
 #include <libKitsunemimiJinja2/jinja2_converter.h>
+#include <libKitsunemimiJson/json_item.h>
+
+#include <items/sakura_items.h>
+#include <converter/converter.h>
 
 namespace SakuraTree
 {
@@ -42,6 +43,7 @@ SakuraRoot* SakuraRoot::m_root = nullptr;
 std::string SakuraRoot::m_executablePath = "";
 TableItem SakuraRoot::m_errorOutput;
 Jinja2Converter* SakuraRoot::m_jinja2Converter = nullptr;
+TreeHandler* SakuraRoot::m_treeHandler = nullptr;
 
 /**
  * @brief constructor
@@ -54,6 +56,7 @@ SakuraRoot::SakuraRoot(const std::string &executablePath)
     m_root = this;
     m_executablePath = executablePath;
     m_jinja2Converter = new Jinja2Converter();
+    m_treeHandler = new TreeHandler();
 
     // initialize error-output
     m_errorOutput.addColumn("Field");
@@ -63,11 +66,11 @@ SakuraRoot::SakuraRoot(const std::string &executablePath)
     // TODO: make the number of initialized threads configurable
     m_threadPool = new ThreadPool(8);
 
-    // TODO: enable again in 0.3.0
-    // m_controller = new Kitsunemimi::Sakura::SakuraHostHandler(this,
-    //                                                           &sessionCallback,
-    //                                                           &dataCallback,
-    //                                                           &blossomOutputCallback);
+    m_networking = new Kitsunemimi::Sakura::SakuraNetwork(this,
+                                                          &sessionCallback,
+                                                          &treeTransferCallback,
+                                                          &seedTriggerCallback,
+                                                          &blossomOutputCallback);
 }
 
 /**
@@ -87,58 +90,49 @@ SakuraRoot::~SakuraRoot()
 /**
  * initialize and start rollout-process
  *
+ * @param initialTreePath
+ * @param seedPath
+ * @param initialValues
+ * @param serverAddress
+ * @param port
+ *
  * @return true if successful, else false
  */
 bool
-SakuraRoot::startProcess(const std::string &rootPath,
-                         const std::string &seedName,
-                         const DataMap &initialValues)
+SakuraRoot::startProcess(const std::string &initialTreePath,
+                         const std::string &seedPath,
+                         const DataMap &initialValues,
+                         const std::string &serverAddress,
+                         const uint16_t serverPort)
 {
-    // TODO: enable again in 0.3.0
-    // m_controller->createServer(1337);
-
-    // parse all files and convert the into
-    SakuraParsing sakuraParsing(DEBUG);
-    bool parserResult = sakuraParsing.parseFiles(rootPath);
-    if(parserResult == false)
-    {
-        std::cout<<sakuraParsing.getError().toString()<<std::endl;
+    if(m_treeHandler->loadPredefinedSubtrees() == false) {
         return false;
     }
 
-    // get the initial selected parsed file-content. if seedName is empty string, it
-    // return the first file. This is helpful, if only one file was parsed
-    JsonItem tree = sakuraParsing.getParsedFileContent(seedName);
-
-    // convert json-representaion of the tree into a sakura-item-tree
-    Converter converter;
-    SakuraItem* processPlan = converter.convert(tree);
-    if(processPlan == nullptr)
+    if(seedPath != "")
     {
-        std::cout<<m_errorOutput.toString()<<std::endl;
-        return false;
+        SakuraItem* seedItem = prepareSeed(seedPath,
+                                           m_executablePath,
+                                           serverAddress,
+                                           serverPort);
+        if(seedItem == nullptr) {
+            return false;
+        }
+
+        if(runProcess(seedItem, initialValues) == false) {
+            return false;
+        }
     }
 
-    // run process by adding the tree as subtree-object to the subtree-queue to be processed by
-    // one of the worker-threads
-    SubtreeQueue::SubtreeObject* object = new SubtreeQueue::SubtreeObject();
-    object->subtree = processPlan;
-    object->items = initialValues;
-    object->activeCounter = new SubtreeQueue::ActiveCounter();
-    object->activeCounter->shouldCount = 1;
-    m_threadPool->m_queue.addSubtreeObject(object);
-
-    // wait until the created subtree was fully processed by the worker-threads
-    while(object->activeCounter->isEqual() == false) {
-        std::this_thread::sleep_for(chronoMilliSec(10));
-    }
-
-    // error-output
-    // TODO: better solution necessary instead of checking the number of rows
-    if(m_errorOutput.getNumberOfRows() > 0)
+    if(initialTreePath != "")
     {
-        std::cout<<m_errorOutput.toString()<<std::endl;
-        return false;
+        if(m_treeHandler->addTree(initialTreePath) == false) {
+            return false;
+        }
+
+        if(runProcess(m_treeHandler->getTree(initialTreePath), initialValues) == false) {
+            return false;
+        }
     }
 
     std::cout<<"finish"<<std::endl;
@@ -147,7 +141,10 @@ SakuraRoot::startProcess(const std::string &rootPath,
 }
 
 /**
- * readded in 0.3.0
+ * @brief SakuraRoot::startSubtreeProcess
+ * @param subtree
+ * @param values
+ * @return
  */
 bool
 SakuraRoot::startSubtreeProcess(const std::string &subtree,
@@ -169,12 +166,20 @@ SakuraRoot::startSubtreeProcess(const std::string &subtree,
     JsonItem valuesJson;
     errorMessage.clear();
     valuesJson.parse(values, errorMessage);
-    // TODO: enable again in 0.3.0
-    // m_rootThread = new SakuraThread(processPlan,
-    //                                 *valuesJson.getItemContent()->copy()->toMap(),
-    //                                 std::vector<std::string>());
-    // m_rootThread->startThread();
-    // m_rootThread->waitUntilStarted();
+
+    // run process by adding the tree as subtree-object to the subtree-queue to be processed by
+    // one of the worker-threads
+    SubtreeQueue::SubtreeObject* object = new SubtreeQueue::SubtreeObject();
+    object->subtree = processPlan;
+    object->items = *valuesJson.getItemContent()->copy()->toMap();
+    object->activeCounter = new SubtreeQueue::ActiveCounter();
+    object->activeCounter->shouldCount = 1;
+    m_threadPool->m_queue.addSubtreeObject(object);
+
+    // wait until the created subtree was fully processed by the worker-threads
+    while(object->activeCounter->isEqual() == false) {
+        std::this_thread::sleep_for(chronoMilliSec(10));
+    }
 
     std::cout<<"finish"<<std::endl;
 
@@ -264,33 +269,36 @@ SakuraRoot::createError(const std::string &errorLocation,
 }
 
 /**
- * readded in 0.3.0
+ * @brief SakuraRoot::sendPlan
+ * @param address
+ * @param subtree
+ * @param values
+ * @return
  */
 bool
-SakuraRoot::sendPlan(const std::string &address,
-                     const std::string &subtree,
-                     const std::string &values)
+SakuraRoot::sendTreefile(const std::string &address,
+                         const std::string &subtree,
+                         const std::string &values)
 {
-    // TODO: enable again in 0.3.0
-    // return m_controller->sendGrowPlan(address, subtree, values);
-    return false;
+    return m_networking->sendTreePlanToHost(address, subtree, values);
 }
 
-
 /**
- * readded in 0.3.0
+ * @brief SakuraRoot::startClientConnection
+ * @param address
+ * @param port
+ * @return
  */
 bool
 SakuraRoot::startClientConnection(const std::string &address,
                                   const int port)
 {
-    // TODO: enable again in 0.3.0
-    // return m_controller->startTcpSession(address, static_cast<uint16_t>(port));
-    return false;
+    //return m_networking->createClientConnection(address, static_cast<uint16_t>(port));
 }
 
 /**
- * readded in 0.3.0
+ * @brief SakuraRoot::printOutput
+ * @param blossomItem
  */
 void
 SakuraRoot::printOutput(const BlossomItem &blossomItem)
@@ -301,8 +309,7 @@ SakuraRoot::printOutput(const BlossomItem &blossomItem)
     std::string output = convertBlossomOutput(blossomItem);
 
     // only for prototyping hardcoded
-    // TODO: enable again in 0.3.0
-    // m_controller->sendBlossomOuput("127.0.0.1", output);
+    //m_networking->sendBlossomOuput("127.0.0.1", "", output);
     std::cout<<output<<std::endl;
 
     m_mutex.unlock();
@@ -320,6 +327,84 @@ SakuraRoot::printOutput(const std::string &output)
     m_mutex.lock();
     std::cout<<output<<std::endl;
     m_mutex.unlock();
+}
+
+/**
+ * @brief SakuraRoot::runProcess
+ * @return
+ */
+bool
+SakuraRoot::runProcess(SakuraItem* item,
+                       const DataMap &initialValues)
+{
+    // run process by adding the tree as subtree-object to the subtree-queue to be processed by
+    // one of the worker-threads
+    SubtreeQueue::SubtreeObject* object = new SubtreeQueue::SubtreeObject();
+    object->subtree = item;
+    object->items = initialValues;
+    object->activeCounter = new SubtreeQueue::ActiveCounter();
+    object->activeCounter->shouldCount = 1;
+    m_threadPool->m_queue.addSubtreeObject(object);
+
+    // wait until the created subtree was fully processed by the worker-threads
+    while(object->activeCounter->isEqual() == false) {
+        std::this_thread::sleep_for(chronoMilliSec(10));
+    }
+
+    // error-output
+    // TODO: better solution necessary instead of checking the number of rows
+    if(m_errorOutput.getNumberOfRows() > 0)
+    {
+        std::cout<<m_errorOutput.toString()<<std::endl;
+        return false;
+    }
+
+    return true;
+}
+
+/**
+ * @brief SakuraRoot::prepareSeed
+ * @param seedPath
+ * @param serverAddress
+ * @param port
+ * @return
+ */
+SakuraItem*
+SakuraRoot::prepareSeed(const std::string &seedPath,
+                        const std::string &executablePath,
+                        const std::string &serverAddress,
+                        const uint16_t port)
+{
+    Kitsunemimi::Sakura::SakuraParsing sakuraParsing(DEBUG);
+    Converter converter;
+
+    // parse seed-file
+    const bool seedParseResult = sakuraParsing.parseFiles(seedPath);
+    if(seedParseResult == false)
+    {
+        std::cout<<sakuraParsing.getError().toString()<<std::endl;
+        return nullptr;
+    }
+
+    // convert seed
+    const JsonItem seed = sakuraParsing.getParsedFileContent();
+    SakuraItem* convertedSeed = converter.convert(seed, true);
+    if(convertedSeed == nullptr)
+    {
+        std::cout<<m_errorOutput.toString()<<std::endl;
+        return nullptr;
+    }
+
+    convertedSeed->values.insert("source_path", new DataValue(executablePath));
+    convertedSeed->values.insert("server_address", new DataValue(serverAddress));
+    convertedSeed->values.insert("server_port", new DataValue(port));
+
+    // create server
+    if(serverAddress != "") {
+        m_networking->createServer(port);
+    }
+
+    return convertedSeed;
 }
 
 }

@@ -25,7 +25,7 @@
 
 #include <common.h>
 #include <unistd.h>
-#include <libKitsunemimiSakuraParser/sakura_parsing.h>
+#include <libKitsunemimiCommon/common_items/table_item.h>
 
 namespace Kitsunemimi
 {
@@ -33,17 +33,18 @@ namespace Jinja2 {
 class Jinja2Converter;
 }
 namespace Sakura {
-class SakuraHostHandler;
+class SakuraNetwork;
 }
 }
 
-using Kitsunemimi::Sakura::SakuraParsing;
 using Kitsunemimi::Jinja2::Jinja2Converter;
 
 namespace SakuraTree
 {
 class SakuraThread;
 class ThreadPool;
+class TreeHandler;
+class SakuraItem;
 struct BlossomItem;
 
 class SakuraRoot
@@ -54,9 +55,11 @@ public:
     ~SakuraRoot();
 
     // start processing
-    bool startProcess(const std::string &rootPath,
-                      const std::string &seedName,
-                      const DataMap &initialValues);
+    bool startProcess(const std::string &initialTreePath,
+                      const std::string &seedPath,
+                      const DataMap &initialValues,
+                      const std::string &serverAddress="127.0.0.1",
+                      const uint16_t serverPort=1337);
     bool startSubtreeProcess(const std::string &subtree,
                              const std::string &values);
 
@@ -74,9 +77,9 @@ public:
                      const std::string &blossomFilePath="");
 
     // network-interaction
-    bool sendPlan(const std::string &address,
-                  const std::string &subtree,
-                  const std::string &values);
+    bool sendTreefile(const std::string &address,
+                      const std::string &subtree,
+                      const std::string &values);
     bool startClientConnection(const std::string &address,
                                const int port);
 
@@ -88,14 +91,22 @@ public:
     static SakuraTree::SakuraRoot* m_root;
     static std::string m_executablePath;
     static Jinja2Converter* m_jinja2Converter;
-    static TableItem m_errorOutput;
+    static Kitsunemimi::TableItem m_errorOutput;
+    static SakuraTree::TreeHandler* m_treeHandler;
 
 private:
-    Kitsunemimi::Sakura::SakuraHostHandler* m_controller = nullptr;
+    Kitsunemimi::Sakura::SakuraNetwork* m_networking = nullptr;
     SakuraThread* m_rootThread = nullptr;
     ThreadPool* m_threadPool = nullptr;
 
     std::mutex m_mutex;
+
+    bool runProcess(SakuraItem* item,
+                    const DataMap &initialValues);
+    SakuraItem* prepareSeed(const std::string &seedPath,
+                            const std::string &executablePath,
+                            const std::string &serverAddress,
+                            const uint16_t port);
 };
 
 }

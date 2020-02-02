@@ -1,0 +1,28 @@
+["sakura provisioning"]
+- type = ""
+- host_name = ""
+- source_path = ""
+- server_address = ""
+- server_port = ""
+- ssh_provisioning = ""
+
+if(ssh_provisioning != "")
+{
+    ssh("prepare remote-node")
+    - address = ssh_provisioning.get("ip_address")
+    - user = ssh_provisioning.get("ssh_user")
+    - port = ssh_provisioning.get("ssh_port")
+    - ssh_key = ssh_provisioning.get("ssh_key_path")
+    -> cmd:
+        - command = "sudo apt-get update"
+    -> cmd:
+        - command = "sudo apt-get install -y libboost-filesystem-dev libsqlite3-dev libboost-program-options-dev"
+    -> scp:
+        - source_path = source_path
+        - target_path = ssh_provisioning.get("target_path")
+    -> file_create:
+        - file_path = "/etc/systemd/system/sakura_tree.service"
+        - file_content = "[Unit]\nDescription=SakuraTree-Test\nStartLimitIntervalSec=0\n\n[Service]\nType=simple\nRestart=always\nRestartSec=1\nUser=neptune\nExecStart={{ssh_provisioning.target_path}}SakuraTree --server-address {{server_address}} --server-port {{server_port}}\n\n[Install]\nWantedBy=multi-user.target\n"
+    -> cmd:
+        - command = "sudo systemctl start sakura_tree"
+}

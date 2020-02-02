@@ -4,25 +4,25 @@ TARGET = SakuraTree
 CONFIG += console
 CONFIG += c++14
 
-# LIBS += -L../libKitsunemimiSakuraNetwork/src -lKitsunemimiSakuraNetwork
-# LIBS += -L../libKitsunemimiSakuraNetwork/src/debug -lKitsunemimiSakuraNetwork
-# LIBS += -L../libKitsunemimiSakuraNetwork/src/release -lKitsunemimiSakuraNetwork
-# INCLUDEPATH += ../libKitsunemimiSakuraNetwork/include
+LIBS += -L../libKitsunemimiSakuraNetwork/src -lKitsunemimiSakuraNetwork
+LIBS += -L../libKitsunemimiSakuraNetwork/src/debug -lKitsunemimiSakuraNetwork
+LIBS += -L../libKitsunemimiSakuraNetwork/src/release -lKitsunemimiSakuraNetwork
+INCLUDEPATH += ../libKitsunemimiSakuraNetwork/include
 
-# LIBS += -L../libKitsunemimiProjectCommon/src -lKitsunemimiProjectCommon
-# LIBS += -L../libKitsunemimiProjectCommon/src/debug -lKitsunemimiProjectCommon
-# LIBS += -L../libKitsunemimiProjectCommon/src/release -lKitsunemimiProjectCommon
-I# NCLUDEPATH += ../libKitsunemimiProjectCommon/include
+LIBS += -L../libKitsunemimiProjectNetwork/src -lKitsunemimiProjectNetwork
+LIBS += -L../libKitsunemimiProjectNetwork/src/debug -lKitsunemimiProjectNetwork
+LIBS += -L../libKitsunemimiProjectNetwork/src/release -lKitsunemimiProjectNetwork
+INCLUDEPATH += ../libKitsunemimiProjectNetwork/include
 
 LIBS += -L../libKitsunemimiCommon/src -lKitsunemimiCommon
 LIBS += -L../libKitsunemimiCommon/src/debug -lKitsunemimiCommon
 LIBS += -L../libKitsunemimiCommon/src/release -lKitsunemimiCommon
 INCLUDEPATH += ../libKitsunemimiCommon/include
 
-# LIBS += -L../libKitsunemimiNetwork/src -lKitsunemimiNetwork
-# LIBS += -L../libKitsunemimiNetwork/src/debug -lKitsunemimiNetwork
-# LIBS += -L../libKitsunemimiNetwork/src/release -lKitsunemimiNetwork
-# INCLUDEPATH += ../libKitsunemimiNetwork/include
+LIBS += -L../libKitsunemimiNetwork/src -lKitsunemimiNetwork
+LIBS += -L../libKitsunemimiNetwork/src/debug -lKitsunemimiNetwork
+LIBS += -L../libKitsunemimiNetwork/src/release -lKitsunemimiNetwork
+INCLUDEPATH += ../libKitsunemimiNetwork/include
 
 LIBS += -L../libKitsunemimiPersistence/src -lKitsunemimiPersistence
 LIBS += -L../libKitsunemimiPersistence/src/debug -lKitsunemimiPersistence
@@ -49,7 +49,7 @@ LIBS += -L../libKitsunemimiSakuraParser/src/debug -lKitsunemimiSakuraParser
 LIBS += -L../libKitsunemimiSakuraParser/src/release -lKitsunemimiSakuraParser
 INCLUDEPATH += ../libKitsunemimiSakuraParser/include
 
-LIBS +=  -lboost_filesystem -lboost_system -lboost_program_options
+LIBS +=  -lboost_filesystem -lboost_system -lboost_program_options  -lssl -lcrypto
 
 INCLUDEPATH += $$PWD \
                src
@@ -115,7 +115,8 @@ HEADERS += \
     tests/processing/blossoms/files/common_files/path_copy_blossom_test.h \
     tests/processing/blossoms/files/common_files/path_chmod_blossom_test.h \
     tests/processing/blossoms/files/common_files/path_chown_blossom_test.h \
-    src/processing/blossoms/special/item_update_blossom.h
+    src/processing/blossoms/special/item_update_blossom.h \
+    src/tree_handler.h
 
 SOURCES += \
     src/converter/converter.cpp \
@@ -172,8 +173,22 @@ SOURCES += \
     tests/processing/blossoms/files/common_files/path_copy_blossom_test.cpp \
     tests/processing/blossoms/files/common_files/path_delete_blossom_test.cpp \
     tests/processing/blossoms/files/common_files/path_rename_blossom_test.cpp \
-    src/processing/blossoms/special/item_update_blossom.cpp
+    src/processing/blossoms/special/item_update_blossom.cpp \
+    src/tree_handler.cpp
 
+
+SAKURA_PROVISIONING_SUBTREE = src/predefined_subtrees/sakura_provisioning_subtree.tree
+
+OTHER_FILES +=  \
+    $$SAKURA_PROVISIONING_SUBTREE
+
+sakura_provisioning_subtree.input = SAKURA_PROVISIONING_SUBTREE
+sakura_provisioning_subtree.output = ${QMAKE_FILE_BASE}.h
+sakura_provisioning_subtree.commands = xxd -i ${QMAKE_FILE_IN} | sed 's/______SakuraTree_src_predefined_subtrees_//g' > ${QMAKE_FILE_BASE}.h
+sakura_provisioning_subtree.variable_out = HEADERS
+sakura_provisioning_subtree.CONFIG += target_predeps no_link
+
+QMAKE_EXTRA_COMPILERS += sakura_provisioning_subtree
 
 
 

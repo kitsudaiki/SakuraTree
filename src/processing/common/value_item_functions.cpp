@@ -94,7 +94,7 @@ splitValue(DataValue* item,
     if(item == nullptr
             || delimiter == nullptr)
     {
-        errorMessage = "inputs for get-function are invalid";
+        errorMessage = "inputs for split-function are invalid";
         return nullptr;
     }
 
@@ -132,14 +132,14 @@ splitValue(DataValue* item,
  *
  * @return data-item of int-type with the size of the incoming item as value
  */
-DataItem*
+DataValue*
 sizeValue(DataItem* item,
           std::string &errorMessage)
 {
     // precheck
     if(item == nullptr)
     {
-        errorMessage = "inputs for get-function are invalid";
+        errorMessage = "inputs for size-function are invalid";
         return nullptr;
     }
 
@@ -158,7 +158,7 @@ sizeValue(DataItem* item,
  *
  * @return data-value with true, if key was found, else data-value with false
  */
-DataItem*
+DataValue*
 containsValue(DataItem* item,
               DataValue* key,
               std::string &errorMessage)
@@ -167,7 +167,7 @@ containsValue(DataItem* item,
     if(item == nullptr
             || key == nullptr)
     {
-        errorMessage = "inputs for get-function are invalid";
+        errorMessage = "inputs for contains-function are invalid";
         return nullptr;
     }
 
@@ -226,7 +226,7 @@ appendValue(DataArray* item,
     if(item == nullptr
             || value == nullptr)
     {
-        errorMessage = "inputs for get-function are invalid";
+        errorMessage = "inputs for append-function are invalid";
         return nullptr;
     }
 
@@ -264,7 +264,7 @@ insertValue(DataMap* item,
             || key == nullptr
             || value == nullptr)
     {
-        errorMessage = "inputs for get-function are invalid";
+        errorMessage = "inputs for insert-function are invalid";
         return nullptr;
     }
 
@@ -298,7 +298,7 @@ clearEmpty(DataArray* item,
     // precheck
     if(item == nullptr)
     {
-        errorMessage = "inputs for get-function are invalid";
+        errorMessage = "inputs for clear-empty-function are invalid";
         return nullptr;
     }
 
