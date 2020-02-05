@@ -68,6 +68,16 @@ int main(int argc, char *argv[])
             argParser::value<uint16_t>(),
             "port of the server"
         )
+        (
+            "listen-address",
+            argParser::value<std::string>(),
+            "address where to listen"
+        )
+        (
+            "listen-port",
+            argParser::value<uint16_t>(),
+            "port where to listen"
+        )
     ;
 
     argParser::variables_map vm;
@@ -85,7 +95,9 @@ int main(int argc, char *argv[])
     std::string seedPath = "";
     DataMap initialValues;
     std::string serverAddress = "";
-    uint16_t port = 0;
+    uint16_t serverPort = 0;
+    std::string listenAddress = "";
+    uint16_t listenPort = 0;
 
     // initial tree-file
     if(vm.count("init-tree"))
@@ -128,8 +140,22 @@ int main(int argc, char *argv[])
     // server-port
     if(vm.count("server-port"))
     {
-        port = vm["server-port"].as<uint16_t>();
-        std::cout << "server-port: " << port << std::endl;
+        serverPort = vm["server-port"].as<uint16_t>();
+        std::cout << "server-port: " << serverPort << std::endl;
+    }
+
+    // listen-address
+    if(vm.count("listen-address"))
+    {
+        listenAddress = vm["listen-address"].as<std::string>();
+        std::cout << "listen-address: " << listenAddress << std::endl;
+    }
+
+    // listen-port
+    if(vm.count("listen-port"))
+    {
+        listenPort = vm["listen-port"].as<uint16_t>();
+        std::cout << "listen-port: " << listenPort << std::endl;
     }
 
     if(vm.count("init-tree"))
@@ -138,15 +164,15 @@ int main(int argc, char *argv[])
         root->startProcess(initialTreePath,
                            seedPath,
                            initialValues,
-                           serverAddress,
-                           port);
+                           listenAddress,
+                           listenPort);
     }
     else if(vm.count("server-address")
             && vm.count("server-port"))
     {
         SakuraTree::SakuraRoot* root = new SakuraTree::SakuraRoot(std::string(argv[0]));
         root->startClientConnection(serverAddress,
-                                    port);
+                                    serverPort);
 
         while(true)
         {

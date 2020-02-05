@@ -293,7 +293,7 @@ bool
 SakuraRoot::startClientConnection(const std::string &address,
                                   const int port)
 {
-    //return m_networking->createClientConnection(address, static_cast<uint16_t>(port));
+    return m_networking->createClientConnection(address, static_cast<uint16_t>(port));
 }
 
 /**
