@@ -6,6 +6,9 @@
 - server_port = ""
 - ssh_provisioning = ""
 
+register_node("register node on server")
+- host_name = host_name
+
 if(ssh_provisioning != "")
 {
     ssh("prepare remote-node")

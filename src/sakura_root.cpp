@@ -44,6 +44,7 @@ std::string SakuraRoot::m_executablePath = "";
 TableItem SakuraRoot::m_errorOutput;
 Jinja2Converter* SakuraRoot::m_jinja2Converter = nullptr;
 TreeHandler* SakuraRoot::m_treeHandler = nullptr;
+Kitsunemimi::Sakura::SakuraNetwork* SakuraRoot::m_networking = nullptr;
 
 /**
  * @brief constructor
@@ -107,6 +108,12 @@ SakuraRoot::startProcess(const std::string &initialTreePath,
 {
     if(m_treeHandler->loadPredefinedSubtrees() == false) {
         return false;
+    }
+
+    if(serverAddress != ""
+            && serverPort != 0)
+    {
+        m_networking->createServer(serverPort);
     }
 
     if(seedPath != "")

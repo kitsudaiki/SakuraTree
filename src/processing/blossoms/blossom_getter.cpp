@@ -39,6 +39,7 @@
 #include <processing/blossoms/special/assert_blossom.h>
 #include <processing/blossoms/special/exit_blossom.h>
 #include <processing/blossoms/special/item_update_blossom.h>
+#include <processing/blossoms/special/register_node_blossom.h>
 
 #include <processing/blossoms/files/common_files/path_copy_blossom.h>
 #include <processing/blossoms/files/common_files/path_delete_blossom.h>
@@ -120,6 +121,9 @@ getBlossom(const std::string blossomGroupType,
         }
         if(blossomType == "exit") {
             return new ExitBlossom();
+        }
+        if(blossomType == "register_node") {
+            return new RegisterNodeBlossom();
         }
     }
 

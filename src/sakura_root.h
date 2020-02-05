@@ -93,9 +93,9 @@ public:
     static Jinja2Converter* m_jinja2Converter;
     static Kitsunemimi::TableItem m_errorOutput;
     static SakuraTree::TreeHandler* m_treeHandler;
+    static Kitsunemimi::Sakura::SakuraNetwork* m_networking;
 
 private:
-    Kitsunemimi::Sakura::SakuraNetwork* m_networking = nullptr;
     SakuraThread* m_rootThread = nullptr;
     ThreadPool* m_threadPool = nullptr;
 

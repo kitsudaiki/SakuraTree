@@ -1,5 +1,5 @@
 /**
- * @file        preregister_node_blossom.h
+ * @file        register_node_blossom.h
  *
  * @author      Tobias Anker <tobias.anker@kitsunemimi.moe>
  *
@@ -23,13 +23,26 @@
 #ifndef PREREGISTER_NODE_BLOSSOM_H
 #define PREREGISTER_NODE_BLOSSOM_H
 
+#include <processing/blossoms/blossom.h>
+
 namespace SakuraTree
 {
 
-class PreregisterNodeBlossom
+class RegisterNodeBlossom
+        : public Blossom
 {
 public:
-    PreregisterNodeBlossom();
+    RegisterNodeBlossom();
+
+protected:
+    void initBlossom(BlossomItem &blossomItem);
+    void preCheck(BlossomItem &blossomItem);
+    void runTask(BlossomItem &blossomItem);
+    void postCheck(BlossomItem &blossomItem);
+    void closeBlossom(BlossomItem &blossomItem);
+
+private:
+    std::string hostName = "";
 };
 
 }
