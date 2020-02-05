@@ -28,22 +28,22 @@
 namespace SakuraTree
 {
 
-void treeTransferCallback(void* target,
+void treeTransferCallback(void* ,
                           const std::string treeId,
-                          const std::string tree)
+                          const std::string )
 {
     std::cout<<"treeTransferCallback: "<<treeId<<std::endl;
 }
 
-void seedTriggerCallback(void* target,
+void seedTriggerCallback(void* ,
                          const std::string treeId,
-                         const std::string values)
+                         const std::string )
 {
     std::cout<<"seedTriggerCallback: "<<treeId<<std::endl;
 }
 
 void blossomOutputCallback(void* target,
-                           const std::string address,
+                           const std::string ,
                            const std::string output)
 {
     SakuraRoot* rootClass = static_cast<SakuraRoot*>(target);
@@ -51,10 +51,10 @@ void blossomOutputCallback(void* target,
 }
 
 
-void sessionCallback(void* target,
+void sessionCallback(void* ,
                      const std::string)
 {
-    SakuraRoot* rootClass = static_cast<SakuraRoot*>(target);
+    //SakuraRoot* rootClass = static_cast<SakuraRoot*>(target);
 }
 
 }
