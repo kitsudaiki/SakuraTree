@@ -106,16 +106,21 @@ SakuraRoot::startProcess(const std::string &initialTreePath,
                          const std::string &serverAddress,
                          const uint16_t serverPort)
 {
+    // load predefined trees
     if(m_treeHandler->loadPredefinedSubtrees() == false) {
         return false;
     }
 
+    // start server
     if(serverAddress != ""
             && serverPort != 0)
     {
-        m_networking->createServer(serverPort);
+        if(m_networking->createServer(serverPort) == false) {
+            return false;
+        }
     }
 
+    // process seed
     if(seedPath != "")
     {
         SakuraItem* seedItem = prepareSeed(seedPath,
@@ -131,6 +136,21 @@ SakuraRoot::startProcess(const std::string &initialTreePath,
         }
     }
 
+    // wait until all hosts ready
+    uint32_t maxTries = 100;
+    while(maxTries > 0)
+    {
+        if(m_networking->areAllHostsReady() == true) {
+            break;
+        }
+        usleep(10000);
+        maxTries--;
+    }
+    if(maxTries == 0) {
+        return false;
+    }
+
+    // process real task
     if(initialTreePath != "")
     {
         if(m_treeHandler->addTree(initialTreePath) == false) {
