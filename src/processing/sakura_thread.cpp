@@ -25,6 +25,8 @@
 #include <sakura_root.h>
 #include <tree_handler.h>
 
+#include <libKitsunemimiSakuraNetwork/sakura_network.h>
+
 #include <processing/common/item_methods.h>
 #include <processing/blossoms/blossom.h>
 #include <processing/blossoms/blossom_getter.h>
@@ -170,9 +172,8 @@ SakuraThread::processSakuraItem(SakuraItem* sakuraItem)
 
     if(sakuraItem->getType() == SakuraItem::SEED_ITEM)
     {
-        SeedItem* forestItem = dynamic_cast<SeedItem*>(sakuraItem);
-        TreeItem* branchItem = dynamic_cast<TreeItem*>(forestItem->child);
-        return processTree(branchItem);
+        SeedItem* seedItem = dynamic_cast<SeedItem*>(sakuraItem);
+        return processSeed(seedItem);
     }
 
     return false;
@@ -356,6 +357,37 @@ SakuraThread::processSubtree(SubtreeItem* subtreeItem)
     overrideItems(m_parentValues, newSubtree->values, false);
 
     return processSakuraItem(newSubtree);
+}
+
+/**
+ * @brief process a seed-item
+ *
+ * @param seed object, which should be processed
+ *
+ * @return true if successful, else false
+ */
+bool
+SakuraThread::processSeed(SeedItem *seedItem)
+{
+    std::string errorMessage = "";
+    bool fillResult = false;
+
+    // fill normal map
+    fillResult = fillInputValueItemMap(seedItem->values, m_parentValues, errorMessage);
+    if(fillResult == false)
+    {
+        SakuraRoot::m_root->createError("seed-processing",
+                                        "error while processing blossom items:\n"
+                                        + errorMessage);
+        return false;
+    }
+
+    DataMap fullValues = m_parentValues;
+    overrideItems(fullValues, seedItem->values, false);
+
+    SakuraRoot::m_networking->triggerSeedByTag(seedItem->tag,
+                                               seedItem->treeId,
+                                               fullValues.toString());
 }
 
 /**

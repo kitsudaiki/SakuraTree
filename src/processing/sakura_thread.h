@@ -55,6 +55,7 @@ private:
     bool processBlossomGroup(BlossomGroupItem &blossomGroupItem);
     bool processTree(TreeItem* treeItem);
     bool processSubtree(SubtreeItem* subtreeItem);
+    bool processSeed(SeedItem* seedItem);
     bool processIf(IfBranching* ifCondition);
     bool processForEach(ForEachBranching* subtree, bool parallel);
     bool processFor(ForBranching* subtree, bool parallel);

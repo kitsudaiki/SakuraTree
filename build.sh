@@ -63,7 +63,7 @@ get_required_kitsune_lib_repo "libKitsunemimiSakuraParser" "master" 1
 
 get_required_kitsune_lib_repo "libKitsunemimiProjectNetwork" "master" 4
 
-get_required_kitsune_lib_repo "libKitsunemimiSakuraNetwork" "update-host-handling" 4
+get_required_kitsune_lib_repo "libKitsunemimiSakuraNetwork" "master" 4
 
 #-----------------------------------------------------------------------------------------------------------------
 
