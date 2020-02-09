@@ -24,22 +24,25 @@
 #define SAKURA_TREE_CALLBACKS_H
 
 #include <sakura_root.h>
+#include <tree_handler.h>
 
 namespace SakuraTree
 {
 
-void treeTransferCallback(void* ,
+void treeTransferCallback(void* target,
                           const std::string treeId,
-                          const std::string )
+                          const std::string tree)
 {
-    std::cout<<"treeTransferCallback: "<<treeId<<std::endl;
+    SakuraRoot* rootClass = static_cast<SakuraRoot*>(target);
+    rootClass->m_treeHandler->addTree(treeId, tree);
 }
 
-void seedTriggerCallback(void* ,
+void seedTriggerCallback(void* target,
                          const std::string treeId,
-                         const std::string )
+                         const std::string values)
 {
-    std::cout<<"seedTriggerCallback: "<<treeId<<std::endl;
+    SakuraRoot* rootClass = static_cast<SakuraRoot*>(target);
+    rootClass->startSubtreeProcess(treeId, values);
 }
 
 void blossomOutputCallback(void* target,

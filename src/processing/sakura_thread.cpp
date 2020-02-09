@@ -309,7 +309,7 @@ SakuraThread::processSubtree(SubtreeItem* subtreeItem)
     std::string errorMessage = "";
     bool fillResult = false;
 
-    SakuraItem* newSubtree = SakuraRoot::m_root->m_treeHandler->getTree(subtreeItem->nameOrPath);
+    SakuraItem* newSubtree = SakuraRoot::m_root->m_treeHandler->getConvertedTree(subtreeItem->nameOrPath);
 
 
     // fill normal map

@@ -60,7 +60,7 @@ public:
                       const DataMap &initialValues,
                       const std::string &serverAddress="127.0.0.1",
                       const uint16_t serverPort=1337);
-    bool startSubtreeProcess(const std::string &subtree,
+    bool startSubtreeProcess(const std::string &treeId,
                              const std::string &values);
 
     // error-output
@@ -107,6 +107,7 @@ private:
                             const std::string &executablePath,
                             const std::string &serverAddress,
                             const uint16_t port);
+    void shareAllTrees();
 };
 
 }

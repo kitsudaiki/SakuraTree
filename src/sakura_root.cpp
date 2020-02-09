@@ -150,6 +150,8 @@ SakuraRoot::startProcess(const std::string &initialTreePath,
         return false;
     }
 
+    shareAllTrees();
+
     // process real task
     if(initialTreePath != "")
     {
@@ -157,7 +159,7 @@ SakuraRoot::startProcess(const std::string &initialTreePath,
             return false;
         }
 
-        if(runProcess(m_treeHandler->getTree(initialTreePath), initialValues) == false) {
+        if(runProcess(m_treeHandler->getConvertedTree(initialTreePath), initialValues) == false) {
             return false;
         }
     }
@@ -169,29 +171,25 @@ SakuraRoot::startProcess(const std::string &initialTreePath,
 
 /**
  * @brief SakuraRoot::startSubtreeProcess
- * @param subtree
+ * @param treeId
  * @param values
  * @return
  */
 bool
-SakuraRoot::startSubtreeProcess(const std::string &subtree,
+SakuraRoot::startSubtreeProcess(const std::string &treeId,
                                 const std::string &values)
 {
     std::cout<<"startSubtreeProcess"<<std::endl;
-    // parsing
-    JsonItem completePlan;
-    std::string errorMessage = "";
-    completePlan.parse(subtree, errorMessage);
 
-    Converter converter;
-    SakuraItem* processPlan = converter.convert(completePlan);
+    // get tree
+    SakuraItem* processPlan = m_treeHandler->getConvertedTree(treeId);
     if(processPlan == nullptr) {
         return false;
     }
 
     // run process
     JsonItem valuesJson;
-    errorMessage.clear();
+    std::string errorMessage = "";
     valuesJson.parse(values, errorMessage);
 
     // run process by adding the tree as subtree-object to the subtree-queue to be processed by
@@ -432,6 +430,21 @@ SakuraRoot::prepareSeed(const std::string &seedPath,
     }
 
     return convertedSeed;
+}
+
+/**
+ * @brief SakuraRoot::shareAllTrees
+ */
+void
+SakuraRoot::shareAllTrees()
+{
+    std::map<std::string, TreeHandler::TreeHandlerItem>::const_iterator it;
+    for(it = m_treeHandler->m_trees.begin();
+        it != m_treeHandler->m_trees.end();
+        it++)
+    {
+        m_networking->sendTreePlanToAll(it->first, it->second.parsedItem.toString());
+    }
 }
 
 }
