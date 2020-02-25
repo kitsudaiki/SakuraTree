@@ -24,13 +24,13 @@
 #define VALUE_ITEMS_FUNCTIONS_TEST_H
 
 #include <common.h>
-#include <libKitsunemimiCommon/test.h>
+#include <libKitsunemimiCommon/test_helper/compare_test_helper.h>
 #include <processing/common/value_item_functions.h>
 
 namespace SakuraTree
 {
 class ValueItemsFunctions_Test
-        : public Kitsunemimi::Test
+        : public Kitsunemimi::CompareTestHelper
 {
 public:
     ValueItemsFunctions_Test();

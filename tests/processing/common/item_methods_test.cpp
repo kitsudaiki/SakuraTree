@@ -32,7 +32,7 @@ namespace SakuraTree
  * @brief constructor
  */
 ItemMethods_Test::ItemMethods_Test()
-    : Kitsunemimi::Test("ItemMethods_Test")
+    : Kitsunemimi::CompareTestHelper("ItemMethods_Test")
 {
     initTestCase();
 

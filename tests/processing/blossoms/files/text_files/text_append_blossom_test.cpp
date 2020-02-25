@@ -29,7 +29,7 @@ namespace SakuraTree
 {
 
 TextAppendBlossom_Test::TextAppendBlossom_Test()
-    : Kitsunemimi::Test("TextAppendBlossom_Test")
+    : Kitsunemimi::CompareTestHelper("TextAppendBlossom_Test")
 {
     initTestCase();
     initTask_test();

@@ -24,7 +24,7 @@
 #define COMMON_METHODS_TEST_H
 
 #include <common.h>
-#include <libKitsunemimiCommon/test.h>
+#include <libKitsunemimiCommon/test_helper/compare_test_helper.h>
 #include <processing/common/item_methods.h>
 
 namespace SakuraTree
@@ -32,7 +32,7 @@ namespace SakuraTree
 class SakuraRoot;
 
 class ItemMethods_Test
-        : public Kitsunemimi::Test
+        : public Kitsunemimi::CompareTestHelper
 {
 public:
     ItemMethods_Test();

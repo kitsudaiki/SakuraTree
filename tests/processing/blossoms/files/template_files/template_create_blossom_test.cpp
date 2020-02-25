@@ -29,7 +29,7 @@ namespace SakuraTree
 {
 
 TemplateCreateBlossom_Test::TemplateCreateBlossom_Test()
-    : Kitsunemimi::Test("TemplateCreateBlossom_Test")
+    : Kitsunemimi::CompareTestHelper("TemplateCreateBlossom_Test")
 {
     m_root = new SakuraRoot(std::string("test"));
 
