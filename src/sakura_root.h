@@ -58,8 +58,9 @@ public:
     bool startProcess(const std::string &initialTreePath,
                       const std::string &seedPath,
                       const DataMap &initialValues,
-                      const std::string &serverAddress="127.0.0.1",
-                      const uint16_t serverPort=1337);
+                      const std::string &serverAddress = "127.0.0.1",
+                      const uint16_t serverPort = 1337,
+                      const std::string &initialTreeId = "");
     bool startSubtreeProcess(const std::string &treeId,
                              const std::string &values);
 
@@ -67,14 +68,14 @@ public:
     void createError(const BlossomItem &blossomItem,
                      const std::string &errorLocation,
                      const std::string &errorMessage,
-                     const std::string &possibleSolution="");
+                     const std::string &possibleSolution = "");
     void createError(const std::string &errorLocation,
                      const std::string &errorMessage,
-                     const std::string &possibleSolution="",
-                     const std::string &blossomType="",
-                     const std::string &blossomGroupType="",
-                     const std::string &blossomName="",
-                     const std::string &blossomFilePath="");
+                     const std::string &possibleSolution = "",
+                     const std::string &blossomType = "",
+                     const std::string &blossomGroupType = "",
+                     const std::string &blossomName = "",
+                     const std::string &blossomFilePath = "");
 
     // network-interaction
     bool sendTreefile(const std::string &address,

@@ -104,7 +104,8 @@ SakuraRoot::startProcess(const std::string &initialTreePath,
                          const std::string &seedPath,
                          const DataMap &initialValues,
                          const std::string &serverAddress,
-                         const uint16_t serverPort)
+                         const uint16_t serverPort,
+                         const std::string &initialTreeId)
 {
     // load predefined trees
     if(m_treeHandler->loadPredefinedSubtrees() == false) {
@@ -134,23 +135,21 @@ SakuraRoot::startProcess(const std::string &initialTreePath,
         if(runProcess(seedItem, initialValues) == false) {
             return false;
         }
-    }
 
-    // wait until all hosts ready
-    uint32_t maxTries = 100;
-    while(maxTries > 0)
-    {
-        if(m_networking->areAllHostsReady() == true) {
-            break;
+        // wait until all hosts ready
+        uint32_t maxTries = 100;
+        while(maxTries > 0)
+        {
+            if(m_networking->areAllHostsReady() == true) {
+                break;
+            }
+            usleep(100000);
+            maxTries--;
         }
-        usleep(10000);
-        maxTries--;
+        if(maxTries == 0) {
+            return false;
+        }
     }
-    if(maxTries == 0) {
-        return false;
-    }
-
-    shareAllTrees();
 
     // process real task
     if(initialTreePath != "")
@@ -159,7 +158,13 @@ SakuraRoot::startProcess(const std::string &initialTreePath,
             return false;
         }
 
-        if(runProcess(m_treeHandler->getConvertedTree(initialTreePath), initialValues) == false) {
+        shareAllTrees();
+
+        SakuraItem* tree = m_treeHandler->getConvertedTree(initialTreeId);
+        if(tree == nullptr) {
+            return false;
+        }
+        if(runProcess(tree, initialValues) == false) {
             return false;
         }
     }

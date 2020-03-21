@@ -44,9 +44,19 @@ int main(int argc, char *argv[])
             "produce help message"
         )
         (
+            "init-tree-id,t",
+            argParser::value<std::string>(),
+            "id of initial tree-file"
+        )
+        (
+            "directory-path,d",
+            argParser::value<std::string>(),
+            "path to directory with all tree-files"
+        )
+        (
             "init-tree",
             argParser::value<std::string>(),
-            "path to the initial tree-file"
+            "path to directory with all tree-files"
         )
         (
             "seed",
@@ -91,7 +101,10 @@ int main(int argc, char *argv[])
         return 0;
     }
 
+    std::string treeDirectoryPath = "";
+    std::string initialTreeId = "";
     std::string initialTreePath = "";
+
     std::string seedPath = "";
     DataMap initialValues;
     std::string serverAddress = "";
@@ -99,7 +112,21 @@ int main(int argc, char *argv[])
     std::string listenAddress = "";
     uint16_t listenPort = 0;
 
-    // initial tree-file
+    // directory-path
+    if(vm.count("directory-path"))
+    {
+        initialTreePath = vm["directory-path"].as<std::string>();
+        std::cout << "directory-path: " << initialTreePath << std::endl;
+    }
+
+    // initial tree-id
+    if(vm.count("init-tree-id"))
+    {
+        initialTreeId = vm["init-tree-id"].as<std::string>();
+        std::cout << "init-tree-id: " << initialTreeId << std::endl;
+    }
+
+    // initial tree-path
     if(vm.count("init-tree"))
     {
         initialTreePath = vm["init-tree"].as<std::string>();
@@ -158,21 +185,23 @@ int main(int argc, char *argv[])
         std::cout << "listen-port: " << listenPort << std::endl;
     }
 
-    if(vm.count("init-tree"))
+    if(vm.count("init-tree")
+            || (vm.count("directory-path")
+                && vm.count("init-tree-id")))
     {
         SakuraTree::SakuraRoot* root = new SakuraTree::SakuraRoot(std::string(argv[0]));
         root->startProcess(initialTreePath,
                            seedPath,
                            initialValues,
                            listenAddress,
-                           listenPort);
+                           listenPort,
+                           initialTreeId);
     }
     else if(vm.count("server-address")
             && vm.count("server-port"))
     {
         SakuraTree::SakuraRoot* root = new SakuraTree::SakuraRoot(std::string(argv[0]));
-        root->startClientConnection(serverAddress,
-                                    serverPort);
+        root->startClientConnection(serverAddress, serverPort);
 
         while(true)
         {

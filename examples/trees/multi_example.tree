@@ -1,0 +1,5 @@
+[seed_install]
+- packages = [ "nano", "vim" ]
+
+seed("test-node", "multinode_remote")
+- packages = packages

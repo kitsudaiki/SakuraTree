@@ -1,0 +1,6 @@
+[multinode_remote]
+- packages = []
+
+apt("install")
+-> latest:
+   - packages = packages

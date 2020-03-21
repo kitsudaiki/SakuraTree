@@ -310,8 +310,8 @@ SakuraThread::processSubtree(SubtreeItem* subtreeItem)
     std::string errorMessage = "";
     bool fillResult = false;
 
-    SakuraItem* newSubtree = SakuraRoot::m_root->m_treeHandler->getConvertedTree(subtreeItem->nameOrPath);
-
+    TreeHandler* treeHandler = SakuraRoot::m_root->m_treeHandler;
+    SakuraItem* newSubtree = treeHandler->getConvertedTree(subtreeItem->nameOrPath);
 
     // fill normal map
     fillResult = fillInputValueItemMap(subtreeItem->values, m_parentValues, errorMessage);
@@ -367,7 +367,7 @@ SakuraThread::processSubtree(SubtreeItem* subtreeItem)
  * @return true if successful, else false
  */
 bool
-SakuraThread::processSeed(SeedItem *seedItem)
+SakuraThread::processSeed(SeedItem* seedItem)
 {
     std::string errorMessage = "";
     bool fillResult = false;
@@ -388,6 +388,8 @@ SakuraThread::processSeed(SeedItem *seedItem)
     SakuraRoot::m_networking->triggerSeedByTag(seedItem->tag,
                                                seedItem->treeId,
                                                fullValues.toString());
+
+    return true;
 }
 
 /**

@@ -36,10 +36,15 @@ TreeHandler::addTree(const std::string &treePath)
         return false;
     }
 
-    for(uint32_t i = 0; i < m_parser->m_fileContents.size(); i++)
+    // iterate over the result from the parser
+    std::map<std::string, JsonItem>::iterator it;
+    for(it = m_parser->m_idContentMapping.begin();
+        it != m_parser->m_idContentMapping.end();
+        it++)
     {
-        const std::string &treeId = m_parser->m_fileContents.at(i).first;
-        const JsonItem plainTree = m_parser->m_fileContents.at(i).second;
+        // get values from map
+        const std::string &treeId = it->first;
+        const JsonItem plainTree = it->second;
 
         // check if tree is already in the map
         std::map<std::string, TreeHandlerItem>::const_iterator it;
