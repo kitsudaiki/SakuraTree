@@ -43,6 +43,7 @@ protected:
 
 private:
     std::string hostName = "";
+    std::vector<std::string> tags;
 };
 
 }

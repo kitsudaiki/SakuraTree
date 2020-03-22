@@ -3,7 +3,7 @@
 - server_address = ""
 - server_port = ""
 
-test_node("")
+sakura("")
 - type = ["test-node"]
 - source_path = source_path
 - server_address = server_address

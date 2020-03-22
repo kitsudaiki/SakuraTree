@@ -41,6 +41,12 @@ RegisterNodeBlossom::initBlossom(BlossomItem &blossomItem)
 {
     hostName = blossomItem.parentValues->get("host_name")->toString();
 
+    DataArray* array = blossomItem.parentValues->get("type")->toArray();
+    for(uint32_t i = 0; i < array->size(); i++)
+    {
+        tags.push_back(array->m_array.at(i)->toString());
+    }
+
     blossomItem.success = true;
 }
 
@@ -59,7 +65,6 @@ RegisterNodeBlossom::preCheck(BlossomItem &blossomItem)
 void
 RegisterNodeBlossom::runTask(BlossomItem &blossomItem)
 {
-    std::vector<std::string> tags;
     const bool result = SakuraRoot::m_root->m_networking->registerHost(hostName, tags);
     blossomItem.success = result;
 }
