@@ -28,7 +28,7 @@ namespace SakuraTree
 {
 
 PathDeleteBlossom_Test::PathDeleteBlossom_Test()
-    : Kitsunemimi::Test("PathDeleteBlossom_Test")
+    : Kitsunemimi::CompareTestHelper("PathDeleteBlossom_Test")
 {
     initTestCase();
     initTask_test();

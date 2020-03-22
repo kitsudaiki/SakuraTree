@@ -1,0 +1,7 @@
+[multinode_remote]
+- newText = ""
+
+text_file("write example text")
+- file_path = "/tmp/poi"
+-> write:
+   - text = newText

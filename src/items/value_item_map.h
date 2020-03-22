@@ -47,6 +47,7 @@ public:
     DataItem* get(const std::string &key);
     ValueItem getValueItem(const std::string &key);
     uint64_t size();
+    const std::string toString();
 
     // iterator
     std::map<std::string, ValueItem>::iterator begin();

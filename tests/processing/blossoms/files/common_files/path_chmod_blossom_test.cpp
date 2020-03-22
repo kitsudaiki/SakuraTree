@@ -26,7 +26,7 @@ namespace SakuraTree
 {
 
 PathChmodBlossom_Test::PathChmodBlossom_Test()
-    : Kitsunemimi::Test("PathChmodBlossom_Test")
+    : Kitsunemimi::CompareTestHelper("PathChmodBlossom_Test")
 {
     initTask_test();
     preCheck_test();

@@ -24,13 +24,13 @@
 #define TEXT_REPLACE_BLOSSOM_TEST_H
 
 #include <common.h>
-#include <libKitsunemimiCommon/test.h>
+#include <libKitsunemimiCommon/test_helper/compare_test_helper.h>
 
 namespace SakuraTree
 {
 
 class TextReplaceBlossom_Test
-        : public Kitsunemimi::Test
+        : public Kitsunemimi::CompareTestHelper
 {
 public:
     TextReplaceBlossom_Test();

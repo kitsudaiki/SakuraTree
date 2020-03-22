@@ -36,17 +36,36 @@ TreeHandler::addTree(const std::string &treePath)
         return false;
     }
 
-    for(uint32_t i = 0; i < m_parser->m_fileContents.size(); i++)
+    // iterate over the result from the parser
+    std::map<std::string, JsonItem>::iterator it;
+    for(it = m_parser->m_idContentMapping.begin();
+        it != m_parser->m_idContentMapping.end();
+        it++)
     {
+        // get values from map
+        const std::string &treeId = it->first;
+        const JsonItem plainTree = it->second;
+
+        // check if tree is already in the map
+        std::map<std::string, TreeHandlerItem>::const_iterator it;
+        it = m_trees.find(treeId);
+        if(it != m_trees.end()) {
+            return false;
+        }
+
         // parsing
-        SakuraItem* processPlan = m_converter->convert(m_parser->m_fileContents.at(i).second);
+        SakuraItem* processPlan = m_converter->convert(plainTree);
         if(processPlan == nullptr) {
             return false;
         }
 
-        if(addTree(m_parser->m_fileContents.at(i).first, processPlan) == false) {
-            return false;
-        }
+        // prepare TreeHandlerItem
+        TreeHandlerItem newTreeHandlerItem;
+        newTreeHandlerItem.convertedItem = processPlan;
+        newTreeHandlerItem.parsedItem = plainTree;
+
+        // add new item to the map
+        m_trees.insert(std::pair<std::string, TreeHandlerItem>(treeId, newTreeHandlerItem));
     }
 
     return true;
@@ -55,21 +74,41 @@ TreeHandler::addTree(const std::string &treePath)
 /**
  * @brief TreeHandler::addTree
  * @param treeId
- * @param tree
+ * @param content
  * @return
  */
 bool
 TreeHandler::addTree(const std::string &treeId,
-                     SakuraItem* tree)
+                     const std::string &content)
 {
-    std::map<std::string, SakuraItem*>::const_iterator it;
-    it = m_trees.find(treeId);
+    JsonItem plainTree;
+    std::string errorMessage = "";
 
+    const bool parsingResult = plainTree.parse(content, errorMessage);
+    if(parsingResult == false) {
+        return false;
+    }
+
+    // check if tree is already in the map
+    std::map<std::string, TreeHandlerItem>::const_iterator it;
+    it = m_trees.find(treeId);
     if(it != m_trees.end()) {
         return false;
     }
 
-    m_trees.insert(std::pair<std::string, SakuraItem*>(treeId, tree));
+    // parsing
+    SakuraItem* processPlan = m_converter->convert(plainTree);
+    if(processPlan == nullptr) {
+        return false;
+    }
+
+    // prepare TreeHandlerItem
+    TreeHandlerItem newTreeHandlerItem;
+    newTreeHandlerItem.convertedItem = processPlan;
+    newTreeHandlerItem.parsedItem = plainTree;
+
+    // add new item to the map
+    m_trees.insert(std::pair<std::string, TreeHandlerItem>(treeId, newTreeHandlerItem));
 
     return true;
 }
@@ -80,16 +119,34 @@ TreeHandler::addTree(const std::string &treeId,
  * @return
  */
 SakuraItem*
-TreeHandler::getTree(const std::string &treeId)
+TreeHandler::getConvertedTree(const std::string &treeId)
 {
-    std::map<std::string, SakuraItem*>::const_iterator it;
+    std::map<std::string, TreeHandlerItem>::const_iterator it;
     it = m_trees.find(treeId);
 
     if(it != m_trees.end()) {
-        return it->second;
+        return it->second.convertedItem;
     }
 
     return nullptr;
+}
+
+/**
+ * @brief TreeHandler::getParsedTree
+ * @param treeId
+ * @return
+ */
+const JsonItem
+TreeHandler::getParsedTree(const std::string &treeId)
+{
+    std::map<std::string, TreeHandlerItem>::const_iterator it;
+    it = m_trees.find(treeId);
+
+    if(it != m_trees.end()) {
+        return it->second.parsedItem;
+    }
+
+    return JsonItem();
 }
 
 /**
@@ -111,7 +168,17 @@ TreeHandler::loadPredefinedSubtrees()
     }
 
     SakuraItem* convertedProvisioningSubtree = m_converter->convert(parsedProvisioningSubtree);
-    addTree("sakura_provisioning", convertedProvisioningSubtree);
+
+    // prepare TreeHandlerItem
+    TreeHandlerItem newTreeHandlerItem;
+    newTreeHandlerItem.convertedItem = convertedProvisioningSubtree;
+    newTreeHandlerItem.parsedItem = parsedProvisioningSubtree;
+
+    // add new item to the map
+    m_trees.insert(std::pair<std::string, TreeHandlerItem>(
+                       "sakura_provisioning",
+                       newTreeHandlerItem)
+                   );
 
     return true;
 }

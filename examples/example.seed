@@ -3,14 +3,14 @@
 - server_address = ""
 - server_port = ""
 
-test_node("")
+sakura("")
 - type = ["test-node"]
 - source_path = source_path
 - server_address = server_address
 - server_port = server_port
 
 -> ssh_provisioning:
-	- ip_address = "192.168.178.25"
+	- ip_address = "192.168.56.101"
 	- ssh_key_path = "~/.ssh/sakura_test"
 	- ssh_user = "sakura"
 	- ssh_port = 22

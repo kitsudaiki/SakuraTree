@@ -194,12 +194,7 @@ SeedItem::SeedItem()
     type = SEED_ITEM;
 }
 
-SeedItem::~SeedItem()
-{
-    if(child != nullptr) {
-        delete child;
-    }
-}
+SeedItem::~SeedItem() {}
 
 SakuraItem*
 SeedItem::copy()
@@ -209,16 +204,8 @@ SeedItem::copy()
     newItem->type = type;
     newItem->values = values;
 
-    newItem->name = name;
-    newItem->address = address;
-    newItem->sshPort = sshPort;
-    newItem->sshUser = sshUser;
-    newItem->sshKey = sshKey;
-    newItem->content = content;
-
-    if(child != nullptr) {
-        newItem->child = child->copy();
-    }
+    newItem->treeId = treeId;
+    newItem->tag = tag;
 
     return newItem;
 }

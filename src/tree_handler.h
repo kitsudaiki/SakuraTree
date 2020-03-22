@@ -17,17 +17,29 @@ class Converter;
 
 class TreeHandler
 {
+
 public:
+
+    struct TreeHandlerItem
+    {
+        JsonItem parsedItem;
+        SakuraItem* convertedItem = nullptr;
+    };
+
     TreeHandler();
 
     bool addTree(const std::string &treePath);
     bool addTree(const std::string &treeId,
-                 SakuraItem* tree);
-    SakuraItem* getTree(const std::string &treeId);
+                 const std::string &content);
+
+    SakuraItem* getConvertedTree(const std::string &treeId);
+    const JsonItem getParsedTree(const std::string &treeId);
 
     bool loadPredefinedSubtrees();
+
+    std::map<std::string, TreeHandlerItem> m_trees;
+
 private:
-    std::map<std::string, SakuraItem*> m_trees;
     Converter* m_converter = nullptr;
     Kitsunemimi::Sakura::SakuraParsing* m_parser = nullptr;
 };

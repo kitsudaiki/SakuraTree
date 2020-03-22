@@ -24,6 +24,8 @@
 #define SAKURA_TREE_CALLBACKS_H
 
 #include <sakura_root.h>
+#include <tree_handler.h>
+#include <libKitsunemimiProjectNetwork/session.h>
 
 namespace SakuraTree
 {
@@ -32,18 +34,22 @@ void treeTransferCallback(void* target,
                           const std::string treeId,
                           const std::string tree)
 {
-    std::cout<<"treeTransferCallback: "<<treeId<<std::endl;
+    SakuraRoot* rootClass = static_cast<SakuraRoot*>(target);
+    rootClass->m_treeHandler->addTree(treeId, tree);
 }
 
 void seedTriggerCallback(void* target,
                          const std::string treeId,
-                         const std::string values)
+                         const std::string values,
+                         Kitsunemimi::Project::Session* session,
+                         const uint64_t blockerId)
 {
-    std::cout<<"seedTriggerCallback: "<<treeId<<std::endl;
+    SakuraRoot* rootClass = static_cast<SakuraRoot*>(target);
+    rootClass->startSubtreeProcess(treeId, values, session, blockerId);
 }
 
 void blossomOutputCallback(void* target,
-                           const std::string address,
+                           const std::string ,
                            const std::string output)
 {
     SakuraRoot* rootClass = static_cast<SakuraRoot*>(target);
@@ -51,10 +57,10 @@ void blossomOutputCallback(void* target,
 }
 
 
-void sessionCallback(void* target,
+void sessionCallback(void* ,
                      const std::string)
 {
-    SakuraRoot* rootClass = static_cast<SakuraRoot*>(target);
+    //SakuraRoot* rootClass = static_cast<SakuraRoot*>(target);
 }
 
 }

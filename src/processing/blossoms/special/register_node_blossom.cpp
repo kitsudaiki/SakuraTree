@@ -1,5 +1,5 @@
 /**
- * @file        apt_update_blossom.cpp
+ * @file        register_node_blossom.cpp
  *
  * @author      Tobias Anker <tobias.anker@kitsunemimi.moe>
  *
@@ -20,21 +20,33 @@
  *      limitations under the License.
  */
 
-#include "apt_update_blossom.h"
-#include <processing/blossoms/install/apt/apt_methods.h>
+#include "register_node_blossom.h"
+#include <sakura_root.h>
+#include <libKitsunemimiSakuraNetwork/sakura_network.h>
 
 namespace SakuraTree
 {
 
-AptUdateBlossom::AptUdateBlossom()
-    : Blossom() {}
+RegisterNodeBlossom::RegisterNodeBlossom()
+    : Blossom()
+{
+    m_requiredKeys.insert("host_name", new DataValue(true));
+}
 
 /**
  * initBlossom
  */
 void
-AptUdateBlossom::initBlossom(BlossomItem &blossomItem)
+RegisterNodeBlossom::initBlossom(BlossomItem &blossomItem)
 {
+    hostName = blossomItem.parentValues->get("host_name")->toString();
+
+    DataArray* array = blossomItem.parentValues->get("type")->toArray();
+    for(uint32_t i = 0; i < array->size(); i++)
+    {
+        tags.push_back(array->m_array.at(i)->toString());
+    }
+
     blossomItem.success = true;
 }
 
@@ -42,7 +54,7 @@ AptUdateBlossom::initBlossom(BlossomItem &blossomItem)
  * preCheck
  */
 void
-AptUdateBlossom::preCheck(BlossomItem &blossomItem)
+RegisterNodeBlossom::preCheck(BlossomItem &blossomItem)
 {
     blossomItem.success = true;
 }
@@ -51,20 +63,17 @@ AptUdateBlossom::preCheck(BlossomItem &blossomItem)
  * runTask
  */
 void
-AptUdateBlossom::runTask(BlossomItem &blossomItem)
+RegisterNodeBlossom::runTask(BlossomItem &blossomItem)
 {
-    const std::string programm = "sudo apt-get update";
-    LOG_DEBUG("Execute: " + programm);
-    blossomItem.processResult = runSyncProcess(programm);
-    blossomItem.success = blossomItem.processResult.success;
-    blossomItem.outputMessage = "";
+    const bool result = SakuraRoot::m_root->m_networking->registerHost(hostName, tags);
+    blossomItem.success = result;
 }
 
 /**
  * postCheck
  */
 void
-AptUdateBlossom::postCheck(BlossomItem &blossomItem)
+RegisterNodeBlossom::postCheck(BlossomItem &blossomItem)
 {
     blossomItem.success = true;
 }
@@ -73,7 +82,7 @@ AptUdateBlossom::postCheck(BlossomItem &blossomItem)
  * closeBlossom
  */
 void
-AptUdateBlossom::closeBlossom(BlossomItem &blossomItem)
+RegisterNodeBlossom::closeBlossom(BlossomItem &blossomItem)
 {
     blossomItem.success = true;
 }

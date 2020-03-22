@@ -1,0 +1,5 @@
+[seed_install]
+- newText = "asdf"
+
+seed("test-node", "multinode_remote")
+- newText = newText

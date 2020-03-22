@@ -117,14 +117,8 @@ public:
     ~SeedItem();
     SakuraItem* copy();
 
-    std::string name = "";
-    std::string address = "";
-    int sshPort = 0;
-    std::string sshUser = "";
-    std::string sshKey = "";
-    std::string content = "";
-
-    SakuraItem* child = nullptr;
+    std::string treeId = "";
+    std::string tag = "";
 };
 
 //===================================================================

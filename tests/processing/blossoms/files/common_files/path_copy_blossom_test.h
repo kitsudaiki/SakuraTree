@@ -24,13 +24,13 @@
 #define PATH_COPY_BLOSSOM_TEST_H
 
 #include <common.h>
-#include <libKitsunemimiCommon/test.h>
+#include <libKitsunemimiCommon/test_helper/compare_test_helper.h>
 
 namespace SakuraTree
 {
 
 class PathCopyBlossom_Test
-        : public Kitsunemimi::Test
+        : public Kitsunemimi::CompareTestHelper
 {
 public:
     PathCopyBlossom_Test();

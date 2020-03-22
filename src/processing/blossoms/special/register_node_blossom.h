@@ -1,5 +1,5 @@
 /**
- * @file        value_items_functions_test.h
+ * @file        register_node_blossom.h
  *
  * @author      Tobias Anker <tobias.anker@kitsunemimi.moe>
  *
@@ -20,32 +20,32 @@
  *      limitations under the License.
  */
 
-#ifndef VALUE_ITEMS_FUNCTIONS_TEST_H
-#define VALUE_ITEMS_FUNCTIONS_TEST_H
+#ifndef PREREGISTER_NODE_BLOSSOM_H
+#define PREREGISTER_NODE_BLOSSOM_H
 
-#include <common.h>
-#include <libKitsunemimiCommon/test_helper/compare_test_helper.h>
-#include <processing/common/value_item_functions.h>
+#include <processing/blossoms/blossom.h>
 
 namespace SakuraTree
 {
-class ValueItemsFunctions_Test
-        : public Kitsunemimi::CompareTestHelper
+
+class RegisterNodeBlossom
+        : public Blossom
 {
 public:
-    ValueItemsFunctions_Test();
+    RegisterNodeBlossom();
+
+protected:
+    void initBlossom(BlossomItem &blossomItem);
+    void preCheck(BlossomItem &blossomItem);
+    void runTask(BlossomItem &blossomItem);
+    void postCheck(BlossomItem &blossomItem);
+    void closeBlossom(BlossomItem &blossomItem);
 
 private:
-    void getValue_test();
-    void splitValue_test();
-    void sizeValue_test();
-    void containsValue_test();
-    void appendValue_test();
-    void insertValue_test();
-
-    void checkNullptr(DataItem *value);
+    std::string hostName = "";
+    std::vector<std::string> tags;
 };
 
 }
 
-#endif // VALUE_ITEMS_FUNCTIONS_TEST_H
+#endif // PREREGISTER_NODE_BLOSSOM_H

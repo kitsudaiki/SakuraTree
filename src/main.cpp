@@ -25,11 +25,14 @@
 #include <tests/run_unit_tests.h>
 #include <boost/program_options.hpp>
 #include <libKitsunemimiCommon/common_methods/string_methods.h>
+#include <libKitsunemimiPersistence/logger/logger.h>
 
 namespace argParser = boost::program_options;
 
 int main(int argc, char *argv[])
 {
+    Kitsunemimi::Persistence::initLogger("/tmp", "testlog", true, true);
+
     // run unit-tests, if enabled by define-value
     #ifdef RUN_UNIT_TEST
     SakuraTree::RunUnitTests unitTests;
@@ -44,9 +47,19 @@ int main(int argc, char *argv[])
             "produce help message"
         )
         (
+            "init-tree-id,t",
+            argParser::value<std::string>(),
+            "id of initial tree-file"
+        )
+        (
+            "directory-path,d",
+            argParser::value<std::string>(),
+            "path to directory with all tree-files"
+        )
+        (
             "init-tree",
             argParser::value<std::string>(),
-            "path to the initial tree-file"
+            "path to directory with all tree-files"
         )
         (
             "seed",
@@ -68,6 +81,16 @@ int main(int argc, char *argv[])
             argParser::value<uint16_t>(),
             "port of the server"
         )
+        (
+            "listen-address",
+            argParser::value<std::string>(),
+            "address where to listen"
+        )
+        (
+            "listen-port",
+            argParser::value<uint16_t>(),
+            "port where to listen"
+        )
     ;
 
     argParser::variables_map vm;
@@ -81,13 +104,32 @@ int main(int argc, char *argv[])
         return 0;
     }
 
+    std::string treeDirectoryPath = "";
+    std::string initialTreeId = "";
     std::string initialTreePath = "";
+
     std::string seedPath = "";
     DataMap initialValues;
     std::string serverAddress = "";
-    uint16_t port = 0;
+    uint16_t serverPort = 0;
+    std::string listenAddress = "";
+    uint16_t listenPort = 0;
 
-    // initial tree-file
+    // directory-path
+    if(vm.count("directory-path"))
+    {
+        initialTreePath = vm["directory-path"].as<std::string>();
+        std::cout << "directory-path: " << initialTreePath << std::endl;
+    }
+
+    // initial tree-id
+    if(vm.count("init-tree-id"))
+    {
+        initialTreeId = vm["init-tree-id"].as<std::string>();
+        std::cout << "init-tree-id: " << initialTreeId << std::endl;
+    }
+
+    // initial tree-path
     if(vm.count("init-tree"))
     {
         initialTreePath = vm["init-tree"].as<std::string>();
@@ -128,25 +170,41 @@ int main(int argc, char *argv[])
     // server-port
     if(vm.count("server-port"))
     {
-        port = vm["server-port"].as<uint16_t>();
-        std::cout << "server-port: " << port << std::endl;
+        serverPort = vm["server-port"].as<uint16_t>();
+        std::cout << "server-port: " << serverPort << std::endl;
     }
 
-    if(vm.count("init-tree"))
+    // listen-address
+    if(vm.count("listen-address"))
+    {
+        listenAddress = vm["listen-address"].as<std::string>();
+        std::cout << "listen-address: " << listenAddress << std::endl;
+    }
+
+    // listen-port
+    if(vm.count("listen-port"))
+    {
+        listenPort = vm["listen-port"].as<uint16_t>();
+        std::cout << "listen-port: " << listenPort << std::endl;
+    }
+
+    if(vm.count("init-tree")
+            || (vm.count("directory-path")
+                && vm.count("init-tree-id")))
     {
         SakuraTree::SakuraRoot* root = new SakuraTree::SakuraRoot(std::string(argv[0]));
         root->startProcess(initialTreePath,
                            seedPath,
                            initialValues,
-                           serverAddress,
-                           port);
+                           listenAddress,
+                           listenPort,
+                           initialTreeId);
     }
     else if(vm.count("server-address")
             && vm.count("server-port"))
     {
         SakuraTree::SakuraRoot* root = new SakuraTree::SakuraRoot(std::string(argv[0]));
-        root->startClientConnection(serverAddress,
-                                    port);
+        root->startClientConnection(serverAddress, serverPort);
 
         while(true)
         {

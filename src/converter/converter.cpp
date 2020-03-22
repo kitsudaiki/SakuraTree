@@ -411,27 +411,16 @@ Converter::convertSubtree(const JsonItem &subtree,
  * @return pointer of the current converted part
  */
 SakuraItem*
-Converter::convertSeed(const JsonItem &subtree, bool &)
+Converter::convertSeed(const JsonItem &subtree, bool &success)
 {
     // init new seed-item
     SeedItem* seedItem = new SeedItem();
-    seedItem->name = subtree.get("b_id").toString();
+    seedItem->treeId = subtree.get("treeId").toString();
+    seedItem->tag = subtree.get("tag").toString();
 
-    // generate new branch-item based on the information
-    const JsonItem connectionInfos = subtree.get("connection");
-    // TODO: enable again in 0.3.0
-    /*SubtreeItem* provisioningBranch = createProvisionBranch
-            (
-                connectionInfos.get("address").getString(),
-                connectionInfos.get("ssh_port").getInt(),
-                connectionInfos.get("ssh_user").getString(),
-                connectionInfos.get("ssh_key").getString(),
-                SakuraRoot::m_executablePath,
-                "",
-                subtree.get("subtree").getString()
-            );
-
-    seedItem->child = provisioningBranch;*/
+    // fill values with the input of the upper level and convert the result
+    const JsonItem items = subtree.get("tems-input");
+    convertItemValues(seedItem, items, success);
 
     return seedItem;
 }
