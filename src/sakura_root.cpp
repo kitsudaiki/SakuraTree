@@ -32,6 +32,7 @@
 #include <libKitsunemimiSakuraParser/sakura_parsing.h>
 #include <libKitsunemimiJinja2/jinja2_converter.h>
 #include <libKitsunemimiJson/json_item.h>
+#include <libKitsunemimiPersistence/logger/logger.h>
 
 #include <items/sakura_items.h>
 #include <converter/converter.h>
@@ -182,7 +183,9 @@ SakuraRoot::startProcess(const std::string &initialTreePath,
  */
 bool
 SakuraRoot::startSubtreeProcess(const std::string &treeId,
-                                const std::string &values)
+                                const std::string &values,
+                                Kitsunemimi::Project::Session* session,
+                                const uint64_t blockerId)
 {
     std::cout<<"startSubtreeProcess"<<std::endl;
 
@@ -204,14 +207,9 @@ SakuraRoot::startSubtreeProcess(const std::string &treeId,
     object->items = *valuesJson.getItemContent()->copy()->toMap();
     object->activeCounter = new SubtreeQueue::ActiveCounter();
     object->activeCounter->shouldCount = 1;
+    object->session = session;
+    object->blockerId = blockerId;
     m_threadPool->m_queue.addSubtreeObject(object);
-
-    // wait until the created subtree was fully processed by the worker-threads
-    while(object->activeCounter->isEqual() == false) {
-        std::this_thread::sleep_for(chronoMilliSec(10));
-    }
-
-    std::cout<<"finish"<<std::endl;
 
     return true;
 }
@@ -385,7 +383,8 @@ SakuraRoot::runProcess(SakuraItem* item,
     // TODO: better solution necessary instead of checking the number of rows
     if(m_errorOutput.getNumberOfRows() > 0)
     {
-        std::cout<<m_errorOutput.toString()<<std::endl;
+        //std::cout<<m_errorOutput.toString()<<std::endl;
+        LOG_ERROR(m_errorOutput.toString());
         return false;
     }
 
@@ -421,7 +420,8 @@ SakuraRoot::prepareSeed(const std::string &seedPath,
     SakuraItem* convertedSeed = converter.convert(seed, true);
     if(convertedSeed == nullptr)
     {
-        std::cout<<m_errorOutput.toString()<<std::endl;
+        //std::cout<<m_errorOutput.toString()<<std::endl;
+        LOG_ERROR(m_errorOutput.toString());
         return nullptr;
     }
 

@@ -21,6 +21,7 @@
  */
 
 #include "value_item_map.h"
+#include <libKitsunemimiCommon/common_items/table_item.h>
 
 namespace SakuraTree
 {
@@ -223,6 +224,31 @@ uint64_t
 ValueItemMap::size()
 {
     return m_valueMap.size();
+}
+
+/**
+ * @brief ValueItemMap::toString
+ *
+ * @return
+ */
+const std::string
+ValueItemMap::toString()
+{
+    // init table output
+    Kitsunemimi::TableItem table;
+    table.addColumn("key");
+    table.addColumn("value");
+
+    // fill table
+    std::map<std::string, ValueItem>::const_iterator it;
+    for(it = m_valueMap.begin();
+        it != m_valueMap.end();
+        it++)
+    {
+        table.addRow(std::vector<std::string>{it->first, it->second.item->toString()});
+    }
+
+    return table.toString();
 }
 
 /**

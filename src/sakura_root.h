@@ -35,6 +35,9 @@ class Jinja2Converter;
 namespace Sakura {
 class SakuraNetwork;
 }
+namespace Project {
+class Session;
+}
 }
 
 using Kitsunemimi::Jinja2::Jinja2Converter;
@@ -62,7 +65,9 @@ public:
                       const uint16_t serverPort = 1337,
                       const std::string &initialTreeId = "");
     bool startSubtreeProcess(const std::string &treeId,
-                             const std::string &values);
+                             const std::string &values,
+                             Kitsunemimi::Project::Session* session,
+                             const uint64_t blockerId);
 
     // error-output
     void createError(const BlossomItem &blossomItem,

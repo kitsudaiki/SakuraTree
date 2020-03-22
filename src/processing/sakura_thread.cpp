@@ -33,6 +33,7 @@
 #include <processing/subtree_queue.h>
 
 #include <libKitsunemimiJinja2/jinja2_converter.h>
+#include <libKitsunemimiPersistence/logger/logger.h>
 
 namespace SakuraTree
 {
@@ -68,14 +69,13 @@ SakuraThread::run()
 
         if(currentSubtree != nullptr)
         {
-            if(currentSubtree->subtree == nullptr)
+            if(currentSubtree->subtree != nullptr)
             {
-                // if subtree-queue is empty, then wait for 1 milli-seconds before asking the queue
-                // again for a new subtree
-                std::this_thread::sleep_for(chronoMilliSec(1));
-            }
-            else
-            {
+                if(currentSubtree->session != nullptr)
+                {
+                    LOG_DEBUG("start Subcall");
+                }
+
                 // handle subtree-object
                 m_hierarchy = currentSubtree->hirarchy;
                 overrideItems(m_parentValues, currentSubtree->subtree->values, false);
@@ -88,7 +88,18 @@ SakuraThread::run()
                 if(currentSubtree->activeCounter != nullptr) {
                     currentSubtree->activeCounter->increaseCounter();
                 }
+
+                if(currentSubtree->session != nullptr)
+                {
+                    char response[50];
+                    LOG_DEBUG("FINISH Subcall");
+                    currentSubtree->session->sendResponse(response, 50, currentSubtree->blockerId);
+                }
             }
+        }
+        else
+        {
+            std::this_thread::sleep_for(chronoMilliSec(1));
         }
     }
 }
@@ -189,9 +200,17 @@ SakuraThread::processSakuraItem(SakuraItem* sakuraItem)
 bool
 SakuraThread::processBlossom(BlossomItem &blossomItem)
 {
+    LOG_DEBUG("processBlossom: \nname: " + blossomItem.blossomName);
+    if(blossomItem.parentValues != nullptr)
+    {
+        LOG_DEBUG("    parentValues:" + blossomItem.parentValues->toString());
+    }
+
     // process values by filling with information of the parent-object
     std::string errorMessage = "";
     const bool result = fillInputValueItemMap(blossomItem.values, m_parentValues, errorMessage);
+    LOG_DEBUG("    values:\n" + blossomItem.values.toString());
+
     if(result == false)
     {
         SakuraRoot::m_root->createError(blossomItem, "processing",
@@ -235,6 +254,8 @@ SakuraThread::processBlossom(BlossomItem &blossomItem)
 bool
 SakuraThread::processBlossomGroup(BlossomGroupItem &blossomGroupItem)
 {
+    LOG_DEBUG("processBlossomGroup");
+
     std::string errorMessage = "";
 
     for(uint32_t i = 0; i < blossomGroupItem.blossoms.size(); i++)
@@ -274,6 +295,8 @@ SakuraThread::processBlossomGroup(BlossomGroupItem &blossomGroupItem)
 bool
 SakuraThread::processTree(TreeItem* treeItem)
 {
+    LOG_DEBUG("processTree");
+
     const std::vector<std::string> uninitItems = checkItems(treeItem->values);
     if(uninitItems.size() > 0)
     {
@@ -307,6 +330,8 @@ SakuraThread::processTree(TreeItem* treeItem)
 bool
 SakuraThread::processSubtree(SubtreeItem* subtreeItem)
 {
+    LOG_DEBUG("processSubtree");
+
     std::string errorMessage = "";
     bool fillResult = false;
 
@@ -369,6 +394,8 @@ SakuraThread::processSubtree(SubtreeItem* subtreeItem)
 bool
 SakuraThread::processSeed(SeedItem* seedItem)
 {
+    LOG_DEBUG("processSeed");
+
     std::string errorMessage = "";
     bool fillResult = false;
 
@@ -402,6 +429,8 @@ SakuraThread::processSeed(SeedItem* seedItem)
 bool
 SakuraThread::processIf(IfBranching* ifCondition)
 {
+    LOG_DEBUG("processIf");
+
     // initialize
     std::string errorMessage = "";
     bool ifMatch = false;
@@ -467,6 +496,8 @@ bool
 SakuraThread::processForEach(ForEachBranching* subtree,
                              bool parallel)
 {
+    LOG_DEBUG("processForEach");
+
     std::string errorMessage = "";
 
     // initialize the array, over twhich the loop should iterate
@@ -563,6 +594,8 @@ bool
 SakuraThread::processFor(ForBranching* subtree,
                          bool parallel)
 {
+    LOG_DEBUG("processFor");
+
     std::string errorMessage = "";
 
     // get start-value
@@ -669,6 +702,8 @@ SakuraThread::processFor(ForBranching* subtree,
 bool
 SakuraThread::processSequeniellPart(SequentiellPart* subtree)
 {
+    LOG_DEBUG("processSequeniellPart");
+
     for(uint32_t i = 0; i < subtree->childs.size(); i++)
     {
         const bool result = processSakuraItem(subtree->childs.at(i));;
@@ -690,6 +725,8 @@ SakuraThread::processSequeniellPart(SequentiellPart* subtree)
 bool
 SakuraThread::processParallelPart(ParallelPart* parallelPart)
 {
+    LOG_DEBUG("processParallelPart");
+
     // create and initialize all threads
     SubtreeQueue::ActiveCounter* counter = new SubtreeQueue::ActiveCounter();
     counter->shouldCount = static_cast<uint32_t>(parallelPart->childs.size());

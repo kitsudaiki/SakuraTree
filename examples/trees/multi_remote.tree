@@ -1,6 +1,7 @@
 [multinode_remote]
-- packages = []
+- newText = ""
 
-apt("install")
--> latest:
-   - packages = packages
+text_file("write example text")
+- file_path = "/tmp/poi"
+-> write:
+   - text = newText

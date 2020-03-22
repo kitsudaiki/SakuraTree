@@ -54,6 +54,7 @@ void
 AptUpgradeBlossom::runTask(BlossomItem &blossomItem)
 {
     const std::string programm = "sudo apt-get -y upgrade";
+    LOG_DEBUG("Execute: " + programm);
     blossomItem.processResult = runSyncProcess(programm);
     blossomItem.success = blossomItem.processResult.success;
     blossomItem.outputMessage = "";

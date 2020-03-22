@@ -1,5 +1,5 @@
 [seed_install]
-- packages = [ "nano", "vim" ]
+- newText = "asdf"
 
 seed("test-node", "multinode_remote")
-- packages = packages
+- newText = newText

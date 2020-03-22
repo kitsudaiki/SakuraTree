@@ -25,6 +25,7 @@
 
 #include <sakura_root.h>
 #include <tree_handler.h>
+#include <libKitsunemimiProjectNetwork/session.h>
 
 namespace SakuraTree
 {
@@ -39,10 +40,12 @@ void treeTransferCallback(void* target,
 
 void seedTriggerCallback(void* target,
                          const std::string treeId,
-                         const std::string values)
+                         const std::string values,
+                         Kitsunemimi::Project::Session* session,
+                         const uint64_t blockerId)
 {
     SakuraRoot* rootClass = static_cast<SakuraRoot*>(target);
-    rootClass->startSubtreeProcess(treeId, values);
+    rootClass->startSubtreeProcess(treeId, values, session, blockerId);
 }
 
 void blossomOutputCallback(void* target,
