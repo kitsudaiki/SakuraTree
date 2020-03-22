@@ -429,11 +429,6 @@ SakuraRoot::prepareSeed(const std::string &seedPath,
     convertedSeed->values.insert("server_address", new DataValue(serverAddress));
     convertedSeed->values.insert("server_port", new DataValue(port));
 
-    // create server
-    if(serverAddress != "") {
-        m_networking->createServer(port);
-    }
-
     return convertedSeed;
 }
 
