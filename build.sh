@@ -47,17 +47,17 @@ function get_required_kitsune_lib_repo () {
 
 #-----------------------------------------------------------------------------------------------------------------
 
-get_required_kitsune_lib_repo "libKitsunemimiCommon" "v0.12.0" 4
+get_required_kitsune_lib_repo "libKitsunemimiCommon" "v0.13.0" 4
 
-get_required_kitsune_lib_repo "libKitsunemimiPersistence" "v0.7.1" 4
+get_required_kitsune_lib_repo "libKitsunemimiPersistence" "v0.8.2" 4
 
-get_required_kitsune_lib_repo "libKitsunemimiNetwork" "v0.6.0" 4
+get_required_kitsune_lib_repo "libKitsunemimiNetwork" "v0.6.2" 4
 
-get_required_kitsune_lib_repo "libKitsunemimiJson" "master" 1
+get_required_kitsune_lib_repo "libKitsunemimiJson" "0.10.2" 1
 
-get_required_kitsune_lib_repo "libKitsunemimiIni" "master" 1
+get_required_kitsune_lib_repo "libKitsunemimiIni" "0.4.3" 1
 
-get_required_kitsune_lib_repo "libKitsunemimiJinja2" "master" 1
+get_required_kitsune_lib_repo "libKitsunemimiJinja2" "0.7.2" 1
 
 get_required_kitsune_lib_repo "libKitsunemimiSakuraParser" "master" 1
 

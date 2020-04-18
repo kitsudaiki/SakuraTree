@@ -31,7 +31,7 @@ namespace argParser = boost::program_options;
 
 int main(int argc, char *argv[])
 {
-    Kitsunemimi::Persistence::initLogger("/tmp", "testlog", true, true);
+    Kitsunemimi::Persistence::initConsoleLogger(true);
 
     // run unit-tests, if enabled by define-value
     #ifdef RUN_UNIT_TEST
