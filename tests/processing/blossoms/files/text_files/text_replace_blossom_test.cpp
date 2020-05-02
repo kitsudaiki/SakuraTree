@@ -126,10 +126,11 @@ TextReplaceBlossom_Test::runTask_test()
     replaceBlossom.runTask(blossomItem);
     TEST_EQUAL(blossomItem.success, true);
 
-    const std::pair<bool, std::string> result = Kitsunemimi::Persistence::readFile(m_path,
-                                                                                   errorMessage);
-    TEST_EQUAL(result.first, true);
-    TEST_EQUAL(result.second, m_newCompleteText);
+    std::string fileContent = "";
+    const bool result = Kitsunemimi::Persistence::readFile(fileContent, m_path, errorMessage);
+
+    TEST_EQUAL(result, true);
+    TEST_EQUAL(fileContent, m_newCompleteText);
 
     runSyncProcess("rm " + m_path);
 }

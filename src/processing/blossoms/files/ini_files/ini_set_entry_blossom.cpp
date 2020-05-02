@@ -77,11 +77,11 @@ IniSetEntryBlossom::preCheck(BlossomItem &blossomItem)
 void
 IniSetEntryBlossom::runTask(BlossomItem &blossomItem)
 {
-    std::pair<bool, std::string> result;
     std::string errorMessage = "";
-    result = Kitsunemimi::Persistence::readFile(m_filePath, errorMessage);
+    std::string fileContent = "";
+    bool result = Kitsunemimi::Persistence::readFile(fileContent, m_filePath, errorMessage);
 
-    if(result.first == false)
+    if(result == false)
     {
         blossomItem.success = false;
         blossomItem.outputMessage = errorMessage;
@@ -90,7 +90,7 @@ IniSetEntryBlossom::runTask(BlossomItem &blossomItem)
 
     IniItem iniItem;
     errorMessage.clear();
-    bool parseResult = iniItem.parse(result.second, errorMessage);
+    bool parseResult = iniItem.parse(fileContent, errorMessage);
 
     if(parseResult == false)
     {

@@ -70,10 +70,10 @@ TemplateCreateBlossom::preCheck(BlossomItem &blossomItem)
     }
 
     // read template-file
-    std::pair<bool, std::string> results;
     std::string errorMessage = "";
-    results = Kitsunemimi::Persistence::readFile(m_templatePath, errorMessage);
-    if(results.first == false)
+    std::string fileContent = "";
+    bool results = Kitsunemimi::Persistence::readFile(fileContent, m_templatePath, errorMessage);
+    if(results == false)
     {
         blossomItem.success = false;
         blossomItem.outputMessage = "couldn't read template-file "
@@ -98,10 +98,11 @@ TemplateCreateBlossom::preCheck(BlossomItem &blossomItem)
 
     // create file-content form template
     errorMessage.clear();
-    results = SakuraRoot::m_root->m_jinja2Converter->convert(results.second,
-                                                             &inputData,
-                                                             errorMessage);
-    if(results.first == false)
+    std::pair<bool, std::string> jinja2Result;
+    jinja2Result = SakuraRoot::m_root->m_jinja2Converter->convert(fileContent,
+                                                                  &inputData,
+                                                                  errorMessage);
+    if(jinja2Result.first == false)
     {
         blossomItem.success = false;
         blossomItem.outputMessage = "couldn't convert template-file "
@@ -110,16 +111,17 @@ TemplateCreateBlossom::preCheck(BlossomItem &blossomItem)
                                    + errorMessage;
         return;
     }
-    m_fileContent = results.second;
+    m_fileContent = jinja2Result.second;
 
     // check if template-file already exist
     if(Kitsunemimi::Persistence::doesPathExist(m_destinationPath))
     {
         // read the already existing file and compare it the current file-content
         errorMessage.clear();
-        results = Kitsunemimi::Persistence::readFile(m_destinationPath, errorMessage);
-        if(results.first == true
-                && m_fileContent == results.second)
+        fileContent.clear();
+        results = Kitsunemimi::Persistence::readFile(fileContent, m_destinationPath, errorMessage);
+        if(results == true
+                && m_fileContent == fileContent)
         {
             blossomItem.skip = true;
             blossomItem.success = true;
@@ -160,11 +162,11 @@ TemplateCreateBlossom::runTask(BlossomItem &blossomItem)
 void
 TemplateCreateBlossom::postCheck(BlossomItem &blossomItem)
 {
-    std::pair<bool, std::string> readFileContent;
     std::string errorMessage = "";
-    readFileContent = Kitsunemimi::Persistence::readFile(m_destinationPath, errorMessage);
-    if(readFileContent.first == false
-            || m_fileContent != readFileContent.second)
+    std::string fileContent = "";
+    bool ret = Kitsunemimi::Persistence::readFile(fileContent, m_destinationPath, errorMessage);
+    if(ret == false
+            || m_fileContent != fileContent)
     {
         blossomItem.success = false;
         return;
