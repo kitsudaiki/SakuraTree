@@ -4,6 +4,11 @@ TARGET = SakuraTree
 CONFIG += console
 CONFIG += c++14
 
+LIBS += -L../libKitsunemimiArgs/src -lKitsunemimiArgs
+LIBS += -L../libKitsunemimiArgs/src/debug -lKitsunemimiArgs
+LIBS += -L../libKitsunemimiArgs/src/release -lKitsunemimiArgs
+INCLUDEPATH += ../libKitsunemimiArgs/include
+
 LIBS += -L../libKitsunemimiSakuraNetwork/src -lKitsunemimiSakuraNetwork
 LIBS += -L../libKitsunemimiSakuraNetwork/src/debug -lKitsunemimiSakuraNetwork
 LIBS += -L../libKitsunemimiSakuraNetwork/src/release -lKitsunemimiSakuraNetwork
@@ -49,7 +54,7 @@ LIBS += -L../libKitsunemimiSakuraParser/src/debug -lKitsunemimiSakuraParser
 LIBS += -L../libKitsunemimiSakuraParser/src/release -lKitsunemimiSakuraParser
 INCLUDEPATH += ../libKitsunemimiSakuraParser/include
 
-LIBS +=  -lboost_filesystem -lboost_system -lboost_program_options  -lssl -lcrypto
+LIBS +=  -lboost_filesystem -lboost_system -lssl -lcrypto
 
 INCLUDEPATH += $$PWD \
                src

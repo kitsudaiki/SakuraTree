@@ -32,6 +32,8 @@ Documentation for latest master-version:
 
 https://gitlab.com/tobiasanker/Sakura-Project-Documentation/builds/artifacts/master/browse?job=build
 
+**IMPORTANT**: The master-version of the documentation actually differs from the master of the code, because the code has a bit bigger restructure for the multi-node support.
+
 ## Build
 
 I write my projects with the Qt-creator, but without Qt itself. 
@@ -46,6 +48,7 @@ g++ | g++ | 6.3.0 | Compiler for the C++ code.
 qmake | qt5-qmake | 5.7.1 | This package provides the tool qmake, which is similar to cmake and create the make-file for compilation.
 FLEX | flex | 2.6.1 | Build the lexer-code for all used parser.
 GNU Bison | bison | 3.0.4 | Build the parser-code together with the lexer-code.
+xxd | xxd | 1.10 | converts text files into source code files
 
 Installation on Ubuntu/Debian:
 
@@ -57,14 +60,12 @@ sudo apt-get install g++ qt5-qmake bison flex
 
 repository-name | version | task
 --- | --- | ---
-libboost-program-options-dev | 1.62 | Provides the argument-parser for the CLI input.
 libboost-filesystem-dev | 1.62 | Use for file-interactions like for example listing files in a directory or check if a path exist.
-libsqlite3-dev | 3.16.2 | Privides a Interaction with SQLite-Databases. Its a requirement of the used library libKitsunemimiPersistence, but its not used by this project now.
 
 Installation on Ubuntu/Debian:
 
 ```bash
-sudo apt-get install libboost-program-options-dev libboost-filesystem-dev libsqlite3-dev
+sudo apt-get install  libboost-filesystem-dev
 ```
 
 This are the version I have installed under Debian Stable via apt. Some older or newer version should work as well. I write my projects with the Qt-creator, but without Qt itself. Thats why qmake is required to build my projects.
@@ -77,13 +78,16 @@ These repositories will be downloaded automatically by the build script of the t
 
 Repository-Name | Version-Tag | Download-Path
 --- | --- | ---
-libKitsunemimiCommon | v0.10.1 |  https://github.com/tobiasanker/libKitsunemimiCommon.git
-libKitsunemimiPersistence | v0.7.0 |  https://github.com/tobiasanker/libKitsunemimiPersistence.git
-libKitsunemimiJson | v0.10.0 |  https://github.com/tobiasanker/libKitsunemimiJson.git
-libKitsunemimiJinja2 | v0.7.0 |  https://github.com/tobiasanker/libKitsunemimiJinja2.git
-libKitsunemimiIni | v0.4.0 |  https://github.com/tobiasanker/libKitsunemimiIni.git
-libKitsunemimiSakuraParser | master |  https://github.com/tobiasanker/libKitsunemimiSakuraParser.git
-
+libKitsunemimiCommon | master | https://github.com/tobiasanker/libKitsunemimiCommon.git
+libKitsunemimiPersistence | master | https://github.com/tobiasanker/libKitsunemimiPersistence.git
+libKitsunemimiArgs | master| https://github.com/tobiasanker/libKitsunemimiArgs.git
+libKitsunemimiJson | master | https://github.com/tobiasanker/libKitsunemimiJson.git
+libKitsunemimiJinja2 | master | https://github.com/tobiasanker/libKitsunemimiJinja2.git
+libKitsunemimiIni | master | https://github.com/tobiasanker/libKitsunemimiIni.git
+libKitsunemimiNetwork | master | https://github.com/tobiasanker/libKitsunemimiNetwork.git
+libKitsunemimiProjectNetwork | master | https://github.com/tobiasanker/libKitsunemimiProjectNetwork.git
+libKitsunemimiSakuraParser | master | https://github.com/tobiasanker/libKitsunemimiSakuraParser.git
+libKitsunemimiSakuraNetwork | master | https://github.com/tobiasanker/libKitsunemimiSakuraNetwork.git
 
 ### build programm
 
