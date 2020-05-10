@@ -51,6 +51,8 @@ get_required_kitsune_lib_repo "libKitsunemimiCommon" "master" 4
 
 get_required_kitsune_lib_repo "libKitsunemimiPersistence" "master" 4
 
+get_required_kitsune_lib_repo "libKitsunemimiArgs" "master" 4
+
 get_required_kitsune_lib_repo "libKitsunemimiNetwork" "v0.6.2" 4
 
 get_required_kitsune_lib_repo "libKitsunemimiJson" "0.10.2" 1

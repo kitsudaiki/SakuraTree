@@ -21,13 +21,13 @@
  */
 
 #include <common.h>
+#include <args.h>
 #include <sakura_root.h>
 #include <tests/run_unit_tests.h>
-#include <boost/program_options.hpp>
+
 #include <libKitsunemimiCommon/common_methods/string_methods.h>
 #include <libKitsunemimiPersistence/logger/logger.h>
-
-namespace argParser = boost::program_options;
+#include <libKitsunemimiArgs/arg_parser.h>
 
 int main(int argc, char *argv[])
 {
@@ -39,69 +39,13 @@ int main(int argc, char *argv[])
     unitTests.run();
     #else
 
-    // Declare the supported options.
-    argParser::options_description desc("Allowed options");
-    desc.add_options()
-        (
-            "help,h", // -h and --help for help-text
-            "produce help message"
-        )
-        (
-            "init-tree-id,t",
-            argParser::value<std::string>(),
-            "id of initial tree-file"
-        )
-        (
-            "directory-path,d",
-            argParser::value<std::string>(),
-            "path to directory with all tree-files"
-        )
-        (
-            "init-tree",
-            argParser::value<std::string>(),
-            "path to directory with all tree-files"
-        )
-        (
-            "seed",
-            argParser::value<std::string>(),
-            "path to the seed-file"
-        )
-        (
-            "input,i",
-            argParser::value<std::vector<std::string>>()->multitoken()->zero_tokens()->composing(),
-            "key-value-pairs to override the initial values inside of the file"
-        )
-        (
-            "server-address",
-            argParser::value<std::string>(),
-            "address of the server"
-        )
-        (
-            "server-port",
-            argParser::value<uint16_t>(),
-            "port of the server"
-        )
-        (
-            "listen-address",
-            argParser::value<std::string>(),
-            "address where to listen"
-        )
-        (
-            "listen-port",
-            argParser::value<uint16_t>(),
-            "port where to listen"
-        )
-    ;
+    // create and init argument-parser
+    Kitsunemimi::Args::ArgParser argParser;
+    KyoukoMind::registerArguments(argParser);
 
-    argParser::variables_map vm;
-    argParser::store(argParser::parse_command_line(argc, argv, desc), vm);
-    argParser::notify(vm);
-
-    // help-arg
-    if(vm.count("help"))
-    {
-        std::cout << desc << std::endl;
-        return 0;
+    // parse cli-input
+    if(argParser.parse(argc, argv) == false) {
+        return 1;
     }
 
     std::string treeDirectoryPath = "";
@@ -116,37 +60,37 @@ int main(int argc, char *argv[])
     uint16_t listenPort = 0;
 
     // directory-path
-    if(vm.count("directory-path"))
+    if(argParser.wasSet("directory-path"))
     {
-        initialTreePath = vm["directory-path"].as<std::string>();
+        initialTreePath = argParser.getStringValues("directory-path")[0];
         std::cout << "directory-path: " << initialTreePath << std::endl;
     }
 
     // initial tree-id
-    if(vm.count("init-tree-id"))
+    if(argParser.wasSet("init-tree-id"))
     {
-        initialTreeId = vm["init-tree-id"].as<std::string>();
+        initialTreeId = argParser.getStringValues("init-tree-id")[0];
         std::cout << "init-tree-id: " << initialTreeId << std::endl;
     }
 
     // initial tree-path
-    if(vm.count("init-tree"))
+    if(argParser.wasSet("init-tree"))
     {
-        initialTreePath = vm["init-tree"].as<std::string>();
+        initialTreePath = argParser.getStringValues("init-tree")[0];
         std::cout << "init-tree: " << initialTreePath << std::endl;
     }
 
     // seed-file
-    if(vm.count("seed"))
+    if(argParser.wasSet("seed"))
     {
-        seedPath = vm["seed"].as<std::string>();
+        seedPath = argParser.getStringValues("seed")[0];
         std::cout << "seed: " << seedPath << std::endl;
     }
 
     // input-values
-    if(vm.count("input"))
+    if(argParser.wasSet("input"))
     {
-        std::vector<std::string> envs = vm["input"].as<std::vector<std::string>>();
+        std::vector<std::string> envs = argParser.getStringValues("input");
         for(uint32_t i = 0; i < envs.size(); i++)
         {
             std::vector<std::string> pair;
@@ -161,36 +105,36 @@ int main(int argc, char *argv[])
     }
 
     // server-address
-    if(vm.count("server-address"))
+    if(argParser.wasSet("server-address"))
     {
-        serverAddress = vm["server-address"].as<std::string>();
+        serverAddress = argParser.getStringValues("server-address")[0];
         std::cout << "server-address: " << serverAddress << std::endl;
     }
 
     // server-port
-    if(vm.count("server-port"))
+    if(argParser.wasSet("server-port"))
     {
-        serverPort = vm["server-port"].as<uint16_t>();
+        serverPort = static_cast<uint16_t>(argParser.getIntValues("server-port")[0]);
         std::cout << "server-port: " << serverPort << std::endl;
     }
 
     // listen-address
-    if(vm.count("listen-address"))
+    if(argParser.wasSet("listen-address"))
     {
-        listenAddress = vm["listen-address"].as<std::string>();
+        listenAddress = argParser.getStringValues("listen-address")[0];
         std::cout << "listen-address: " << listenAddress << std::endl;
     }
 
     // listen-port
-    if(vm.count("listen-port"))
+    if(argParser.wasSet("listen-port"))
     {
-        listenPort = vm["listen-port"].as<uint16_t>();
+        listenPort = static_cast<uint16_t>(argParser.getIntValues("listen-port")[0]);
         std::cout << "listen-port: " << listenPort << std::endl;
     }
 
-    if(vm.count("init-tree")
-            || (vm.count("directory-path")
-                && vm.count("init-tree-id")))
+    if(argParser.wasSet("init-tree")
+            || (argParser.wasSet("directory-path")
+                && argParser.wasSet("init-tree-id")))
     {
         SakuraTree::SakuraRoot* root = new SakuraTree::SakuraRoot(std::string(argv[0]));
         root->startProcess(initialTreePath,
@@ -200,8 +144,8 @@ int main(int argc, char *argv[])
                            listenPort,
                            initialTreeId);
     }
-    else if(vm.count("server-address")
-            && vm.count("server-port"))
+    else if(argParser.wasSet("server-address")
+            && argParser.wasSet("server-port"))
     {
         SakuraTree::SakuraRoot* root = new SakuraTree::SakuraRoot(std::string(argv[0]));
         root->startClientConnection(serverAddress, serverPort);
