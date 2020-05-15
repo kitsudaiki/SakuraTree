@@ -144,7 +144,7 @@ const std::vector<std::string>
 getInstalledPackages()
 {
     const std::string command = "dpkg --list | grep ^ii  | awk ' {print \\$2} '";
-    const ProcressResult processResult = runSyncProcess(command);
+    const ProcessResult processResult = runSyncProcess(command);
     // TODO: check for error
     std::vector<std::string> result;
     Kitsunemimi::splitStringByDelimiter(result, processResult.processOutput, '\n');

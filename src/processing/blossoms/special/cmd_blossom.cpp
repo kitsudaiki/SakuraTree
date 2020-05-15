@@ -63,7 +63,6 @@ CmdBlossom::runTask(BlossomItem &blossomItem)
     blossomItem.success = blossomItem.processResult.success;
 
     blossomItem.blossomOutput = new DataValue(blossomItem.processResult.processOutput);
-    blossomItem.success = true;
 }
 
 /**

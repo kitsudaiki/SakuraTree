@@ -57,7 +57,7 @@ using Kitsunemimi::DataMap;
 
 using Kitsunemimi::Json::JsonItem;
 
-using Kitsunemimi::ProcressResult;
+using Kitsunemimi::ProcessResult;
 using Kitsunemimi::runSyncProcess;
 
 #endif // INCLUDES_H

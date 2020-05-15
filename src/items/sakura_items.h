@@ -82,7 +82,7 @@ public:
     DataMap* parentValues = nullptr;
 
     // process
-    ProcressResult processResult;
+    ProcessResult processResult;
 
     // result
     std::vector<std::string> nameHirarchie;
