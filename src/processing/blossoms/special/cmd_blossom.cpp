@@ -31,6 +31,7 @@ CmdBlossom::CmdBlossom()
     m_hasOutput = true;
 
     m_requiredKeys.insert("command", new DataValue(true));
+    m_requiredKeys.insert("ignore_result", new DataValue(false));
 }
 
 /**
@@ -40,8 +41,21 @@ void
 CmdBlossom::initBlossom(BlossomItem &blossomItem)
 {
     m_command = blossomItem.values.getValueAsString("command");
-
-    blossomItem.success = true;
+    DataItem* ignoreResultItem = blossomItem.values.getValueItem("ignore_result").item;
+    if(ignoreResultItem != nullptr)
+    {
+        if(ignoreResultItem->isBoolValue())
+        {
+            m_ignoreResult = ignoreResultItem->getBool();
+            blossomItem.success = true;
+        }
+        else
+        {
+            const std::string errorMsg = "ignore_result was set, but is not a bool-value";
+            blossomItem.processResult.processOutput = errorMsg;
+            blossomItem.success = false;
+        }
+    }
 }
 
 /**
@@ -61,6 +75,10 @@ CmdBlossom::runTask(BlossomItem &blossomItem)
 {
     blossomItem.processResult = runSyncProcess(m_command);
     blossomItem.success = blossomItem.processResult.success;
+
+    if(m_ignoreResult) {
+        blossomItem.success = true;
+    }
 
     blossomItem.blossomOutput = new DataValue(blossomItem.processResult.processOutput);
 }
