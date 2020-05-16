@@ -42,7 +42,7 @@ ValueItemMap::ValueItemMap(const ValueItemMap &other)
         it++)
     {
         ValueItem value = it->second;
-        m_valueMap.insert(std::pair<std::string, ValueItem>(it->first, value));
+        m_valueMap.insert(std::make_pair(it->first, value));
     }
 }
 
@@ -60,7 +60,7 @@ ValueItemMap::operator=(const ValueItemMap &other)
             it++)
         {
             ValueItem value = it->second;
-            this->m_valueMap.insert(std::pair<std::string, ValueItem>(it->first, value));
+            this->m_valueMap.insert(std::make_pair(it->first, value));
         }
     }
     return *this;
@@ -111,7 +111,7 @@ ValueItemMap::insert(const std::string &key,
     if(it != m_valueMap.end()) {
         it->second = value;
     } else {
-        m_valueMap.insert(std::pair<std::string, ValueItem>(key, value));
+        m_valueMap.insert(std::make_pair(key, value));
     }
     return true;
 }

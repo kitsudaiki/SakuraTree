@@ -65,7 +65,7 @@ TreeHandler::addTree(const std::string &treePath)
         newTreeHandlerItem.parsedItem = plainTree;
 
         // add new item to the map
-        m_trees.insert(std::pair<std::string, TreeHandlerItem>(treeId, newTreeHandlerItem));
+        m_trees.insert(std::make_pair(treeId, newTreeHandlerItem));
     }
 
     return true;
@@ -108,7 +108,7 @@ TreeHandler::addTree(const std::string &treeId,
     newTreeHandlerItem.parsedItem = plainTree;
 
     // add new item to the map
-    m_trees.insert(std::pair<std::string, TreeHandlerItem>(treeId, newTreeHandlerItem));
+    m_trees.insert(std::make_pair(treeId, newTreeHandlerItem));
 
     return true;
 }
@@ -175,10 +175,7 @@ TreeHandler::loadPredefinedSubtrees()
     newTreeHandlerItem.parsedItem = parsedProvisioningSubtree;
 
     // add new item to the map
-    m_trees.insert(std::pair<std::string, TreeHandlerItem>(
-                       "sakura_provisioning",
-                       newTreeHandlerItem)
-                   );
+    m_trees.insert(std::make_pair("sakura_provisioning", newTreeHandlerItem));
 
     return true;
 }
