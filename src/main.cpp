@@ -77,7 +77,7 @@ int main(int argc, char *argv[])
     // input-values
     if(argParser.wasSet("item-input"))
     {
-        std::vector<std::string> envs = argParser.getStringValues("input");
+        std::vector<std::string> envs = argParser.getStringValues("item-input");
         for(uint32_t i = 0; i < envs.size(); i++)
         {
             std::vector<std::string> pair;
