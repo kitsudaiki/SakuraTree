@@ -72,12 +72,6 @@ BlossomItem::copy()
         newItem->parentValues = parentValues;
     }
 
-    // process
-    newItem->processResult.success = processResult.success;
-    newItem->processResult.exitStatus = processResult.exitStatus;
-    newItem->processResult.errorMessage = processResult.errorMessage;
-    newItem->processResult.processOutput = processResult.processOutput;
-
     // result
     newItem->nameHirarchie = nameHirarchie;
     newItem->skip = skip;

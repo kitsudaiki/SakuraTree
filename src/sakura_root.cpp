@@ -337,7 +337,7 @@ SakuraRoot::printOutput(const BlossomItem &blossomItem)
     m_mutex.lock();
 
     std::cout<<" "<<std::endl;
-    std::string output = convertBlossomOutput(blossomItem);
+    const std::string output = convertBlossomOutput(blossomItem);
 
     // only for prototyping hardcoded
     //m_networking->sendBlossomOuput("127.0.0.1", "", output);
@@ -384,10 +384,7 @@ SakuraRoot::runProcess(SakuraItem* item,
 
     // error-output
     // TODO: better solution necessary instead of checking the number of rows
-    if(m_errorOutput.getNumberOfRows() > 0)
-    {
-        //std::cout<<m_errorOutput.toString()<<std::endl;
-        LOG_ERROR(m_errorOutput.toString());
+    if(m_errorOutput.getNumberOfRows() > 0) {
         return false;
     }
 

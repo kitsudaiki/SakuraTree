@@ -517,6 +517,7 @@ convertBlossomOutput(const BlossomItem &blossom)
     if(blossom.success == false)
     {
         // TODO: red error output
+        output += "\n";
         output += SakuraRoot::m_root->m_errorOutput.toString(200) + "\n";
     }
 

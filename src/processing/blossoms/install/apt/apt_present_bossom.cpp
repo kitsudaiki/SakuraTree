@@ -93,9 +93,10 @@ AptPresentBlossom::runTask(BlossomItem &blossomItem)
     {
         const std::string programm = "sudo apt-get install -y " + m_packageNames.at(i);
         LOG_DEBUG("Execute: " + programm);
-        blossomItem.processResult = runSyncProcess(programm);
-        blossomItem.success = blossomItem.processResult.success;
-        blossomItem.outputMessage = "";
+
+        ProcessResult processResult = runSyncProcess(programm);
+        blossomItem.success = processResult.success;
+        blossomItem.outputMessage = processResult.processOutput;
     }
 }
 

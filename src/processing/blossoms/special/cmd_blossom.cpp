@@ -52,7 +52,7 @@ CmdBlossom::initBlossom(BlossomItem &blossomItem)
         else
         {
             const std::string errorMsg = "ignore_result was set, but is not a bool-value";
-            blossomItem.processResult.processOutput = errorMsg;
+            blossomItem.outputMessage = errorMsg;
             blossomItem.success = false;
         }
     }
@@ -73,14 +73,15 @@ CmdBlossom::preCheck(BlossomItem &blossomItem)
 void
 CmdBlossom::runTask(BlossomItem &blossomItem)
 {
-    blossomItem.processResult = runSyncProcess(m_command);
-    blossomItem.success = blossomItem.processResult.success;
+    ProcessResult processResult = runSyncProcess(m_command);
+    blossomItem.success = processResult.success;
 
     if(m_ignoreResult) {
         blossomItem.success = true;
     }
 
-    blossomItem.blossomOutput = new DataValue(blossomItem.processResult.processOutput);
+    blossomItem.outputMessage = processResult.processOutput;
+    blossomItem.blossomOutput = new DataValue(processResult.processOutput);
 }
 
 /**
