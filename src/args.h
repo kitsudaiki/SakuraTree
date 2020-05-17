@@ -9,6 +9,9 @@ namespace KyoukoMind
 bool
 registerArguments(Kitsunemimi::Args::ArgParser &argparser)
 {
+    argparser.registerPlain("debug,d",
+                            "Enable debug-output.");
+
     argparser.registerString("init-tree-id,t",
                              "Id of the initial tree-file within the choosen directory");
 
