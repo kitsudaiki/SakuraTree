@@ -162,7 +162,9 @@ SakuraRoot::startProcess(const std::string &inputPath,
     }
 
     // process real task
-    if(m_treeHandler->addTree(inputPath) == false) {
+    if(m_treeHandler->addTree(inputPath) == false)
+    {
+        LOG_ERROR(m_errorOutput.toString());
         return false;
     }
 
