@@ -31,7 +31,7 @@ CmdBlossom::CmdBlossom()
     m_hasOutput = true;
 
     m_requiredKeys.insert("command", new DataValue(true));
-    m_requiredKeys.insert("ignore_result", new DataValue(false));
+    m_requiredKeys.insert("ignore_errors", new DataValue(false));
 }
 
 /**
@@ -41,7 +41,7 @@ void
 CmdBlossom::initBlossom(BlossomItem &blossomItem)
 {
     m_command = blossomItem.values.getValueAsString("command");
-    const ValueItem ignoreResultItem = blossomItem.values.getValueItem("ignore_result");
+    const ValueItem ignoreResultItem = blossomItem.values.getValueItem("ignore_errors");
 
     if(ignoreResultItem.item != nullptr)
     {
@@ -52,7 +52,7 @@ CmdBlossom::initBlossom(BlossomItem &blossomItem)
         }
         else
         {
-            const std::string errorMsg = "ignore_result was set, but is not a bool-value";
+            const std::string errorMsg = "ignore_errors was set, but is not a bool-value";
             blossomItem.outputMessage = errorMsg;
             blossomItem.success = false;
         }
