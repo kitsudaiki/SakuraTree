@@ -41,12 +41,13 @@ void
 CmdBlossom::initBlossom(BlossomItem &blossomItem)
 {
     m_command = blossomItem.values.getValueAsString("command");
-    DataItem* ignoreResultItem = blossomItem.values.getValueItem("ignore_result").item;
-    if(ignoreResultItem != nullptr)
+    const ValueItem ignoreResultItem = blossomItem.values.getValueItem("ignore_result");
+
+    if(ignoreResultItem.item != nullptr)
     {
-        if(ignoreResultItem->isBoolValue())
+        if(ignoreResultItem.item->isBoolValue())
         {
-            m_ignoreResult = ignoreResultItem->getBool();
+            m_ignoreResult = ignoreResultItem.item->getBool();
             blossomItem.success = true;
         }
         else
