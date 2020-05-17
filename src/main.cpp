@@ -49,6 +49,7 @@ int main(int argc, char *argv[])
         return 1;
     }
 
+    bool enableDebug = false;
     std::string initialTreeId = "";
     std::string inputPath = "";
 
@@ -61,7 +62,9 @@ int main(int argc, char *argv[])
     uint16_t listenPort = 0;
 
     // check debug-output
-    if(argParser.wasSet("debug")) {
+    if(argParser.wasSet("debug"))
+    {
+        enableDebug = true;
         Kitsunemimi::Persistence::setDebugFlag(true);
     }
 
@@ -138,7 +141,7 @@ int main(int argc, char *argv[])
     if(argParser.wasSet("server-address")
             && argParser.wasSet("server-port"))
     {
-        SakuraTree::SakuraRoot* root = new SakuraTree::SakuraRoot(std::string(argv[0]));
+        SakuraTree::SakuraRoot* root = new SakuraTree::SakuraRoot(std::string(argv[0]), false);
         root->startClientConnection(serverAddress, serverPort);
 
         while(true)
@@ -148,7 +151,8 @@ int main(int argc, char *argv[])
     }
     else
     {
-        SakuraTree::SakuraRoot* root = new SakuraTree::SakuraRoot(std::string(argv[0]));
+        SakuraTree::SakuraRoot* root = new SakuraTree::SakuraRoot(std::string(argv[0]),
+                                                                  enableDebug);
         root->startProcess(inputPath,
                            seedPath,
                            itemInputValues,

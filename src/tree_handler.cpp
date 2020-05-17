@@ -1,5 +1,6 @@
 #include "tree_handler.h"
 
+#include <sakura_root.h>
 #include <items/sakura_items.h>
 #include <converter/converter.h>
 #include <libKitsunemimiSakuraParser/sakura_parsing.h>
@@ -18,7 +19,7 @@ namespace SakuraTree
 TreeHandler::TreeHandler()
 {
     m_converter = new Converter();
-    m_parser = new Kitsunemimi::Sakura::SakuraParsing(DEBUG);
+    m_parser = new Kitsunemimi::Sakura::SakuraParsing(SakuraRoot::m_root->m_enableDebug);
 }
 
 /**
@@ -50,13 +51,17 @@ TreeHandler::addTree(const std::string &treePath)
         // check if tree is already in the map
         std::map<std::string, TreeHandlerItem>::const_iterator it;
         it = m_trees.find(treeId);
-        if(it != m_trees.end()) {
+        if(it != m_trees.end())
+        {
+            LOG_ERROR("Tree-id already registered: " + treeId);
             return false;
         }
 
         // parsing
         SakuraItem* processPlan = m_converter->convert(plainTree);
-        if(processPlan == nullptr) {
+        if(processPlan == nullptr)
+        {
+            LOG_ERROR("Failed to convert tree: " + treeId);
             return false;
         }
 

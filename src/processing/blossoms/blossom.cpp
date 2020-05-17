@@ -53,10 +53,10 @@ Blossom::growBlossom(BlossomItem &blossomItem)
     }
 
     //-------------------------------
-    if(DEBUG) {
-        std::cout<<"initBlossom"<<std::endl;
-    }
+    LOG_DEBUG("initBlossom " + blossomItem.blossomName);
+
     initBlossom(blossomItem);
+
     if(blossomItem.success == false)
     {
         SakuraRoot::m_root->createError(blossomItem,
@@ -66,10 +66,10 @@ Blossom::growBlossom(BlossomItem &blossomItem)
     }
 
     //-------------------------------
-    if(DEBUG) {
-        std::cout<<"preCheck"<<std::endl;
-    }
+    LOG_DEBUG("preCheck " + blossomItem.blossomName);
+
     preCheck(blossomItem);
+
     if(blossomItem.success == false)
     {
         SakuraRoot::m_root->createError(blossomItem,
@@ -83,10 +83,10 @@ Blossom::growBlossom(BlossomItem &blossomItem)
     }
 
     //-------------------------------
-    if(DEBUG) {
-        std::cout<<"runTask"<<std::endl;
-    }
+    LOG_DEBUG("runTask " + blossomItem.blossomName);
+
     runTask(blossomItem);
+
     if(blossomItem.success == false)
     {
         SakuraRoot::m_root->createError(blossomItem,
@@ -96,10 +96,10 @@ Blossom::growBlossom(BlossomItem &blossomItem)
     }
 
     //-------------------------------
-    if(DEBUG) {
-        std::cout<<"postCheck"<<std::endl;
-    }
+    LOG_DEBUG("postCheck " + blossomItem.blossomName);
+
     postCheck(blossomItem);
+
     if(blossomItem.success == false)
     {
         SakuraRoot::m_root->createError(blossomItem,
@@ -108,10 +108,10 @@ Blossom::growBlossom(BlossomItem &blossomItem)
         return;
     }
     //-------------------------------
-    if(DEBUG) {
-        std::cout<<"closeBlossom"<<std::endl;
-    }
+    LOG_DEBUG("closeBlossom " + blossomItem.blossomName);
+
     closeBlossom(blossomItem);
+
     if(blossomItem.success == false)
     {
         SakuraRoot::m_root->createError(blossomItem,

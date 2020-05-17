@@ -54,7 +54,8 @@ class SakuraRoot
 {
 
 public:
-    SakuraRoot(const std::string &executablePath);
+    SakuraRoot(const std::string &executablePath,
+               const bool enableDebug = false);
     ~SakuraRoot();
 
     // start processing
@@ -100,6 +101,8 @@ public:
     static Kitsunemimi::TableItem m_errorOutput;
     static SakuraTree::TreeHandler* m_treeHandler;
     static Kitsunemimi::Sakura::SakuraNetwork* m_networking;
+
+    bool m_enableDebug = false;
 
 private:
     SakuraThread* m_rootThread = nullptr;

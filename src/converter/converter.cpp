@@ -26,6 +26,7 @@
 #include <libKitsunemimiSakuraParser/sakura_parsing.h>
 
 #include <libKitsunemimiJson/json_item.h>
+#include <libKitsunemimiPersistence/logger/logger.h>
 
 #include <sakura_root.h>
 #include <items/sakura_items.h>
@@ -60,13 +61,7 @@ Converter::convert(const JsonItem &tree,
                    const bool isSeed)
 {
     // debug-output
-    if(DEBUG)
-    {
-        std::cout<<"+++++++++++++++++++++++++++++++++++++++++++++++++++++"<<std::endl;
-        const std::string output = tree.toString(true);
-        std::cout<<output<<std::endl;
-        std::cout<<"-----------------------------------------------------"<<std::endl;
-    }
+    LOG_DEBUG("\n" + tree.toString(true) + "\n");
 
     m_isSeed = isSeed;
     bool success = true;

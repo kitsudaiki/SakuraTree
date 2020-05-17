@@ -52,8 +52,11 @@ Kitsunemimi::Sakura::SakuraNetwork* SakuraRoot::m_networking = nullptr;
  *
  * @param executablePath path of the current executed SakuraTree-binary
  */
-SakuraRoot::SakuraRoot(const std::string &executablePath)
+SakuraRoot::SakuraRoot(const std::string &executablePath,
+                       const bool enableDebug)
 {
+    m_enableDebug = enableDebug;
+
     // initialzed static variables
     m_root = this;
     m_executablePath = executablePath;
@@ -404,7 +407,7 @@ SakuraRoot::prepareSeed(const std::string &seedPath,
                         const std::string &serverAddress,
                         const uint16_t port)
 {
-    Kitsunemimi::Sakura::SakuraParsing sakuraParsing(DEBUG);
+    Kitsunemimi::Sakura::SakuraParsing sakuraParsing(m_enableDebug);
     Converter converter;
 
     // parse seed-file
