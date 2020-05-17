@@ -31,6 +31,7 @@ CmdBlossom::CmdBlossom()
     m_hasOutput = true;
 
     m_requiredKeys.insert("command", new DataValue(true));
+    m_requiredKeys.insert("ignore_errors", new DataValue(false));
 }
 
 /**
@@ -40,8 +41,22 @@ void
 CmdBlossom::initBlossom(BlossomItem &blossomItem)
 {
     m_command = blossomItem.values.getValueAsString("command");
+    const ValueItem ignoreResultItem = blossomItem.values.getValueItem("ignore_errors");
 
-    blossomItem.success = true;
+    if(ignoreResultItem.item != nullptr)
+    {
+        if(ignoreResultItem.item->isBoolValue())
+        {
+            m_ignoreResult = ignoreResultItem.item->getBool();
+            blossomItem.success = true;
+        }
+        else
+        {
+            const std::string errorMsg = "ignore_errors was set, but is not a bool-value";
+            blossomItem.outputMessage = errorMsg;
+            blossomItem.success = false;
+        }
+    }
 }
 
 /**
@@ -59,11 +74,15 @@ CmdBlossom::preCheck(BlossomItem &blossomItem)
 void
 CmdBlossom::runTask(BlossomItem &blossomItem)
 {
-    blossomItem.processResult = runSyncProcess(m_command);
-    blossomItem.success = blossomItem.processResult.success;
+    ProcessResult processResult = runSyncProcess(m_command);
+    blossomItem.success = processResult.success;
 
-    blossomItem.blossomOutput = new DataValue(blossomItem.processResult.processOutput);
-    blossomItem.success = true;
+    if(m_ignoreResult) {
+        blossomItem.success = true;
+    }
+
+    blossomItem.outputMessage = processResult.processOutput;
+    blossomItem.blossomOutput = new DataValue(processResult.processOutput);
 }
 
 /**

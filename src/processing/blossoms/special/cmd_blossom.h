@@ -47,6 +47,7 @@ private:
     friend CmdBlossom_Test;
 
     std::string m_command = "";
+    bool m_ignoreResult = false;
 };
 
 }

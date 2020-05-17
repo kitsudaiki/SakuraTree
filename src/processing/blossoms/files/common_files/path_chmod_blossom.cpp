@@ -77,8 +77,10 @@ PathChmodBlossom::runTask(BlossomItem &blossomItem)
     command += m_path;
 
     LOG_DEBUG("Execute: " + command);
-    blossomItem.processResult = runSyncProcess(command);
-    blossomItem.success = blossomItem.processResult.success;
+
+    ProcessResult processResult = runSyncProcess(command);
+    blossomItem.success = processResult.success;
+    blossomItem.outputMessage = processResult.processOutput;
 }
 
 /**

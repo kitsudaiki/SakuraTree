@@ -38,6 +38,7 @@ public:
     bool loadPredefinedSubtrees();
 
     std::map<std::string, TreeHandlerItem> m_trees;
+    std::map<std::string, TreeHandlerItem> m_predefinedTrees;
 
 private:
     Converter* m_converter = nullptr;

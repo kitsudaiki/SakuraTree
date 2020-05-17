@@ -85,10 +85,11 @@ SshCmdBlossom::runTask(BlossomItem &blossomItem)
     programm += m_command;
     programm += "\"";
 
-    blossomItem.processResult = runSyncProcess(programm);
-    blossomItem.success = blossomItem.processResult.success;
+    ProcessResult processResult = runSyncProcess(m_command);
+    blossomItem.success = processResult.success;
+    blossomItem.outputMessage = processResult.processOutput;
 
-    blossomItem.blossomOutput = new DataValue(blossomItem.processResult.processOutput);
+    blossomItem.blossomOutput = new DataValue(processResult.processOutput);
     blossomItem.success = true;
 }
 

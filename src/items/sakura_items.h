@@ -81,9 +81,6 @@ public:
     DataItem* blossomOutput = nullptr;
     DataMap* parentValues = nullptr;
 
-    // process
-    ProcressResult processResult;
-
     // result
     std::vector<std::string> nameHirarchie;
     bool skip = false;

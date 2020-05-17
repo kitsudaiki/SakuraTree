@@ -55,9 +55,10 @@ AptUdateBlossom::runTask(BlossomItem &blossomItem)
 {
     const std::string programm = "sudo apt-get update";
     LOG_DEBUG("Execute: " + programm);
-    blossomItem.processResult = runSyncProcess(programm);
-    blossomItem.success = blossomItem.processResult.success;
-    blossomItem.outputMessage = "";
+
+    ProcessResult processResult = runSyncProcess(programm);
+    blossomItem.success = processResult.success;
+    blossomItem.outputMessage = processResult.processOutput;
 }
 
 /**

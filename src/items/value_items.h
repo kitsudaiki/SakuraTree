@@ -62,11 +62,13 @@ struct ValueItem
         if(item != nullptr) {
             delete item;
         }
+
         if(other.item != nullptr) {
             item = other.item->copy();
         } else {
             item = nullptr;
         }
+
         type = other.type;
         isIdentifier = other.isIdentifier;
         functions = other.functions;
@@ -84,11 +86,13 @@ struct ValueItem
             if(this->item != nullptr) {
                 delete this->item;
             }
+
             if(other.item != nullptr) {
                 this->item = other.item->copy();
             } else {
                 this->item = nullptr;
             }
+
             this->type = other.type;
             this->isIdentifier = other.isIdentifier;
             this->functions = other.functions;
