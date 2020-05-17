@@ -85,7 +85,8 @@ SshCmdBlossom::runTask(BlossomItem &blossomItem)
     programm += m_command;
     programm += "\"";
 
-    ProcessResult processResult = runSyncProcess(m_command);
+    LOG_DEBUG("run command: " + programm);
+    ProcessResult processResult = runSyncProcess(programm);
     blossomItem.success = processResult.success;
     blossomItem.outputMessage = processResult.processOutput;
 

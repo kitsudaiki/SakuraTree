@@ -32,7 +32,7 @@
 
 int main(int argc, char *argv[])
 {
-    Kitsunemimi::Persistence::initConsoleLogger(true);
+    Kitsunemimi::Persistence::initConsoleLogger(false);
 
     // run unit-tests, if enabled by define-value
     #ifdef RUN_UNIT_TEST
@@ -59,6 +59,11 @@ int main(int argc, char *argv[])
     uint16_t serverPort = 0;
     std::string listenAddress = "";
     uint16_t listenPort = 0;
+
+    // check debug-output
+    if(argParser.wasSet("debug")) {
+        Kitsunemimi::Persistence::setDebugFlag(true);
+    }
 
     // initial tree-id
     if(argParser.wasSet("init-tree-id"))

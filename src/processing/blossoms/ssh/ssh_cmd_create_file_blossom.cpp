@@ -86,6 +86,7 @@ SshCmdCreateFileBlossom::runTask(BlossomItem &blossomItem)
     programm += m_filePath;
     programm += "\"";
 
+    LOG_DEBUG("run command: " + programm);
     ProcessResult processResult = runSyncProcess(programm);
     blossomItem.success = processResult.success;
     blossomItem.outputMessage = processResult.processOutput;
@@ -117,6 +118,7 @@ SshCmdCreateFileBlossom::runTask(BlossomItem &blossomItem)
     programm += m_filePath;
     programm += "\"";
 
+    LOG_DEBUG("run command: " + programm);
     processResult = runSyncProcess(programm);
     blossomItem.success = processResult.success;
     blossomItem.outputMessage = processResult.processOutput;
