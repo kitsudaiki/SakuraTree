@@ -85,6 +85,7 @@ SshScpBlossom::runTask(BlossomItem &blossomItem)
     programm += ":";
     programm += m_targetPath;
 
+    LOG_DEBUG("run command: " + programm);
     ProcessResult processResult = runSyncProcess(programm);
     blossomItem.success = processResult.success;
     blossomItem.outputMessage = processResult.processOutput;

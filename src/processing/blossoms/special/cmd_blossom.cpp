@@ -74,6 +74,7 @@ CmdBlossom::preCheck(BlossomItem &blossomItem)
 void
 CmdBlossom::runTask(BlossomItem &blossomItem)
 {
+    LOG_DEBUG("run command: " + m_command);
     ProcessResult processResult = runSyncProcess(m_command);
     blossomItem.success = processResult.success;
 

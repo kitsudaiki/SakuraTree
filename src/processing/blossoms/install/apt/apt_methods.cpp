@@ -24,6 +24,7 @@
 
 #include <libKitsunemimiCommon/common_methods/string_methods.h>
 #include <libKitsunemimiCommon/common_items/data_items.h>
+#include <libKitsunemimiPersistence/logger/logger.h>
 
 namespace SakuraTree
 {
@@ -144,6 +145,7 @@ const std::vector<std::string>
 getInstalledPackages()
 {
     const std::string command = "dpkg --list | grep ^ii  | awk ' {print \\$2} '";
+    LOG_DEBUG("run command: " + command);
     const ProcessResult processResult = runSyncProcess(command);
     // TODO: check for error
     std::vector<std::string> result;
