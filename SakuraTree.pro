@@ -122,7 +122,8 @@ HEADERS += \
     tests/processing/blossoms/files/common_files/path_chown_blossom_test.h \
     src/processing/blossoms/special/item_update_blossom.h \
     src/tree_handler.h \
-    src/processing/blossoms/special/register_node_blossom.h
+    src/processing/blossoms/special/register_node_blossom.h \
+    src/args.h
 
 SOURCES += \
     src/converter/converter.cpp \

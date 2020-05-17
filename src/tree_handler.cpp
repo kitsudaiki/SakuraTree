@@ -1,10 +1,11 @@
 #include "tree_handler.h"
 
 #include <items/sakura_items.h>
+#include <converter/converter.h>
 #include <libKitsunemimiSakuraParser/sakura_parsing.h>
 #include <libKitsunemimiJson/json_item.h>
-#include <converter/converter.h>
 #include <libKitsunemimiCommon/common_methods/string_methods.h>
+#include <libKitsunemimiPersistence/logger/logger.h>
 
 #include <sakura_provisioning_subtree.h>
 
@@ -121,11 +122,25 @@ TreeHandler::addTree(const std::string &treeId,
 SakuraItem*
 TreeHandler::getConvertedTree(const std::string &treeId)
 {
-    std::map<std::string, TreeHandlerItem>::const_iterator it;
-    it = m_trees.find(treeId);
+    if(treeId != "")
+    {
+        std::map<std::string, TreeHandlerItem>::const_iterator it;
 
-    if(it != m_trees.end()) {
-        return it->second.convertedItem;
+        // search in trees
+        it = m_trees.find(treeId);
+        if(it != m_trees.end()) {
+            return it->second.convertedItem;
+        }
+
+        // search in predefined trees
+        it = m_predefinedTrees.find(treeId);
+        if(it != m_predefinedTrees.end()) {
+            return it->second.convertedItem;
+        }
+    }
+    else
+    {
+        return m_trees.begin()->second.convertedItem;
     }
 
     return nullptr;
@@ -163,7 +178,7 @@ TreeHandler::loadPredefinedSubtrees()
     m_parser->parseString(parsedProvisioningSubtree, provisioningSubtree);
     if(parsedProvisioningSubtree.isValid() == false)
     {
-        std::cout<<m_parser->getError().toString()<<std::endl;
+        LOG_ERROR(m_parser->getError().toString());
         return false;
     }
 
@@ -175,7 +190,7 @@ TreeHandler::loadPredefinedSubtrees()
     newTreeHandlerItem.parsedItem = parsedProvisioningSubtree;
 
     // add new item to the map
-    m_trees.insert(std::make_pair("sakura_provisioning", newTreeHandlerItem));
+    m_predefinedTrees.insert(std::make_pair("sakura_provisioning", newTreeHandlerItem));
 
     return true;
 }

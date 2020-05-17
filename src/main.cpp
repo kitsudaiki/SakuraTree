@@ -27,6 +27,7 @@
 
 #include <libKitsunemimiCommon/common_methods/string_methods.h>
 #include <libKitsunemimiPersistence/logger/logger.h>
+#include <libKitsunemimiPersistence/files/file_methods.h>
 #include <libKitsunemimiArgs/arg_parser.h>
 
 int main(int argc, char *argv[])
@@ -48,23 +49,16 @@ int main(int argc, char *argv[])
         return 1;
     }
 
-    std::string treeDirectoryPath = "";
     std::string initialTreeId = "";
-    std::string initialTreePath = "";
+    std::string inputPath = "";
 
     std::string seedPath = "";
-    DataMap initialValues;
+    DataMap itemInputValues;
+
     std::string serverAddress = "";
     uint16_t serverPort = 0;
     std::string listenAddress = "";
     uint16_t listenPort = 0;
-
-    // directory-path
-    if(argParser.wasSet("directory-path"))
-    {
-        initialTreePath = argParser.getStringValues("directory-path")[0];
-        std::cout << "directory-path: " << initialTreePath << std::endl;
-    }
 
     // initial tree-id
     if(argParser.wasSet("init-tree-id"))
@@ -73,22 +67,15 @@ int main(int argc, char *argv[])
         std::cout << "init-tree-id: " << initialTreeId << std::endl;
     }
 
-    // initial tree-path
-    if(argParser.wasSet("init-tree"))
-    {
-        initialTreePath = argParser.getStringValues("init-tree")[0];
-        std::cout << "init-tree: " << initialTreePath << std::endl;
-    }
-
     // seed-file
-    if(argParser.wasSet("seed"))
+    if(argParser.wasSet("seed-path"))
     {
         seedPath = argParser.getStringValues("seed")[0];
         std::cout << "seed: " << seedPath << std::endl;
     }
 
     // input-values
-    if(argParser.wasSet("input"))
+    if(argParser.wasSet("item-input"))
     {
         std::vector<std::string> envs = argParser.getStringValues("input");
         for(uint32_t i = 0; i < envs.size(); i++)
@@ -100,7 +87,7 @@ int main(int argc, char *argv[])
                 std::cout << "'"<<envs.at(i)<<"' is not a valid pair"<<std::endl;
                 return 1;
             }
-            initialValues.insert(pair.at(0), new DataValue(pair.at(1)));
+            itemInputValues.insert(pair.at(0), new DataValue(pair.at(1)));
         }
     }
 
@@ -132,19 +119,18 @@ int main(int argc, char *argv[])
         std::cout << "listen-port: " << listenPort << std::endl;
     }
 
-    if(argParser.wasSet("init-tree")
-            || (argParser.wasSet("directory-path")
-                && argParser.wasSet("init-tree-id")))
+    // input-path
+    inputPath = argParser.getStringValues("input-path")[0];
+    std::cout << "input-path: " << inputPath << std::endl;
+
+    if(Kitsunemimi::Persistence::isDir(inputPath)
+            && argParser.wasSet("init-tree-id") == false)
     {
-        SakuraTree::SakuraRoot* root = new SakuraTree::SakuraRoot(std::string(argv[0]));
-        root->startProcess(initialTreePath,
-                           seedPath,
-                           initialValues,
-                           listenAddress,
-                           listenPort,
-                           initialTreeId);
+        std::cout<<"because the input-path is a directory"
+                   ", init-tree-id must be set as well."<<std::endl;
     }
-    else if(argParser.wasSet("server-address")
+
+    if(argParser.wasSet("server-address")
             && argParser.wasSet("server-port"))
     {
         SakuraTree::SakuraRoot* root = new SakuraTree::SakuraRoot(std::string(argv[0]));
@@ -157,8 +143,13 @@ int main(int argc, char *argv[])
     }
     else
     {
-        std::cout << "seed-path is missing"<<std::endl;
-        return 1;
+        SakuraTree::SakuraRoot* root = new SakuraTree::SakuraRoot(std::string(argv[0]));
+        root->startProcess(inputPath,
+                           seedPath,
+                           itemInputValues,
+                           listenAddress,
+                           listenPort,
+                           initialTreeId);
     }
     #endif
 

@@ -101,7 +101,7 @@ SakuraRoot::~SakuraRoot()
  * @return true if successful, else false
  */
 bool
-SakuraRoot::startProcess(const std::string &initialTreePath,
+SakuraRoot::startProcess(const std::string &inputPath,
                          const std::string &seedPath,
                          const DataMap &initialValues,
                          const std::string &serverAddress,
@@ -109,7 +109,9 @@ SakuraRoot::startProcess(const std::string &initialTreePath,
                          const std::string &initialTreeId)
 {
     // load predefined trees
-    if(m_treeHandler->loadPredefinedSubtrees() == false) {
+    if(m_treeHandler->loadPredefinedSubtrees() == false)
+    {
+        LOG_ERROR("failed to loag predefined trees");
         return false;
     }
 
@@ -117,7 +119,9 @@ SakuraRoot::startProcess(const std::string &initialTreePath,
     if(serverAddress != ""
             && serverPort != 0)
     {
-        if(m_networking->createServer(serverPort) == false) {
+        if(m_networking->createServer(serverPort) == false)
+        {
+            LOG_ERROR("failed to create server on port " + std::to_string(serverPort));
             return false;
         }
     }
@@ -129,7 +133,9 @@ SakuraRoot::startProcess(const std::string &initialTreePath,
                                            m_executablePath,
                                            serverAddress,
                                            serverPort);
-        if(seedItem == nullptr) {
+        if(seedItem == nullptr)
+        {
+            LOG_ERROR("failed to loag predefined trees");
             return false;
         }
 
@@ -153,21 +159,18 @@ SakuraRoot::startProcess(const std::string &initialTreePath,
     }
 
     // process real task
-    if(initialTreePath != "")
-    {
-        if(m_treeHandler->addTree(initialTreePath) == false) {
-            return false;
-        }
+    if(m_treeHandler->addTree(inputPath) == false) {
+        return false;
+    }
 
-        shareAllTrees();
+    shareAllTrees();
 
-        SakuraItem* tree = m_treeHandler->getConvertedTree(initialTreeId);
-        if(tree == nullptr) {
-            return false;
-        }
-        if(runProcess(tree, initialValues) == false) {
-            return false;
-        }
+    SakuraItem* tree = m_treeHandler->getConvertedTree(initialTreeId);
+    if(tree == nullptr) {
+        return false;
+    }
+    if(runProcess(tree, initialValues) == false) {
+        return false;
     }
 
     std::cout<<"finish"<<std::endl;
@@ -411,7 +414,7 @@ SakuraRoot::prepareSeed(const std::string &seedPath,
     const bool seedParseResult = sakuraParsing.parseFiles(seedPath);
     if(seedParseResult == false)
     {
-        std::cout<<sakuraParsing.getError().toString()<<std::endl;
+        LOG_ERROR(sakuraParsing.getError().toString());;
         return nullptr;
     }
 

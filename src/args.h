@@ -9,34 +9,36 @@ namespace KyoukoMind
 bool
 registerArguments(Kitsunemimi::Args::ArgParser &argparser)
 {
-    argparser.registerString("directory-path,d",
-                             "path to directory with all tree-files");
-
     argparser.registerString("init-tree-id,t",
-                             "id of the initial tree-file within the choosen directory");
+                             "Id of the initial tree-file within the choosen directory");
 
-    argparser.registerString("init-tree",
-                             "path a single tree-file");
+    argparser.registerString("seed-path,s",
+                             "Path to the seed-file");
 
-    argparser.registerString("seed",
-                             "path to the seed-file");
-
-    argparser.registerString("input,i",
-                             "key-value-pairs to override the initial values inside of the file");
+    argparser.registerString("item-input,i",
+                             "Key-value-pairs to override the initial values inside of the file");
 
     // connect to server
     argparser.registerString("server-address",
-                             "address of the server");
+                             "Address of the server");
 
     argparser.registerInteger("server-port",
-                              "port of the server");
+                              "Port of the server");
 
     // listen
     argparser.registerString("listen-address",
-                             "address where to listen for incoming connections");
+                             "Address where to listen for incoming connections");
 
     argparser.registerInteger("listen-port",
-                             "port where to listen for incoming connections");
+                             "Port where to listen for incoming connections");
+
+    // required input
+    argparser.registerString("input-path",
+                             "Directory- or file-path for the tree-input. If this path is a "
+                             "directory, the argument init-tree-id is also required to identify "
+                             "the tree inside of the directory.",
+                             true,
+                             true);
 
     return true;
 }
