@@ -1,4 +1,5 @@
 *.pro.user
 build
 test_vm_reset.sh
+examples
 
