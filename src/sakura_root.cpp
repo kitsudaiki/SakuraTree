@@ -170,11 +170,13 @@ SakuraRoot::startProcess(const std::string &inputPath,
 
     shareAllTrees();
 
-    SakuraItem* tree = m_treeHandler->getConvertedTree(initialTreeId);
+    SakuraItem* tree = m_treeHandler->getConvertedTree(initialTreeId, inputPath);
     if(tree == nullptr) {
         return false;
     }
-    if(runProcess(tree, initialValues) == false) {
+    if(runProcess(tree, initialValues) == false)
+    {
+        LOG_ERROR(m_errorOutput.toString());
         return false;
     }
 
@@ -198,7 +200,7 @@ SakuraRoot::startSubtreeProcess(const std::string &treeId,
     std::cout<<"startSubtreeProcess"<<std::endl;
 
     // get tree
-    SakuraItem* processPlan = m_treeHandler->getConvertedTree(treeId);
+    SakuraItem* processPlan = m_treeHandler->getConvertedTree(treeId, "");
     if(processPlan == nullptr) {
         return false;
     }

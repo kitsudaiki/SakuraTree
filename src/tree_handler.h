@@ -32,7 +32,8 @@ public:
     bool addTree(const std::string &treeId,
                  const std::string &content);
 
-    SakuraItem* getConvertedTree(const std::string &treeId);
+    SakuraItem* getConvertedTree(const std::string &treeId,
+                                 const std::string &initPath);
     const JsonItem getParsedTree(const std::string &treeId);
 
     bool loadPredefinedSubtrees();
@@ -43,6 +44,8 @@ public:
 private:
     Converter* m_converter = nullptr;
     Kitsunemimi::Sakura::SakuraParsing* m_parser = nullptr;
+
+    SakuraItem* getConvertedTreeFromMap(const std::string &treeId);
 };
 
 }

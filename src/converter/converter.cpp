@@ -379,21 +379,6 @@ Converter::convertSubtree(const JsonItem &subtree,
     const JsonItem items = subtree.get("items-input");
     convertItemValues(subtreeItem, items, success);
 
-    // convert all blossoms of the group
-    const JsonItem subTypeArray = subtree.get("blossoms");
-    for(uint32_t i = 0; i < subTypeArray.size(); i++)
-    {
-        const JsonItem item = subTypeArray.get(i);
-        BlossomItem* blossomItem = new BlossomItem();
-
-        convertItemValues(blossomItem, item.get("items-input"), success);
-        const std::string subtype = item.get("blossom-type").toString();
-        subtreeItem->internalSubtrees.insert(
-                    std::pair<std::string, ValueItemMap>(subtype, blossomItem->values));
-
-        delete blossomItem;
-    }
-
     return subtreeItem;
 }
 

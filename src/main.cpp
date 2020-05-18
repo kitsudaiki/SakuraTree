@@ -132,10 +132,12 @@ int main(int argc, char *argv[])
     std::cout << "input-path: " << inputPath << std::endl;
 
     if(Kitsunemimi::Persistence::isDir(inputPath)
-            && argParser.wasSet("init-tree-id") == false)
+            && argParser.wasSet("init-tree-id") == false
+            && Kitsunemimi::Persistence::isFile(inputPath + "/root.tree") == false)
     {
-        std::cout<<"because the input-path is a directory"
-                   ", init-tree-id must be set as well."<<std::endl;
+        LOG_ERROR("Because the input-path is a directory"
+                   ", init-tree-id have to be set as well or "
+                   "the directory have to contain a 'root.tree'-file.");
     }
 
     if(argParser.wasSet("server-address")
