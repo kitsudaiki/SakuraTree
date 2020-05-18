@@ -338,6 +338,13 @@ SakuraThread::processSubtree(SubtreeItem* subtreeItem)
     TreeHandler* treeHandler = SakuraRoot::m_root->m_treeHandler;
     SakuraItem* newSubtree = treeHandler->getConvertedTree(subtreeItem->nameOrPath, "");
 
+    if(newSubtree == nullptr)
+    {
+        SakuraRoot::m_root->createError("subtree-processing",
+                                        "subtree doesn't exist: " + subtreeItem->nameOrPath);
+        return false;
+    }
+
     // fill normal map
     fillResult = fillInputValueItemMap(subtreeItem->values, m_parentValues, errorMessage);
     if(fillResult == false)

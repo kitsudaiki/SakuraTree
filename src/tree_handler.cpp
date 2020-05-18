@@ -184,6 +184,8 @@ TreeHandler::getConvertedTreeFromMap(const std::string &treeId)
     if(it != m_predefinedTrees.end()) {
         return it->second.convertedItem;
     }
+
+    return nullptr;
 }
 
 /**

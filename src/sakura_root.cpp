@@ -174,7 +174,9 @@ SakuraRoot::startProcess(const std::string &inputPath,
     if(tree == nullptr) {
         return false;
     }
-    if(runProcess(tree, initialValues) == false) {
+    if(runProcess(tree, initialValues) == false)
+    {
+        LOG_ERROR(m_errorOutput.toString());
         return false;
     }
 
