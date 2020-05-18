@@ -3,10 +3,13 @@
 #include <sakura_root.h>
 #include <items/sakura_items.h>
 #include <converter/converter.h>
+
 #include <libKitsunemimiSakuraParser/sakura_parsing.h>
 #include <libKitsunemimiJson/json_item.h>
 #include <libKitsunemimiCommon/common_methods/string_methods.h>
+
 #include <libKitsunemimiPersistence/logger/logger.h>
+#include <libKitsunemimiPersistence/files/file_methods.h>
 
 #include <sakura_provisioning_subtree.h>
 
@@ -35,6 +38,7 @@ TreeHandler::addTree(const std::string &treePath)
     if(treeParseResult == false)
     {
         std::cout<<m_parser->getError().toString()<<std::endl;
+        m_parser->m_idContentMapping.clear();
         return false;
     }
 
@@ -54,6 +58,7 @@ TreeHandler::addTree(const std::string &treePath)
         if(it != m_trees.end())
         {
             LOG_ERROR("Tree-id already registered: " + treeId);
+            m_parser->m_idContentMapping.clear();
             return false;
         }
 
@@ -62,6 +67,7 @@ TreeHandler::addTree(const std::string &treePath)
         if(processPlan == nullptr)
         {
             LOG_ERROR("Failed to convert tree: " + treeId);
+            m_parser->m_idContentMapping.clear();
             return false;
         }
 
@@ -73,6 +79,8 @@ TreeHandler::addTree(const std::string &treePath)
         // add new item to the map
         m_trees.insert(std::make_pair(treeId, newTreeHandlerItem));
     }
+
+    m_parser->m_idContentMapping.clear();
 
     return true;
 }
@@ -125,30 +133,57 @@ TreeHandler::addTree(const std::string &treeId,
  * @return
  */
 SakuraItem*
-TreeHandler::getConvertedTree(const std::string &treeId)
+TreeHandler::getConvertedTree(const std::string &treeId,
+                              const std::string &initPath)
 {
     if(treeId != "")
     {
-        std::map<std::string, TreeHandlerItem>::const_iterator it;
-
-        // search in trees
-        it = m_trees.find(treeId);
-        if(it != m_trees.end()) {
-            return it->second.convertedItem;
-        }
-
-        // search in predefined trees
-        it = m_predefinedTrees.find(treeId);
-        if(it != m_predefinedTrees.end()) {
-            return it->second.convertedItem;
-        }
+        return getConvertedTreeFromMap(treeId);
     }
     else
     {
-        return m_trees.begin()->second.convertedItem;
+        if(m_trees.size() == 1)
+        {
+            return m_trees.begin()->second.convertedItem;
+        }
+        else if(Kitsunemimi::Persistence::isDir(initPath))
+        {
+            const bool treeParseResult = m_parser->parseFiles(initPath + "/root.tree");
+            if(treeParseResult == false)
+            {
+                m_parser->m_idContentMapping.clear();
+                return nullptr;
+            }
+
+            const JsonItem id = m_parser->m_idContentMapping.begin()->second.get("b_id");
+            return getConvertedTreeFromMap(id.toString());
+        }
     }
 
     return nullptr;
+}
+
+/**
+ * @brief TreeHandler::getConvertedTreeFromMap
+ * @param treeId
+ * @return
+ */
+SakuraItem*
+TreeHandler::getConvertedTreeFromMap(const std::string &treeId)
+{
+    std::map<std::string, TreeHandlerItem>::const_iterator it;
+
+    // search in trees
+    it = m_trees.find(treeId);
+    if(it != m_trees.end()) {
+        return it->second.convertedItem;
+    }
+
+    // search in predefined trees
+    it = m_predefinedTrees.find(treeId);
+    if(it != m_predefinedTrees.end()) {
+        return it->second.convertedItem;
+    }
 }
 
 /**

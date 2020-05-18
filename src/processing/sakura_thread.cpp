@@ -336,7 +336,7 @@ SakuraThread::processSubtree(SubtreeItem* subtreeItem)
     bool fillResult = false;
 
     TreeHandler* treeHandler = SakuraRoot::m_root->m_treeHandler;
-    SakuraItem* newSubtree = treeHandler->getConvertedTree(subtreeItem->nameOrPath);
+    SakuraItem* newSubtree = treeHandler->getConvertedTree(subtreeItem->nameOrPath, "");
 
     // fill normal map
     fillResult = fillInputValueItemMap(subtreeItem->values, m_parentValues, errorMessage);
