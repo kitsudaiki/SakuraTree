@@ -33,6 +33,8 @@ PathCopyBlossom::PathCopyBlossom()
 {
     m_requiredKeys.insert("source_path", new DataValue(true));
     m_requiredKeys.insert("dest_path", new DataValue(true));
+    m_requiredKeys.insert("mode", new DataValue(false));
+    m_requiredKeys.insert("owner", new DataValue(false));
 }
 
 /**
@@ -43,6 +45,8 @@ PathCopyBlossom::initBlossom(BlossomItem &blossomItem)
 {
     m_sourcePath = blossomItem.values.getValueAsString("source_path");
     m_destinationPath = blossomItem.values.getValueAsString("dest_path");
+    m_mode = blossomItem.values.getValueAsString("mode");
+    m_owner = blossomItem.values.getValueAsString("owner");
 
     if(m_sourcePath.at(0) != '/')
     {
@@ -95,6 +99,48 @@ PathCopyBlossom::runTask(BlossomItem &blossomItem)
         blossomItem.success = false;
         blossomItem.outputMessage = errorMessage;
         return;
+    }
+
+    // set mode if requested
+    if(m_mode != "")
+    {
+        std::string command = "chmod ";
+        if(Kitsunemimi::Persistence::isDir(m_destinationPath)) {
+            command += "-R ";
+        }
+        command += m_mode + " ";
+        command += m_destinationPath;
+
+        LOG_DEBUG("run command: " + command);
+        ProcessResult processResult = runSyncProcess(command);
+        blossomItem.success = processResult.success;
+
+        if(blossomItem.success == false)
+        {
+            blossomItem.outputMessage = processResult.processOutput;
+            return;
+        }
+    }
+
+    // set owner if requested
+    if(m_owner != "")
+    {
+        std::string command = "chown ";
+        if(Kitsunemimi::Persistence::isDir(m_destinationPath)) {
+            command += "-R ";
+        }
+        command += m_owner + ":" + m_owner + " ";
+        command += m_destinationPath;
+
+        LOG_DEBUG("run command: " + command);
+        ProcessResult processResult = runSyncProcess(command);
+        blossomItem.success = processResult.success;
+
+        if(blossomItem.success == false)
+        {
+            blossomItem.outputMessage = processResult.processOutput;
+            return;
+        }
     }
 
     blossomItem.success = true;
