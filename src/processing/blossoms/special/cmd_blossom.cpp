@@ -82,7 +82,11 @@ CmdBlossom::runTask(BlossomItem &blossomItem)
         blossomItem.success = true;
     }
 
-    blossomItem.outputMessage = processResult.processOutput;
+    LOG_DEBUG("command-output: \n" + processResult.processOutput);
+    if(blossomItem.success == false) {
+        blossomItem.outputMessage = processResult.processOutput;
+    }
+
     blossomItem.blossomOutput = new DataValue(processResult.processOutput);
 }
 
