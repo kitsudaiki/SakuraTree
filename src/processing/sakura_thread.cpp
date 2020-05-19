@@ -1,4 +1,4 @@
-﻿/**
+/**
  * @file        sakura_thread.cpp
  *
  * @author      Tobias Anker <tobias.anker@kitsunemimi.moe>
@@ -297,7 +297,7 @@ SakuraThread::processTree(TreeItem* treeItem)
 {
     LOG_DEBUG("processTree");
 
-    const std::vector<std::string> uninitItems = checkItems(treeItem->values);
+    const std::vector<std::string> uninitItems = checkItems(m_parentValues);
     if(uninitItems.size() > 0)
     {
         std::string message = "The following items are not initialized: \n";

@@ -98,7 +98,7 @@ ItemMethods_Test::overrideItems_test()
 void
 ItemMethods_Test::checkItems_test()
 {
-    ValueItemMap items;
+    DataMap items;
     items.insert("x", new DataValue("{{}}"));
     items.insert("y", new DataValue("asdf"));
 
