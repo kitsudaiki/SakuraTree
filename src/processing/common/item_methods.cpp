@@ -462,16 +462,16 @@ overrideItems(ValueItemMap &original,
  * @return list of not initialized values
  */
 const std::vector<std::string>
-checkItems(ValueItemMap &items)
+checkItems(DataMap &items)
 {
     std::vector<std::string> result;
 
-    std::map<std::string, ValueItem>::const_iterator it;
-    for(it = items.const_begin();
-        it != items.const_end();
+    std::map<std::string, DataItem*>::const_iterator it;
+    for(it = items.m_map.begin();
+        it != items.m_map.end();
         it++)
     {
-        if(it->second.item->getString() == "{{}}") {
+        if(it->second->getString() == "{{}}") {
             result.push_back(it->first);
         }
     }
