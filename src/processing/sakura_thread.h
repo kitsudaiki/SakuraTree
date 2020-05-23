@@ -56,8 +56,8 @@ private:
     bool processSubtree(SubtreeItem* subtreeItem, const std::string &filePath);
     bool processSeed(SeedItem* seedItem);
     bool processIf(IfBranching* ifCondition, const std::string &filePath);
-    bool processForEach(ForEachBranching* subtree, bool parallel, const std::string &filePath);
-    bool processFor(ForBranching* subtree, bool parallel, const std::string &filePath);
+    bool processForEach(ForEachBranching* subtree, const std::string &filePath);
+    bool processFor(ForBranching* subtree, const std::string &filePath);
     bool processSequeniellPart(SequentiellPart* subtree, const std::string &filePath);
     bool processParallelPart(ParallelPart* parallelPart, const std::string &filePath);
 

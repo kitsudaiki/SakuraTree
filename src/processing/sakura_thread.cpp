@@ -154,25 +154,13 @@ SakuraThread::processSakuraItem(SakuraItem* sakuraItem, const std::string &fileP
     if(sakuraItem->getType() == SakuraItem::FOR_EACH_ITEM)
     {
         ForEachBranching* forEachBranching = dynamic_cast<ForEachBranching*>(sakuraItem);
-        return processForEach(forEachBranching, false, filePath);
+        return processForEach(forEachBranching, filePath);
     }
 
     if(sakuraItem->getType() == SakuraItem::FOR_ITEM)
     {
         ForBranching* forBranching = dynamic_cast<ForBranching*>(sakuraItem);
-        return processFor(forBranching, false, filePath);
-    }
-
-    if(sakuraItem->getType() == SakuraItem::PARALLEL_FOR_EACH_ITEM)
-    {
-        ForEachBranching* forEachBranching = dynamic_cast<ForEachBranching*>(sakuraItem);
-        return processForEach(forEachBranching, true, filePath);
-    }
-
-    if(sakuraItem->getType() == SakuraItem::PARALLEL_FOR_ITEM)
-    {
-        ForBranching* forBranching = dynamic_cast<ForBranching*>(sakuraItem);
-        return processFor(forBranching, true, filePath);
+        return processFor(forBranching, filePath);
     }
 
     if(sakuraItem->getType() == SakuraItem::PARALLEL_ITEM)
@@ -201,8 +189,8 @@ bool
 SakuraThread::processBlossom(BlossomItem &blossomItem, const std::string &filePath)
 {
     LOG_DEBUG("processBlossom: \nname: " + blossomItem.blossomName);
-    if(blossomItem.parentValues != nullptr)
-    {
+
+    if(blossomItem.parentValues != nullptr) {
         LOG_DEBUG("    parentValues:" + blossomItem.parentValues->toString());
     }
 
@@ -266,6 +254,11 @@ SakuraThread::processBlossomGroup(BlossomGroupItem &blossomGroupItem, const std:
         BlossomItem* blossomItem = blossomGroupItem.blossoms.at(i);
         blossomItem->blossomGroupType = blossomGroupItem.blossomGroupType;
         blossomItem->nameHirarchie = m_hierarchy;
+
+        // copy values of the blossom-group into the blossom
+        // TODO: check that values, which are set in the blossom-group do not already exist in the
+        //       values of the blossom
+        overrideItems(blossomItem->values, blossomGroupItem.values, false);
 
         // convert name as jinja2-string
         Jinja2Converter* converter = SakuraRoot::m_jinja2Converter;
@@ -503,8 +496,7 @@ SakuraThread::processIf(IfBranching* ifCondition, const std::string &filePath)
  * @return true if successful, else false
  */
 bool
-SakuraThread::processForEach(ForEachBranching* subtree,
-                             bool parallel, const std::string &filePath)
+SakuraThread::processForEach(ForEachBranching* subtree, const std::string &filePath)
 {
     LOG_DEBUG("processForEach");
 
@@ -522,7 +514,7 @@ SakuraThread::processForEach(ForEachBranching* subtree,
     DataArray* array = subtree->iterateArray.get("array")->toArray();
 
     // process content normal or parallel via worker-threads
-    if(parallel == false)
+    if(subtree->parallel == false)
     {
         // backup the parent-values to avoid permanent merging with loop-internal values
         DataMap preBalueBackup = m_parentValues;
@@ -605,8 +597,7 @@ SakuraThread::processForEach(ForEachBranching* subtree,
  * @return true if successful, else false
  */
 bool
-SakuraThread::processFor(ForBranching* subtree,
-                         bool parallel, const std::string &filePath)
+SakuraThread::processFor(ForBranching* subtree, const std::string &filePath)
 {
     LOG_DEBUG("processFor");
 
@@ -635,7 +626,7 @@ SakuraThread::processFor(ForBranching* subtree,
     const long endValue = subtree->end.item->toValue()->getLong();
 
     // process content normal or parallel via worker-threads
-    if(parallel == false)
+    if(subtree->parallel == false)
     {
         // backup the parent-values to avoid permanent merging with loop-internal values
         DataMap preBalueBackup = m_parentValues;
