@@ -48,18 +48,18 @@ private:
 
     void run();
 
-    bool processSakuraItem(SakuraItem* sakuraItem);
+    bool processSakuraItem(SakuraItem* sakuraItem, const std::string &filePath);
 
-    bool processBlossom(BlossomItem &blossomItem);
-    bool processBlossomGroup(BlossomGroupItem &blossomGroupItem);
+    bool processBlossom(BlossomItem &blossomItem, const std::string &filePath);
+    bool processBlossomGroup(BlossomGroupItem &blossomGroupItem, const std::string &filePath);
     bool processTree(TreeItem* treeItem);
-    bool processSubtree(SubtreeItem* subtreeItem);
+    bool processSubtree(SubtreeItem* subtreeItem, const std::string &filePath);
     bool processSeed(SeedItem* seedItem);
-    bool processIf(IfBranching* ifCondition);
-    bool processForEach(ForEachBranching* subtree, bool parallel);
-    bool processFor(ForBranching* subtree, bool parallel);
-    bool processSequeniellPart(SequentiellPart* subtree);
-    bool processParallelPart(ParallelPart* parallelPart);
+    bool processIf(IfBranching* ifCondition, const std::string &filePath);
+    bool processForEach(ForEachBranching* subtree, bool parallel, const std::string &filePath);
+    bool processFor(ForBranching* subtree, bool parallel, const std::string &filePath);
+    bool processSequeniellPart(SequentiellPart* subtree, const std::string &filePath);
+    bool processParallelPart(ParallelPart* parallelPart, const std::string &filePath);
 
 };
 

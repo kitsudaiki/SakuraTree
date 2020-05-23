@@ -80,7 +80,7 @@ SakuraThread::run()
                 m_hierarchy = currentSubtree->hirarchy;
                 overrideItems(m_parentValues, currentSubtree->subtree->values, false);
                 overrideItems(m_parentValues, currentSubtree->items, false);
-                processSakuraItem(currentSubtree->subtree);
+                processSakuraItem(currentSubtree->subtree, currentSubtree->filePath);
                 overrideItems(currentSubtree->items, m_parentValues, true);
 
                 // increase active-counter as last step, so the source subtree can check, if all
@@ -112,8 +112,14 @@ SakuraThread::run()
  * @return true if successful, else false
  */
 bool
-SakuraThread::processSakuraItem(SakuraItem* sakuraItem)
+SakuraThread::processSakuraItem(SakuraItem* sakuraItem, const std::string &filePath)
 {
+    if(sakuraItem->getType() == SakuraItem::SEQUENTIELL_ITEM)
+    {
+        SequentiellPart* sequential = dynamic_cast<SequentiellPart*>(sakuraItem);
+        return processSequeniellPart(sequential, filePath);
+    }
+
     if(sakuraItem->getType() == SakuraItem::TREE_ITEM)
     {
         TreeItem* subtreeItem = dynamic_cast<TreeItem*>(sakuraItem);
@@ -124,55 +130,55 @@ SakuraThread::processSakuraItem(SakuraItem* sakuraItem)
     if(sakuraItem->getType() == SakuraItem::SUBTREE_ITEM)
     {
         SubtreeItem* subtreeItem = dynamic_cast<SubtreeItem*>(sakuraItem);
-        return processSubtree(subtreeItem);
+        return processSubtree(subtreeItem, filePath);
     }
 
     if(sakuraItem->getType() == SakuraItem::BLOSSOM_ITEM)
     {
         BlossomItem* blossomItem = dynamic_cast<BlossomItem*>(sakuraItem);
-        return processBlossom(*blossomItem);
+        return processBlossom(*blossomItem, filePath);
     }
 
     if(sakuraItem->getType() == SakuraItem::BLOSSOM_GROUP_ITEM)
     {
         BlossomGroupItem* blossomGroupItem = dynamic_cast<BlossomGroupItem*>(sakuraItem);
-        return processBlossomGroup(*blossomGroupItem);
+        return processBlossomGroup(*blossomGroupItem, filePath);
     }
 
     if(sakuraItem->getType() == SakuraItem::IF_ITEM)
     {
         IfBranching* ifBranching = dynamic_cast<IfBranching*>(sakuraItem);
-        return processIf(ifBranching);
+        return processIf(ifBranching, filePath);
     }
 
     if(sakuraItem->getType() == SakuraItem::FOR_EACH_ITEM)
     {
         ForEachBranching* forEachBranching = dynamic_cast<ForEachBranching*>(sakuraItem);
-        return processForEach(forEachBranching, false);
+        return processForEach(forEachBranching, false, filePath);
     }
 
     if(sakuraItem->getType() == SakuraItem::FOR_ITEM)
     {
         ForBranching* forBranching = dynamic_cast<ForBranching*>(sakuraItem);
-        return processFor(forBranching, false);
+        return processFor(forBranching, false, filePath);
     }
 
     if(sakuraItem->getType() == SakuraItem::PARALLEL_FOR_EACH_ITEM)
     {
         ForEachBranching* forEachBranching = dynamic_cast<ForEachBranching*>(sakuraItem);
-        return processForEach(forEachBranching, true);
+        return processForEach(forEachBranching, true, filePath);
     }
 
     if(sakuraItem->getType() == SakuraItem::PARALLEL_FOR_ITEM)
     {
         ForBranching* forBranching = dynamic_cast<ForBranching*>(sakuraItem);
-        return processFor(forBranching, true);
+        return processFor(forBranching, true, filePath);
     }
 
     if(sakuraItem->getType() == SakuraItem::PARALLEL_ITEM)
     {
         ParallelPart* parallel = dynamic_cast<ParallelPart*>(sakuraItem);
-        return processParallelPart(parallel);
+        return processParallelPart(parallel, filePath);
     }
 
     if(sakuraItem->getType() == SakuraItem::SEED_ITEM)
@@ -192,7 +198,7 @@ SakuraThread::processSakuraItem(SakuraItem* sakuraItem)
  * @return true if successful, else false
  */
 bool
-SakuraThread::processBlossom(BlossomItem &blossomItem)
+SakuraThread::processBlossom(BlossomItem &blossomItem, const std::string &filePath)
 {
     LOG_DEBUG("processBlossom: \nname: " + blossomItem.blossomName);
     if(blossomItem.parentValues != nullptr)
@@ -222,7 +228,10 @@ SakuraThread::processBlossom(BlossomItem &blossomItem)
         blossomItem.success = false;
         return blossomItem.success;
     }
+
     blossomItem.parentValues = &m_parentValues;
+    blossomItem.blossomPath = filePath;
+
     blossom->growBlossom(blossomItem);
     delete blossom;
 
@@ -246,7 +255,7 @@ SakuraThread::processBlossom(BlossomItem &blossomItem)
  * @return true if successful, else false
  */
 bool
-SakuraThread::processBlossomGroup(BlossomGroupItem &blossomGroupItem)
+SakuraThread::processBlossomGroup(BlossomGroupItem &blossomGroupItem, const std::string &filePath)
 {
     LOG_DEBUG("processBlossomGroup");
 
@@ -270,7 +279,7 @@ SakuraThread::processBlossomGroup(BlossomGroupItem &blossomGroupItem)
 
         blossomItem->nameHirarchie.push_back("BLOSSOM: " + convertResult.second);
 
-        const bool result = processSakuraItem(blossomItem);
+        const bool result = processSakuraItem(blossomItem, filePath);
         if(result == false) {
             return false;
         }
@@ -303,7 +312,8 @@ SakuraThread::processTree(TreeItem* treeItem)
         return false;
     }
 
-    const bool result = processSakuraItem(treeItem->childs);;
+    const std::string completePath = treeItem->rootPath + "/" + treeItem->relativePath;
+    const bool result = processSakuraItem(treeItem->childs, completePath);
     if(result == false) {
         return false;
     }
@@ -319,7 +329,7 @@ SakuraThread::processTree(TreeItem* treeItem)
  * @return true if successful, else false
  */
 bool
-SakuraThread::processSubtree(SubtreeItem* subtreeItem)
+SakuraThread::processSubtree(SubtreeItem* subtreeItem, const std::string &filePath)
 {
     LOG_DEBUG("processSubtree");
 
@@ -379,7 +389,7 @@ SakuraThread::processSubtree(SubtreeItem* subtreeItem)
     overrideItems(newSubtree->values, subtreeItem->values, false);
     overrideItems(m_parentValues, newSubtree->values, false);
 
-    return processSakuraItem(newSubtree);
+    return processSakuraItem(newSubtree, filePath);
 }
 
 /**
@@ -425,7 +435,7 @@ SakuraThread::processSeed(SeedItem* seedItem)
  * @return true if successful, else false
  */
 bool
-SakuraThread::processIf(IfBranching* ifCondition)
+SakuraThread::processIf(IfBranching* ifCondition, const std::string &filePath)
 {
     LOG_DEBUG("processIf");
 
@@ -475,9 +485,9 @@ SakuraThread::processIf(IfBranching* ifCondition)
 
     // based on the result, process the if-subtree or the else-subtree
     if(ifMatch) {
-        return processSakuraItem(ifCondition->ifContent);;
+        return processSakuraItem(ifCondition->ifContent, filePath);
     } else {
-        return processSakuraItem(ifCondition->elseContent);;
+        return processSakuraItem(ifCondition->elseContent, filePath);
     }
 }
 
@@ -492,7 +502,7 @@ SakuraThread::processIf(IfBranching* ifCondition)
  */
 bool
 SakuraThread::processForEach(ForEachBranching* subtree,
-                             bool parallel)
+                             bool parallel, const std::string &filePath)
 {
     LOG_DEBUG("processForEach");
 
@@ -518,7 +528,7 @@ SakuraThread::processForEach(ForEachBranching* subtree,
         for(uint32_t i = 0; i < array->size(); i++)
         {
             m_parentValues.insert(subtree->tempVarName, array->get(i), true);
-            const bool result = processSakuraItem(subtree->content->copy());
+            const bool result = processSakuraItem(subtree->content->copy(), filePath);
             if(result == false) {
                 return false;
             }
@@ -550,6 +560,8 @@ SakuraThread::processForEach(ForEachBranching* subtree,
             object->items = internalValues;
             object->hirarchy = m_hierarchy;
             object->activeCounter = counter;
+            object->filePath = filePath;
+
             m_queue->addSubtreeObject(object);
             spawnedObjects.push_back(object);
         }
@@ -590,7 +602,7 @@ SakuraThread::processForEach(ForEachBranching* subtree,
  */
 bool
 SakuraThread::processFor(ForBranching* subtree,
-                         bool parallel)
+                         bool parallel, const std::string &filePath)
 {
     LOG_DEBUG("processFor");
 
@@ -627,7 +639,7 @@ SakuraThread::processFor(ForBranching* subtree,
             // add the counter-variable as new value to be accessable within the loop
             m_parentValues.insert(subtree->tempVarName, new DataValue(i), true);
 
-            const bool result = processSakuraItem(subtree->content);
+            const bool result = processSakuraItem(subtree->content, filePath);
             if(result == false) {
                 return false;
             }
@@ -661,6 +673,8 @@ SakuraThread::processFor(ForBranching* subtree,
             object->items = internalValues;
             object->hirarchy = m_hierarchy;
             object->activeCounter = counter;
+            object->filePath = filePath;
+
             m_queue->addSubtreeObject(object);
             spawnedObjects.push_back(object);
         }
@@ -698,13 +712,13 @@ SakuraThread::processFor(ForBranching* subtree,
  * @return true if successful, else false
  */
 bool
-SakuraThread::processSequeniellPart(SequentiellPart* subtree)
+SakuraThread::processSequeniellPart(SequentiellPart* subtree, const std::string &filePath)
 {
     LOG_DEBUG("processSequeniellPart");
 
     for(uint32_t i = 0; i < subtree->childs.size(); i++)
     {
-        const bool result = processSakuraItem(subtree->childs.at(i));;
+        const bool result = processSakuraItem(subtree->childs.at(i), filePath);
         if(result == false) {
             return false;
         }
@@ -721,7 +735,7 @@ SakuraThread::processSequeniellPart(SequentiellPart* subtree)
  * @return true if successful, else false
  */
 bool
-SakuraThread::processParallelPart(ParallelPart* parallelPart)
+SakuraThread::processParallelPart(ParallelPart* parallelPart, const std::string &filePath)
 {
     LOG_DEBUG("processParallelPart");
 
@@ -741,6 +755,8 @@ SakuraThread::processParallelPart(ParallelPart* parallelPart)
         object->hirarchy = m_hierarchy;
         object->items = m_parentValues;
         object->activeCounter = counter;
+        object->filePath = filePath;
+
         m_queue->addSubtreeObject(object);
         spawnedObjects.push_back(object);
     }

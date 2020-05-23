@@ -441,7 +441,7 @@ SakuraRoot::shareAllTrees()
         it != m_treeHandler->m_garden.trees.end();
         it++)
     {
-        m_networking->sendTreePlanToAll(it->first, it->second->unparedConent);
+        m_networking->sendTreePlanToAll(it->first, it->second->unparsedConent);
     }
 }
 

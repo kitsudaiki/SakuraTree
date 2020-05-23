@@ -90,6 +90,8 @@ public:
         // current position in the processing-hirarchy for status-output
         std::vector<std::string> hirarchy;
 
+        std::string filePath = "";
+
         Kitsunemimi::Project::Session* session = nullptr;
         uint64_t blockerId = 0;
     };

@@ -61,7 +61,7 @@ get_required_kitsune_lib_repo "libKitsunemimiIni" "0.4.3" 1
 
 get_required_kitsune_lib_repo "libKitsunemimiJinja2" "0.7.2" 1
 
-get_required_kitsune_lib_repo "libKitsunemimiSakuraParser" "master" 1
+get_required_kitsune_lib_repo "libKitsunemimiSakuraParser" "move-converter" 1
 
 get_required_kitsune_lib_repo "libKitsunemimiProjectNetwork" "master" 4
 
