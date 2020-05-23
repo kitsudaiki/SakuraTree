@@ -21,7 +21,6 @@
  */
 
 #include "text_write_blossom_test.h"
-#include <items/sakura_items.h>
 #include <processing/blossoms/files/text_files/text_write_blossom.h>
 #include <libKitsunemimiPersistence/files/text_file.h>
 

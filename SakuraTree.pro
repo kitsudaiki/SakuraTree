@@ -64,7 +64,6 @@ HEADERS += \
     src/common/enums.h \
     src/common/includes.h \
     src/common/typedefs.h \
-    src/converter/converter.h \
     src/items/sakura_items.h \
     src/items/value_items.h \
     src/processing/blossoms/files/ini_files/ini_delete_entry_blossom.h \
@@ -109,7 +108,6 @@ HEADERS += \
     tests/run_unit_tests.h \
     src/processing/common/value_item_functions.h \
     src/converter/common_converter_methods.h \
-    src/items/value_item_map.h \
     src/processing/blossoms/files/common_files/path_chmod_blossom.h \
     src/processing/blossoms/files/common_files/path_chown_blossom.h \
     src/processing/blossoms/files/common_files/path_copy_blossom.h \
@@ -126,8 +124,6 @@ HEADERS += \
     src/args.h
 
 SOURCES += \
-    src/converter/converter.cpp \
-    src/items/sakura_items.cpp \
     src/processing/blossoms/files/ini_files/ini_delete_entry_blossom.cpp \
     src/processing/blossoms/files/ini_files/ini_read_entry_blossom.cpp \
     src/processing/blossoms/files/ini_files/ini_set_entry_blossom.cpp \
@@ -169,7 +165,6 @@ SOURCES += \
     tests/processing/common/item_methods_test.cpp \
     tests/run_unit_tests.cpp \
     src/converter/common_converter_methods.cpp \
-    src/items/value_item_map.cpp \
     src/processing/blossoms/files/common_files/path_chmod_blossom.cpp \
     src/processing/blossoms/files/common_files/path_chown_blossom.cpp \
     src/processing/blossoms/files/common_files/path_copy_blossom.cpp \

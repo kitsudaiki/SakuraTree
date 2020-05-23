@@ -24,7 +24,6 @@
 #define SUBTREE_QUEUE_H
 
 #include <common.h>
-#include <items/sakura_items.h>
 #include <libKitsunemimiProjectNetwork/session.h>
 
 namespace SakuraTree

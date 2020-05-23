@@ -169,12 +169,6 @@ SakuraThread::processSakuraItem(SakuraItem* sakuraItem)
         return processFor(forBranching, true);
     }
 
-    if(sakuraItem->getType() == SakuraItem::SEQUENTIELL_ITEM)
-    {
-        SequentiellPart* sequentiell = dynamic_cast<SequentiellPart*>(sakuraItem);
-        return processSequeniellPart(sequentiell);
-    }
-
     if(sakuraItem->getType() == SakuraItem::PARALLEL_ITEM)
     {
         ParallelPart* parallel = dynamic_cast<ParallelPart*>(sakuraItem);
@@ -309,12 +303,9 @@ SakuraThread::processTree(TreeItem* treeItem)
         return false;
     }
 
-    for(uint32_t i = 0; i < treeItem->childs.size(); i++)
-    {
-        const bool result = processSakuraItem(treeItem->childs.at(i));;
-        if(result == false) {
-            return false;
-        }
+    const bool result = processSakuraItem(treeItem->childs);;
+    if(result == false) {
+        return false;
     }
 
     return true;
@@ -336,7 +327,7 @@ SakuraThread::processSubtree(SubtreeItem* subtreeItem)
     bool fillResult = false;
 
     TreeHandler* treeHandler = SakuraRoot::m_root->m_treeHandler;
-    SakuraItem* newSubtree = treeHandler->getConvertedTree(subtreeItem->nameOrPath, "");
+    SakuraItem* newSubtree = treeHandler->getConvertedTree(subtreeItem->nameOrPath);
 
     if(newSubtree == nullptr)
     {
@@ -484,9 +475,9 @@ SakuraThread::processIf(IfBranching* ifCondition)
 
     // based on the result, process the if-subtree or the else-subtree
     if(ifMatch) {
-        return processSakuraItem(ifCondition->ifContent);
+        return processSakuraItem(ifCondition->ifContent);;
     } else {
-        return processSakuraItem(ifCondition->elseContent);
+        return processSakuraItem(ifCondition->elseContent);;
     }
 }
 
@@ -734,17 +725,19 @@ SakuraThread::processParallelPart(ParallelPart* parallelPart)
 {
     LOG_DEBUG("processParallelPart");
 
+    SequentiellPart* parts = dynamic_cast<SequentiellPart*>(parallelPart->childs);
+
     // create and initialize all threads
     SubtreeQueue::ActiveCounter* counter = new SubtreeQueue::ActiveCounter();
-    counter->shouldCount = static_cast<uint32_t>(parallelPart->childs.size());
+    counter->shouldCount = static_cast<uint32_t>(parts->childs.size());
     std::vector<SubtreeQueue::SubtreeObject*> spawnedObjects;
 
     // encapsulate each subtree of the paralle part as subtree-object and add it to the
     // subtree-queue for parallel processing
-    for(uint32_t i = 0; i < parallelPart->childs.size(); i++)
+    for(uint32_t i = 0; i < parts->childs.size(); i++)
     {
         SubtreeQueue::SubtreeObject* object = new SubtreeQueue::SubtreeObject();
-        object->subtree = parallelPart->childs.at(i)->copy();
+        object->subtree = parts->childs.at(i)->copy();
         object->hirarchy = m_hierarchy;
         object->items = m_parentValues;
         object->activeCounter = counter;

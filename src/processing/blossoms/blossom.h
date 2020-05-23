@@ -24,7 +24,6 @@
 #define BLOSSOM_H
 
 #include <common.h>
-#include <items/sakura_items.h>
 #include <sakura_root.h>
 #include <processing/common/item_methods.h>
 #include <libKitsunemimiPersistence/logger/logger.h>

@@ -25,7 +25,6 @@
 
 #include <common.h>
 #include <libKitsunemimiCommon/threading/thread.h>
-#include <items/sakura_items.h>
 
 using namespace Kitsunemimi;
 

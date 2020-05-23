@@ -24,7 +24,6 @@
 #define COMMON_CONVERTER_METHODS_H
 
 #include <common.h>
-#include <items/sakura_items.h>
 
 namespace SakuraTree
 {
@@ -35,7 +34,7 @@ bool checkOutput(BlossomItem &blossomItem,
                  const bool hasOutput);
 bool checkBlossomItem(BlossomItem &blossomItem);
 bool checkBlossomItem(BlossomItem &blossomItem,
-                          DataMap &requiredKeys);
+                      DataMap &requiredKeys);
 
 }
 

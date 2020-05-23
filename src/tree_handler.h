@@ -12,40 +12,27 @@ class SakuraParsing;
 
 namespace SakuraTree
 {
-class SakuraItem;
-class Converter;
-
 class TreeHandler
 {
 
 public:
-
-    struct TreeHandlerItem
-    {
-        JsonItem parsedItem;
-        SakuraItem* convertedItem = nullptr;
-    };
-
     TreeHandler();
 
     bool addTree(const std::string &treePath);
     bool addTree(const std::string &treeId,
                  const std::string &content);
 
-    SakuraItem* getConvertedTree(const std::string &treeId,
-                                 const std::string &initPath);
+    SakuraItem* getConvertedTree(const std::string &inputPath,
+                                 const std::string &initialTreeId = "");
     const JsonItem getParsedTree(const std::string &treeId);
 
     bool loadPredefinedSubtrees();
 
-    std::map<std::string, TreeHandlerItem> m_trees;
-    std::map<std::string, TreeHandlerItem> m_predefinedTrees;
+    std::map<std::string, TreeItem*> m_predefinedTrees;
+    Kitsunemimi::Sakura::SakuraGarden m_garden;
 
 private:
-    Converter* m_converter = nullptr;
     Kitsunemimi::Sakura::SakuraParsing* m_parser = nullptr;
-
-    SakuraItem* getConvertedTreeFromMap(const std::string &treeId);
 };
 
 }
