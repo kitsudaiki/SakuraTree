@@ -337,8 +337,8 @@ SakuraThread::processSubtree(SubtreeItem* subtreeItem, const std::string &filePa
     bool fillResult = false;
 
     TreeHandler* treeHandler = SakuraRoot::m_root->m_treeHandler;
-    SakuraItem* newSubtree = treeHandler->getConvertedTree(subtreeItem->nameOrPath);
 
+    SakuraItem* newSubtree = treeHandler->getConvertedTree(subtreeItem->nameOrPath);
     if(newSubtree == nullptr)
     {
         SakuraRoot::m_root->createError("subtree-processing",
@@ -355,6 +355,7 @@ SakuraThread::processSubtree(SubtreeItem* subtreeItem, const std::string &filePa
                                         + errorMessage);
         return false;
     }
+
     overrideItems(newSubtree->values, subtreeItem->values, false);
 
     // fill internal maps
@@ -452,7 +453,6 @@ SakuraThread::processIf(IfBranching* ifCondition, const std::string &filePath)
                                         + errorMessage);
         return false;
     }
-    const std::string leftSide = ifCondition->leftSide.item->toString();
 
     // get right side of the comparism
     if(fillValueItem(ifCondition->rightSide, m_parentValues, errorMessage) == false)
@@ -462,6 +462,8 @@ SakuraThread::processIf(IfBranching* ifCondition, const std::string &filePath)
                                         + errorMessage);
         return false;
     }
+
+    const std::string leftSide = ifCondition->leftSide.item->toString();
     const std::string rightSide = ifCondition->rightSide.item->toString();
 
     // compare based on the compare-type
@@ -516,6 +518,7 @@ SakuraThread::processForEach(ForEachBranching* subtree,
                                         + errorMessage);
         return false;
     }
+
     DataArray* array = subtree->iterateArray.get("array")->toArray();
 
     // process content normal or parallel via worker-threads
@@ -585,6 +588,7 @@ SakuraThread::processForEach(ForEachBranching* subtree,
                 return false;
             }
         }
+
         overrideItems(m_parentValues, subtree->values, true);
     }
 
@@ -616,6 +620,7 @@ SakuraThread::processFor(ForBranching* subtree,
                                         + errorMessage);
         return false;
     }
+
     const long startValue = subtree->start.item->toValue()->getLong();
 
     // get end-value
@@ -626,6 +631,7 @@ SakuraThread::processFor(ForBranching* subtree,
                                         + errorMessage);
         return false;
     }
+
     const long endValue = subtree->end.item->toValue()->getLong();
 
     // process content normal or parallel via worker-threads
@@ -698,6 +704,7 @@ SakuraThread::processFor(ForBranching* subtree,
                 return false;
             }
         }
+
         overrideItems(m_parentValues, subtree->values, true);
     }
 
