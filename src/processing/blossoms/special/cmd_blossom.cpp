@@ -22,6 +22,8 @@
 
 #include "cmd_blossom.h"
 
+#include <libKitsunemimiCommon/common_methods/string_methods.h>
+
 namespace SakuraTree
 {
 
@@ -32,6 +34,7 @@ CmdBlossom::CmdBlossom()
 
     m_requiredKeys.insert("command", new DataValue(true));
     m_requiredKeys.insert("ignore_errors", new DataValue(false));
+    m_requiredKeys.insert("trim_output", new DataValue(false));
 }
 
 /**
@@ -41,8 +44,8 @@ void
 CmdBlossom::initBlossom(BlossomItem &blossomItem)
 {
     m_command = blossomItem.values.getValueAsString("command");
-    const ValueItem ignoreResultItem = blossomItem.values.getValueItem("ignore_errors");
 
+    const ValueItem ignoreResultItem = blossomItem.values.getValueItem("ignore_errors");
     if(ignoreResultItem.item != nullptr)
     {
         if(ignoreResultItem.item->isBoolValue())
@@ -53,6 +56,22 @@ CmdBlossom::initBlossom(BlossomItem &blossomItem)
         else
         {
             const std::string errorMsg = "ignore_errors was set, but is not a bool-value";
+            blossomItem.outputMessage = errorMsg;
+            blossomItem.success = false;
+        }
+    }
+
+    const ValueItem trimOutputItem = blossomItem.values.getValueItem("trim_output");
+    if(trimOutputItem.item != nullptr)
+    {
+        if(trimOutputItem.item->isBoolValue())
+        {
+            m_trimOutput = trimOutputItem.item->getBool();
+            blossomItem.success = true;
+        }
+        else
+        {
+            const std::string errorMsg = "trim_output was set, but is not a bool-value";
             blossomItem.outputMessage = errorMsg;
             blossomItem.success = false;
         }
@@ -85,6 +104,10 @@ CmdBlossom::runTask(BlossomItem &blossomItem)
     LOG_DEBUG("command-output: \n" + processResult.processOutput);
     if(blossomItem.success == false) {
         blossomItem.outputMessage = processResult.processOutput;
+    }
+
+    if(m_trimOutput) {
+        Kitsunemimi::trim(processResult.processOutput);
     }
 
     blossomItem.blossomOutput = new DataValue(processResult.processOutput);
