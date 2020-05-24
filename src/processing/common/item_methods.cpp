@@ -437,8 +437,10 @@ overrideItems(ValueItemMap &original,
             std::map<std::string, ValueItem>::iterator originalIt;
             originalIt = original.find(overrideIt->first);
 
-            if(originalIt != original.end()) {
-                original.insert(overrideIt->first, overrideIt->second.item->copy(), true);
+            if(originalIt != original.end())
+            {
+                ValueItem temp = overrideIt->second;
+                original.insert(overrideIt->first, temp, true);
             }
         }
     }
@@ -449,7 +451,8 @@ overrideItems(ValueItemMap &original,
             overrideIt != override.const_end();
             overrideIt++)
         {
-            original.insert(overrideIt->first, overrideIt->second.item->copy(), true);
+            ValueItem temp = overrideIt->second;
+            original.insert(overrideIt->first, temp, true);
         }
     }
 }

@@ -48,6 +48,7 @@ private:
 
     std::string m_command = "";
     bool m_ignoreResult = false;
+    bool m_trimOutput = false;
 };
 
 }
