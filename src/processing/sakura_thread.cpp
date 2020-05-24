@@ -330,10 +330,10 @@ SakuraThread::processSubtree(SubtreeItem* subtreeItem, const std::string &filePa
     std::string errorMessage = "";
     bool fillResult = false;
 
+    // get subtree-file based on the required path
     TreeHandler* treeHandler = SakuraRoot::m_root->m_treeHandler;
     const std::string relativePath = treeHandler->getRelativePath(filePath,
                                                                   subtreeItem->nameOrPath);
-
     SakuraItem* newSubtree = treeHandler->getConvertedTree(treeHandler->m_garden.rootPath,
                                                            relativePath);
     if(newSubtree == nullptr)
