@@ -175,7 +175,21 @@ SakuraRoot::startProcess(const std::string &inputPath,
 
     shareAllTrees();
 
-    SakuraItem* tree = m_treeHandler->getConvertedTree(inputPath, initialTreeId);
+    SakuraItem* tree = nullptr;
+
+    if(Kitsunemimi::Persistence::isFile(inputPath))
+    {
+        std::vector<std::string> splittedParts;
+        Kitsunemimi::splitStringByDelimiter(splittedParts, inputPath, '/');
+        const std::string rootPath = Kitsunemimi::Persistence::getParent(inputPath);
+        const std::string relativePath = splittedParts.at(splittedParts.size() - 1);
+        tree = m_treeHandler->getConvertedTree(rootPath, relativePath, initialTreeId);
+    }
+    else
+    {
+        tree = m_treeHandler->getConvertedTree(inputPath, "", initialTreeId);
+    }
+
     if(tree == nullptr)
     {
         std::string errorMessage = "No tree found for the input-path " + inputPath;
@@ -212,7 +226,7 @@ SakuraRoot::startSubtreeProcess(const std::string &relativePath,
     std::cout<<"startSubtreeProcess"<<std::endl;
 
     // get tree
-    SakuraItem* processPlan = m_treeHandler->getConvertedTree(relativePath);
+    SakuraItem* processPlan = m_treeHandler->getConvertedTree("", relativePath);
     if(processPlan == nullptr) {
         return false;
     }

@@ -53,6 +53,7 @@ TemplateCreateBlossom::initBlossom(BlossomItem &blossomItem)
     const std::string relativePath = Kitsunemimi::Persistence::getRelativePath(parentPath,
                                                                                rootPath);
     if(relativePath == ".") {
+        // if relativePath is a '.', then it is on the same level like the root-path
         m_templatePath = "templates/" + m_templatePath;
     } else {
         m_templatePath = relativePath + "/templates/" + m_templatePath;

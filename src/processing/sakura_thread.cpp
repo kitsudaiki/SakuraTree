@@ -34,6 +34,7 @@
 
 #include <libKitsunemimiJinja2/jinja2_converter.h>
 #include <libKitsunemimiPersistence/logger/logger.h>
+#include <libKitsunemimiPersistence/files/file_methods.h>
 
 namespace SakuraTree
 {
@@ -330,8 +331,8 @@ SakuraThread::processSubtree(SubtreeItem* subtreeItem, const std::string &filePa
     bool fillResult = false;
 
     TreeHandler* treeHandler = SakuraRoot::m_root->m_treeHandler;
-
-    SakuraItem* newSubtree = treeHandler->getConvertedTree(subtreeItem->nameOrPath);
+    SakuraItem* newSubtree = treeHandler->getConvertedTree(treeHandler->m_garden.rootPath,
+                                                           subtreeItem->nameOrPath);
     if(newSubtree == nullptr)
     {
         SakuraRoot::m_root->createError("subtree-processing",

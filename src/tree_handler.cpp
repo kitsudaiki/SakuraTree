@@ -69,25 +69,31 @@ TreeHandler::addTree(const std::string &treeId,
  * @return
  */
 SakuraItem*
-TreeHandler::getConvertedTree(const std::string &inputPath,
+TreeHandler::getConvertedTree(const std::string &rootPath,
+                              const std::string &relativePath,
                               const std::string &initialTreeId)
 {
     if(initialTreeId != "")
     {
         return m_garden.getTreeById(initialTreeId);
     }
+    else if(rootPath == "")
+    {
+        return m_garden.getTreeByPath(relativePath);
+    }
     else
     {
-        if(Kitsunemimi::Persistence::isDir(inputPath))
+        const std::string completePath = rootPath + "/" + relativePath;
+        if(Kitsunemimi::Persistence::isDir(completePath))
         {
-            const std::string relativePath = "root.tree";
-            return m_garden.getTreeByPath(relativePath);
+            if(relativePath == "") {
+                return m_garden.getTreeByPath("root.tree");
+            } else {
+                return m_garden.getTreeByPath(relativePath + "/root.tree");
+            }
         }
         else
         {
-            std::vector<std::string> splittedParts;
-            Kitsunemimi::splitStringByDelimiter(splittedParts, inputPath, '/');
-            const std::string relativePath = splittedParts.at(splittedParts.size() - 1);
             return m_garden.getTreeByPath(relativePath);
         }
     }
