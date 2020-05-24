@@ -47,8 +47,6 @@ namespace SakuraTree
 class SakuraThread;
 class ThreadPool;
 class TreeHandler;
-class SakuraItem;
-struct BlossomItem;
 
 class SakuraRoot
 {
@@ -65,7 +63,7 @@ public:
                       const std::string &serverAddress = "127.0.0.1",
                       const uint16_t serverPort = 1337,
                       const std::string &initialTreeId = "");
-    bool startSubtreeProcess(const std::string &treeId,
+    bool startSubtreeProcess(const std::string &relativePath,
                              const std::string &values,
                              Kitsunemimi::Project::Session* session,
                              const uint64_t blockerId);

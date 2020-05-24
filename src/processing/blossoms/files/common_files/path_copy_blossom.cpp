@@ -21,7 +21,10 @@
  */
 
 #include "path_copy_blossom.h"
+#include <sakura_root.h>
+#include <tree_handler.h>
 #include <libKitsunemimiPersistence/files/file_methods.h>
+#include <libKitsunemimiPersistence/files/binary_file.h>
 #include <libKitsunemimiCommon/common_methods/string_methods.h>
 
 namespace SakuraTree
@@ -50,8 +53,10 @@ PathCopyBlossom::initBlossom(BlossomItem &blossomItem)
 
     if(m_sourcePath.at(0) != '/')
     {
-        const std::string parentPath = Kitsunemimi::Persistence::getParent(blossomItem.blossomPath);
-        m_sourcePath = parentPath + "/files/" + m_sourcePath;
+        m_localStorage = true;
+        m_sourcePath = SakuraRoot::m_treeHandler->getRelativePath(blossomItem.blossomPath,
+                                                                  m_sourcePath,
+                                                                  "files");
     }
 
     blossomItem.success = true;
@@ -63,13 +68,16 @@ PathCopyBlossom::initBlossom(BlossomItem &blossomItem)
 void
 PathCopyBlossom::preCheck(BlossomItem &blossomItem)
 {
-    if(Kitsunemimi::Persistence::doesPathExist(m_sourcePath) == false)
+    if(m_localStorage == false)
     {
-        blossomItem.success = false;
-        blossomItem.outputMessage = "COPY FAILED: source-path "
-                                   + m_sourcePath
-                                   + " doesn't exist";
-        return;
+        if(Kitsunemimi::Persistence::doesPathExist(m_sourcePath) == false)
+        {
+            blossomItem.success = false;
+            blossomItem.outputMessage = "COPY FAILED: source-path "
+                                       + m_sourcePath
+                                       + " doesn't exist";
+            return;
+        }
     }
 
     // TODO: compare files, until then copy everytime
@@ -89,10 +97,33 @@ PathCopyBlossom::preCheck(BlossomItem &blossomItem)
 void
 PathCopyBlossom::runTask(BlossomItem &blossomItem)
 {
+    bool copyResult = false;
     std::string errorMessage = "";
-    bool copyResult = Kitsunemimi::Persistence::copyPath(m_sourcePath,
-                                                         m_destinationPath,
-                                                         errorMessage);
+
+    if(m_localStorage == true)
+    {
+        TreeHandler* treeHandler = SakuraRoot::m_treeHandler;
+        Kitsunemimi::DataBuffer* buffer = treeHandler->m_garden.getFile(m_sourcePath);
+
+        if(buffer == nullptr)
+        {
+            blossomItem.success = false;
+            blossomItem.outputMessage = "couldn't find local file "
+                                       + m_sourcePath;
+            return;
+        }
+
+        Kitsunemimi::Persistence::deleteFileOrDir(m_destinationPath, errorMessage);
+        Kitsunemimi::Persistence::BinaryFile ouputFile(m_destinationPath);
+        copyResult = ouputFile.writeCompleteFile(*buffer);
+        ouputFile.closeFile();
+    }
+    else
+    {
+        copyResult = Kitsunemimi::Persistence::copyPath(m_sourcePath,
+                                                        m_destinationPath,
+                                                        errorMessage);
+    }
 
     if(copyResult == false)
     {

@@ -24,7 +24,6 @@
 #define COMMON_METHODS_H
 
 #include <common.h>
-#include <items/sakura_items.h>
 
 namespace Kitsunemimi
 {
@@ -58,10 +57,10 @@ bool fillOutputValueItemMap(ValueItemMap &items,
 
 void overrideItems(DataMap &original,
                    const DataMap &override,
-                   bool onlyExisting=true);
+                   bool onlyExisting  =true);
 void overrideItems(DataMap &original,
                    const ValueItemMap &override,
-                   bool onlyExisting=true);
+                   bool onlyExisting = true);
 void overrideItems(ValueItemMap &original,
                    const ValueItemMap &override,
                    bool onlyExisting);

@@ -21,7 +21,6 @@
  */
 
 #include "cmd_blossom_test.h"
-#include <items/sakura_items.h>
 #include <processing/blossoms/special/cmd_blossom.h>
 #include <libKitsunemimiPersistence/files/file_methods.h>
 

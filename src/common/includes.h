@@ -46,18 +46,31 @@
 #include <boost/filesystem.hpp>
 
 #include <libKitsunemimiCommon/common_items/data_items.h>
-#include <libKitsunemimiJson/json_item.h>
-
-#include <libKitsunemimiCommon/process_execution.h>
-
 using Kitsunemimi::DataItem;
 using Kitsunemimi::DataArray;
 using Kitsunemimi::DataValue;
 using Kitsunemimi::DataMap;
 
+#include <libKitsunemimiJson/json_item.h>
 using Kitsunemimi::Json::JsonItem;
 
+#include <libKitsunemimiCommon/process_execution.h>
 using Kitsunemimi::ProcessResult;
 using Kitsunemimi::runSyncProcess;
+
+#include <libKitsunemimiSakuraParser/sakura_items.h>
+using Kitsunemimi::Sakura::BlossomItem;
+using Kitsunemimi::Sakura::SakuraItem;
+using Kitsunemimi::Sakura::ValueItem;
+using Kitsunemimi::Sakura::ValueItemMap;
+using Kitsunemimi::Sakura::BlossomGroupItem;
+using Kitsunemimi::Sakura::TreeItem;
+using Kitsunemimi::Sakura::SubtreeItem;
+using Kitsunemimi::Sakura::SeedItem;
+using Kitsunemimi::Sakura::IfBranching;
+using Kitsunemimi::Sakura::ForEachBranching;
+using Kitsunemimi::Sakura::ForBranching;
+using Kitsunemimi::Sakura::SequentiellPart;
+using Kitsunemimi::Sakura::ParallelPart;
 
 #endif // INCLUDES_H

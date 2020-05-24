@@ -49,6 +49,7 @@ private:
     std::string m_destinationPath = "";
     std::string m_mode = "";
     std::string m_owner = "";
+    bool m_localStorage = false;
 };
 
 }

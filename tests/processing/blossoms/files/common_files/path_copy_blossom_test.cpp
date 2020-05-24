@@ -21,7 +21,6 @@
  */
 
 #include "path_copy_blossom_test.h"
-#include <items/sakura_items.h>
 #include <processing/blossoms/files/common_files/path_copy_blossom.h>
 
 namespace SakuraTree

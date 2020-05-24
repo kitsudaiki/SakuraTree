@@ -21,7 +21,6 @@
  */
 
 #include "path_rename_blossom_test.h"
-#include <items/sakura_items.h>
 #include <processing/blossoms/files/common_files/path_rename_blossom.h>
 
 namespace SakuraTree
