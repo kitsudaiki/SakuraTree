@@ -49,7 +49,7 @@ function get_required_kitsune_lib_repo () {
 
 get_required_kitsune_lib_repo "libKitsunemimiCommon" "master" 4
 
-get_required_kitsune_lib_repo "libKitsunemimiPersistence" "read-complete-binary-files-into-buffer" 4
+get_required_kitsune_lib_repo "libKitsunemimiPersistence" "master" 4
 
 get_required_kitsune_lib_repo "libKitsunemimiArgs" "master" 4
 
@@ -61,7 +61,7 @@ get_required_kitsune_lib_repo "libKitsunemimiIni" "0.4.3" 1
 
 get_required_kitsune_lib_repo "libKitsunemimiJinja2" "0.7.2" 1
 
-get_required_kitsune_lib_repo "libKitsunemimiSakuraParser" "move-converter" 1
+get_required_kitsune_lib_repo "libKitsunemimiSakuraParser" "master" 1
 
 get_required_kitsune_lib_repo "libKitsunemimiProjectNetwork" "master" 4
 
