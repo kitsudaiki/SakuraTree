@@ -22,6 +22,10 @@ public:
     bool addTree(const std::string &treeId,
                  const std::string &content);
 
+    const std::string getRelativePath(const std::string &blossomFilePath,
+                                      const std::string &blossomInternalRelPath,
+                                      const std::string &addition = "");
+
     SakuraItem* getConvertedTree(const std::string &rootPath,
                                  const std::string &relativePath,
                                  const std::string &initialTreeId = "");

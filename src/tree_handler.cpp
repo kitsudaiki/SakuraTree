@@ -64,6 +64,40 @@ TreeHandler::addTree(const std::string &treeId,
 }
 
 /**
+ * @brief TreeHandler::getRelativePath
+ * @param blossomFilePath
+ * @param blossomInternalRelPath
+ * @param addition
+ * @return
+ */
+const std::string
+TreeHandler::getRelativePath(const std::string &blossomFilePath,
+                             const std::string &blossomInternalRelPath,
+                             const std::string &addition)
+{
+    // create source-path
+    const std::string parentPath = Kitsunemimi::Persistence::getParent(blossomFilePath);
+    std::string relativePath = Kitsunemimi::Persistence::getRelativePath(parentPath,
+                                                                         m_garden.rootPath);
+    if(relativePath == ".")
+    {
+        if(addition == "") {
+            return blossomInternalRelPath;
+        } else {
+            return addition + "/" + blossomInternalRelPath;
+        }
+    }
+    else
+    {
+        if(addition == "") {
+            return relativePath + "/" + blossomInternalRelPath;;
+        } else {
+            return relativePath + "/" + addition + "/" + blossomInternalRelPath;
+        }
+    }
+}
+
+/**
  * @brief TreeHandler::getTree
  * @param treeId
  * @return

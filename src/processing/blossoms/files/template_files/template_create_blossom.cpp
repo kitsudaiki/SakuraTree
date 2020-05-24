@@ -48,16 +48,9 @@ TemplateCreateBlossom::initBlossom(BlossomItem &blossomItem)
     m_destinationPath = blossomItem.values.getValueAsString("dest_path");
 
     // create source-path
-    const std::string parentPath = Kitsunemimi::Persistence::getParent(blossomItem.blossomPath);
-    const std::string rootPath = SakuraRoot::m_treeHandler->m_garden.rootPath;
-    const std::string relativePath = Kitsunemimi::Persistence::getRelativePath(parentPath,
-                                                                               rootPath);
-    if(relativePath == ".") {
-        // if relativePath is a '.', then it is on the same level like the root-path
-        m_templatePath = "templates/" + m_templatePath;
-    } else {
-        m_templatePath = relativePath + "/templates/" + m_templatePath;
-    }
+    m_templatePath = SakuraRoot::m_treeHandler->getRelativePath(blossomItem.blossomPath,
+                                                                m_templatePath,
+                                                                "templates");
 
     blossomItem.success = true;
 }
