@@ -23,6 +23,7 @@
 #include "template_create_blossom.h"
 #include <libKitsunemimiPersistence/files/file_methods.h>
 #include <sakura_root.h>
+#include <tree_handler.h>
 #include <libKitsunemimiJinja2/jinja2_converter.h>
 #include <libKitsunemimiPersistence/files/text_file.h>
 
@@ -48,7 +49,14 @@ TemplateCreateBlossom::initBlossom(BlossomItem &blossomItem)
 
     // create source-path
     const std::string parentPath = Kitsunemimi::Persistence::getParent(blossomItem.blossomPath);
-    m_templatePath = parentPath + "/templates/" + m_templatePath;
+    const std::string rootPath = SakuraRoot::m_treeHandler->m_garden.rootPath;
+    const std::string relativePath = Kitsunemimi::Persistence::getRelativePath(parentPath,
+                                                                               rootPath);
+    if(relativePath == ".") {
+        m_templatePath = "templates/" + m_templatePath;
+    } else {
+        m_templatePath = relativePath + "/templates/" + m_templatePath;
+    }
 
     blossomItem.success = true;
 }
@@ -59,27 +67,14 @@ TemplateCreateBlossom::initBlossom(BlossomItem &blossomItem)
 void
 TemplateCreateBlossom::preCheck(BlossomItem &blossomItem)
 {
-    // check if path to template is valid
-    if(Kitsunemimi::Persistence::doesPathExist(m_templatePath) == false)
-    {
-        blossomItem.success = false;
-        blossomItem.outputMessage = "template-path "
-                                   + m_templatePath
-                                   + " doesn't exist";
-        return;
-    }
-
     // read template-file
-    std::string errorMessage = "";
-    std::string fileContent = "";
-    bool results = Kitsunemimi::Persistence::readFile(fileContent, m_templatePath, errorMessage);
-    if(results == false)
+    std::string fileContent = SakuraRoot::m_treeHandler->m_garden.getTemplate(m_templatePath);
+
+    if(fileContent == "")
     {
         blossomItem.success = false;
-        blossomItem.outputMessage = "couldn't read template-file "
-                                   + m_templatePath +
-                                   " with reason: "
-                                   + errorMessage;
+        blossomItem.outputMessage = "couldn't find template-file "
+                                   + m_templatePath;
         return;
     }
 
@@ -97,7 +92,7 @@ TemplateCreateBlossom::preCheck(BlossomItem &blossomItem)
     }
 
     // create file-content form template
-    errorMessage.clear();
+    std::string errorMessage;
     std::pair<bool, std::string> jinja2Result;
     jinja2Result = SakuraRoot::m_root->m_jinja2Converter->convert(fileContent,
                                                                   &inputData,
@@ -119,7 +114,9 @@ TemplateCreateBlossom::preCheck(BlossomItem &blossomItem)
         // read the already existing file and compare it the current file-content
         errorMessage.clear();
         fileContent.clear();
-        results = Kitsunemimi::Persistence::readFile(fileContent, m_destinationPath, errorMessage);
+        bool results = Kitsunemimi::Persistence::readFile(fileContent,
+                                                          m_destinationPath,
+                                                          errorMessage);
         if(results == true
                 && m_fileContent == fileContent)
         {
