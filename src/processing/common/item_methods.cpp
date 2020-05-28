@@ -124,8 +124,8 @@ getProcessedItem(ValueItem &valueItem,
                     && fillValueItem(arg2, insertValues, errorMessage))
             {
                 valueItem.item = insertValue(valueItem.item->toMap(),
-                                            arg1.item->toValue(),
-                                            arg2.item,
+                                             arg1.item->toValue(),
+                                             arg2.item,
                                              errorMessage);
             }
             continue;
@@ -141,7 +141,7 @@ getProcessedItem(ValueItem &valueItem,
             if(fillValueItem(arg, insertValues, errorMessage))
             {
                 valueItem.item = appendValue(valueItem.item->toArray(),
-                                             arg.item->toValue(),
+                                             arg.item,
                                              errorMessage);
             }
             continue;
