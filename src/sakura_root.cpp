@@ -132,36 +132,9 @@ SakuraRoot::startProcess(const std::string &inputPath,
     // process seed
     if(seedPath != "")
     {
-        SakuraItem* seedItem = prepareSeed(seedPath,
-                                           m_executablePath,
-                                           serverAddress,
-                                           serverPort);
-
-        if(seedItem == nullptr)
+        if(processSeed(seedPath, serverAddress, serverPort) == false)
         {
-            LOG_ERROR("failed to loag predefined trees");
-            return false;
-        }
-
-        if(runProcess(seedItem, initialValues) == false)
-        {
-            LOG_ERROR(m_errorOutput.toString());
-            return false;
-        }
-
-        // wait until all hosts ready or until timeout after 10 seconds
-        uint32_t maxTries = 100;
-        while(maxTries > 0)
-        {
-            if(m_networking->areAllHostsReady() == true) {
-                break;
-            }
-
-            usleep(100000);
-            maxTries--;
-        }
-
-        if(maxTries == 0) {
+            LOG_ERROR("failed prcess seed");
             return false;
         }
     }
@@ -172,8 +145,6 @@ SakuraRoot::startProcess(const std::string &inputPath,
         LOG_ERROR(m_errorOutput.toString());
         return false;
     }
-
-    shareAllTrees();
 
     SakuraItem* tree = nullptr;
 
@@ -425,13 +396,61 @@ SakuraRoot::runProcess(SakuraItem* item,
 }
 
 /**
+ * @brief SakuraRoot::processSeed
+ * @param seedPath
+ * @return
+ */
+bool
+SakuraRoot::processSeed(const std::string &seedPath,
+                        const std::string &serverAddress,
+                        const uint16_t serverPort)
+{
+    TreeItem* seedItem = prepareSeed(seedPath,
+                                       m_executablePath,
+                                       serverAddress,
+                                       serverPort);
+
+    if(seedItem == nullptr)
+    {
+        LOG_ERROR("failed to loag predefined trees");
+        return false;
+    }
+
+    /*if(runProcess(seedItem, initialValues) == false)
+    {
+        LOG_ERROR(m_errorOutput.toString());
+        return false;
+    }*/
+
+    // wait until all hosts ready or until timeout after 10 seconds
+    uint32_t maxTries = 100;
+    while(maxTries > 0)
+    {
+        if(m_networking->areAllHostsReady() == true) {
+            break;
+        }
+
+        usleep(100000);
+        maxTries--;
+    }
+
+    if(maxTries == 0) {
+        return false;
+    }
+
+    shareAllTrees();
+
+    return true;
+}
+
+/**
  * @brief SakuraRoot::prepareSeed
  * @param seedPath
  * @param serverAddress
  * @param port
  * @return
  */
-SakuraItem*
+TreeItem*
 SakuraRoot::prepareSeed(const std::string &seedPath,
                         const std::string &executablePath,
                         const std::string &serverAddress,
@@ -439,9 +458,23 @@ SakuraRoot::prepareSeed(const std::string &seedPath,
 {
     Kitsunemimi::Sakura::SakuraParsing sakuraParsing(m_enableDebug);
 
-    // TODO
+    // prepare path for parser
+    const std::string parent = Kitsunemimi::Persistence::getParent(seedPath);
+    const std::string relPath = Kitsunemimi::Persistence::getRelativePath(seedPath, parent);
 
-    return nullptr;
+    // parse seed-file
+    std::string errorMessage = "";
+    SakuraItem* seed = sakuraParsing.parseSingleFile(relPath, parent, errorMessage);
+    if(seed == nullptr) {
+        return nullptr;
+    }
+
+    // add additional information to the parsed content
+    //seed->values.insert("sakura_server_address", new DataValue(serverAddress), true);
+    //seed->values.insert("sakura_server_port", new DataValue(port), true);
+    //seed->values.insert("sakura_executablePath", new DataValue(executablePath), true);
+
+    return static_cast<TreeItem*>(seed->copy());
 }
 
 /**
