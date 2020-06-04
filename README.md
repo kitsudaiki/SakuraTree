@@ -138,7 +138,7 @@ Tested on Debian and Ubuntu. If you use CentOS, Arch, etc and the build script f
 
 ## Simple example
 
-The following example is not very usefull, but should give a first impression of the file-syntax, which is processed by the tool. See full syntax explaination in section [Documentation](#documentation).
+The following example is not very usefull, but should give a first impression of the file-syntax, which is processed by the tool. See full syntax explanation in section [Documentation](#documentation).
 
 
 ```c++
