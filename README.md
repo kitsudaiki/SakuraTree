@@ -136,6 +136,50 @@ The build script links all Kitsunemimi libraries statically into the final binar
 Tested on Debian and Ubuntu. If you use CentOS, Arch, etc and the build script fails on your machine, then please write me a message or file a GitHub issue and I will try to fix the script.
 
 
+## Simple example
+
+The following example is not very usefull, but should give a first impression of the file-syntax, which is processed by the tool. See full syntax explaination in section [Documentation](#documentation).
+
+
+```c++
+["test example file"]
+
+- packages = [ "nano", "vim" ]
+- path = "/tmp/test_file"
+- test_output = ""
+
+
+for(package : packages)
+{
+    print("print packages-names")
+    - output = package
+}
+
+
+apt("update and install")
+-> update
+-> present:
+- packages = packages
+
+
+if(packages.size() == 2)
+{
+    ini_file("get value from a test-ini-file")
+    - file_path = path
+    - group = "DEFAULT"
+    - entry = "asdf"
+
+    -> read:
+        - blossom_output >> test_output
+    -> set:
+        - value = "123456789"
+
+    print("print init-file-output")
+    - first_try = test_output
+}
+```
+
+
 ## Contributing
 
 Please give me as many inputs as possible: feature suggestions, bugs, bad code style, bad documentation, bad spelling and so on. 
