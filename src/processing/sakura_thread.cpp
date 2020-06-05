@@ -170,11 +170,13 @@ SakuraThread::processSakuraItem(SakuraItem* sakuraItem, const std::string &fileP
         return processParallelPart(parallel, filePath);
     }
 
-    if(sakuraItem->getType() == SakuraItem::SEED_ITEM)
+    if(sakuraItem->getType() == SakuraItem::SEED_TRIGGER_ITEM)
     {
         SeedTrigger* seedItem = dynamic_cast<SeedTrigger*>(sakuraItem);
         return processSeedTrigger(seedItem);
     }
+
+    // TODO: error-message
 
     return false;
 }

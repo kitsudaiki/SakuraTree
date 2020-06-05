@@ -1,13 +1,12 @@
 ["test-remote installation"]
 - source_path = ""
-- server_address = ""
-- server_port = ""
+- address = ""
+- port = ""
 
-sakura("")
+sakura:
 - tags = ["test-node"]
-- source_path = source_path
-- server_address = server_address
-- server_port = server_port
+- address = address
+- port = port
 
 #-> ssh_provisioning:
 #	- ip_address = "192.168.56.101"
@@ -15,4 +14,5 @@ sakura("")
 #	- ssh_user = "sakura"
 #	- ssh_port = 22
 #	- target_path = "/tmp/"
+
 

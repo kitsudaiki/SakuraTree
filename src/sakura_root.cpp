@@ -30,6 +30,8 @@
 
 #include <libKitsunemimiSakuraNetwork/sakura_network.h>
 #include <libKitsunemimiSakuraParser/sakura_parsing.h>
+#include <libKitsunemimiSakuraParser/sakura_items.h>
+
 #include <libKitsunemimiJinja2/jinja2_converter.h>
 #include <libKitsunemimiJson/json_item.h>
 #include <libKitsunemimiCommon/common_methods/string_methods.h>
@@ -107,34 +109,28 @@ bool
 SakuraRoot::startProcess(const std::string &inputPath,
                          const std::string &seedPath,
                          const DataMap &initialValues,
-                         const std::string &serverAddress,
-                         const uint16_t serverPort,
                          const std::string &initialTreeId)
 {
     // load predefined trees
     if(m_treeHandler->loadPredefinedSubtrees() == false)
     {
-        LOG_ERROR("failed to loag predefined trees");
+        LOG_ERROR("failed to load predefined trees");
         return false;
     }
 
     // start server
-    if(serverAddress != ""
-            && serverPort != 0)
+    if(m_networking->createServer(1337) == false)
     {
-        if(m_networking->createServer(serverPort) == false)
-        {
-            LOG_ERROR("failed to create server on port " + std::to_string(serverPort));
-            return false;
-        }
+        LOG_ERROR("failed to create server on port " + std::to_string(1337));
+        return false;
     }
 
     // process seed
     if(seedPath != "")
     {
-        if(processSeed(seedPath, serverAddress, serverPort) == false)
+        if(processSeed(seedPath) == false)
         {
-            LOG_ERROR("failed prcess seed");
+            LOG_ERROR("failed process seed");
             return false;
         }
     }
@@ -401,26 +397,33 @@ SakuraRoot::runProcess(SakuraItem* item,
  * @return
  */
 bool
-SakuraRoot::processSeed(const std::string &seedPath,
-                        const std::string &serverAddress,
-                        const uint16_t serverPort)
+SakuraRoot::processSeed(const std::string &seedPath)
 {
-    TreeItem* seedItem = prepareSeed(seedPath,
-                                       m_executablePath,
-                                       serverAddress,
-                                       serverPort);
+    SeedItem* seedItem = prepareSeed(seedPath);
 
     if(seedItem == nullptr)
     {
-        LOG_ERROR("failed to loag predefined trees");
+        LOG_ERROR("failed to load seed-file " + seedPath);
         return false;
     }
 
-    /*if(runProcess(seedItem, initialValues) == false)
+    for(SeedPart* part : seedItem->childs)
     {
-        LOG_ERROR(m_errorOutput.toString());
-        return false;
-    }*/
+        std::vector<std::string> tags;
+
+        // get and convert tags inside the part
+        DataArray* unconvertedTags = dynamic_cast<DataArray*>(part->values.get("tags"));
+        if(unconvertedTags != nullptr)
+        {
+            for(uint32_t i = 0; i < unconvertedTags->size(); i++)
+            {
+                tags.push_back(unconvertedTags->get(i)->toString());
+            }
+        }
+
+        // register host based on the information
+        m_networking->registerHost(part->id, tags);
+    }
 
     // wait until all hosts ready or until timeout after 10 seconds
     uint32_t maxTries = 100;
@@ -450,11 +453,8 @@ SakuraRoot::processSeed(const std::string &seedPath,
  * @param port
  * @return
  */
-TreeItem*
-SakuraRoot::prepareSeed(const std::string &seedPath,
-                        const std::string &executablePath,
-                        const std::string &serverAddress,
-                        const uint16_t port)
+SeedItem*
+SakuraRoot::prepareSeed(const std::string &seedPath)
 {
     Kitsunemimi::Sakura::SakuraParsing sakuraParsing(m_enableDebug);
 
@@ -465,16 +465,15 @@ SakuraRoot::prepareSeed(const std::string &seedPath,
     // parse seed-file
     std::string errorMessage = "";
     SakuraItem* seed = sakuraParsing.parseSingleFile(relPath, parent, errorMessage);
-    if(seed == nullptr) {
+
+    // check parser-result
+    if(seed == nullptr
+           || seed->getType() != SakuraItem::SEED_ITEM )
+    {
         return nullptr;
     }
 
-    // add additional information to the parsed content
-    //seed->values.insert("sakura_server_address", new DataValue(serverAddress), true);
-    //seed->values.insert("sakura_server_port", new DataValue(port), true);
-    //seed->values.insert("sakura_executablePath", new DataValue(executablePath), true);
-
-    return static_cast<TreeItem*>(seed->copy());
+    return static_cast<SeedItem*>(seed);
 }
 
 /**

@@ -144,7 +144,7 @@ TreeHandler::loadPredefinedSubtrees()
     Kitsunemimi::replaceSubstring(provisioningSubtree, "\\n", "\n");
 
     std::string errorMessage = "";
-    TreeItem* parsedItem = m_parser->parseString(provisioningSubtree, errorMessage);
+    SakuraItem* parsedItem = m_parser->parseString(provisioningSubtree, errorMessage);
     if(parsedItem == nullptr)
     {
         LOG_ERROR(errorMessage);
@@ -152,7 +152,8 @@ TreeHandler::loadPredefinedSubtrees()
     }
 
     // add new item to the map
-    m_predefinedTrees.insert(std::make_pair("sakura_provisioning", parsedItem));
+    TreeItem* treeItem = static_cast<TreeItem*>(parsedItem);
+    m_predefinedTrees.insert(std::make_pair("sakura_provisioning", treeItem));
 
     return true;
 }

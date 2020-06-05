@@ -65,6 +65,8 @@ using Kitsunemimi::Sakura::ValueItem;
 using Kitsunemimi::Sakura::ValueItemMap;
 using Kitsunemimi::Sakura::BlossomGroupItem;
 using Kitsunemimi::Sakura::TreeItem;
+using Kitsunemimi::Sakura::SeedItem;
+using Kitsunemimi::Sakura::SeedPart;
 using Kitsunemimi::Sakura::SubtreeItem;
 using Kitsunemimi::Sakura::SeedTrigger;
 using Kitsunemimi::Sakura::IfBranching;

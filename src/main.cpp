@@ -129,8 +129,6 @@ int main(int argc, char *argv[])
     root->startProcess(inputPath,
                        seedPath,
                        itemInputValues,
-                       listenAddress,
-                       listenPort,
                        initialTreeId);
     #endif
 
