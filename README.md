@@ -168,14 +168,13 @@ if(packages.size() == 2)
     - file_path = path
     - group = "DEFAULT"
     - entry = "asdf"
-
     -> read:
         - blossom_output >> test_output
     -> set:
         - value = "123456789"
 
-    print("print init-file-output")
-    - first_try = test_output
+    print("print ini-file-output")
+    - value = test_output
 }
 ```
 
