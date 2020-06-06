@@ -9,6 +9,11 @@ LIBS += -L../libKitsunemimiArgs/src/debug -lKitsunemimiArgs
 LIBS += -L../libKitsunemimiArgs/src/release -lKitsunemimiArgs
 INCLUDEPATH += ../libKitsunemimiArgs/include
 
+LIBS += -L../libKitsunemimiConfig/src -lKitsunemimiConfig
+LIBS += -L../libKitsunemimiConfig/src/debug -lKitsunemimiConfig
+LIBS += -L../libKitsunemimiConfig/src/release -lKitsunemimiConfig
+INCLUDEPATH += ../libKitsunemimiConfig/include
+
 LIBS += -L../libKitsunemimiSakuraNetwork/src -lKitsunemimiSakuraNetwork
 LIBS += -L../libKitsunemimiSakuraNetwork/src/debug -lKitsunemimiSakuraNetwork
 LIBS += -L../libKitsunemimiSakuraNetwork/src/release -lKitsunemimiSakuraNetwork
@@ -121,7 +126,8 @@ HEADERS += \
     src/processing/blossoms/special/item_update_blossom.h \
     src/tree_handler.h \
     src/processing/blossoms/special/register_node_blossom.h \
-    src/args.h
+    src/args.h \
+    src/config.h
 
 SOURCES += \
     src/processing/blossoms/files/ini_files/ini_delete_entry_blossom.cpp \

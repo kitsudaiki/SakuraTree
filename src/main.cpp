@@ -22,6 +22,7 @@
 
 #include <common.h>
 #include <args.h>
+#include <config.h>
 #include <sakura_root.h>
 #include <tests/run_unit_tests.h>
 
@@ -44,12 +45,17 @@ int main(int argc, char *argv[])
     Kitsunemimi::Args::ArgParser argParser;
     KyoukoMind::registerArguments(argParser);
 
+    // load config definition
+    SakuraTree::registerConfigs();
+
     // parse cli-input
     if(argParser.parse(argc, argv) == false) {
         return 1;
     }
 
     bool enableDebug = false;
+    bool useConfigFile = false;
+
     std::string initialTreeId = "";
     std::string inputPath = "";
 
@@ -64,6 +70,11 @@ int main(int argc, char *argv[])
     {
         enableDebug = true;
         Kitsunemimi::Persistence::setDebugFlag(true);
+    }
+
+    // check if config-file should be used
+    if(argParser.wasSet("use-config")) {
+        useConfigFile = true;
     }
 
     // initial tree-id
@@ -126,10 +137,19 @@ int main(int argc, char *argv[])
 
     SakuraTree::SakuraRoot* root = new SakuraTree::SakuraRoot(std::string(argv[0]),
                                                               enableDebug);
-    root->startProcess(inputPath,
-                       seedPath,
-                       itemInputValues,
-                       initialTreeId);
+
+    if(useConfigFile)
+    {
+        root->startProcess(inputPath);
+    }
+    else
+    {
+        root->startProcess(inputPath,
+                           seedPath,
+                           itemInputValues,
+                           initialTreeId);
+    }
+
     #endif
 
     return 0;

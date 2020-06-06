@@ -34,6 +34,7 @@
 
 #include <libKitsunemimiJinja2/jinja2_converter.h>
 #include <libKitsunemimiJson/json_item.h>
+#include <libKitsunemimiConfig/config_handler.h>
 #include <libKitsunemimiCommon/common_methods/string_methods.h>
 
 #include <libKitsunemimiPersistence/logger/logger.h>
@@ -92,6 +93,23 @@ SakuraRoot::~SakuraRoot()
         delete m_rootThread;
         m_rootThread = nullptr;
     }
+}
+
+/**
+ * @brief SakuraRoot::startProcess
+ * @param configFilePath
+ * @return
+ */
+bool
+SakuraRoot::startProcess(const std::string &configFilePath)
+{
+    Kitsunemimi::Config::ConfigHandler configHandler;
+    bool success = configHandler.initConfig(configFilePath);
+    if(success == false) {
+        return false;
+    }
+
+    return true;
 }
 
 /**
@@ -468,7 +486,7 @@ SakuraRoot::prepareSeed(const std::string &seedPath)
 
     // check parser-result
     if(seed == nullptr
-           || seed->getType() != SakuraItem::SEED_ITEM )
+           || seed->getType() != SakuraItem::SEED_ITEM)
     {
         return nullptr;
     }

@@ -57,6 +57,7 @@ public:
     ~SakuraRoot();
 
     // start processing
+    bool startProcess(const std::string &configFilePath);
     bool startProcess(const std::string &inputPath,
                       const std::string &seedPath,
                       const DataMap &initialValues,
