@@ -30,6 +30,8 @@ function build_kitsune_lib_repo () {
     # copy build-result and include-files into the result-directory
     cp -d $REPO_DIR/src/$REPO_NAME.so.* $RESULT_DIR/
     cp -r $PARENT_DIR/$REPO_NAME/include $RESULT_DIR/
+    ls -l $RESULT_DIR/include/
+    ls -l $RESULT_DIR
 }
 
 function get_required_kitsune_lib_repo () {
@@ -48,24 +50,49 @@ function get_required_kitsune_lib_repo () {
 #-----------------------------------------------------------------------------------------------------------------
 
 get_required_kitsune_lib_repo "libKitsunemimiCommon" "master" 4
-
+echo ""
+echo "###########################################################################################################"
+echo ""
 get_required_kitsune_lib_repo "libKitsunemimiPersistence" "master" 4
-
+echo ""
+echo "###########################################################################################################"
+echo ""
 get_required_kitsune_lib_repo "libKitsunemimiArgs" "master" 4
-
+echo ""
+echo "###########################################################################################################"
+echo ""
 get_required_kitsune_lib_repo "libKitsunemimiNetwork" "v0.6.2" 4
-
+echo ""
+echo "###########################################################################################################"
+echo ""
 get_required_kitsune_lib_repo "libKitsunemimiJson" "0.10.2" 1
-
+echo ""
+echo "###########################################################################################################"
+echo ""
 get_required_kitsune_lib_repo "libKitsunemimiIni" "0.4.3" 1
-
+echo ""
+echo "###########################################################################################################"
+echo ""
+get_required_kitsune_lib_repo "libKitsunemimiConfig" "master" 4
+echo ""
+echo "###########################################################################################################"
+echo ""
 get_required_kitsune_lib_repo "libKitsunemimiJinja2" "0.7.2" 1
-
+echo ""
+echo "###########################################################################################################"
+echo ""
 get_required_kitsune_lib_repo "libKitsunemimiSakuraParser" "fix-multinode-feature" 1
-
+echo ""
+echo "###########################################################################################################"
+echo ""
 get_required_kitsune_lib_repo "libKitsunemimiProjectNetwork" "master" 4
-
+echo ""
+echo "###########################################################################################################"
+echo ""
 get_required_kitsune_lib_repo "libKitsunemimiSakuraNetwork" "master" 4
+echo ""
+echo "###########################################################################################################"
+echo ""
 
 #-----------------------------------------------------------------------------------------------------------------
 

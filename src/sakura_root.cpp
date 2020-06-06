@@ -136,16 +136,16 @@ SakuraRoot::startProcess(const std::string &inputPath,
         return false;
     }
 
-    // start server
-    if(m_networking->createServer(1337) == false)
-    {
-        LOG_ERROR("failed to create server on port " + std::to_string(1337));
-        return false;
-    }
-
     // process seed
     if(seedPath != "")
     {
+        // start server
+        if(m_networking->createServer(1337) == false)
+        {
+            LOG_ERROR("failed to create server on port " + std::to_string(1337));
+            return false;
+        }
+
         if(processSeed(seedPath) == false)
         {
             LOG_ERROR("failed process seed");
