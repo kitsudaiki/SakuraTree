@@ -1,5 +1,5 @@
 ["sakura ssh provisioning"]
-- source_path = "{{}}"
+- executable_path = "{{}}"
 - target_path = "{{}}"
 - server_port = "{{}}"
 - server_ip_address = "{{}}"
@@ -40,7 +40,7 @@ ssh("prepare remote-node")
     - source_path = ini_file_path
     - target_path = target_path
 -> scp:
-    - source_path = source_path
+    - source_path = executable_path
     - target_path = target_path
 -> file_create:
     - file_path = "/etc/systemd/system/sakura_tree.service"

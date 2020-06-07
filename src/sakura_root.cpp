@@ -22,6 +22,7 @@
 
 #include "sakura_root.h"
 #include <tree_handler.h>
+#include <config.h>
 
 #include <processing/common/item_methods.h>
 #include <processing/sakura_thread.h>
@@ -103,10 +104,25 @@ SakuraRoot::~SakuraRoot()
 bool
 SakuraRoot::startProcess(const std::string &configFilePath)
 {
-    Kitsunemimi::Config::ConfigHandler configHandler;
-    bool success = configHandler.initConfig(configFilePath);
+    bool success = Kitsunemimi::Config::initConfig(configFilePath);
     if(success == false) {
         return false;
+    }
+
+    // load config definition
+    SakuraTree::registerConfigs();
+
+    const std::string address = GET_STRING_CONFIG("server", "server_address", success);
+    // TODO: log-error
+    assert(success);
+    const uint16_t port = static_cast<uint16_t>(GET_INT_CONFIG("server", "server_port", success));
+    // TODO: log-error
+    assert(success);
+    m_networking->createClientConnection(address, port);
+
+    // TODO: better solution
+    while(true) {
+        sleep(10);
     }
 
     return true;
@@ -432,7 +448,7 @@ SakuraRoot::processSeed(const std::string &seedPath,
     assert(provisioningTree != nullptr);
 
     DataMap values;
-    values.insert("source_path", new DataValue(m_executablePath), true);
+    values.insert("executable_path", new DataValue(m_executablePath), true);
     values.insert("server_port", new DataValue(serverPort), true);
     values.insert("server_ip_address", new DataValue(serverAddress), true);
 

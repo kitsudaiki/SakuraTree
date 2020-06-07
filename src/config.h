@@ -1,6 +1,7 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 
+#include <common.h>
 #include <libKitsunemimiConfig/config_handler.h>
 
 namespace SakuraTree
@@ -9,8 +10,8 @@ namespace SakuraTree
 void
 registerConfigs()
 {
-    REGISTER_INT_CONFIG("Server", "port", 1337);
-    REGISTER_STRING_CONFIG("Server", "address", "127.0.0.1");
+    assert(REGISTER_INT_CONFIG("server", "server_port", 1337));
+    assert(REGISTER_STRING_CONFIG("server", "server_address", "127.0.0.1"));
 }
 
 }

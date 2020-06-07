@@ -22,7 +22,6 @@
 
 #include <common.h>
 #include <args.h>
-#include <config.h>
 #include <sakura_root.h>
 #include <tests/run_unit_tests.h>
 
@@ -44,9 +43,6 @@ int main(int argc, char *argv[])
     // create and init argument-parser
     Kitsunemimi::Args::ArgParser argParser;
     KyoukoMind::registerArguments(argParser);
-
-    // load config definition
-    SakuraTree::registerConfigs();
 
     // parse cli-input
     if(argParser.parse(argc, argv) == false) {
