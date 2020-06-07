@@ -109,7 +109,19 @@ TreeHandler::getConvertedTree(const std::string &rootPath,
 {
     if(initialTreeId != "")
     {
-        return m_garden.getTreeById(initialTreeId);
+        TreeItem* tree = m_garden.getTreeById(initialTreeId);
+
+        if(tree == nullptr)
+        {
+            std::map<std::string, TreeItem*>::const_iterator it;
+            it = m_predefinedTrees.find(relativePath);
+
+            if(it != m_predefinedTrees.end()) {
+                return it->second;
+            }
+        }
+
+        return tree;
     }
     else if(rootPath == "")
     {

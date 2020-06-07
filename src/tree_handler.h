@@ -29,7 +29,6 @@ public:
     SakuraItem* getConvertedTree(const std::string &rootPath,
                                  const std::string &relativePath,
                                  const std::string &initialTreeId = "");
-    const JsonItem getParsedTree(const std::string &treeId);
 
     bool loadPredefinedSubtrees();
 
