@@ -102,7 +102,7 @@ TreeHandler::getRelativePath(const std::string &blossomFilePath,
  * @param treeId
  * @return
  */
-SakuraItem*
+TreeItem*
 TreeHandler::getConvertedTree(const std::string &rootPath,
                               const std::string &relativePath,
                               const std::string &initialTreeId)
@@ -114,7 +114,7 @@ TreeHandler::getConvertedTree(const std::string &rootPath,
         if(tree == nullptr)
         {
             std::map<std::string, TreeItem*>::const_iterator it;
-            it = m_predefinedTrees.find(relativePath);
+            it = m_predefinedTrees.find(initialTreeId);
 
             if(it != m_predefinedTrees.end()) {
                 return it->second;

@@ -26,9 +26,9 @@ public:
                                       const std::string &blossomInternalRelPath,
                                       const std::string &addition = "");
 
-    SakuraItem* getConvertedTree(const std::string &rootPath,
-                                 const std::string &relativePath,
-                                 const std::string &initialTreeId = "");
+    TreeItem* getConvertedTree(const std::string &rootPath,
+                               const std::string &relativePath,
+                               const std::string &initialTreeId = "");
 
     bool loadPredefinedSubtrees();
 

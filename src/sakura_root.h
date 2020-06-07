@@ -61,7 +61,9 @@ public:
     bool startProcess(const std::string &inputPath,
                       const std::string &seedPath,
                       const DataMap &initialValues,
-                      const std::string &initialTreeId = "");
+                      const std::string &initialTreeId = "",
+                      const std::string &serverAddress = "",
+                      const uint16_t serverPort = 1337);
     bool startSubtreeProcess(const std::string &relativePath,
                              const std::string &values,
                              Kitsunemimi::Project::Session* session,
@@ -109,7 +111,9 @@ private:
 
     bool runProcess(SakuraItem* item,
                     const DataMap &initialValues);
-    bool processSeed(const std::string &seedPath);
+    bool processSeed(const std::string &seedPath,
+                     const std::string &serverAddress,
+                     const uint16_t serverPort);
     SeedItem* prepareSeed(const std::string &seedPath);
     void shareAllTrees();
 };

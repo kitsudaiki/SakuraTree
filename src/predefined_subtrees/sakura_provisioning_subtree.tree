@@ -10,6 +10,14 @@
 - ini_file_path = "/tmp/sakura_tree.init"
 
 
+cmd("initial create of ini-file")
+- command = "echo '"
+            "[server]\n"
+            "server_address = 127.0.0.1\n"
+            "server_port = 1337\n"
+            "' > {{ini_file_path}}"
+
+
 ini_file("create config-file")
 - file_path = ini_file_path
 - group = "server"
