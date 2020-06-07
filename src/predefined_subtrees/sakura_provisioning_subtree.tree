@@ -1,25 +1,54 @@
-["sakura provisioning"]
-- source_path = ""
-- target_path = ""
+["sakura ssh provisioning"]
+- source_path = "{{}}"
+- target_path = "{{}}"
 - server_port = "{{}}"
-- ip_address = "{{}}"
+- server_ip_address = "{{}}"
+- client_ip_address = "{{}}"
 - ssh_user = "{{}}"
 - ssh_port = "{{}}"
 - ssh_key_path = "{{}}"
+- ini_file_path = "/tmp/sakura_tree.init"
+
+
+ini_file("create config-file")
+- file_path = ini_file_path
+- group = "server"
+-> set:
+    - entry = "server_address"
+    - value = server_ip_address
+-> set:
+    - entry = "server_port"
+    - value = server_port
+
 
 ssh("prepare remote-node")
-- address = ip_address
+- address = client_ip_address
 - user = ssh_user
 - port = ssh_port
 - ssh_key = ssh_key_path
 -> cmd:
     - command = "sudo systemctl stop sakura_tree"
 -> scp:
+    - source_path = ini_file_path
+    - target_path = target_path
+-> scp:
     - source_path = source_path
     - target_path = target_path
 -> file_create:
     - file_path = "/etc/systemd/system/sakura_tree.service"
-    - file_content = "[Unit]\nDescription=SakuraTree-Test\nStartLimitIntervalSec=0\n\n[Service]\nType=simple\nRestart=always\nRestartSec=1\nUser={{ssh_provisioning.ssh_user}}\nExecStart={{ssh_provisioning.target_path}}SakuraTree --use-config {{config_path}}\n\n[Install]\nWantedBy=multi-user.target\n"
+    - file_content = "[Unit]\n"
+                     "Description=SakuraTree-Test\n"
+                     "StartLimitIntervalSec=0\n"
+                     "\n"
+                     "[Service]\n"
+                     "Type=simple\n"
+                     "Restart=always\n"
+                     "RestartSec=1\n"
+                     "User={{ssh_user}}\n"
+                     "ExecStart={{target_path}}/SakuraTree --use-config {{target_path}}/sakura_tree.init\n"
+                     "\n"
+                     "[Install]\n"
+                     "WantedBy=multi-user.target\n"
 -> cmd:
     - command = "sudo systemctl daemon-reload"
 -> cmd:
