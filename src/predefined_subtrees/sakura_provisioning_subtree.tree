@@ -12,6 +12,9 @@
 
 cmd("initial create of ini-file")
 - command = "echo '"
+            "[DEFAULT]\n"
+            "debug = true\n"
+            "\n"
             "[server]\n"
             "server_address = 127.0.0.1\n"
             "server_port = 1337\n"

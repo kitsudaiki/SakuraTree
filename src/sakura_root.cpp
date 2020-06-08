@@ -77,7 +77,7 @@ SakuraRoot::SakuraRoot(const std::string &executablePath,
 
     m_networking = new Kitsunemimi::Sakura::SakuraNetwork(this,
                                                           &sessionCallback,
-                                                          &treeTransferCallback,
+                                                          &objectTransferCallback,
                                                           &seedTriggerCallback,
                                                           &blossomOutputCallback);
 }
@@ -111,6 +111,10 @@ SakuraRoot::startProcess(const std::string &configFilePath)
 
     // load config definition
     SakuraTree::registerConfigs();
+
+    const bool debug = GET_BOOL_CONFIG("DEFAULT", "debug", success);
+    Kitsunemimi::Persistence::initFileLogger("/tmp/", "SakuraTree_log", debug);
+    Kitsunemimi::Persistence::setDebugFlag(debug);
 
     const std::string address = GET_STRING_CONFIG("server", "server_address", success);
     // TODO: log-error
@@ -347,7 +351,8 @@ SakuraRoot::sendTreefile(const std::string &address,
                          const std::string &subtree,
                          const std::string &values)
 {
-    return m_networking->sendTreePlanToHost(address, subtree, values);
+    return true;
+    //return m_networking->sendDataToHost(address, subtree, values);
 }
 
 /**
@@ -540,13 +545,7 @@ SakuraRoot::prepareSeed(const std::string &seedPath)
 void
 SakuraRoot::shareAllTrees()
 {
-    std::map<std::string, TreeItem*>::const_iterator it;
-    for(it = m_treeHandler->m_garden.trees.begin();
-        it != m_treeHandler->m_garden.trees.end();
-        it++)
-    {
-        m_networking->sendTreePlanToAll(it->first, it->second->unparsedConent);
-    }
+    m_networking->sendDataToAll(m_treeHandler->m_garden);
 }
 
 }

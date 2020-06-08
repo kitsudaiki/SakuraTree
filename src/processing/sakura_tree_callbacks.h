@@ -25,27 +25,80 @@
 
 #include <sakura_root.h>
 #include <tree_handler.h>
+
 #include <libKitsunemimiProjectNetwork/session.h>
+#include <libKitsunemimiSakuraParser/sakura_parsing.h>
+#include <libKitsunemimiCommon/buffer/data_buffer.h>
+#include <libKitsunemimiPersistence/logger/logger.h>
 
 namespace SakuraTree
 {
 
-void treeTransferCallback(void* target,
-                          const std::string treeId,
-                          const std::string tree)
+enum objectType
+{
+    UNDEFINED_OBJECT_TYPE = 0,
+    TREE_OBJECT_TYPE = 1,
+    FILE_OBJECT_TYPE = 2,
+    TEMPLATE_OBJECT_TYPE = 3,
+};
+
+void objectTransferCallback(void* target,
+                            const uint8_t objectType,
+                            const std::string path,
+                            const void* data,
+                            const uint64_t dataSize)
 {
     SakuraRoot* rootClass = static_cast<SakuraRoot*>(target);
-    rootClass->m_treeHandler->addTree(treeId, tree);
+
+    if(objectType == TREE_OBJECT_TYPE)
+    {
+        LOG_DEBUG("receive tree-object with relative path " + path);
+
+        Kitsunemimi::Sakura::SakuraParsing parser;
+        const std::string content(static_cast<const char*>(data), dataSize);
+
+        std::string errorMessage = "";
+        SakuraItem* parsedItem = parser.parseString(content, errorMessage)->copy();
+
+        TreeItem* parsedTree = dynamic_cast<TreeItem*>(parsedItem);
+        parsedTree->relativePath = path;
+        parsedTree->rootPath = "/tmp";
+        parsedTree->unparsedConent = content;
+
+        rootClass->m_treeHandler->m_garden.trees.insert(std::make_pair(path, parsedTree));
+    }
+
+    if(objectType == FILE_OBJECT_TYPE)
+    {
+        LOG_DEBUG("receive file-object with relative path " + path);
+
+        const uint32_t numberOfBlocks = static_cast<uint32_t>((dataSize / 4096) + 1);
+        Kitsunemimi::DataBuffer* buffer = new Kitsunemimi::DataBuffer(numberOfBlocks);
+        memcpy(buffer->data, data, dataSize);
+        buffer->bufferPosition = dataSize;
+
+        rootClass->m_treeHandler->m_garden.files.insert(std::make_pair(path, buffer));
+    }
+
+    if(objectType == TEMPLATE_OBJECT_TYPE)
+    {
+        LOG_DEBUG("receive template-object with relative path " + path);
+
+        const std::string content(static_cast<const char*>(data), dataSize);
+        rootClass->m_treeHandler->m_garden.templates.insert(std::make_pair(path, content));
+    }
 }
 
 void seedTriggerCallback(void* target,
-                         const std::string treeId,
+                         const std::string path,
                          const std::string values,
                          Kitsunemimi::Project::Session* session,
                          const uint64_t blockerId)
 {
+    LOG_DEBUG("receive seed-trigger with relative path " + path);
+
     SakuraRoot* rootClass = static_cast<SakuraRoot*>(target);
-    rootClass->startSubtreeProcess(treeId, values, session, blockerId);
+    rootClass->startSubtreeProcess(path, values, session, blockerId);
 }
 
 void blossomOutputCallback(void* target,
