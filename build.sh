@@ -81,7 +81,7 @@ get_required_kitsune_lib_repo "libKitsunemimiJinja2" "0.7.2" 1
 echo ""
 echo "###########################################################################################################"
 echo ""
-get_required_kitsune_lib_repo "libKitsunemimiSakuraParser" "fix-multinode-feature" 1
+get_required_kitsune_lib_repo "libKitsunemimiSakuraParser" "master" 1
 echo ""
 echo "###########################################################################################################"
 echo ""
@@ -89,7 +89,7 @@ get_required_kitsune_lib_repo "libKitsunemimiProjectNetwork" "master" 4
 echo ""
 echo "###########################################################################################################"
 echo ""
-get_required_kitsune_lib_repo "libKitsunemimiSakuraNetwork" "fix-multinode-feature" 4
+get_required_kitsune_lib_repo "libKitsunemimiSakuraNetwork" "master" 4
 echo ""
 echo "###########################################################################################################"
 echo ""
