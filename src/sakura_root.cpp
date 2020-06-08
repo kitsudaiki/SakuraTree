@@ -126,7 +126,7 @@ SakuraRoot::startProcess(const std::string &configFilePath)
 
     // TODO: better solution
     while(true) {
-        sleep(10);
+        sleep(1);
     }
 
     return true;
@@ -197,6 +197,8 @@ SakuraRoot::startProcess(const std::string &inputPath,
         tree = m_treeHandler->getConvertedTree(inputPath, "", initialTreeId);
     }
 
+    shareAllTrees();
+
     if(tree == nullptr)
     {
         std::string errorMessage = "No tree found for the input-path " + inputPath;
@@ -214,6 +216,8 @@ SakuraRoot::startProcess(const std::string &inputPath,
     }
 
     LOG_INFO("finish");
+
+    m_networking->closeAllSessions();
 
     return true;
 }
@@ -503,8 +507,6 @@ SakuraRoot::processSeed(const std::string &seedPath,
     if(maxTries == 0) {
         return false;
     }
-
-    shareAllTrees();
 
     return true;
 }
