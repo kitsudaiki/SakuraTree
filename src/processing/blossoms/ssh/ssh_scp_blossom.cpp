@@ -22,6 +22,8 @@
 
 #include "ssh_scp_blossom.h"
 
+#include <libKitsunemimiCommon/common_methods/string_methods.h>
+
 namespace SakuraTree
 {
 
@@ -86,6 +88,7 @@ SshScpBlossom::runTask(BlossomItem &blossomItem)
     programm += m_targetPath;
 
     LOG_DEBUG("run command: " + programm);
+    Kitsunemimi::replaceSubstring(programm, "\"", "\\\"");
     ProcessResult processResult = runSyncProcess(programm);
     blossomItem.success = processResult.success;
     blossomItem.outputMessage = processResult.processOutput;

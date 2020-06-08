@@ -170,11 +170,13 @@ SakuraThread::processSakuraItem(SakuraItem* sakuraItem, const std::string &fileP
         return processParallelPart(parallel, filePath);
     }
 
-    if(sakuraItem->getType() == SakuraItem::SEED_ITEM)
+    if(sakuraItem->getType() == SakuraItem::SEED_TRIGGER_ITEM)
     {
-        SeedItem* seedItem = dynamic_cast<SeedItem*>(sakuraItem);
-        return processSeed(seedItem);
+        SeedTrigger* seedItem = dynamic_cast<SeedTrigger*>(sakuraItem);
+        return processSeedTrigger(seedItem);
     }
+
+    // TODO: error-message
 
     return false;
 }
@@ -398,7 +400,7 @@ SakuraThread::processSubtree(SubtreeItem* subtreeItem, const std::string &filePa
  * @return true if successful, else false
  */
 bool
-SakuraThread::processSeed(SeedItem* seedItem)
+SakuraThread::processSeedTrigger(SeedTrigger* seedItem)
 {
     LOG_DEBUG("processSeed");
 

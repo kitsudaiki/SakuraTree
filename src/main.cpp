@@ -50,14 +50,14 @@ int main(int argc, char *argv[])
     }
 
     bool enableDebug = false;
+    bool useConfigFile = false;
+
     std::string initialTreeId = "";
     std::string inputPath = "";
 
     std::string seedPath = "";
     DataMap itemInputValues;
 
-    std::string serverAddress = "";
-    uint16_t serverPort = 0;
     std::string listenAddress = "";
     uint16_t listenPort = 0;
 
@@ -66,6 +66,11 @@ int main(int argc, char *argv[])
     {
         enableDebug = true;
         Kitsunemimi::Persistence::setDebugFlag(true);
+    }
+
+    // check if config-file should be used
+    if(argParser.wasSet("use-config")) {
+        useConfigFile = true;
     }
 
     // initial tree-id
@@ -78,8 +83,8 @@ int main(int argc, char *argv[])
     // seed-file
     if(argParser.wasSet("seed-path"))
     {
-        seedPath = argParser.getStringValues("seed")[0];
-        std::cout << "seed: " << seedPath << std::endl;
+        seedPath = argParser.getStringValues("seed-path")[0];
+        std::cout << "seeseed-pathd: " << seedPath << std::endl;
     }
 
     // input-values
@@ -97,20 +102,6 @@ int main(int argc, char *argv[])
             }
             itemInputValues.insert(pair.at(0), new DataValue(pair.at(1)));
         }
-    }
-
-    // server-address
-    if(argParser.wasSet("server-address"))
-    {
-        serverAddress = argParser.getStringValues("server-address")[0];
-        std::cout << "server-address: " << serverAddress << std::endl;
-    }
-
-    // server-port
-    if(argParser.wasSet("server-port"))
-    {
-        serverPort = static_cast<uint16_t>(argParser.getIntValues("server-port")[0]);
-        std::cout << "server-port: " << serverPort << std::endl;
     }
 
     // listen-address
@@ -140,28 +131,23 @@ int main(int argc, char *argv[])
                    "the directory have to contain a 'root.tree'-file.");
     }
 
-    if(argParser.wasSet("server-address")
-            && argParser.wasSet("server-port"))
-    {
-        SakuraTree::SakuraRoot* root = new SakuraTree::SakuraRoot(std::string(argv[0]), false);
-        root->startClientConnection(serverAddress, serverPort);
+    SakuraTree::SakuraRoot* root = new SakuraTree::SakuraRoot(std::string(argv[0]),
+                                                              enableDebug);
 
-        while(true)
-        {
-            sleep(10);
-        }
+    if(useConfigFile)
+    {
+        root->startProcess(inputPath);
     }
     else
     {
-        SakuraTree::SakuraRoot* root = new SakuraTree::SakuraRoot(std::string(argv[0]),
-                                                                  enableDebug);
         root->startProcess(inputPath,
                            seedPath,
                            itemInputValues,
+                           initialTreeId,
                            listenAddress,
-                           listenPort,
-                           initialTreeId);
+                           listenPort);
     }
+
     #endif
 
     return 0;

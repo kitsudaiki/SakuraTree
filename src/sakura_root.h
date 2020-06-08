@@ -57,12 +57,13 @@ public:
     ~SakuraRoot();
 
     // start processing
+    bool startProcess(const std::string &configFilePath);
     bool startProcess(const std::string &inputPath,
                       const std::string &seedPath,
                       const DataMap &initialValues,
-                      const std::string &serverAddress = "127.0.0.1",
-                      const uint16_t serverPort = 1337,
-                      const std::string &initialTreeId = "");
+                      const std::string &initialTreeId = "",
+                      const std::string &serverAddress = "",
+                      const uint16_t serverPort = 1337);
     bool startSubtreeProcess(const std::string &relativePath,
                              const std::string &values,
                              Kitsunemimi::Project::Session* session,
@@ -110,10 +111,10 @@ private:
 
     bool runProcess(SakuraItem* item,
                     const DataMap &initialValues);
-    SakuraItem* prepareSeed(const std::string &seedPath,
-                            const std::string &executablePath,
-                            const std::string &serverAddress,
-                            const uint16_t port);
+    bool processSeed(const std::string &seedPath,
+                     const std::string &serverAddress,
+                     const uint16_t serverPort);
+    SeedItem* prepareSeed(const std::string &seedPath);
     void shareAllTrees();
 };
 

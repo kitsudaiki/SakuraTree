@@ -22,6 +22,8 @@
 
 #include "ssh_cmd_create_file_blossom.h"
 
+#include <libKitsunemimiCommon/common_methods/string_methods.h>
+
 namespace SakuraTree
 {
 
@@ -87,13 +89,11 @@ SshCmdCreateFileBlossom::runTask(BlossomItem &blossomItem)
     programm += "\"";
 
     LOG_DEBUG("run command: " + programm);
+    Kitsunemimi::replaceSubstring(programm, "\"", "\\\"");
     ProcessResult processResult = runSyncProcess(programm);
     blossomItem.success = processResult.success;
     blossomItem.outputMessage = processResult.processOutput;
 
-    if(blossomItem.success == false) {
-        return;
-    }
 
     programm = "";
 
@@ -119,6 +119,7 @@ SshCmdCreateFileBlossom::runTask(BlossomItem &blossomItem)
     programm += "\"";
 
     LOG_DEBUG("run command: " + programm);
+    Kitsunemimi::replaceSubstring(programm, "\"", "\\\"");
     processResult = runSyncProcess(programm);
     blossomItem.success = processResult.success;
     blossomItem.outputMessage = processResult.processOutput;

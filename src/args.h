@@ -12,6 +12,10 @@ registerArguments(Kitsunemimi::Args::ArgParser &argparser)
     argparser.registerPlain("debug,d",
                             "Enable debug-output.");
 
+    argparser.registerPlain("use-config",
+                            "Use a config-file as input.");
+
+
     argparser.registerString("init-tree-id,t",
                              "Id of the initial tree-file within the choosen directory");
 
@@ -21,12 +25,6 @@ registerArguments(Kitsunemimi::Args::ArgParser &argparser)
     argparser.registerString("item-input,i",
                              "Key-value-pairs to override the initial values inside of the file");
 
-    // connect to server
-    argparser.registerString("server-address",
-                             "Address of the server");
-
-    argparser.registerInteger("server-port",
-                              "Port of the server");
 
     // listen
     argparser.registerString("listen-address",

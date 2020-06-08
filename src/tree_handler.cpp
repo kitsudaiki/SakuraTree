@@ -102,14 +102,26 @@ TreeHandler::getRelativePath(const std::string &blossomFilePath,
  * @param treeId
  * @return
  */
-SakuraItem*
+TreeItem*
 TreeHandler::getConvertedTree(const std::string &rootPath,
                               const std::string &relativePath,
                               const std::string &initialTreeId)
 {
     if(initialTreeId != "")
     {
-        return m_garden.getTreeById(initialTreeId);
+        TreeItem* tree = m_garden.getTreeById(initialTreeId);
+
+        if(tree == nullptr)
+        {
+            std::map<std::string, TreeItem*>::const_iterator it;
+            it = m_predefinedTrees.find(initialTreeId);
+
+            if(it != m_predefinedTrees.end()) {
+                return it->second;
+            }
+        }
+
+        return tree;
     }
     else if(rootPath == "")
     {
@@ -144,7 +156,7 @@ TreeHandler::loadPredefinedSubtrees()
     Kitsunemimi::replaceSubstring(provisioningSubtree, "\\n", "\n");
 
     std::string errorMessage = "";
-    TreeItem* parsedItem = m_parser->parseString(provisioningSubtree, errorMessage);
+    SakuraItem* parsedItem = m_parser->parseString(provisioningSubtree, errorMessage);
     if(parsedItem == nullptr)
     {
         LOG_ERROR(errorMessage);
@@ -152,7 +164,8 @@ TreeHandler::loadPredefinedSubtrees()
     }
 
     // add new item to the map
-    m_predefinedTrees.insert(std::make_pair("sakura_provisioning", parsedItem));
+    TreeItem* treeItem = static_cast<TreeItem*>(parsedItem);
+    m_predefinedTrees.insert(std::make_pair("sakura_provisioning", treeItem));
 
     return true;
 }
