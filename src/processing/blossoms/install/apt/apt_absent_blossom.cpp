@@ -41,6 +41,7 @@ AptAbsentBlossom::initBlossom(BlossomItem &blossomItem)
     DataArray* names = blossomItem.values.get("packages")->toArray();
     if(names != nullptr)
     {
+        // list of packages
         for(uint32_t i = 0; i < names->size(); i++)
         {
             m_packageNames.push_back(names->get(i)->toString());
@@ -48,9 +49,11 @@ AptAbsentBlossom::initBlossom(BlossomItem &blossomItem)
     }
     else
     {
+        // single package
         m_packageNames.push_back(blossomItem.values.get("packages")->toString());
     }
 
+    // check if there are at least one package defined
     if(m_packageNames.size() == 0)
     {
         blossomItem.success = false;
@@ -68,6 +71,7 @@ void
 AptAbsentBlossom::preCheck(BlossomItem &blossomItem)
 {
     m_packageNames = getInstalledPackages(m_packageNames);
+
     if(m_packageNames.size() == 0) {
         blossomItem.skip = true;
     }
@@ -81,15 +85,18 @@ AptAbsentBlossom::preCheck(BlossomItem &blossomItem)
 void
 AptAbsentBlossom::runTask(BlossomItem &blossomItem)
 {
+    // convert list into string
     std::string appendedList = "";
-    for(uint32_t i = 0; i < m_packageNames.size(); i++)
+    for(const std::string& packageName : m_packageNames)
     {
-        appendedList += m_packageNames.at(i) + " ";
+        appendedList += packageName + " ";
     }
 
+    // build command
     const std::string programm = "sudo apt-get remove -y " + appendedList;
-
     LOG_DEBUG("run command: " + programm);
+
+    // run command
     ProcessResult processResult = runSyncProcess(programm);
     blossomItem.success = processResult.success;
     blossomItem.outputMessage = processResult.processOutput;
@@ -101,17 +108,21 @@ AptAbsentBlossom::runTask(BlossomItem &blossomItem)
 void
 AptAbsentBlossom::postCheck(BlossomItem &blossomItem)
 {
+    // get list of still installed packages
     m_packageNames = getInstalledPackages(m_packageNames);
+
+    // if there are still some packages left, create an error
     if(m_packageNames.size() > 0)
     {
         std::string output = "couldn't remove following packages: \n";
-        for(uint32_t i = 0; i < m_packageNames.size(); i++)
+        for(const std::string& packageName : m_packageNames)
         {
-            output += m_packageNames.at(i) + "\n";
+            output += "    " + packageName + "\n";
         }
 
         blossomItem.success = false;
         blossomItem.outputMessage = output;
+
         return;
     }
 

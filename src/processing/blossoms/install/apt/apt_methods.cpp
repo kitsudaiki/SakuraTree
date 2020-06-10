@@ -44,9 +44,9 @@ isInstalled(const std::string &package)
     }
 
     const std::vector<std::string> currentInstalled = getInstalledPackages();
-    for(uint32_t i = 0; i < currentInstalled.size(); i++)
+    for(const std::string& installedPackage : currentInstalled)
     {
-        if(currentInstalled.at(i) == package) {
+        if(installedPackage == package) {
             return true;
         }
     }
@@ -65,9 +65,10 @@ const std::string
 createPackageList(const std::vector<std::string> &packageList)
 {
     std::string result = "";
-    for(uint32_t i = 0; i < packageList.size(); i++)
+
+    for(const std::string& package : packageList)
     {
-        result += " " + packageList.at(i);
+        result += " " + package;
     }
 
     return result;
@@ -87,13 +88,13 @@ getInstalledPackages(const std::vector<std::string> &packageList)
     std::vector<std::string> result;
     const std::vector<std::string> currentInstalled = getInstalledPackages();
 
-    for(uint32_t i = 0; i < packageList.size(); i++)
+    for(const std::string& package : packageList)
     {
-        for(uint32_t j = 0; j < currentInstalled.size(); j++)
+        for(const std::string& installedPackage : currentInstalled)
         {
-            if(currentInstalled.at(j) == packageList.at(i))
+            if(installedPackage == package)
             {
-                result.push_back(packageList.at(i));
+                result.push_back(package);
                 break;
             }
         }
@@ -115,12 +116,12 @@ getAbsendPackages(const std::vector<std::string> &packageList)
     std::vector<std::string> result;
     const std::vector<std::string> currentInstalled = getInstalledPackages();
 
-    for(uint32_t i = 0; i < packageList.size(); i++)
+    for(const std::string& package : packageList)
     {
         bool found = false;
-        for(uint32_t j = 0; j < currentInstalled.size(); j++)
+        for(const std::string& installedPackage : currentInstalled)
         {
-            if(currentInstalled.at(j) == packageList.at(i))
+            if(installedPackage == package)
             {
                 found = true;
                 break;
@@ -128,7 +129,7 @@ getAbsendPackages(const std::vector<std::string> &packageList)
         }
 
         if(found == false) {
-            result.push_back(packageList.at(i));
+            result.push_back(package);
         }
     }
 
@@ -146,10 +147,12 @@ getInstalledPackages()
 {
     const std::string command = "dpkg --list | grep ^ii  | awk ' {print \\$2} '";
     LOG_DEBUG("run command: " + command);
+
     const ProcessResult processResult = runSyncProcess(command);
     // TODO: check for error
     std::vector<std::string> result;
     Kitsunemimi::splitStringByDelimiter(result, processResult.processOutput, '\n');
+
     return result;
 }
 
