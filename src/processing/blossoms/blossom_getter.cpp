@@ -33,7 +33,6 @@
 #include <processing/blossoms/ssh/ssh_scp_blossom.h>
 #include <processing/blossoms/ssh/ssh_cmd_create_file_blossom.h>
 
-#include <processing/blossoms/special/sakura_copy_subtree_blossom.h>
 #include <processing/blossoms/special/print_blossom.h>
 #include <processing/blossoms/special/cmd_blossom.h>
 #include <processing/blossoms/special/assert_blossom.h>
@@ -106,9 +105,6 @@ getBlossom(const std::string blossomGroupType,
     {
         if(blossomType == "item_update") {
             return new ItemUpdateBlossom();
-        }
-        if(blossomType == "copy-subtree") {
-            return new SakuraCopySubtreeBlossom();
         }
         if(blossomType == "print") {
             return new PrintBlossom();

@@ -82,13 +82,6 @@ public:
                      const std::string &blossomName = "",
                      const std::string &blossomFilePath = "");
 
-    // network-interaction
-    bool sendTreefile(const std::string &address,
-                      const std::string &subtree,
-                      const std::string &values);
-    bool startClientConnection(const std::string &address,
-                               const int port);
-
     // output
     void printOutput(const BlossomItem &blossomItem);
     void printOutput(const std::string &output);

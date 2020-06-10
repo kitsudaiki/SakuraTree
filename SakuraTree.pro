@@ -89,7 +89,6 @@ HEADERS += \
     src/processing/blossoms/special/cmd_blossom.h \
     src/processing/blossoms/special/exit_blossom.h \
     src/processing/blossoms/special/print_blossom.h \
-    src/processing/blossoms/special/sakura_copy_subtree_blossom.h \
     src/processing/blossoms/ssh/ssh_cmd_blossom.h \
     src/processing/blossoms/ssh/ssh_cmd_create_file_blossom.h \
     src/processing/blossoms/ssh/ssh_scp_blossom.h \
@@ -148,7 +147,6 @@ SOURCES += \
     src/processing/blossoms/special/cmd_blossom.cpp \
     src/processing/blossoms/special/exit_blossom.cpp \
     src/processing/blossoms/special/print_blossom.cpp \
-    src/processing/blossoms/special/sakura_copy_subtree_blossom.cpp \
     src/processing/blossoms/ssh/ssh_cmd_blossom.cpp \
     src/processing/blossoms/ssh/ssh_cmd_create_file_blossom.cpp \
     src/processing/blossoms/ssh/ssh_scp_blossom.cpp \

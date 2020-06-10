@@ -351,35 +351,6 @@ SakuraRoot::createError(const std::string &errorLocation,
 }
 
 /**
- * @brief SakuraRoot::sendPlan
- * @param address
- * @param subtree
- * @param values
- * @return
- */
-bool
-SakuraRoot::sendTreefile(const std::string &address,
-                         const std::string &subtree,
-                         const std::string &values)
-{
-    return true;
-    //return m_networking->sendDataToHost(address, subtree, values);
-}
-
-/**
- * @brief SakuraRoot::startClientConnection
- * @param address
- * @param port
- * @return
- */
-bool
-SakuraRoot::startClientConnection(const std::string &address,
-                                  const int port)
-{
-    return m_networking->createClientConnection(address, static_cast<uint16_t>(port));
-}
-
-/**
  * @brief SakuraRoot::printOutput
  * @param blossomItem
  */
