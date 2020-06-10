@@ -90,14 +90,14 @@ int main(int argc, char *argv[])
     // input-values
     if(argParser.wasSet("item-input"))
     {
-        std::vector<std::string> envs = argParser.getStringValues("item-input");
-        for(uint32_t i = 0; i < envs.size(); i++)
+        std::vector<std::string> itemInput = argParser.getStringValues("item-input");
+        for(const std::string& item : itemInput)
         {
             std::vector<std::string> pair;
-            Kitsunemimi::splitStringByDelimiter(pair, envs.at(i), '=');
+            Kitsunemimi::splitStringByDelimiter(pair, item, '=');
             if(pair.size() != 2)
             {
-                std::cout << "'"<<envs.at(i)<<"' is not a valid pair"<<std::endl;
+                std::cout << "'" << item << "' is not a valid pair" << std::endl;
                 return 1;
             }
             itemInputValues.insert(pair.at(0), new DataValue(pair.at(1)));

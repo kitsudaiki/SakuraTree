@@ -48,7 +48,8 @@ IniDeleteEntryBlossom::initBlossom(BlossomItem &blossomItem)
     m_group = blossomItem.values.getValueAsString("group");
     m_entry = blossomItem.values.getValueAsString("entry");
 
-    blossomItem.success = true;}
+    blossomItem.success = true;
+}
 
 /**
  * @brief preCheck
@@ -111,6 +112,7 @@ IniDeleteEntryBlossom::runTask(BlossomItem &blossomItem)
 void
 IniDeleteEntryBlossom::postCheck(BlossomItem &blossomItem)
 {
+    // TODO:
     blossomItem.success = true;
 }
 

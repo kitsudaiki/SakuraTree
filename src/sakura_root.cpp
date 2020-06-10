@@ -160,7 +160,7 @@ SakuraRoot::startProcess(const std::string &inputPath,
         return false;
     }
 
-    // process seed
+    // process seed if defined
     if(seedPath != "")
     {
         // start server
@@ -170,7 +170,7 @@ SakuraRoot::startProcess(const std::string &inputPath,
             return false;
         }
 
-        // parse and process seed-file
+        // parse and process seed-file and prepare hosts, which are defined in the seed-file
         if(processSeed(seedPath,
                        serverAddress,
                        serverPort,
@@ -190,6 +190,7 @@ SakuraRoot::startProcess(const std::string &inputPath,
 
     SakuraItem* tree = nullptr;
 
+    // get initial tree-file
     if(Kitsunemimi::Persistence::isFile(inputPath))
     {
         tree = m_treeHandler->getTree(inputPath);
@@ -204,6 +205,8 @@ SakuraRoot::startProcess(const std::string &inputPath,
 
     }
 
+    // send all tree-files, templates and files too all hosts, which are defined within the
+    // seed-file
     m_networking->sendDataToAll(m_treeHandler->m_garden);
 
     if(tree == nullptr)
@@ -216,6 +219,7 @@ SakuraRoot::startProcess(const std::string &inputPath,
         return false;
     }
 
+    // process tree-file with initial values
     if(runProcess(tree, initialValues) == false)
     {
         LOG_ERROR(m_errorOutput.toString());
@@ -224,6 +228,7 @@ SakuraRoot::startProcess(const std::string &inputPath,
 
     LOG_INFO("finish");
 
+    // close connection to all hosts
     m_networking->closeAllSessions();
 
     return true;
@@ -347,6 +352,7 @@ SakuraRoot::createError(const std::string &errorLocation,
                     std::vector<std::string>{"blossom-file-path",
                                              blossomFilePath});
     }
+
     SakuraRoot::m_errorOutput.addRow(std::vector<std::string>{"", ""});
 }
 
@@ -417,6 +423,9 @@ SakuraRoot::runProcess(SakuraItem* item,
 /**
  * @brief SakuraRoot::processSeed
  * @param seedPath
+ * @param serverAddress
+ * @param serverPort
+ * @param errorMessage
  * @return
  */
 bool
@@ -425,6 +434,7 @@ SakuraRoot::processSeed(const std::string &seedPath,
                         const uint16_t serverPort,
                         std::string &errorMessage)
 {
+    // parse seed
     SeedItem* seedItem = prepareSeed(seedPath, errorMessage);
     if(seedItem == nullptr)
     {
@@ -432,14 +442,17 @@ SakuraRoot::processSeed(const std::string &seedPath,
         return false;
     }
 
+    // get predefined provisioning tree
     TreeItem* provisioningTree = m_treeHandler->getTreeById("sakura_provisioning");
     assert(provisioningTree != nullptr);
 
+    // prepare values for provisioning subtree
     DataMap values;
     values.insert("executable_path", new DataValue(m_executablePath), true);
     values.insert("server_port", new DataValue(serverPort), true);
     values.insert("server_ip_address", new DataValue(serverAddress), true);
 
+    // iterate of all hosts, which are defined within the seed-file
     for(SeedPart* part : seedItem->childs)
     {
         std::vector<std::string> tags;
@@ -483,6 +496,7 @@ SakuraRoot::processSeed(const std::string &seedPath,
         maxTries--;
     }
 
+    // if timeout then fail
     if(maxTries == 0) {
         return false;
     }

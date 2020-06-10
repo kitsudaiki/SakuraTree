@@ -48,77 +48,80 @@ getProcessedItem(ValueItem &valueItem,
                  DataMap &insertValues,
                  std::string &errorMessage)
 {
-    for(uint32_t i = 0; i < valueItem.functions.size(); i++)
+    for(const Kitsunemimi::Sakura::FunctionItem& functionItem : valueItem.functions)
     {
         if(valueItem.item == nullptr) {
             return false;
         }
 
-        const std::string type = valueItem.functions.at(i).type;
+        const std::string type = functionItem.type;
 
-        //==========================================================================================
+        //------------------------------------------------------------------------------------------
         if(type == "get")
         {
-            if(valueItem.functions.at(i).arguments.size() != 1) {
+            if(functionItem.arguments.size() != 1) {
                 return false;
             }
 
-            ValueItem arg = valueItem.functions.at(i).arguments.at(0);
+            ValueItem arg = functionItem.arguments.at(0);
             if(fillValueItem(arg, insertValues, errorMessage))
             {
                 valueItem.item = getValue(valueItem.item,
                                           arg.item->toValue(),
                                           errorMessage);
             }
+
             continue;
         }
-        //==========================================================================================
+        //------------------------------------------------------------------------------------------
         if(type == "split")
         {
-            if(valueItem.functions.at(i).arguments.size() != 1) {
+            if(functionItem.arguments.size() != 1) {
                 return false;
             }
 
-            ValueItem arg = valueItem.functions.at(i).arguments.at(0);
+            ValueItem arg = functionItem.arguments.at(0);
             if(fillValueItem(arg, insertValues, errorMessage))
             {
                 valueItem.item = splitValue(valueItem.item->toValue(),
                                             arg.item->toValue(),
                                             errorMessage);
             }
+
             continue;
         }
-        //==========================================================================================
+        //------------------------------------------------------------------------------------------
         if(type == "contains")
         {
-            if(valueItem.functions.at(i).arguments.size() != 1) {
+            if(functionItem.arguments.size() != 1) {
                 return false;
             }
 
-            ValueItem arg = valueItem.functions.at(i).arguments.at(0);
+            ValueItem arg = functionItem.arguments.at(0);
             if(fillValueItem(arg, insertValues, errorMessage))
             {
                 valueItem.item = containsValue(valueItem.item,
                                                arg.item->toValue(),
                                                errorMessage);
             }
+
             continue;
         }
-        //==========================================================================================
+        //------------------------------------------------------------------------------------------
         if(type == "size")
         {
             valueItem.item = sizeValue(valueItem.item, errorMessage);
             continue;
         }
-        //==========================================================================================
+        //------------------------------------------------------------------------------------------
         if(type == "insert")
         {
-            if(valueItem.functions.at(i).arguments.size() != 2) {
+            if(functionItem.arguments.size() != 2) {
                 return false;
             }
 
-            ValueItem arg1 = valueItem.functions.at(i).arguments.at(0);
-            ValueItem arg2 = valueItem.functions.at(i).arguments.at(1);
+            ValueItem arg1 = functionItem.arguments.at(0);
+            ValueItem arg2 = functionItem.arguments.at(1);
 
             if(fillValueItem(arg1, insertValues, errorMessage)
                     && fillValueItem(arg2, insertValues, errorMessage))
@@ -128,35 +131,39 @@ getProcessedItem(ValueItem &valueItem,
                                              arg2.item,
                                              errorMessage);
             }
+
             continue;
         }
-        //==========================================================================================
+        //------------------------------------------------------------------------------------------
         if(type == "append")
         {
-            if(valueItem.functions.at(i).arguments.size() != 1) {
+            if(functionItem.arguments.size() != 1) {
                 return false;
             }
 
-            ValueItem arg = valueItem.functions.at(i).arguments.at(0);
+            ValueItem arg = functionItem.arguments.at(0);
             if(fillValueItem(arg, insertValues, errorMessage))
             {
                 valueItem.item = appendValue(valueItem.item->toArray(),
                                              arg.item,
                                              errorMessage);
             }
+
             continue;
         }
-        //==========================================================================================
+        //------------------------------------------------------------------------------------------
         if(type == "clear_empty")
         {
-            if(valueItem.functions.at(i).arguments.size() != 0) {
+            if(functionItem.arguments.size() != 0) {
                 return false;
             }
+
             valueItem.item = clearEmpty(valueItem.item->toArray(),
                                         errorMessage);
+
             continue;
         }
-        //==========================================================================================
+        //------------------------------------------------------------------------------------------
 
         valueItem.item = nullptr;
     }
