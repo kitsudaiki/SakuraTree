@@ -113,9 +113,10 @@ private:
                     const DataMap &initialValues);
     bool processSeed(const std::string &seedPath,
                      const std::string &serverAddress,
-                     const uint16_t serverPort);
-    SeedItem* prepareSeed(const std::string &seedPath);
-    void shareAllTrees();
+                     const uint16_t serverPort,
+                     std::string &errorMessage);
+    SeedItem* prepareSeed(const std::string &seedPath,
+                          std::string &errorMessage);
 };
 
 }

@@ -12,7 +12,7 @@ registerArguments(Kitsunemimi::Args::ArgParser &argparser)
     argparser.registerPlain("debug,d",
                             "Enable debug-output.");
 
-    argparser.registerPlain("use-config",
+    argparser.registerPlain("use-config,c",
                             "Use a config-file as input.");
 
 

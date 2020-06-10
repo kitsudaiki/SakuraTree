@@ -18,17 +18,17 @@ class TreeHandler
 public:
     TreeHandler();
 
-    bool addTree(const std::string &treePath);
-    bool addTree(const std::string &treeId,
-                 const std::string &content);
+    bool addTree(const std::string &treePath,
+                 std::string &errorMessage);
 
     const std::string getRelativePath(const std::string &blossomFilePath,
                                       const std::string &blossomInternalRelPath,
                                       const std::string &addition = "");
 
-    TreeItem* getConvertedTree(const std::string &rootPath,
-                               const std::string &relativePath,
-                               const std::string &initialTreeId = "");
+    TreeItem* getTreeById(const std::string &id);
+
+    TreeItem* getTree(const std::string &relativePath,
+                      const std::string &rootPath = "");
 
     bool loadPredefinedSubtrees();
 
