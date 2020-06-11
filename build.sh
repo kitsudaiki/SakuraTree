@@ -77,7 +77,7 @@ get_required_kitsune_lib_repo "libKitsunemimiConfig" "master" 4
 echo ""
 echo "###########################################################################################################"
 echo ""
-get_required_kitsune_lib_repo "libKitsunemimiJinja2" "0.7.2" 1
+get_required_kitsune_lib_repo "libKitsunemimiJinja2" "master" 1
 echo ""
 echo "###########################################################################################################"
 echo ""

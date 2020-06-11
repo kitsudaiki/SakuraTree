@@ -267,15 +267,19 @@ SakuraThread::processBlossomGroup(BlossomGroupItem &blossomGroupItem, const std:
 
         // convert name as jinja2-string
         Jinja2Converter* converter = SakuraRoot::m_jinja2Converter;
-        std::pair<bool, std::string> convertResult;
-        convertResult = converter->convert(blossomGroupItem.id, &m_parentValues, errorMessage);
-        if(convertResult.first == false)
+        std::string convertResult = "";
+        bool ret = converter->convert(convertResult,
+                                      blossomGroupItem.id,
+                                      &m_parentValues,
+                                      errorMessage);
+
+        if(ret == false)
         {
-            SakuraRoot::m_root->createError("jinja2-converter", convertResult.second);
+            SakuraRoot::m_root->createError("jinja2-converter", convertResult);
             return false;
         }
 
-        blossomItem->nameHirarchie.push_back("BLOSSOM: " + convertResult.second);
+        blossomItem->nameHirarchie.push_back("BLOSSOM: " + convertResult);
 
         const bool result = processSakuraItem(blossomItem, filePath);
         if(result == false) {

@@ -224,18 +224,20 @@ fillJinja2Template(ValueItem &valueItem,
 {
     // convert jinja2-string
     Jinja2Converter* converter = SakuraRoot::m_jinja2Converter;
-    std::pair<bool, std::string> convertResult;
-    convertResult = converter->convert(valueItem.item->toString(), &insertValues, errorMessage);
+    std::string convertResult = "";
+    bool ret = converter->convert(convertResult,
+                                  valueItem.item->toString(),
+                                  &insertValues,
+                                  errorMessage);
 
-    ValueItem returnValue;
-    if(convertResult.first == false)
+    if(ret == false)
     {
-        SakuraRoot::m_root->createError("jinja2-converter", convertResult.second);
+        SakuraRoot::m_root->createError("jinja2-converter", convertResult);
         return false;
     }
 
     delete valueItem.item;
-    valueItem.item = new DataValue(convertResult.second);
+    valueItem.item = new DataValue(convertResult);
 
     return true;
 }
