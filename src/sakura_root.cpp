@@ -361,18 +361,35 @@ SakuraRoot::createError(const std::string &errorLocation,
  * @param blossomItem
  */
 void
+SakuraRoot::printOutput(const BlossomGroupItem &blossomGroupItem)
+{
+    std::string output = "";
+
+    // print call-hierarchy
+    for(uint32_t i = 0; i < blossomGroupItem.nameHirarchie.size(); i++)
+    {
+        for(uint32_t j = 0; j < i; j++)
+        {
+            output += "   ";
+        }
+        output += blossomGroupItem.nameHirarchie.at(i) + "\n";
+    }
+
+    printOutput(output);
+}
+
+/**
+ * @brief SakuraRoot::printOutput
+ * @param blossomItem
+ */
+void
 SakuraRoot::printOutput(const BlossomItem &blossomItem)
 {
-    m_mutex.lock();
-
-    std::cout<<" "<<std::endl;
     const std::string output = convertBlossomOutput(blossomItem);
 
     // only for prototyping hardcoded
     //m_networking->sendBlossomOuput("127.0.0.1", "", output);
-    std::cout<<output<<std::endl;
-
-    m_mutex.unlock();
+    printOutput(output);
 }
 
 /**
@@ -385,7 +402,17 @@ SakuraRoot::printOutput(const std::string &output)
 {
     // TODO: use logger instead
     m_mutex.lock();
-    std::cout<<output<<std::endl;
+
+    // get width of the termial to draw the separator-line
+    struct winsize size;
+    ioctl(STDOUT_FILENO, TIOCGWINSZ, &size);
+    const uint32_t terminalWidth = size.ws_col;
+
+    // draw separator line
+    std::string line(terminalWidth, '=');
+
+    std::cout<<line<<"\n\n"<<output<<"\n"<<std::endl;
+
     m_mutex.unlock();
 }
 

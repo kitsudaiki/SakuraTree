@@ -83,6 +83,7 @@ public:
                      const std::string &blossomFilePath = "");
 
     // output
+    void printOutput(const BlossomGroupItem &blossomGroupItem);
     void printOutput(const BlossomItem &blossomItem);
     void printOutput(const std::string &output);
 

@@ -208,7 +208,8 @@ SakuraThread::processBlossom(BlossomItem &blossomItem,
     {
         SakuraRoot::m_root->createError(blossomItem,
                                         "processing",
-                                        "error while processing blossom items:\n" + errorMessage);
+                                        "error while processing blossom items:\n    "
+                                        + errorMessage);
         blossomItem.success = false;
 
         return false;
@@ -267,6 +268,11 @@ SakuraThread::processBlossomGroup(BlossomGroupItem &blossomGroupItem,
         return false;
     }
 
+    // print blossom-group
+    blossomGroupItem.nameHirarchie = m_hierarchy;
+    blossomGroupItem.nameHirarchie.push_back("BLOSSOM-GROUP: " + blossomGroupItem.id);
+    SakuraRoot::m_root->printOutput(blossomGroupItem);
+
     // iterate over all blossoms of the group and process one after another
     for(BlossomItem* blossomItem : blossomGroupItem.blossoms)
     {
@@ -305,6 +311,7 @@ SakuraThread::processTree(TreeItem* treeItem)
 {
     LOG_DEBUG("processTree");
 
+    // check if there are uninitialized items in the tree
     const std::vector<std::string> uninitItems = checkItems(m_parentValues);
     if(uninitItems.size() > 0)
     {
@@ -318,6 +325,7 @@ SakuraThread::processTree(TreeItem* treeItem)
         return false;
     }
 
+    // process items of the tree
     const std::string completePath = treeItem->rootPath + "/" + treeItem->relativePath;
     const bool result = processSakuraItem(treeItem->childs, completePath);
     if(result == false) {

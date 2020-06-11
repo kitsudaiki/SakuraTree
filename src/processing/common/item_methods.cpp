@@ -522,14 +522,7 @@ checkItems(DataMap &items)
 const std::string
 convertBlossomOutput(const BlossomItem &blossom)
 {
-    // get width of the termial to draw the separator-line
-    struct winsize size;
-    ioctl(STDOUT_FILENO, TIOCGWINSZ, &size);
-    const uint32_t terminalWidth = size.ws_col;
-
-    // draw separator line
-    std::string output(terminalWidth, '=');
-    output += "\n\n";
+    std::string output = "";
 
     // print call-hierarchy
     for(uint32_t i = 0; i < blossom.nameHirarchie.size(); i++)
