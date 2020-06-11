@@ -429,12 +429,16 @@ overrideItems(DataMap &original,
  * @param original map with the original key-values, which should be updates with the
  *                 information of the override-map
  * @param override map with the new incoming information
- * @param onlyExisting true, of only replacing values of existing key, but not add new keys
+ * @param onlyExisting true, to only replacing values of existing key, but not add new keys
+ *                     (Default: false)
+ * @param onlyNotExisting true, to only add new values, which are not already exist in the
+ *                        original (Default: false)
  */
 void
 overrideItems(ValueItemMap &original,
               const ValueItemMap &override,
-              bool onlyExisting)
+              bool onlyExisting,
+              bool onlyNotExisting)
 {
     if(onlyExisting)
     {
@@ -447,6 +451,23 @@ overrideItems(ValueItemMap &original,
             originalIt = original.find(overrideIt->first);
 
             if(originalIt != original.end())
+            {
+                ValueItem temp = overrideIt->second;
+                original.insert(overrideIt->first, temp, true);
+            }
+        }
+    }
+    else if(onlyNotExisting)
+    {
+        std::map<std::string, ValueItem>::const_iterator overrideIt;
+        for(overrideIt = override.const_begin();
+            overrideIt != override.const_end();
+            overrideIt++)
+        {
+            std::map<std::string, ValueItem>::iterator originalIt;
+            originalIt = original.find(overrideIt->first);
+
+            if(originalIt == original.end())
             {
                 ValueItem temp = overrideIt->second;
                 original.insert(overrideIt->first, temp, true);

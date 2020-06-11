@@ -57,13 +57,14 @@ bool fillOutputValueItemMap(ValueItemMap &items,
 
 void overrideItems(DataMap &original,
                    const DataMap &override,
-                   bool onlyExisting  =true);
+                   bool onlyExisting = true);
 void overrideItems(DataMap &original,
                    const ValueItemMap &override,
                    bool onlyExisting = true);
 void overrideItems(ValueItemMap &original,
                    const ValueItemMap &override,
-                   bool onlyExisting);
+                   bool onlyExisting = false,
+                   bool onlyNotExisting = false);
 const std::vector<std::string> checkItems(DataMap &items);
 const std::string convertBlossomOutput(const BlossomItem &blossom);
 

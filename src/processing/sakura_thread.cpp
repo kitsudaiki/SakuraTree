@@ -249,39 +249,42 @@ SakuraThread::processBlossom(BlossomItem &blossomItem,
  * @return true if successful, else false
  */
 bool
-SakuraThread::processBlossomGroup(BlossomGroupItem &blossomGroupItem, const std::string &filePath)
+SakuraThread::processBlossomGroup(BlossomGroupItem &blossomGroupItem,
+                                  const std::string &filePath)
 {
     LOG_DEBUG("processBlossomGroup");
 
+    // convert name as jinja2-string
+    std::string convertResult = "";
     std::string errorMessage = "";
+    const bool ret = SakuraRoot::m_jinja2Converter->convert(convertResult,
+                                                            blossomGroupItem.id,
+                                                            &m_parentValues,
+                                                            errorMessage);
+    if(ret == false)
+    {
+        SakuraRoot::m_root->createError("jinja2-converter", convertResult);
+        return false;
+    }
 
+    // iterate over all blossoms of the group and process one after another
     for(BlossomItem* blossomItem : blossomGroupItem.blossoms)
     {
+        // update blossom-item with group-values for console-output
         blossomItem->blossomGroupType = blossomGroupItem.blossomGroupType;
         blossomItem->nameHirarchie = m_hierarchy;
-
-        // copy values of the blossom-group into the blossom
-        // TODO: check that values, which are set in the blossom-group do not already exist in the
-        //       values of the blossom
-        overrideItems(blossomItem->values, blossomGroupItem.values, false);
-
-        // convert name as jinja2-string
-        Jinja2Converter* converter = SakuraRoot::m_jinja2Converter;
-        std::string convertResult = "";
-        bool ret = converter->convert(convertResult,
-                                      blossomGroupItem.id,
-                                      &m_parentValues,
-                                      errorMessage);
-
-        if(ret == false)
-        {
-            SakuraRoot::m_root->createError("jinja2-converter", convertResult);
-            return false;
-        }
-
+        blossomItem->blossomName = blossomGroupItem.id;
+        blossomItem->blossomGroupType = blossomGroupItem.blossomGroupType;
         blossomItem->nameHirarchie.push_back("BLOSSOM: " + convertResult);
 
-        const bool result = processSakuraItem(blossomItem, filePath);
+        // copy values of the blossom-group into the blossom, but only values, which are not defined
+        // which in the blossom
+        overrideItems(blossomItem->values,
+                      blossomGroupItem.values,
+                      false,
+                      true);
+
+        const bool result = processBlossom(*blossomItem, filePath);
         if(result == false) {
             return false;
         }
