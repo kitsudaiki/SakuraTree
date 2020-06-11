@@ -101,15 +101,6 @@ HEADERS += \
     src/processing/thread_pool.h \
     src/common.h \
     src/sakura_root.h \
-    tests/processing/blossoms/files/template_files/template_create_blossom_test.h \
-    tests/processing/blossoms/files/text_files/text_append_blossom_test.h \
-    tests/processing/blossoms/files/text_files/text_read_blossom_test.h \
-    tests/processing/blossoms/files/text_files/text_replace_blossom_test.h \
-    tests/processing/blossoms/files/text_files/text_write_blossom_test.h \
-    tests/processing/blossoms/special/cmd_blossom_test.h \
-    tests/processing/common/functions_test.h \
-    tests/processing/common/item_methods_test.h \
-    tests/run_unit_tests.h \
     src/processing/common/value_item_functions.h \
     src/converter/common_converter_methods.h \
     src/processing/blossoms/files/common_files/path_chmod_blossom.h \
@@ -117,11 +108,6 @@ HEADERS += \
     src/processing/blossoms/files/common_files/path_copy_blossom.h \
     src/processing/blossoms/files/common_files/path_delete_blossom.h \
     src/processing/blossoms/files/common_files/path_rename_blossom.h \
-    tests/processing/blossoms/files/common_files/path_rename_blossom_test.h \
-    tests/processing/blossoms/files/common_files/path_delete_blossom_test.h \
-    tests/processing/blossoms/files/common_files/path_copy_blossom_test.h \
-    tests/processing/blossoms/files/common_files/path_chmod_blossom_test.h \
-    tests/processing/blossoms/files/common_files/path_chown_blossom_test.h \
     src/processing/blossoms/special/item_update_blossom.h \
     src/tree_handler.h \
     src/args.h \
@@ -156,8 +142,39 @@ SOURCES += \
     src/processing/sakura_thread.cpp \
     src/processing/subtree_queue.cpp \
     src/processing/thread_pool.cpp \
-    src/main.cpp \
     src/sakura_root.cpp \
+    src/converter/common_converter_methods.cpp \
+    src/processing/blossoms/files/common_files/path_chmod_blossom.cpp \
+    src/processing/blossoms/files/common_files/path_chown_blossom.cpp \
+    src/processing/blossoms/files/common_files/path_copy_blossom.cpp \
+    src/processing/blossoms/files/common_files/path_delete_blossom.cpp \
+    src/processing/blossoms/files/common_files/path_rename_blossom.cpp \
+    src/processing/blossoms/special/item_update_blossom.cpp \
+    src/tree_handler.cpp
+
+CONFIG(run_tests) {
+TARGET = SakuraTree_Test
+
+HEADERS += \
+    tests/processing/blossoms/files/common_files/path_rename_blossom_test.h \
+    tests/processing/blossoms/files/common_files/path_delete_blossom_test.h \
+    tests/processing/blossoms/files/common_files/path_copy_blossom_test.h \
+    tests/processing/blossoms/files/common_files/path_chmod_blossom_test.h \
+    tests/processing/blossoms/files/common_files/path_chown_blossom_test.h \
+    tests/processing/blossoms/files/template_files/template_create_blossom_test.h \
+    tests/processing/blossoms/files/text_files/text_append_blossom_test.h \
+    tests/processing/blossoms/files/text_files/text_read_blossom_test.h \
+    tests/processing/blossoms/files/text_files/text_replace_blossom_test.h \
+    tests/processing/blossoms/files/text_files/text_write_blossom_test.h \
+    tests/processing/blossoms/special/cmd_blossom_test.h \
+    tests/processing/common/functions_test.h \
+    tests/processing/common/item_methods_test.h
+SOURCES += \
+    tests/processing/blossoms/files/common_files/path_chmod_blossom_test.cpp \
+    tests/processing/blossoms/files/common_files/path_chown_blossom_test.cpp \
+    tests/processing/blossoms/files/common_files/path_copy_blossom_test.cpp \
+    tests/processing/blossoms/files/common_files/path_delete_blossom_test.cpp \
+    tests/processing/blossoms/files/common_files/path_rename_blossom_test.cpp \
     tests/processing/blossoms/files/template_files/template_create_blossom_test.cpp \
     tests/processing/blossoms/files/text_files/text_append_blossom_test.cpp \
     tests/processing/blossoms/files/text_files/text_read_blossom_test.cpp \
@@ -166,21 +183,11 @@ SOURCES += \
     tests/processing/blossoms/special/cmd_blossom_test.cpp \
     tests/processing/common/functions_test.cpp \
     tests/processing/common/item_methods_test.cpp \
-    tests/run_unit_tests.cpp \
-    src/converter/common_converter_methods.cpp \
-    src/processing/blossoms/files/common_files/path_chmod_blossom.cpp \
-    src/processing/blossoms/files/common_files/path_chown_blossom.cpp \
-    src/processing/blossoms/files/common_files/path_copy_blossom.cpp \
-    src/processing/blossoms/files/common_files/path_delete_blossom.cpp \
-    src/processing/blossoms/files/common_files/path_rename_blossom.cpp \
-    tests/processing/blossoms/files/common_files/path_chmod_blossom_test.cpp \
-    tests/processing/blossoms/files/common_files/path_chown_blossom_test.cpp \
-    tests/processing/blossoms/files/common_files/path_copy_blossom_test.cpp \
-    tests/processing/blossoms/files/common_files/path_delete_blossom_test.cpp \
-    tests/processing/blossoms/files/common_files/path_rename_blossom_test.cpp \
-    src/processing/blossoms/special/item_update_blossom.cpp \
-    src/tree_handler.cpp
-
+    tests/main_tests.cpp
+} else {
+SOURCES += \
+    src/main.cpp
+}
 
 SAKURA_PROVISIONING_SUBTREE = src/predefined_subtrees/sakura_provisioning_subtree.tree
 

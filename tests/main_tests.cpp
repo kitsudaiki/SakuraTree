@@ -1,5 +1,5 @@
 /**
- * @file        runUnitTests.cpp
+ * @file        main_tests.cpp
  *
  * @author      Tobias Anker <tobias.anker@kitsunemimi.moe>
  *
@@ -20,8 +20,6 @@
  *      limitations under the License.
  */
 
-#include "run_unit_tests.h"
-
 #include <tests/processing/common/item_methods_test.h>
 #include <tests/processing/common/functions_test.h>
 
@@ -39,18 +37,9 @@
 #include <tests/processing/blossoms/files/text_files/text_replace_blossom_test.h>
 #include <tests/processing/blossoms/files/text_files/text_write_blossom_test.h>
 
-namespace SakuraTree
+int
+main(int argc, char *argv[])
 {
-
-RunUnitTests::RunUnitTests()
-{
-
-}
-
-void
-RunUnitTests::run()
-{
-    #ifdef RUN_UNIT_TEST
     SakuraTree::ValueItemsFunctions_Test();
     SakuraTree::ItemMethods_Test();
     //SakuraTree::PathChmodBlossom_Test();
@@ -64,7 +53,5 @@ RunUnitTests::run()
     SakuraTree::TextWriteBlossom_Test();
     SakuraTree::TextAppendBlossom_Test();
     SakuraTree::TextReplaceBlossom_Test();
-    #endif
-}
-
+    return 0;
 }

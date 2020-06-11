@@ -99,7 +99,7 @@ SakuraThread::run()
         }
         else
         {
-            std::this_thread::sleep_for(chronoMilliSec(1));
+            std::this_thread::sleep_for(chronoMilliSec(10));
         }
     }
 }
@@ -192,7 +192,8 @@ bool
 SakuraThread::processBlossom(BlossomItem &blossomItem,
                              const std::string &filePath)
 {
-    LOG_DEBUG("processBlossom: \n    name: " + blossomItem.blossomName);
+    LOG_DEBUG("processBlossom: \n");
+    LOG_DEBUG("    name: " + blossomItem.blossomName);
 
     if(blossomItem.parentValues != nullptr) {
         LOG_DEBUG("    parentValues:" + blossomItem.parentValues->toString());

@@ -23,7 +23,6 @@
 #include <common.h>
 #include <args.h>
 #include <sakura_root.h>
-#include <tests/run_unit_tests.h>
 
 #include <libKitsunemimiCommon/common_methods/string_methods.h>
 #include <libKitsunemimiPersistence/logger/logger.h>
@@ -33,12 +32,6 @@
 int main(int argc, char *argv[])
 {
     Kitsunemimi::Persistence::initConsoleLogger(false);
-
-    // run unit-tests, if enabled by define-value
-    #ifdef RUN_UNIT_TEST
-    SakuraTree::RunUnitTests unitTests;
-    unitTests.run();
-    #else
 
     // create and init argument-parser
     Kitsunemimi::Args::ArgParser argParser;
@@ -147,8 +140,6 @@ int main(int argc, char *argv[])
                            listenAddress,
                            listenPort);
     }
-
-    #endif
 
     return 0;
 }
