@@ -28,8 +28,6 @@
 namespace SakuraTree
 {
 
-void overrideItems(JsonItem &original,
-                   const JsonItem &override);
 bool checkOutput(BlossomItem &blossomItem,
                  const bool hasOutput);
 bool checkBlossomItem(BlossomItem &blossomItem);

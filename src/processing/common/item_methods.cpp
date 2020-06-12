@@ -48,77 +48,80 @@ getProcessedItem(ValueItem &valueItem,
                  DataMap &insertValues,
                  std::string &errorMessage)
 {
-    for(uint32_t i = 0; i < valueItem.functions.size(); i++)
+    for(const Kitsunemimi::Sakura::FunctionItem& functionItem : valueItem.functions)
     {
         if(valueItem.item == nullptr) {
             return false;
         }
 
-        const std::string type = valueItem.functions.at(i).type;
+        const std::string type = functionItem.type;
 
-        //==========================================================================================
+        //------------------------------------------------------------------------------------------
         if(type == "get")
         {
-            if(valueItem.functions.at(i).arguments.size() != 1) {
+            if(functionItem.arguments.size() != 1) {
                 return false;
             }
 
-            ValueItem arg = valueItem.functions.at(i).arguments.at(0);
+            ValueItem arg = functionItem.arguments.at(0);
             if(fillValueItem(arg, insertValues, errorMessage))
             {
                 valueItem.item = getValue(valueItem.item,
                                           arg.item->toValue(),
                                           errorMessage);
             }
+
             continue;
         }
-        //==========================================================================================
+        //------------------------------------------------------------------------------------------
         if(type == "split")
         {
-            if(valueItem.functions.at(i).arguments.size() != 1) {
+            if(functionItem.arguments.size() != 1) {
                 return false;
             }
 
-            ValueItem arg = valueItem.functions.at(i).arguments.at(0);
+            ValueItem arg = functionItem.arguments.at(0);
             if(fillValueItem(arg, insertValues, errorMessage))
             {
                 valueItem.item = splitValue(valueItem.item->toValue(),
                                             arg.item->toValue(),
                                             errorMessage);
             }
+
             continue;
         }
-        //==========================================================================================
+        //------------------------------------------------------------------------------------------
         if(type == "contains")
         {
-            if(valueItem.functions.at(i).arguments.size() != 1) {
+            if(functionItem.arguments.size() != 1) {
                 return false;
             }
 
-            ValueItem arg = valueItem.functions.at(i).arguments.at(0);
+            ValueItem arg = functionItem.arguments.at(0);
             if(fillValueItem(arg, insertValues, errorMessage))
             {
                 valueItem.item = containsValue(valueItem.item,
                                                arg.item->toValue(),
                                                errorMessage);
             }
+
             continue;
         }
-        //==========================================================================================
+        //------------------------------------------------------------------------------------------
         if(type == "size")
         {
             valueItem.item = sizeValue(valueItem.item, errorMessage);
             continue;
         }
-        //==========================================================================================
+        //------------------------------------------------------------------------------------------
         if(type == "insert")
         {
-            if(valueItem.functions.at(i).arguments.size() != 2) {
+            if(functionItem.arguments.size() != 2) {
                 return false;
             }
 
-            ValueItem arg1 = valueItem.functions.at(i).arguments.at(0);
-            ValueItem arg2 = valueItem.functions.at(i).arguments.at(1);
+            ValueItem arg1 = functionItem.arguments.at(0);
+            ValueItem arg2 = functionItem.arguments.at(1);
 
             if(fillValueItem(arg1, insertValues, errorMessage)
                     && fillValueItem(arg2, insertValues, errorMessage))
@@ -128,35 +131,39 @@ getProcessedItem(ValueItem &valueItem,
                                              arg2.item,
                                              errorMessage);
             }
+
             continue;
         }
-        //==========================================================================================
+        //------------------------------------------------------------------------------------------
         if(type == "append")
         {
-            if(valueItem.functions.at(i).arguments.size() != 1) {
+            if(functionItem.arguments.size() != 1) {
                 return false;
             }
 
-            ValueItem arg = valueItem.functions.at(i).arguments.at(0);
+            ValueItem arg = functionItem.arguments.at(0);
             if(fillValueItem(arg, insertValues, errorMessage))
             {
                 valueItem.item = appendValue(valueItem.item->toArray(),
                                              arg.item,
                                              errorMessage);
             }
+
             continue;
         }
-        //==========================================================================================
+        //------------------------------------------------------------------------------------------
         if(type == "clear_empty")
         {
-            if(valueItem.functions.at(i).arguments.size() != 0) {
+            if(functionItem.arguments.size() != 0) {
                 return false;
             }
+
             valueItem.item = clearEmpty(valueItem.item->toArray(),
                                         errorMessage);
+
             continue;
         }
-        //==========================================================================================
+        //------------------------------------------------------------------------------------------
 
         valueItem.item = nullptr;
     }
@@ -217,18 +224,20 @@ fillJinja2Template(ValueItem &valueItem,
 {
     // convert jinja2-string
     Jinja2Converter* converter = SakuraRoot::m_jinja2Converter;
-    std::pair<bool, std::string> convertResult;
-    convertResult = converter->convert(valueItem.item->toString(), &insertValues, errorMessage);
+    std::string convertResult = "";
+    bool ret = converter->convert(convertResult,
+                                  valueItem.item->toString(),
+                                  &insertValues,
+                                  errorMessage);
 
-    ValueItem returnValue;
-    if(convertResult.first == false)
+    if(ret == false)
     {
-        SakuraRoot::m_root->createError("jinja2-converter", convertResult.second);
+        SakuraRoot::m_root->createError("jinja2-converter", convertResult);
         return false;
     }
 
     delete valueItem.item;
-    valueItem.item = new DataValue(convertResult.second);
+    valueItem.item = new DataValue(convertResult);
 
     return true;
 }
@@ -420,12 +429,16 @@ overrideItems(DataMap &original,
  * @param original map with the original key-values, which should be updates with the
  *                 information of the override-map
  * @param override map with the new incoming information
- * @param onlyExisting true, of only replacing values of existing key, but not add new keys
+ * @param onlyExisting true, to only replacing values of existing key, but not add new keys
+ *                     (Default: false)
+ * @param onlyNotExisting true, to only add new values, which are not already exist in the
+ *                        original (Default: false)
  */
 void
 overrideItems(ValueItemMap &original,
               const ValueItemMap &override,
-              bool onlyExisting)
+              bool onlyExisting,
+              bool onlyNotExisting)
 {
     if(onlyExisting)
     {
@@ -438,6 +451,23 @@ overrideItems(ValueItemMap &original,
             originalIt = original.find(overrideIt->first);
 
             if(originalIt != original.end())
+            {
+                ValueItem temp = overrideIt->second;
+                original.insert(overrideIt->first, temp, true);
+            }
+        }
+    }
+    else if(onlyNotExisting)
+    {
+        std::map<std::string, ValueItem>::const_iterator overrideIt;
+        for(overrideIt = override.const_begin();
+            overrideIt != override.const_end();
+            overrideIt++)
+        {
+            std::map<std::string, ValueItem>::iterator originalIt;
+            originalIt = original.find(overrideIt->first);
+
+            if(originalIt == original.end())
             {
                 ValueItem temp = overrideIt->second;
                 original.insert(overrideIt->first, temp, true);
@@ -492,14 +522,7 @@ checkItems(DataMap &items)
 const std::string
 convertBlossomOutput(const BlossomItem &blossom)
 {
-    // get width of the termial to draw the separator-line
-    struct winsize size;
-    ioctl(STDOUT_FILENO, TIOCGWINSZ, &size);
-    const uint32_t terminalWidth = size.ws_col;
-
-    // draw separator line
-    std::string output(terminalWidth, '=');
-    output += "\n\n";
+    std::string output = "";
 
     // print call-hierarchy
     for(uint32_t i = 0; i < blossom.nameHirarchie.size(); i++)

@@ -111,14 +111,14 @@ splitValue(DataValue* item,
     }
 
     // split string into string-array
-    std::vector<std::string> array;
-    splitStringByDelimiter(array, item->toString(), demilimter);
+    std::vector<std::string> splittedContent;
+    splitStringByDelimiter(splittedContent, item->toString(), demilimter);
 
     // convert string-array into a DataArray-object
     DataArray* resultArray = new DataArray();
-    for(uint32_t i = 0; i < array.size(); i++)
+    for(const std::string& object : splittedContent)
     {
-        resultArray->append(new DataValue(array.at(i)));
+        resultArray->append(new DataValue(object));
     }
 
     return resultArray;

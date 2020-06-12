@@ -39,7 +39,6 @@ ThreadPool::ThreadPool(const uint32_t numberOfThreads)
         m_childThreads.push_back(child);
         child->startThread();
     }
-
 }
 
 /**
@@ -51,16 +50,16 @@ ThreadPool::~ThreadPool()
 }
 
 /**
- * stop and delete all threads of the pool
+ * @brief stop and delete all threads of the pool
  */
 void
 ThreadPool::clearChildThreads()
 {
-    for(uint32_t i = 0; i < m_childThreads.size(); i++)
+    for(SakuraThread* childThread : m_childThreads)
     {
-        m_childThreads.at(i)->stopThread();
-        m_childThreads.at(i)->waitForFinish();
-        delete m_childThreads[i];
+        childThread->stopThread();
+        childThread->waitForFinish();
+        delete childThread;
     }
     m_childThreads.clear();
 }

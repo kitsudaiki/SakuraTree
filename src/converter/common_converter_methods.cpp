@@ -30,28 +30,6 @@ namespace SakuraTree
 {
 
 /**
- * @brief merge two item-maps
- *
- * @param original original item-map
- * @param override additional item-map for merging into the original one
- */
-void
-overrideItems(JsonItem &original,
-              const JsonItem &override)
-{
-    DataMap* overrideMap = override.getItemContent()->toMap();
-    std::map<std::string, DataItem*>::const_iterator it;
-    for(it = overrideMap->m_map.begin();
-        it != overrideMap->m_map.end();
-        it++)
-    {
-        original.insert(it->first,
-                        it->second->copy(),
-                        true);
-    }
-}
-
-/**
  * @brief check if all values are set inside a blossom-item
  *
  * @param blossomItem blossom-item with the information

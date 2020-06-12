@@ -82,14 +82,8 @@ public:
                      const std::string &blossomName = "",
                      const std::string &blossomFilePath = "");
 
-    // network-interaction
-    bool sendTreefile(const std::string &address,
-                      const std::string &subtree,
-                      const std::string &values);
-    bool startClientConnection(const std::string &address,
-                               const int port);
-
     // output
+    void printOutput(const BlossomGroupItem &blossomGroupItem);
     void printOutput(const BlossomItem &blossomItem);
     void printOutput(const std::string &output);
 
@@ -113,9 +107,10 @@ private:
                     const DataMap &initialValues);
     bool processSeed(const std::string &seedPath,
                      const std::string &serverAddress,
-                     const uint16_t serverPort);
-    SeedItem* prepareSeed(const std::string &seedPath);
-    void shareAllTrees();
+                     const uint16_t serverPort,
+                     std::string &errorMessage);
+    SeedItem* prepareSeed(const std::string &seedPath,
+                          std::string &errorMessage);
 };
 
 }

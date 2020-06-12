@@ -26,10 +26,6 @@
 namespace SakuraTree
 {
 
-/**
- * @brief AptInstallBlossom::AptInstallBlossom
- * @param content
- */
 AptPresentBlossom::AptPresentBlossom()
     : Blossom()
 {
@@ -38,7 +34,6 @@ AptPresentBlossom::AptPresentBlossom()
 
 /**
  * @brief AptInstallBlossom::initBlossom
- * @return
  */
 void
 AptPresentBlossom::initBlossom(BlossomItem &blossomItem)
@@ -46,6 +41,7 @@ AptPresentBlossom::initBlossom(BlossomItem &blossomItem)
     DataArray* names = blossomItem.values.get("packages")->toArray();
     if(names != nullptr)
     {
+        // list of packages
         for(uint32_t i = 0; i < names->size(); i++)
         {
             m_packageNames.push_back(names->get(i)->toString());
@@ -53,9 +49,11 @@ AptPresentBlossom::initBlossom(BlossomItem &blossomItem)
     }
     else
     {
+        // single package
         m_packageNames.push_back(blossomItem.values.get("packages")->toString());
     }
 
+    // check if there are at least one package defined
     if(m_packageNames.size() == 0)
     {
         blossomItem.success = false;
@@ -68,7 +66,6 @@ AptPresentBlossom::initBlossom(BlossomItem &blossomItem)
 
 /**
  * @brief AptInstallBlossom::preCheck
- * @return
  */
 void
 AptPresentBlossom::preCheck(BlossomItem &blossomItem)
@@ -84,40 +81,48 @@ AptPresentBlossom::preCheck(BlossomItem &blossomItem)
 
 /**
  * @brief AptInstallBlossom::runTask
- * @return
  */
 void
 AptPresentBlossom::runTask(BlossomItem &blossomItem)
 {
-    for(uint32_t i = 0; i < m_packageNames.size(); i++)
+    // convert list into string
+    std::string appendedList = "";
+    for(const std::string& packageName : m_packageNames)
     {
-        const std::string programm = "sudo apt-get install -y " + m_packageNames.at(i);
-
-        LOG_DEBUG("run command: " + programm);
-        ProcessResult processResult = runSyncProcess(programm);
-        blossomItem.success = processResult.success;
-        blossomItem.outputMessage = processResult.processOutput;
+        appendedList += packageName + " ";
     }
+
+    // build command
+    const std::string programm = "sudo apt-get install -y " + appendedList;
+    LOG_DEBUG("run command: " + programm);
+
+    // run command
+    ProcessResult processResult = runSyncProcess(programm);
+    blossomItem.success = processResult.success;
+    blossomItem.outputMessage = processResult.processOutput;
 }
 
 /**
  * @brief AptInstallBlossom::postCheck
- * @return
  */
 void
 AptPresentBlossom::postCheck(BlossomItem &blossomItem)
 {
+    // get list of not installed packages
     m_packageNames = getAbsendPackages(m_packageNames);
+
+    // if there are still some packages missing, create an error
     if(m_packageNames.size() > 0)
     {
         std::string output = "couldn't install following packages: \n";
-        for(uint32_t i = 0; i < m_packageNames.size(); i++)
+        for(const std::string& packageName : m_packageNames)
         {
-            output += m_packageNames.at(i) + "\n";
+            output += "    " + packageName + "\n";
         }
 
         blossomItem.success = false;
         blossomItem.outputMessage = output;
+
         return;
     }
 
@@ -126,7 +131,6 @@ AptPresentBlossom::postCheck(BlossomItem &blossomItem)
 
 /**
  * @brief AptInstallBlossom::closeBlossom
- * @return
  */
 void
 AptPresentBlossom::closeBlossom(BlossomItem &blossomItem)

@@ -80,7 +80,7 @@ void
 TextAppendBlossom::runTask(BlossomItem &blossomItem)
 {
     std::string errorMessage = "";
-    bool result = Kitsunemimi::Persistence::appendText(m_filePath, m_newText, errorMessage);
+    const bool result = Kitsunemimi::Persistence::appendText(m_filePath, m_newText, errorMessage);
 
     if(result == false)
     {

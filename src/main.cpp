@@ -23,7 +23,6 @@
 #include <common.h>
 #include <args.h>
 #include <sakura_root.h>
-#include <tests/run_unit_tests.h>
 
 #include <libKitsunemimiCommon/common_methods/string_methods.h>
 #include <libKitsunemimiPersistence/logger/logger.h>
@@ -33,12 +32,6 @@
 int main(int argc, char *argv[])
 {
     Kitsunemimi::Persistence::initConsoleLogger(false);
-
-    // run unit-tests, if enabled by define-value
-    #ifdef RUN_UNIT_TEST
-    SakuraTree::RunUnitTests unitTests;
-    unitTests.run();
-    #else
 
     // create and init argument-parser
     Kitsunemimi::Args::ArgParser argParser;
@@ -90,14 +83,14 @@ int main(int argc, char *argv[])
     // input-values
     if(argParser.wasSet("item-input"))
     {
-        std::vector<std::string> envs = argParser.getStringValues("item-input");
-        for(uint32_t i = 0; i < envs.size(); i++)
+        std::vector<std::string> itemInput = argParser.getStringValues("item-input");
+        for(const std::string& item : itemInput)
         {
             std::vector<std::string> pair;
-            Kitsunemimi::splitStringByDelimiter(pair, envs.at(i), '=');
+            Kitsunemimi::splitStringByDelimiter(pair, item, '=');
             if(pair.size() != 2)
             {
-                std::cout << "'"<<envs.at(i)<<"' is not a valid pair"<<std::endl;
+                std::cout << "'" << item << "' is not a valid pair" << std::endl;
                 return 1;
             }
             itemInputValues.insert(pair.at(0), new DataValue(pair.at(1)));
@@ -147,8 +140,6 @@ int main(int argc, char *argv[])
                            listenAddress,
                            listenPort);
     }
-
-    #endif
 
     return 0;
 }

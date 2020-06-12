@@ -63,12 +63,10 @@ TemplateCreateBlossom::preCheck(BlossomItem &blossomItem)
 {
     // read template-file
     std::string fileContent = SakuraRoot::m_treeHandler->m_garden.getTemplate(m_templatePath);
-
     if(fileContent == "")
     {
         blossomItem.success = false;
-        blossomItem.outputMessage = "couldn't find template-file "
-                                   + m_templatePath;
+        blossomItem.outputMessage = "couldn't find template-file " + m_templatePath;
         return;
     }
 
@@ -85,11 +83,11 @@ TemplateCreateBlossom::preCheck(BlossomItem &blossomItem)
 
     // create file-content form template
     std::string errorMessage;
-    std::pair<bool, std::string> jinja2Result;
-    jinja2Result = SakuraRoot::m_root->m_jinja2Converter->convert(fileContent,
-                                                                  &inputData,
-                                                                  errorMessage);
-    if(jinja2Result.first == false)
+    bool jinja2Result = SakuraRoot::m_root->m_jinja2Converter->convert(m_fileContent,
+                                                                       fileContent,
+                                                                       &inputData,
+                                                                       errorMessage);
+    if(jinja2Result == false)
     {
         blossomItem.success = false;
         blossomItem.outputMessage = "couldn't convert template-file "
@@ -98,7 +96,6 @@ TemplateCreateBlossom::preCheck(BlossomItem &blossomItem)
                                    + errorMessage;
         return;
     }
-    m_fileContent = jinja2Result.second;
 
     // check if template-file already exist
     if(Kitsunemimi::Persistence::doesPathExist(m_destinationPath))

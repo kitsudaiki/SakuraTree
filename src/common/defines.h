@@ -25,6 +25,4 @@
 
 #include <common/includes.h>
 
-//#define RUN_UNIT_TEST
-
 #endif // DEFINES_H

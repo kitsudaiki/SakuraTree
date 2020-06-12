@@ -38,7 +38,7 @@ Blossom::~Blossom() {}
 void
 Blossom::growBlossom(BlossomItem &blossomItem)
 {
-    //-------------------------------
+    //----------------------------------------------------------------------------------------------
     LOG_DEBUG("initBlossom " + blossomItem.blossomName);
 
     initBlossom(blossomItem);
@@ -51,7 +51,7 @@ Blossom::growBlossom(BlossomItem &blossomItem)
         return;
     }
 
-    //-------------------------------
+    //----------------------------------------------------------------------------------------------
     LOG_DEBUG("preCheck " + blossomItem.blossomName);
 
     preCheck(blossomItem);
@@ -68,7 +68,7 @@ Blossom::growBlossom(BlossomItem &blossomItem)
         return;
     }
 
-    //-------------------------------
+    //----------------------------------------------------------------------------------------------
     LOG_DEBUG("runTask " + blossomItem.blossomName);
 
     runTask(blossomItem);
@@ -81,7 +81,7 @@ Blossom::growBlossom(BlossomItem &blossomItem)
         return;
     }
 
-    //-------------------------------
+    //----------------------------------------------------------------------------------------------
     LOG_DEBUG("postCheck " + blossomItem.blossomName);
 
     postCheck(blossomItem);
@@ -93,7 +93,8 @@ Blossom::growBlossom(BlossomItem &blossomItem)
                                         blossomItem.outputMessage);
         return;
     }
-    //-------------------------------
+
+    //----------------------------------------------------------------------------------------------
     LOG_DEBUG("closeBlossom " + blossomItem.blossomName);
 
     closeBlossom(blossomItem);
@@ -106,7 +107,7 @@ Blossom::growBlossom(BlossomItem &blossomItem)
         return;
     }
 
-    //-------------------------------
+    //----------------------------------------------------------------------------------------------
 
     return;
 }

@@ -50,10 +50,10 @@ PathRenameBlossom::initBlossom(BlossomItem &blossomItem)
     stringParts[stringParts.size()-1] = m_newFileName;
 
     Kitsunemimi::removeEmptyStrings(stringParts);
-    for(uint32_t i = 0; i < stringParts.size(); i++)
+    for(const std::string& stringPart : stringParts)
     {
         m_newFilePath += "/";
-        m_newFilePath += stringParts.at(i);
+        m_newFilePath += stringPart;
     }
 
     blossomItem.success = true;

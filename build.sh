@@ -77,7 +77,7 @@ get_required_kitsune_lib_repo "libKitsunemimiConfig" "master" 4
 echo ""
 echo "###########################################################################################################"
 echo ""
-get_required_kitsune_lib_repo "libKitsunemimiJinja2" "0.7.2" 1
+get_required_kitsune_lib_repo "libKitsunemimiJinja2" "master" 1
 echo ""
 echo "###########################################################################################################"
 echo ""
@@ -103,14 +103,16 @@ cd $LIB_KITSUNE_SAKURA_TREE_DIR
 
 # build SakuraTree library with qmake
 if [ $1 = "test" ]; then
-    /usr/lib/x86_64-linux-gnu/qt5/bin/qmake "$PARENT_DIR/SakuraTree/SakuraTree.pro" -spec linux-g++ "CONFIG += optimize_full" "QMAKE_CXXFLAGS += -DRUN_UNIT_TEST"
+    /usr/lib/x86_64-linux-gnu/qt5/bin/qmake "$PARENT_DIR/SakuraTree/SakuraTree.pro" -spec linux-g++ "CONFIG += optimize_full" "CONFIG+=run_tests"
+    /usr/bin/make -j4
+    # copy build-result and include-files into the result-directory
+    cp "$LIB_KITSUNE_SAKURA_TREE_DIR/SakuraTree_Test" "$RESULT_DIR/"
 else
     /usr/lib/x86_64-linux-gnu/qt5/bin/qmake "$PARENT_DIR/SakuraTree/SakuraTree.pro" -spec linux-g++ "CONFIG += optimize_full"
+    /usr/bin/make -j4
+    # copy build-result and include-files into the result-directory
+    cp "$LIB_KITSUNE_SAKURA_TREE_DIR/SakuraTree" "$RESULT_DIR/"
 fi
-/usr/bin/make -j4
-
-# copy build-result and include-files into the result-directory
-cp "$LIB_KITSUNE_SAKURA_TREE_DIR/SakuraTree" "$RESULT_DIR/"
 
 #-----------------------------------------------------------------------------------------------------------------
 

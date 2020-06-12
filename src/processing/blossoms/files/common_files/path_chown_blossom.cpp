@@ -54,9 +54,7 @@ PathChownBlossom::preCheck(BlossomItem &blossomItem)
     if(Kitsunemimi::Persistence::doesPathExist(m_path) == false)
     {
         blossomItem.success = false;
-        blossomItem.outputMessage = "path "
-                                   + m_path
-                                   + " doesn't exist";
+        blossomItem.outputMessage = "path " + m_path + " doesn't exist";
         return;
     }
 
@@ -70,13 +68,16 @@ void
 PathChownBlossom::runTask(BlossomItem &blossomItem)
 {
     std::string command = "chown ";
+
     if(Kitsunemimi::Persistence::isDir(m_path)) {
         command += "-R ";
     }
+
     command += m_owner + ":" + m_owner + " ";
     command += m_path;
 
     LOG_DEBUG("run command: " + command);
+
     ProcessResult processResult = runSyncProcess(command);
     blossomItem.success = processResult.success;
     blossomItem.outputMessage = processResult.processOutput;
