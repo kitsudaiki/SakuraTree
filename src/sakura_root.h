@@ -109,7 +109,7 @@ private:
                      const std::string &serverAddress,
                      const uint16_t serverPort,
                      std::string &errorMessage);
-    SeedItem* prepareSeed(const std::string &seedPath,
+    SeedInitItem* prepareSeed(const std::string &seedPath,
                           std::string &errorMessage);
 };
 

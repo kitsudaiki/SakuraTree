@@ -54,7 +54,7 @@ private:
     bool processBlossomGroup(BlossomGroupItem &blossomGroupItem, const std::string &filePath);
     bool processTree(TreeItem* treeItem);
     bool processSubtree(SubtreeItem* subtreeItem, const std::string &filePath);
-    bool processSeedTrigger(SeedTrigger* seedItem);
+    bool processSeedTrigger(SeedTriggerItem* seedItem);
     bool processIf(IfBranching* ifCondition, const std::string &filePath);
     bool processForEach(ForEachBranching* subtree, const std::string &filePath);
     bool processFor(ForBranching* subtree, const std::string &filePath);

@@ -462,7 +462,7 @@ SakuraRoot::processSeed(const std::string &seedPath,
                         std::string &errorMessage)
 {
     // parse seed
-    SeedItem* seedItem = prepareSeed(seedPath, errorMessage);
+    SeedInitItem* seedItem = prepareSeed(seedPath, errorMessage);
     if(seedItem == nullptr)
     {
         LOG_ERROR("failed to load seed-file " + seedPath);
@@ -539,7 +539,7 @@ SakuraRoot::processSeed(const std::string &seedPath,
  *
  * @return pointer to parsed seed content
  */
-SeedItem*
+SeedInitItem*
 SakuraRoot::prepareSeed(const std::string &seedPath,
                         std::string &errorMessage)
 {
@@ -564,7 +564,7 @@ SakuraRoot::prepareSeed(const std::string &seedPath,
         return nullptr;
     }
 
-    return static_cast<SeedItem*>(seed);
+    return static_cast<SeedInitItem*>(seed);
 }
 
 }
