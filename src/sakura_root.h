@@ -90,6 +90,8 @@ public:
     // static values
     static SakuraTree::SakuraRoot* m_root;
     static std::string m_executablePath;
+    static std::string m_serverAddress;
+    static uint16_t m_serverPort;
     static Jinja2Converter* m_jinja2Converter;
     static Kitsunemimi::TableItem m_errorOutput;
     static SakuraTree::TreeHandler* m_treeHandler;

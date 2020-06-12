@@ -1,0 +1,18 @@
+["seed_install"]
+- newText = "asdf"
+
+
+seed_init
+{
+	sakura:
+	- tags = ["test-node"]
+	- ip_address = "192.168.56.101"
+	- ssh_user = "sakura"
+	- ssh_port = 22
+	- ssh_key_path = "~/.ssh/sakura_test"
+	- target_path = "/tmp/"
+}
+
+
+seed("test-node", "multi_remote.tree")
+- newText = newText

@@ -46,6 +46,8 @@ namespace SakuraTree
 
 SakuraRoot* SakuraRoot::m_root = nullptr;
 std::string SakuraRoot::m_executablePath = "";
+std::string SakuraRoot::m_serverAddress = "127.0.0.1";
+uint16_t SakuraRoot::m_serverPort = 1337;
 TableItem SakuraRoot::m_errorOutput;
 Jinja2Converter* SakuraRoot::m_jinja2Converter = nullptr;
 TreeHandler* SakuraRoot::m_treeHandler = nullptr;
@@ -153,32 +155,14 @@ SakuraRoot::startProcess(const std::string &inputPath,
 {
     std::string errorMessage = "";
 
+    m_serverAddress = serverAddress;
+    m_serverPort = serverPort;
+
     // load predefined trees
     if(m_treeHandler->loadPredefinedSubtrees() == false)
     {
         LOG_ERROR("failed to load predefined trees");
         return false;
-    }
-
-    // process seed if defined
-    if(seedPath != "")
-    {
-        // start server
-        if(m_networking->createServer(serverPort) == false)
-        {
-            LOG_ERROR("failed to create server on port " + std::to_string(1337));
-            return false;
-        }
-
-        // parse and process seed-file and prepare hosts, which are defined in the seed-file
-        if(processSeed(seedPath,
-                       serverAddress,
-                       serverPort,
-                       errorMessage) == false)
-        {
-            LOG_ERROR("failed process seed\n    " + errorMessage);
-            return false;
-        }
     }
 
     // process real task
@@ -204,10 +188,6 @@ SakuraRoot::startProcess(const std::string &inputPath,
         }
 
     }
-
-    // send all tree-files, templates and files too all hosts, which are defined within the
-    // seed-file
-    m_networking->sendDataToAll(m_treeHandler->m_garden);
 
     if(tree == nullptr)
     {
@@ -445,126 +425,6 @@ SakuraRoot::runProcess(SakuraItem* item,
     }
 
     return true;
-}
-
-/**
- * @brief SakuraRoot::processSeed
- * @param seedPath
- * @param serverAddress
- * @param serverPort
- * @param errorMessage
- * @return
- */
-bool
-SakuraRoot::processSeed(const std::string &seedPath,
-                        const std::string &serverAddress,
-                        const uint16_t serverPort,
-                        std::string &errorMessage)
-{
-    // parse seed
-    SeedInitItem* seedItem = prepareSeed(seedPath, errorMessage);
-    if(seedItem == nullptr)
-    {
-        LOG_ERROR("failed to load seed-file " + seedPath);
-        return false;
-    }
-
-    // get predefined provisioning tree
-    TreeItem* provisioningTree = m_treeHandler->getTreeById("sakura_provisioning");
-    assert(provisioningTree != nullptr);
-
-    // prepare values for provisioning subtree
-    DataMap values;
-    values.insert("executable_path", new DataValue(m_executablePath), true);
-    values.insert("server_port", new DataValue(serverPort), true);
-    values.insert("server_ip_address", new DataValue(serverAddress), true);
-
-    // iterate of all hosts, which are defined within the seed-file
-    for(SeedPart* part : seedItem->childs)
-    {
-        std::vector<std::string> tags;
-
-        // get and convert tags inside the part
-        DataArray* unconvertedTags = dynamic_cast<DataArray*>(part->values.get("tags"));
-        if(unconvertedTags != nullptr)
-        {
-            for(uint32_t i = 0; i < unconvertedTags->size(); i++)
-            {
-                tags.push_back(unconvertedTags->get(i)->toString());
-            }
-        }
-
-        // register host based on the information
-        m_networking->registerHost(part->id, tags);
-
-        // set host specific values
-        values.insert("target_path", part->values.get("target_path"), true);
-        values.insert("client_ip_address", part->values.get("ip_address"), true);
-        values.insert("ssh_user", part->values.get("ssh_user"), true);
-        values.insert("ssh_port", part->values.get("ssh_port"), true);
-        values.insert("ssh_key_path", part->values.get("ssh_key_path"), true);
-
-        // run provisioning for the host
-        const bool ret = runProcess(provisioningTree, values);
-        if(ret == false) {
-            return false;
-        }
-    }
-
-    // wait until all hosts ready or until timeout after 10 seconds
-    uint32_t maxTries = 100;
-    while(maxTries > 0)
-    {
-        if(m_networking->areAllHostsReady() == true) {
-            break;
-        }
-
-        usleep(100000);
-        maxTries--;
-    }
-
-    // if timeout then fail
-    if(maxTries == 0) {
-        return false;
-    }
-
-    return true;
-}
-
-/**
- * @brief prepare seed for multi-node-access by parsing the seed-file
- *
- * @param seedPath path to the seed-file
- * @param errorMessage reference to error-message for output
- *
- * @return pointer to parsed seed content
- */
-SeedInitItem*
-SakuraRoot::prepareSeed(const std::string &seedPath,
-                        std::string &errorMessage)
-{
-    Kitsunemimi::Sakura::SakuraParsing sakuraParsing(m_enableDebug);
-
-    // prepare path for parser
-    const std::string parent = Kitsunemimi::Persistence::getParent(seedPath);
-    const std::string relPath = Kitsunemimi::Persistence::getRelativePath(seedPath, parent);
-
-    // parse seed-file
-    SakuraItem* seed = sakuraParsing.parseSingleFile(relPath, parent, errorMessage)->copy();
-
-    // check parser-result
-    if(seed == nullptr) {
-        return nullptr;
-    }
-
-    // check if parsed file was a seed-file
-    if(seed->getType() != SakuraItem::SEED_ITEM)
-    {
-        LOG_ERROR("parsed file " + seedPath + " is not a seed-file");
-        return nullptr;
-    }
-
-    return static_cast<SeedInitItem*>(seed);
 }
 
 }

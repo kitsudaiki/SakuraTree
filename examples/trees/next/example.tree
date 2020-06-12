@@ -1,0 +1,16 @@
+["test example file"]
+
+- test_dict = {"key1": "val1", "key2": "val2"}
+- packages = [  ]
+- path = "/tmp/test_file1 " "/tmp/test_file2 " "/tmp/test_file3 "
+         "/tmp/test_file4 " "/tmp/test_file5"
+
+
+item_update("add entry to list")
+- packages = packages.append(test_dict)
+
+item_update("add entry to list")
+- packages = packages.append(test_dict)
+
+print("print path")
+- packages = packages
