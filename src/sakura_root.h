@@ -37,6 +37,7 @@ class SakuraNetwork;
 }
 namespace Project {
 class Session;
+class SakuraGarden;
 }
 }
 
@@ -46,7 +47,6 @@ namespace SakuraTree
 {
 class SakuraThread;
 class ThreadPool;
-class TreeHandler;
 
 class SakuraRoot
 {
@@ -94,7 +94,7 @@ public:
     static uint16_t m_serverPort;
     static Jinja2Converter* m_jinja2Converter;
     static Kitsunemimi::TableItem m_errorOutput;
-    static SakuraTree::TreeHandler* m_treeHandler;
+    static Kitsunemimi::Sakura::SakuraGarden* m_currentGarden;
     static Kitsunemimi::Sakura::SakuraNetwork* m_networking;
 
     bool m_enableDebug = false;
@@ -112,7 +112,8 @@ private:
                      const uint16_t serverPort,
                      std::string &errorMessage);
     SeedInitItem* prepareSeed(const std::string &seedPath,
-                          std::string &errorMessage);
+                              std::string &errorMessage);
+    bool loadPredefinedSubtrees(std::string &errorMessage);
 };
 
 }

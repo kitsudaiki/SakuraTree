@@ -23,7 +23,6 @@
 #include "sakura_thread.h"
 
 #include <sakura_root.h>
-#include <tree_handler.h>
 
 #include <libKitsunemimiSakuraNetwork/sakura_network.h>
 
@@ -358,9 +357,9 @@ SakuraThread::processSubtree(SubtreeItem* subtreeItem,
     std::string errorMessage = "";
 
     // get subtree-file based on the required path
-    TreeHandler* treeHandler = SakuraRoot::m_root->m_treeHandler;
+    Kitsunemimi::Sakura::SakuraGarden* treeHandler = SakuraRoot::m_root->m_currentGarden;
     const std::string relPath = treeHandler->getRelativePath(filePath, subtreeItem->nameOrPath);
-    SakuraItem* newSubtree = treeHandler->getTree(relPath, treeHandler->m_garden.rootPath);
+    SakuraItem* newSubtree = treeHandler->getTree(relPath, SakuraRoot::m_currentGarden->rootPath);
     if(newSubtree == nullptr)
     {
         SakuraRoot::m_root->createError("subtree-processing",
@@ -420,7 +419,7 @@ SakuraThread::processSubtree(SubtreeItem* subtreeItem,
 /**
  * @brief process a seed-init-item
  *
- * @param seed-init object, which should be processed
+ * @param seedItem seed-init object, which should be processed
  *
  * @return true if successful, else false
  */
@@ -438,7 +437,7 @@ SakuraThread::processSeedInit(Sakura::SeedInitItem *seedItem,
     }
 
     // get predefined provisioning tree
-    TreeItem* provisioningTree = SakuraRoot::m_treeHandler->getTreeById("sakura_provisioning");
+    TreeItem* provisioningTree = SakuraRoot::m_currentGarden->getRessource("sakura_provisioning");
     assert(provisioningTree != nullptr);
 
     // prepare values for provisioning subtree
@@ -516,7 +515,7 @@ SakuraThread::processSeedInit(Sakura::SeedInitItem *seedItem,
     }
 
     // send all tree-files, templates and files too all hosts, which are defined within the seed
-    SakuraRoot::m_networking->sendDataToAll(SakuraRoot::m_treeHandler->m_garden);
+    SakuraRoot::m_networking->sendDataToAll(*SakuraRoot::m_currentGarden);
 
     return true;
 }
@@ -625,8 +624,6 @@ SakuraThread::processIf(IfBranching* ifCondition,
  * @brief process a for-each-loop
  *
  * @param subtree object, which should be processed
- * @param parallel true, to encapsulate each cycle of the loop into a subtree-object and add these
- *                 to the subtree-queue, to be processed by multiple worker-threads
  *
  * @return true if successful, else false
  */
@@ -727,8 +724,6 @@ SakuraThread::processForEach(ForEachBranching* subtree,
  * @brief process a for-loop
  *
  * @param subtree object, which should be processed
- * @param parallel true, to encapsulate each cycle of the loop into a subtree-object and add these
- *                 to the subtree-queue, to be processed by multiple worker-threads
  *
  * @return true if successful, else false
  */

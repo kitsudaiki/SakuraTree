@@ -23,7 +23,6 @@
 #include "template_create_blossom.h"
 #include <libKitsunemimiPersistence/files/file_methods.h>
 #include <sakura_root.h>
-#include <tree_handler.h>
 #include <libKitsunemimiJinja2/jinja2_converter.h>
 #include <libKitsunemimiPersistence/files/text_file.h>
 
@@ -48,7 +47,7 @@ TemplateCreateBlossom::initBlossom(BlossomItem &blossomItem)
     m_destinationPath = blossomItem.values.getValueAsString("dest_path");
 
     // create source-path
-    m_templatePath = SakuraRoot::m_treeHandler->getRelativePath(blossomItem.blossomPath,
+    m_templatePath = SakuraRoot::m_currentGarden->getRelativePath(blossomItem.blossomPath,
                                                                 m_templatePath,
                                                                 "templates");
 
@@ -62,7 +61,7 @@ void
 TemplateCreateBlossom::preCheck(BlossomItem &blossomItem)
 {
     // read template-file
-    std::string fileContent = SakuraRoot::m_treeHandler->m_garden.getTemplate(m_templatePath);
+    std::string fileContent = SakuraRoot::m_currentGarden->getTemplate(m_templatePath);
     if(fileContent == "")
     {
         blossomItem.success = false;

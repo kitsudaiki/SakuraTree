@@ -21,7 +21,6 @@
  */
 
 #include "sakura_root.h"
-#include <tree_handler.h>
 #include <config.h>
 
 #include <processing/common/item_methods.h>
@@ -41,6 +40,8 @@
 #include <libKitsunemimiPersistence/logger/logger.h>
 #include <libKitsunemimiPersistence/files/file_methods.h>
 
+#include <sakura_provisioning_subtree.h>
+
 namespace SakuraTree
 {
 
@@ -50,7 +51,7 @@ std::string SakuraRoot::m_serverAddress = "127.0.0.1";
 uint16_t SakuraRoot::m_serverPort = 1337;
 TableItem SakuraRoot::m_errorOutput;
 Jinja2Converter* SakuraRoot::m_jinja2Converter = nullptr;
-TreeHandler* SakuraRoot::m_treeHandler = nullptr;
+Kitsunemimi::Sakura::SakuraGarden* SakuraRoot::m_currentGarden = nullptr;
 Kitsunemimi::Sakura::SakuraNetwork* SakuraRoot::m_networking = nullptr;
 
 /**
@@ -67,7 +68,7 @@ SakuraRoot::SakuraRoot(const std::string &executablePath,
     m_root = this;
     m_executablePath = executablePath;
     m_jinja2Converter = new Jinja2Converter();
-    m_treeHandler = new TreeHandler();
+    m_currentGarden = new Kitsunemimi::Sakura::SakuraGarden();
 
     // initialize error-output
     m_errorOutput.addColumn("Field");
@@ -159,14 +160,15 @@ SakuraRoot::startProcess(const std::string &inputPath,
     m_serverPort = serverPort;
 
     // load predefined trees
-    if(m_treeHandler->loadPredefinedSubtrees() == false)
+    if(loadPredefinedSubtrees(errorMessage) == false)
     {
-        LOG_ERROR("failed to load predefined trees");
+        LOG_ERROR("Failed to load predefined trees");
+        LOG_ERROR("    " + errorMessage);
         return false;
     }
 
     // process real task
-    if(m_treeHandler->addTree(inputPath, errorMessage) == false)
+    if(m_currentGarden->addTree(inputPath, errorMessage) == false)
     {
         LOG_ERROR("failed to add trees\n    " + errorMessage);
         return false;
@@ -177,14 +179,14 @@ SakuraRoot::startProcess(const std::string &inputPath,
     // get initial tree-file
     if(Kitsunemimi::Persistence::isFile(inputPath))
     {
-        tree = m_treeHandler->getTree(inputPath);
+        tree = m_currentGarden->getTree(inputPath);
     }
     else
     {
         if(initialTreeId != "") {
-            tree = m_treeHandler->getTreeById(initialTreeId);
+            tree = m_currentGarden->getTreeById(initialTreeId);
         } else {
-            tree = m_treeHandler->getTree(inputPath);
+            tree = m_currentGarden->getTree(inputPath);
         }
 
     }
@@ -229,7 +231,7 @@ SakuraRoot::startSubtreeProcess(const std::string &relativePath,
     std::cout<<"startSubtreeProcess"<<std::endl;
 
     // get tree
-    SakuraItem* processPlan = m_treeHandler->getTree(relativePath);
+    SakuraItem* processPlan = m_currentGarden->getTree(relativePath);
     if(processPlan == nullptr) {
         return false;
     }
@@ -421,6 +423,25 @@ SakuraRoot::runProcess(SakuraItem* item,
     // error-output
     // TODO: better solution necessary instead of checking the number of rows
     if(m_errorOutput.getNumberOfRows() > 0) {
+        return false;
+    }
+
+    return true;
+}
+
+/**
+ * @brief load predefined subtrees
+ */
+bool
+SakuraRoot::loadPredefinedSubtrees(std::string &errorMessage)
+{
+    // get predifile provisioning subtree
+    std::string provisioningSubtree(reinterpret_cast<char*>(sakura_provisioning_subtree_tree),
+                                    sakura_provisioning_subtree_tree_len);
+    Kitsunemimi::replaceSubstring(provisioningSubtree, "\\n", "\n");
+
+    bool ret = m_currentGarden->addResource(provisioningSubtree, errorMessage);
+    if(ret == false) {
         return false;
     }
 

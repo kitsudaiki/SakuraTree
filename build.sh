@@ -89,7 +89,7 @@ get_required_kitsune_lib_repo "libKitsunemimiProjectNetwork" "master" 4
 echo ""
 echo "###########################################################################################################"
 echo ""
-get_required_kitsune_lib_repo "libKitsunemimiSakuraNetwork" "master" 4
+get_required_kitsune_lib_repo "libKitsunemimiSakuraNetwork" "update-multinode-setup" 4
 echo ""
 echo "###########################################################################################################"
 echo ""

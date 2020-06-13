@@ -109,7 +109,6 @@ HEADERS += \
     src/processing/blossoms/files/common_files/path_delete_blossom.h \
     src/processing/blossoms/files/common_files/path_rename_blossom.h \
     src/processing/blossoms/special/item_update_blossom.h \
-    src/tree_handler.h \
     src/args.h \
     src/config.h
 
@@ -149,8 +148,7 @@ SOURCES += \
     src/processing/blossoms/files/common_files/path_copy_blossom.cpp \
     src/processing/blossoms/files/common_files/path_delete_blossom.cpp \
     src/processing/blossoms/files/common_files/path_rename_blossom.cpp \
-    src/processing/blossoms/special/item_update_blossom.cpp \
-    src/tree_handler.cpp
+    src/processing/blossoms/special/item_update_blossom.cpp
 
 CONFIG(run_tests) {
 TARGET = SakuraTree_Test
