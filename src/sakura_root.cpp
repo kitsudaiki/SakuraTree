@@ -148,7 +148,6 @@ SakuraRoot::startProcess(const std::string &configFilePath)
  */
 bool
 SakuraRoot::startProcess(const std::string &inputPath,
-                         const std::string &seedPath,
                          const DataMap &initialValues,
                          const std::string &initialTreeId,
                          const std::string &serverAddress,
