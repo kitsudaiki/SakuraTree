@@ -203,7 +203,9 @@ SakuraRoot::startProcess(const std::string &inputPath,
     // process tree-file with initial values
     if(runProcess(tree, initialValues) == false)
     {
-        LOG_ERROR(m_errorOutput.toString());
+        if(m_errorOutput.getNumberOfRows() > 0) {
+            LOG_ERROR(m_errorOutput.toString());
+        }
         return false;
     }
 
