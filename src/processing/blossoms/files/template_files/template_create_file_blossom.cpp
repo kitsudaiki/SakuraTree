@@ -164,11 +164,10 @@ TemplateCreateFileBlossom::runTask(BlossomItem &blossomItem)
 void
 TemplateCreateFileBlossom::postCheck(BlossomItem &blossomItem)
 {
-    std::string errorMessage = "";
     std::string fileContent = "";
     bool ret = Kitsunemimi::Persistence::readFile(fileContent,
                                                   m_destinationPath,
-                                                  errorMessage);
+                                                  blossomItem.outputMessage);
     if(ret == false
             || m_convertedContent != fileContent)
     {
