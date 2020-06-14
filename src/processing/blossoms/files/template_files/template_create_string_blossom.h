@@ -1,5 +1,5 @@
 /**
- * @file        template_create_blossom.h
+ * @file        template_create_string_blossom.h
  *
  * @author      Tobias Anker <tobias.anker@kitsunemimi.moe>
  *
@@ -20,21 +20,20 @@
  *      limitations under the License.
  */
 
-#ifndef TEMPLATE_BLOSSOM_H
-#define TEMPLATE_BLOSSOM_H
+#ifndef TEMPLATE_CREATE_STRING_BLOSSOM_H
+#define TEMPLATE_CREATE_STRING_BLOSSOM_H
 
 #include <processing/blossoms/blossom.h>
 
 namespace SakuraTree
 {
-class TemplateCreateBlossom_Test;
 
-class TemplateCreateBlossom
+class TemplateCreateStringBlossom
         : public Blossom
 {
 
 public:
-    TemplateCreateBlossom();
+    TemplateCreateStringBlossom();
 
 protected:
     void initBlossom(BlossomItem &blossomItem);
@@ -44,8 +43,6 @@ protected:
     void closeBlossom(BlossomItem &blossomItem);
 
 private:
-    friend TemplateCreateBlossom_Test;
-
     std::string m_templatePath = "";
     std::string m_destinationPath = "";
 
@@ -54,4 +51,4 @@ private:
 
 }
 
-#endif // TEMPLATE_BLOSSOM_H
+#endif // TEMPLATE_CREATE_STRING_BLOSSOM_H

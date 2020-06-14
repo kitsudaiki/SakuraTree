@@ -1,5 +1,5 @@
 /**
- * @file        template_create_blossom.cpp
+ * @file        template_create_file_blossom.cpp
  *
  * @author      Tobias Anker <tobias.anker@kitsunemimi.moe>
  *
@@ -20,7 +20,7 @@
  *      limitations under the License.
  */
 
-#include "template_create_blossom.h"
+#include "template_create_file_blossom.h"
 #include <libKitsunemimiPersistence/files/file_methods.h>
 #include <sakura_root.h>
 #include <libKitsunemimiJinja2/jinja2_converter.h>
@@ -29,7 +29,7 @@
 namespace SakuraTree
 {
 
-TemplateCreateBlossom::TemplateCreateBlossom()
+TemplateCreateFileBlossom::TemplateCreateFileBlossom()
     : Blossom()
 {
     m_requiredKeys.insert("source_path", new DataValue(true));
@@ -41,7 +41,7 @@ TemplateCreateBlossom::TemplateCreateBlossom()
  * initBlossom
  */
 void
-TemplateCreateBlossom::initBlossom(BlossomItem &blossomItem)
+TemplateCreateFileBlossom::initBlossom(BlossomItem &blossomItem)
 {
     m_templatePath = blossomItem.values.getValueAsString("source_path");
     m_destinationPath = blossomItem.values.getValueAsString("dest_path");
@@ -58,7 +58,7 @@ TemplateCreateBlossom::initBlossom(BlossomItem &blossomItem)
  * preCheck
  */
 void
-TemplateCreateBlossom::preCheck(BlossomItem &blossomItem)
+TemplateCreateFileBlossom::preCheck(BlossomItem &blossomItem)
 {
     // read template-file
     std::string fileContent = SakuraRoot::m_currentGarden->getTemplate(m_templatePath);
@@ -121,7 +121,7 @@ TemplateCreateBlossom::preCheck(BlossomItem &blossomItem)
  * runTask
  */
 void
-TemplateCreateBlossom::runTask(BlossomItem &blossomItem)
+TemplateCreateFileBlossom::runTask(BlossomItem &blossomItem)
 {
     std::string errorMessage = "";
     bool writeResult = Kitsunemimi::Persistence::writeFile(m_destinationPath,
@@ -145,7 +145,7 @@ TemplateCreateBlossom::runTask(BlossomItem &blossomItem)
  * postCheck
  */
 void
-TemplateCreateBlossom::postCheck(BlossomItem &blossomItem)
+TemplateCreateFileBlossom::postCheck(BlossomItem &blossomItem)
 {
     std::string errorMessage = "";
     std::string fileContent = "";
@@ -164,7 +164,7 @@ TemplateCreateBlossom::postCheck(BlossomItem &blossomItem)
  * closeBlossom
  */
 void
-TemplateCreateBlossom::closeBlossom(BlossomItem &blossomItem)
+TemplateCreateFileBlossom::closeBlossom(BlossomItem &blossomItem)
 {
     blossomItem.success = true;
 }
