@@ -48,6 +48,8 @@ private:
 
     std::string m_templatePath = "";
     std::string m_destinationPath = "";
+    std::string m_owner = "";
+    std::string m_permission = "";
 
     std::string m_convertedContent = "";
 };

@@ -36,6 +36,8 @@ TemplateCreateFileBlossom::TemplateCreateFileBlossom()
 {
     m_requiredKeys.insert("source_path", new DataValue(true));
     m_requiredKeys.insert("dest_path", new DataValue(true));
+    m_requiredKeys.insert("owner", new DataValue(false));
+    m_requiredKeys.insert("permission", new DataValue(false));
     m_requiredKeys.insert("*", new DataValue(false));
 }
 
@@ -47,6 +49,8 @@ TemplateCreateFileBlossom::initBlossom(BlossomItem &blossomItem)
 {
     m_templatePath = blossomItem.values.getValueAsString("source_path");
     m_destinationPath = blossomItem.values.getValueAsString("dest_path");
+    m_owner = blossomItem.values.getValueAsString("owner");
+    m_permission = blossomItem.values.getValueAsString("permission");
 
     // create source-path
     m_templatePath = SakuraRoot::m_currentGarden->getRelativePath(blossomItem.blossomPath,
@@ -97,18 +101,58 @@ void
 TemplateCreateFileBlossom::runTask(BlossomItem &blossomItem)
 {
     std::string errorMessage = "";
-    bool writeResult = Kitsunemimi::Persistence::writeFile(m_destinationPath,
-                                                           m_convertedContent,
-                                                           errorMessage,
-                                                           true);
-    if(writeResult == false)
+    blossomItem.success = Kitsunemimi::Persistence::writeFile(m_destinationPath,
+                                                              m_convertedContent,
+                                                              errorMessage,
+                                                              true);
+    if(blossomItem.success == false)
     {
         blossomItem.success = false;
-        blossomItem.outputMessage = "couldn't write file "
+        blossomItem.outputMessage = "couldn't write template-file to "
                                    + m_destinationPath +
                                    " with reason: "
                                    + errorMessage;
         return;
+    }
+
+    // set owner if defined
+    if(m_owner != "")
+    {
+        std::string command = "chown ";
+
+        command += m_owner + ":" + m_owner + " ";
+        command += m_destinationPath;
+
+        LOG_DEBUG("run command: " + command);
+
+        ProcessResult processResult = runSyncProcess(command);
+        blossomItem.success = processResult.success;
+
+        if(blossomItem.success == false)
+        {
+            blossomItem.outputMessage = processResult.processOutput;
+            return;
+        }
+    }
+
+    // set permission if defined
+    if(m_permission != "")
+    {
+        std::string command = "chmod ";
+
+        command += m_permission + " ";
+        command += m_destinationPath;
+
+        LOG_DEBUG("run command: " + command);
+
+        ProcessResult processResult = runSyncProcess(command);
+        blossomItem.success = processResult.success;
+
+        if(blossomItem.success == false)
+        {
+            blossomItem.outputMessage = processResult.processOutput;
+            return;
+        }
     }
 
     blossomItem.success = true;
