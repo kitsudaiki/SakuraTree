@@ -50,8 +50,8 @@ TemplateCreateFileBlossom::initBlossom(BlossomItem &blossomItem)
 
     // create source-path
     m_templatePath = SakuraRoot::m_currentGarden->getRelativePath(blossomItem.blossomPath,
-                                                                m_templatePath,
-                                                                "templates");
+                                                                  m_templatePath,
+                                                                  "templates");
 
     blossomItem.success = true;
 }

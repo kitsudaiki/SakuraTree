@@ -44,9 +44,6 @@ protected:
 
 private:
     std::string m_templatePath = "";
-    std::string m_destinationPath = "";
-
-    std::string m_convertedContent = "";
 };
 
 }
