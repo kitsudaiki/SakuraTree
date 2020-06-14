@@ -111,7 +111,8 @@ HEADERS += \
     src/args.h \
     src/config.h \
     src/processing/blossoms/files/template_files/template_create_file_blossom.h \
-    src/processing/blossoms/files/template_files/template_create_string_blossom.h
+    src/processing/blossoms/files/template_files/template_create_string_blossom.h \
+    src/processing/blossoms/files/template_files/template_methods.h
 
 SOURCES += \
     src/processing/blossoms/files/ini_files/ini_delete_entry_blossom.cpp \
@@ -150,7 +151,8 @@ SOURCES += \
     src/processing/blossoms/files/common_files/path_rename_blossom.cpp \
     src/processing/blossoms/special/item_update_blossom.cpp \
     src/processing/blossoms/files/template_files/template_create_file_blossom.cpp \
-    src/processing/blossoms/files/template_files/template_create_string_blossom.cpp
+    src/processing/blossoms/files/template_files/template_create_string_blossom.cpp \
+    src/processing/blossoms/files/template_files/template_methods.cpp
 
 CONFIG(run_tests) {
 TARGET = SakuraTree_Test

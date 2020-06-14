@@ -1,5 +1,5 @@
 /**
- * @file        template_create_file_blossom.h
+ * @file        template_methods.h
  *
  * @author      Tobias Anker <tobias.anker@kitsunemimi.moe>
  *
@@ -20,38 +20,20 @@
  *      limitations under the License.
  */
 
-#ifndef TEMPLATE_CREATE_FILE_BLOSSOM_H
-#define TEMPLATE_CREATE_FILE_BLOSSOM_H
+#ifndef TEMPLATE_METHODS_H
+#define TEMPLATE_METHODS_H
 
-#include <processing/blossoms/blossom.h>
+#include <common.h>
+#include <sakura_root.h>
 
 namespace SakuraTree
 {
-class TemplateCreateBlossom_Test;
 
-class TemplateCreateFileBlossom
-        : public Blossom
-{
-
-public:
-    TemplateCreateFileBlossom();
-
-protected:
-    void initBlossom(BlossomItem &blossomItem);
-    void preCheck(BlossomItem &blossomItem);
-    void runTask(BlossomItem &blossomItem);
-    void postCheck(BlossomItem &blossomItem);
-    void closeBlossom(BlossomItem &blossomItem);
-
-private:
-    friend TemplateCreateBlossom_Test;
-
-    std::string m_templatePath = "";
-    std::string m_destinationPath = "";
-
-    std::string m_convertedContent = "";
-};
+bool convertTemplate(std::string &output,
+                     const std::string &templatePath,
+                     const ValueItemMap &values,
+                     std::string &errorMessage);
 
 }
 
-#endif // TEMPLATE_CREATE_FILE_BLOSSOM_H
+#endif // TEMPLATE_METHODS_H

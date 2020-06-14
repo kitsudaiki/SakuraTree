@@ -1,0 +1,83 @@
+/**
+ * @file        template_methods.cpp
+ *
+ * @author      Tobias Anker <tobias.anker@kitsunemimi.moe>
+ *
+ * @copyright   Apache License Version 2.0
+ *
+ *      Copyright 2019 Tobias Anker
+ *
+ *      Licensed under the Apache License, Version 2.0 (the "License");
+ *      you may not use this file except in compliance with the License.
+ *      You may obtain a copy of the License at
+ *
+ *          http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *      Unless required by applicable law or agreed to in writing, software
+ *      distributed under the License is distributed on an "AS IS" BASIS,
+ *      WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *      See the License for the specific language governing permissions and
+ *      limitations under the License.
+ */
+
+#include "template_methods.h"
+
+#include <libKitsunemimiJinja2/jinja2_converter.h>
+
+namespace SakuraTree
+{
+
+/**
+ * @brief convert a jinja2-template with values into a new string
+ *
+ * @param output reference for the converted output-string
+ * @param templatePath relative-path to the template-file within the sakura-garden
+ * @param values value-item-map with all values, which should be inserted into the template
+ * @param errorMessage reference-string for output of the error-message in case of an error
+ *
+ * @return true, if successful, else false
+ */
+bool
+convertTemplate(std::string &output,
+                const std::string &templatePath,
+                const ValueItemMap &values,
+                std::string &errorMessage)
+{
+    // read template-file
+    const std::string templateFileContent = SakuraRoot::m_currentGarden->getTemplate(templatePath);
+    if(templateFileContent == "")
+    {
+        errorMessage = "couldn't find template-file " + templatePath;
+        return false;
+    }
+
+    // convert value-item-map into data-map to be processable by the jinja2-library
+    DataMap inputData;
+    std::map<std::string, ValueItem>::const_iterator it;
+    for(it = values.const_begin();
+        it != values.const_end();
+        it++)
+    {
+        if(it->second.item != nullptr) {
+            inputData.insert(it->first, it->second.item->copy());
+        }
+    }
+
+    // create file-content form template
+    bool jinja2Result = SakuraRoot::m_root->m_jinja2Converter->convert(output,
+                                                                       templateFileContent,
+                                                                       &inputData,
+                                                                       errorMessage);
+    if(jinja2Result == false)
+    {
+        errorMessage = "couldn't convert template-file "
+                       + templatePath +
+                       " with reason: "
+                       + errorMessage;
+        return false;
+    }
+
+    return true;
+}
+
+}

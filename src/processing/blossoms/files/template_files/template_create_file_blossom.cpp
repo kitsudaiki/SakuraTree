@@ -21,9 +21,11 @@
  */
 
 #include "template_create_file_blossom.h"
-#include <libKitsunemimiPersistence/files/file_methods.h>
+#include "template_methods.h"
+
 #include <sakura_root.h>
-#include <libKitsunemimiJinja2/jinja2_converter.h>
+
+#include <libKitsunemimiPersistence/files/file_methods.h>
 #include <libKitsunemimiPersistence/files/text_file.h>
 
 namespace SakuraTree
@@ -60,39 +62,11 @@ TemplateCreateFileBlossom::initBlossom(BlossomItem &blossomItem)
 void
 TemplateCreateFileBlossom::preCheck(BlossomItem &blossomItem)
 {
-    // read template-file
-    std::string fileContent = SakuraRoot::m_currentGarden->getTemplate(m_templatePath);
-    if(fileContent == "")
-    {
-        blossomItem.success = false;
-        blossomItem.outputMessage = "couldn't find template-file " + m_templatePath;
-        return;
-    }
-
-    DataMap inputData;
-    std::map<std::string, ValueItem>::iterator it;
-    for(it = blossomItem.values.begin();
-        it != blossomItem.values.end();
-        it++)
-    {
-        if(it->second.item != nullptr) {
-            inputData.insert(it->first, it->second.item->copy());
-        }
-    }
-
-    // create file-content form template
-    std::string errorMessage;
-    bool jinja2Result = SakuraRoot::m_root->m_jinja2Converter->convert(m_fileContent,
-                                                                       fileContent,
-                                                                       &inputData,
-                                                                       errorMessage);
-    if(jinja2Result == false)
-    {
-        blossomItem.success = false;
-        blossomItem.outputMessage = "couldn't convert template-file "
-                                   + m_templatePath +
-                                   " with reason: "
-                                   + errorMessage;
+    blossomItem.success = convertTemplate(m_convertedContent,
+                                          m_templatePath,
+                                          blossomItem.values,
+                                          blossomItem.outputMessage);
+    if(blossomItem.success == false) {
         return;
     }
 
@@ -100,13 +74,12 @@ TemplateCreateFileBlossom::preCheck(BlossomItem &blossomItem)
     if(Kitsunemimi::Persistence::doesPathExist(m_destinationPath))
     {
         // read the already existing file and compare it the current file-content
-        errorMessage.clear();
-        fileContent.clear();
-        bool results = Kitsunemimi::Persistence::readFile(fileContent,
-                                                          m_destinationPath,
-                                                          errorMessage);
-        if(results == true
-                && m_fileContent == fileContent)
+        std::string existingFileContent;
+        const bool ret = Kitsunemimi::Persistence::readFile(existingFileContent,
+                                                            m_destinationPath,
+                                                            blossomItem.outputMessage);
+        if(ret == true
+                && m_convertedContent == existingFileContent)
         {
             blossomItem.skip = true;
             blossomItem.success = true;
@@ -125,7 +98,7 @@ TemplateCreateFileBlossom::runTask(BlossomItem &blossomItem)
 {
     std::string errorMessage = "";
     bool writeResult = Kitsunemimi::Persistence::writeFile(m_destinationPath,
-                                                           m_fileContent,
+                                                           m_convertedContent,
                                                            errorMessage,
                                                            true);
     if(writeResult == false)
@@ -149,9 +122,11 @@ TemplateCreateFileBlossom::postCheck(BlossomItem &blossomItem)
 {
     std::string errorMessage = "";
     std::string fileContent = "";
-    bool ret = Kitsunemimi::Persistence::readFile(fileContent, m_destinationPath, errorMessage);
+    bool ret = Kitsunemimi::Persistence::readFile(fileContent,
+                                                  m_destinationPath,
+                                                  errorMessage);
     if(ret == false
-            || m_fileContent != fileContent)
+            || m_convertedContent != fileContent)
     {
         blossomItem.success = false;
         return;
