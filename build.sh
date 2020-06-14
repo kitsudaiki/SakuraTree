@@ -81,7 +81,7 @@ get_required_kitsune_lib_repo "libKitsunemimiJinja2" "master" 1
 echo ""
 echo "###########################################################################################################"
 echo ""
-get_required_kitsune_lib_repo "libKitsunemimiSakuraParser" "update-template-blossom" 1
+get_required_kitsune_lib_repo "libKitsunemimiSakuraParser" "master" 1
 echo ""
 echo "###########################################################################################################"
 echo ""

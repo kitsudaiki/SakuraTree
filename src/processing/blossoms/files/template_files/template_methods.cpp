@@ -51,11 +51,25 @@ convertTemplate(std::string &output,
         return false;
     }
 
+    // get variables
+    ValueItemMap* variables = nullptr;
+    std::map<std::string, ValueItemMap*>::const_iterator variablesIt;
+    variablesIt = values.m_childMaps.find("variables");
+    if(variablesIt != values.m_childMaps.end())
+    {
+        variables = variablesIt->second;
+    }
+    else
+    {
+        errorMessage = "couldn't find variables in the template-values";
+        return false;
+    }
+
     // convert value-item-map into data-map to be processable by the jinja2-library
     DataMap inputData;
     std::map<std::string, ValueItem>::const_iterator it;
-    for(it = values.m_valueMap.begin();
-        it != values.m_valueMap.end();
+    for(it = variables->m_valueMap.begin();
+        it != variables->m_valueMap.end();
         it++)
     {
         if(it->second.item != nullptr) {
