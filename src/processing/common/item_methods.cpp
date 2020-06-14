@@ -308,6 +308,17 @@ fillInputValueItemMap(ValueItemMap &items,
         }
     }
 
+    std::map<std::string, ValueItemMap*>::iterator itChild;
+    for(itChild = items.m_childMaps.begin();
+        itChild != items.m_childMaps.end();
+        itChild++)
+    {
+        const bool ret = fillInputValueItemMap(*itChild->second, insertValues, errorMessage);
+        if(ret == false) {
+            return false;
+        }
+    }
+
     return true;
 }
 
