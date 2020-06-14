@@ -54,8 +54,8 @@ convertTemplate(std::string &output,
     // convert value-item-map into data-map to be processable by the jinja2-library
     DataMap inputData;
     std::map<std::string, ValueItem>::const_iterator it;
-    for(it = values.const_begin();
-        it != values.const_end();
+    for(it = values.m_valueMap.begin();
+        it != values.m_valueMap.end();
         it++)
     {
         if(it->second.item != nullptr) {

@@ -72,8 +72,8 @@ checkOutput(BlossomItem &blossomItem,
             const bool hasOutput)
 {
     std::map<std::string, ValueItem>::const_iterator it;
-    for(it = blossomItem.values.const_begin();
-        it != blossomItem.values.const_end();
+    for(it = blossomItem.values.m_valueMap.begin();
+        it != blossomItem.values.m_valueMap.end();
         it++)
     {
         ValueItem tempItem = blossomItem.values.getValueItem(it->first);
@@ -116,8 +116,8 @@ checkBlossomItem(BlossomItem &blossomItem,
     {
         // check if all keys in the values of the blossom-item also exist in the required-key-list
         std::map<std::string, ValueItem>::const_iterator it;
-        for(it = blossomItem.values.const_begin();
-            it != blossomItem.values.const_end();
+        for(it = blossomItem.values.m_valueMap.begin();
+            it != blossomItem.values.m_valueMap.end();
             it++)
         {
             ValueItem tempItem = blossomItem.values.getValueItem(it->first);

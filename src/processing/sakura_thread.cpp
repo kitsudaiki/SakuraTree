@@ -389,8 +389,8 @@ SakuraThread::processSubtree(SubtreeItem* subtreeItem,
         DataMap* tempMap = new DataMap();
 
         std::map<std::string, ValueItem>::iterator valueIt;
-        for(valueIt = mapIt->second.begin();
-            valueIt != mapIt->second.end();
+        for(valueIt = mapIt->second.m_valueMap.begin();
+            valueIt != mapIt->second.m_valueMap.end();
             valueIt++)
         {
             errorMessage = "";

@@ -299,8 +299,8 @@ fillInputValueItemMap(ValueItemMap &items,
     Result result;
 
     std::map<std::string, ValueItem>::iterator it;
-    for(it = items.begin();
-        it != items.end();
+    for(it = items.m_valueMap.begin();
+        it != items.m_valueMap.end();
         it++)
     {
         if(fillValueItem(it->second, insertValues, errorMessage) == false) {
@@ -326,8 +326,8 @@ fillOutputValueItemMap(ValueItemMap &items,
     bool found = false;
 
     std::map<std::string, ValueItem>::iterator it;
-    for(it = items.begin();
-        it != items.end();
+    for(it = items.m_valueMap.begin();
+        it != items.m_valueMap.end();
         it++)
     {
         // replace only as output-marked values
@@ -399,8 +399,8 @@ overrideItems(DataMap &original,
     if(onlyExisting)
     {
         std::map<std::string, ValueItem>::const_iterator overrideIt;
-        for(overrideIt = override.const_begin();
-            overrideIt != override.const_end();
+        for(overrideIt = override.m_valueMap.begin();
+            overrideIt != override.m_valueMap.end();
             overrideIt++)
         {
             std::map<std::string, DataItem*>::iterator originalIt;
@@ -414,8 +414,8 @@ overrideItems(DataMap &original,
     else
     {
         std::map<std::string, ValueItem>::const_iterator overrideIt;
-        for(overrideIt = override.const_begin();
-            overrideIt != override.const_end();
+        for(overrideIt = override.m_valueMap.begin();
+            overrideIt != override.m_valueMap.end();
             overrideIt++)
         {
             original.insert(overrideIt->first, overrideIt->second.item->copy(), true);
@@ -443,14 +443,14 @@ overrideItems(ValueItemMap &original,
     if(onlyExisting)
     {
         std::map<std::string, ValueItem>::const_iterator overrideIt;
-        for(overrideIt = override.const_begin();
-            overrideIt != override.const_end();
+        for(overrideIt = override.m_valueMap.begin();
+            overrideIt != override.m_valueMap.end();
             overrideIt++)
         {
             std::map<std::string, ValueItem>::iterator originalIt;
-            originalIt = original.find(overrideIt->first);
+            originalIt = original.m_valueMap.find(overrideIt->first);
 
-            if(originalIt != original.end())
+            if(originalIt != original.m_valueMap.end())
             {
                 ValueItem temp = overrideIt->second;
                 original.insert(overrideIt->first, temp, true);
@@ -460,14 +460,14 @@ overrideItems(ValueItemMap &original,
     else if(onlyNotExisting)
     {
         std::map<std::string, ValueItem>::const_iterator overrideIt;
-        for(overrideIt = override.const_begin();
-            overrideIt != override.const_end();
+        for(overrideIt = override.m_valueMap.begin();
+            overrideIt != override.m_valueMap.end();
             overrideIt++)
         {
             std::map<std::string, ValueItem>::iterator originalIt;
-            originalIt = original.find(overrideIt->first);
+            originalIt = original.m_valueMap.find(overrideIt->first);
 
-            if(originalIt == original.end())
+            if(originalIt == original.m_valueMap.end())
             {
                 ValueItem temp = overrideIt->second;
                 original.insert(overrideIt->first, temp, true);
@@ -477,8 +477,8 @@ overrideItems(ValueItemMap &original,
     else
     {
         std::map<std::string, ValueItem>::const_iterator overrideIt;
-        for(overrideIt = override.const_begin();
-            overrideIt != override.const_end();
+        for(overrideIt = override.m_valueMap.begin();
+            overrideIt != override.m_valueMap.end();
             overrideIt++)
         {
             ValueItem temp = overrideIt->second;
