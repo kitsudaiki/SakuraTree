@@ -21,7 +21,6 @@
  */
 
 #include "sakura_root.h"
-#include <tree_handler.h>
 #include <config.h>
 
 #include <processing/common/item_methods.h>
@@ -41,14 +40,18 @@
 #include <libKitsunemimiPersistence/logger/logger.h>
 #include <libKitsunemimiPersistence/files/file_methods.h>
 
+#include <sakura_provisioning_subtree.h>
+
 namespace SakuraTree
 {
 
 SakuraRoot* SakuraRoot::m_root = nullptr;
 std::string SakuraRoot::m_executablePath = "";
+std::string SakuraRoot::m_serverAddress = "127.0.0.1";
+uint16_t SakuraRoot::m_serverPort = 1337;
 TableItem SakuraRoot::m_errorOutput;
 Jinja2Converter* SakuraRoot::m_jinja2Converter = nullptr;
-TreeHandler* SakuraRoot::m_treeHandler = nullptr;
+Kitsunemimi::Sakura::SakuraGarden* SakuraRoot::m_currentGarden = nullptr;
 Kitsunemimi::Sakura::SakuraNetwork* SakuraRoot::m_networking = nullptr;
 
 /**
@@ -65,7 +68,7 @@ SakuraRoot::SakuraRoot(const std::string &executablePath,
     m_root = this;
     m_executablePath = executablePath;
     m_jinja2Converter = new Jinja2Converter();
-    m_treeHandler = new TreeHandler();
+    m_currentGarden = new Kitsunemimi::Sakura::SakuraGarden();
 
     // initialize error-output
     m_errorOutput.addColumn("Field");
@@ -145,7 +148,6 @@ SakuraRoot::startProcess(const std::string &configFilePath)
  */
 bool
 SakuraRoot::startProcess(const std::string &inputPath,
-                         const std::string &seedPath,
                          const DataMap &initialValues,
                          const std::string &initialTreeId,
                          const std::string &serverAddress,
@@ -153,36 +155,19 @@ SakuraRoot::startProcess(const std::string &inputPath,
 {
     std::string errorMessage = "";
 
+    m_serverAddress = serverAddress;
+    m_serverPort = serverPort;
+
     // load predefined trees
-    if(m_treeHandler->loadPredefinedSubtrees() == false)
+    if(loadPredefinedSubtrees(errorMessage) == false)
     {
-        LOG_ERROR("failed to load predefined trees");
+        LOG_ERROR("Failed to load predefined trees");
+        LOG_ERROR("    " + errorMessage);
         return false;
     }
 
-    // process seed if defined
-    if(seedPath != "")
-    {
-        // start server
-        if(m_networking->createServer(serverPort) == false)
-        {
-            LOG_ERROR("failed to create server on port " + std::to_string(1337));
-            return false;
-        }
-
-        // parse and process seed-file and prepare hosts, which are defined in the seed-file
-        if(processSeed(seedPath,
-                       serverAddress,
-                       serverPort,
-                       errorMessage) == false)
-        {
-            LOG_ERROR("failed process seed\n    " + errorMessage);
-            return false;
-        }
-    }
-
     // process real task
-    if(m_treeHandler->addTree(inputPath, errorMessage) == false)
+    if(m_currentGarden->addTree(inputPath, errorMessage) == false)
     {
         LOG_ERROR("failed to add trees\n    " + errorMessage);
         return false;
@@ -193,21 +178,17 @@ SakuraRoot::startProcess(const std::string &inputPath,
     // get initial tree-file
     if(Kitsunemimi::Persistence::isFile(inputPath))
     {
-        tree = m_treeHandler->getTree(inputPath);
+        tree = m_currentGarden->getTree(inputPath);
     }
     else
     {
         if(initialTreeId != "") {
-            tree = m_treeHandler->getTreeById(initialTreeId);
+            tree = m_currentGarden->getTreeById(initialTreeId);
         } else {
-            tree = m_treeHandler->getTree(inputPath);
+            tree = m_currentGarden->getTree(inputPath);
         }
 
     }
-
-    // send all tree-files, templates and files too all hosts, which are defined within the
-    // seed-file
-    m_networking->sendDataToAll(m_treeHandler->m_garden);
 
     if(tree == nullptr)
     {
@@ -222,7 +203,9 @@ SakuraRoot::startProcess(const std::string &inputPath,
     // process tree-file with initial values
     if(runProcess(tree, initialValues) == false)
     {
-        LOG_ERROR(m_errorOutput.toString());
+        if(m_errorOutput.getNumberOfRows() > 0) {
+            LOG_ERROR(m_errorOutput.toString());
+        }
         return false;
     }
 
@@ -249,7 +232,7 @@ SakuraRoot::startSubtreeProcess(const std::string &relativePath,
     std::cout<<"startSubtreeProcess"<<std::endl;
 
     // get tree
-    SakuraItem* processPlan = m_treeHandler->getTree(relativePath);
+    SakuraItem* processPlan = m_currentGarden->getTree(relativePath);
     if(processPlan == nullptr) {
         return false;
     }
@@ -448,123 +431,22 @@ SakuraRoot::runProcess(SakuraItem* item,
 }
 
 /**
- * @brief SakuraRoot::processSeed
- * @param seedPath
- * @param serverAddress
- * @param serverPort
- * @param errorMessage
- * @return
+ * @brief load predefined subtrees
  */
 bool
-SakuraRoot::processSeed(const std::string &seedPath,
-                        const std::string &serverAddress,
-                        const uint16_t serverPort,
-                        std::string &errorMessage)
+SakuraRoot::loadPredefinedSubtrees(std::string &errorMessage)
 {
-    // parse seed
-    SeedItem* seedItem = prepareSeed(seedPath, errorMessage);
-    if(seedItem == nullptr)
-    {
-        LOG_ERROR("failed to load seed-file " + seedPath);
-        return false;
-    }
+    // get predifile provisioning subtree
+    std::string provisioningSubtree(reinterpret_cast<char*>(sakura_provisioning_subtree_tree),
+                                    sakura_provisioning_subtree_tree_len);
+    Kitsunemimi::replaceSubstring(provisioningSubtree, "\\n", "\n");
 
-    // get predefined provisioning tree
-    TreeItem* provisioningTree = m_treeHandler->getTreeById("sakura_provisioning");
-    assert(provisioningTree != nullptr);
-
-    // prepare values for provisioning subtree
-    DataMap values;
-    values.insert("executable_path", new DataValue(m_executablePath), true);
-    values.insert("server_port", new DataValue(serverPort), true);
-    values.insert("server_ip_address", new DataValue(serverAddress), true);
-
-    // iterate of all hosts, which are defined within the seed-file
-    for(SeedPart* part : seedItem->childs)
-    {
-        std::vector<std::string> tags;
-
-        // get and convert tags inside the part
-        DataArray* unconvertedTags = dynamic_cast<DataArray*>(part->values.get("tags"));
-        if(unconvertedTags != nullptr)
-        {
-            for(uint32_t i = 0; i < unconvertedTags->size(); i++)
-            {
-                tags.push_back(unconvertedTags->get(i)->toString());
-            }
-        }
-
-        // register host based on the information
-        m_networking->registerHost(part->id, tags);
-
-        // set host specific values
-        values.insert("target_path", part->values.get("target_path"), true);
-        values.insert("client_ip_address", part->values.get("ip_address"), true);
-        values.insert("ssh_user", part->values.get("ssh_user"), true);
-        values.insert("ssh_port", part->values.get("ssh_port"), true);
-        values.insert("ssh_key_path", part->values.get("ssh_key_path"), true);
-
-        // run provisioning for the host
-        const bool ret = runProcess(provisioningTree, values);
-        if(ret == false) {
-            return false;
-        }
-    }
-
-    // wait until all hosts ready or until timeout after 10 seconds
-    uint32_t maxTries = 100;
-    while(maxTries > 0)
-    {
-        if(m_networking->areAllHostsReady() == true) {
-            break;
-        }
-
-        usleep(100000);
-        maxTries--;
-    }
-
-    // if timeout then fail
-    if(maxTries == 0) {
+    bool ret = m_currentGarden->addResource(provisioningSubtree, errorMessage);
+    if(ret == false) {
         return false;
     }
 
     return true;
-}
-
-/**
- * @brief prepare seed for multi-node-access by parsing the seed-file
- *
- * @param seedPath path to the seed-file
- * @param errorMessage reference to error-message for output
- *
- * @return pointer to parsed seed content
- */
-SeedItem*
-SakuraRoot::prepareSeed(const std::string &seedPath,
-                        std::string &errorMessage)
-{
-    Kitsunemimi::Sakura::SakuraParsing sakuraParsing(m_enableDebug);
-
-    // prepare path for parser
-    const std::string parent = Kitsunemimi::Persistence::getParent(seedPath);
-    const std::string relPath = Kitsunemimi::Persistence::getRelativePath(seedPath, parent);
-
-    // parse seed-file
-    SakuraItem* seed = sakuraParsing.parseSingleFile(relPath, parent, errorMessage)->copy();
-
-    // check parser-result
-    if(seed == nullptr) {
-        return nullptr;
-    }
-
-    // check if parsed file was a seed-file
-    if(seed->getType() != SakuraItem::SEED_ITEM)
-    {
-        LOG_ERROR("parsed file " + seedPath + " is not a seed-file");
-        return nullptr;
-    }
-
-    return static_cast<SeedItem*>(seed);
 }
 
 }

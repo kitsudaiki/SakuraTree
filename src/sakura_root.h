@@ -37,6 +37,7 @@ class SakuraNetwork;
 }
 namespace Project {
 class Session;
+class SakuraGarden;
 }
 }
 
@@ -46,7 +47,6 @@ namespace SakuraTree
 {
 class SakuraThread;
 class ThreadPool;
-class TreeHandler;
 
 class SakuraRoot
 {
@@ -59,7 +59,6 @@ public:
     // start processing
     bool startProcess(const std::string &configFilePath);
     bool startProcess(const std::string &inputPath,
-                      const std::string &seedPath,
                       const DataMap &initialValues,
                       const std::string &initialTreeId = "",
                       const std::string &serverAddress = "",
@@ -90,9 +89,11 @@ public:
     // static values
     static SakuraTree::SakuraRoot* m_root;
     static std::string m_executablePath;
+    static std::string m_serverAddress;
+    static uint16_t m_serverPort;
     static Jinja2Converter* m_jinja2Converter;
     static Kitsunemimi::TableItem m_errorOutput;
-    static SakuraTree::TreeHandler* m_treeHandler;
+    static Kitsunemimi::Sakura::SakuraGarden* m_currentGarden;
     static Kitsunemimi::Sakura::SakuraNetwork* m_networking;
 
     bool m_enableDebug = false;
@@ -109,8 +110,9 @@ private:
                      const std::string &serverAddress,
                      const uint16_t serverPort,
                      std::string &errorMessage);
-    SeedItem* prepareSeed(const std::string &seedPath,
-                          std::string &errorMessage);
+    SeedInitItem* prepareSeed(const std::string &seedPath,
+                              std::string &errorMessage);
+    bool loadPredefinedSubtrees(std::string &errorMessage);
 };
 
 }

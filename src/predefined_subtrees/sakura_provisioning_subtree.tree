@@ -1,4 +1,4 @@
-["sakura ssh provisioning"]
+["sakura_provisioning"]
 - executable_path = "{{}}"
 - target_path = "{{}}"
 - server_port = "{{}}"

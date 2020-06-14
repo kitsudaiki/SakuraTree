@@ -22,7 +22,6 @@
 
 #include "path_copy_blossom.h"
 #include <sakura_root.h>
-#include <tree_handler.h>
 #include <libKitsunemimiPersistence/files/file_methods.h>
 #include <libKitsunemimiPersistence/files/binary_file.h>
 #include <libKitsunemimiCommon/common_methods/string_methods.h>
@@ -54,7 +53,7 @@ PathCopyBlossom::initBlossom(BlossomItem &blossomItem)
     if(m_sourcePath.at(0) != '/')
     {
         m_localStorage = true;
-        m_sourcePath = SakuraRoot::m_treeHandler->getRelativePath(blossomItem.blossomPath,
+        m_sourcePath = SakuraRoot::m_currentGarden->getRelativePath(blossomItem.blossomPath,
                                                                   m_sourcePath,
                                                                   "files");
     }
@@ -102,8 +101,7 @@ PathCopyBlossom::runTask(BlossomItem &blossomItem)
 
     if(m_localStorage == true)
     {
-        TreeHandler* treeHandler = SakuraRoot::m_treeHandler;
-        Kitsunemimi::DataBuffer* buffer = treeHandler->m_garden.getFile(m_sourcePath);
+        Kitsunemimi::DataBuffer* buffer = SakuraRoot::m_currentGarden->getFile(m_sourcePath);
 
         if(buffer == nullptr)
         {

@@ -23,7 +23,6 @@
 #include "sakura_thread.h"
 
 #include <sakura_root.h>
-#include <tree_handler.h>
 
 #include <libKitsunemimiSakuraNetwork/sakura_network.h>
 
@@ -112,7 +111,8 @@ SakuraThread::run()
  * @return true if successful, else false
  */
 bool
-SakuraThread::processSakuraItem(SakuraItem* sakuraItem, const std::string &filePath)
+SakuraThread::processSakuraItem(SakuraItem* sakuraItem,
+                                const std::string &filePath)
 {
     //----------------------------------------------------------------------------------------------
     if(sakuraItem->getType() == SakuraItem::SEQUENTIELL_ITEM)
@@ -170,9 +170,15 @@ SakuraThread::processSakuraItem(SakuraItem* sakuraItem, const std::string &fileP
         return processParallelPart(parallel, filePath);
     }
     //----------------------------------------------------------------------------------------------
+    if(sakuraItem->getType() == SakuraItem::SEED_ITEM)
+    {
+        SeedInitItem* seedItem = dynamic_cast<SeedInitItem*>(sakuraItem);
+        return processSeedInit(seedItem, filePath);
+    }
+    //----------------------------------------------------------------------------------------------
     if(sakuraItem->getType() == SakuraItem::SEED_TRIGGER_ITEM)
     {
-        SeedTrigger* seedItem = dynamic_cast<SeedTrigger*>(sakuraItem);
+        SeedTriggerItem* seedItem = dynamic_cast<SeedTriggerItem*>(sakuraItem);
         return processSeedTrigger(seedItem);
     }
     //----------------------------------------------------------------------------------------------
@@ -343,16 +349,17 @@ SakuraThread::processTree(TreeItem* treeItem)
  * @return true if successful, else false
  */
 bool
-SakuraThread::processSubtree(SubtreeItem* subtreeItem, const std::string &filePath)
+SakuraThread::processSubtree(SubtreeItem* subtreeItem,
+                             const std::string &filePath)
 {
     LOG_DEBUG("processSubtree");
 
     std::string errorMessage = "";
 
     // get subtree-file based on the required path
-    TreeHandler* treeHandler = SakuraRoot::m_root->m_treeHandler;
+    Kitsunemimi::Sakura::SakuraGarden* treeHandler = SakuraRoot::m_root->m_currentGarden;
     const std::string relPath = treeHandler->getRelativePath(filePath, subtreeItem->nameOrPath);
-    SakuraItem* newSubtree = treeHandler->getTree(relPath, treeHandler->m_garden.rootPath);
+    SakuraItem* newSubtree = treeHandler->getTree(relPath, SakuraRoot::m_currentGarden->rootPath);
     if(newSubtree == nullptr)
     {
         SakuraRoot::m_root->createError("subtree-processing",
@@ -410,14 +417,118 @@ SakuraThread::processSubtree(SubtreeItem* subtreeItem, const std::string &filePa
 }
 
 /**
- * @brief process a seed-item
+ * @brief process a seed-init-item
  *
- * @param seed object, which should be processed
+ * @param seedItem seed-init object, which should be processed
  *
  * @return true if successful, else false
  */
 bool
-SakuraThread::processSeedTrigger(SeedTrigger* seedItem)
+SakuraThread::processSeedInit(Sakura::SeedInitItem *seedItem,
+                              const std::string &filePath)
+{
+    LOG_DEBUG("processSeedInit");
+
+    // start server
+    if(SakuraRoot::m_networking->createServer(SakuraRoot::m_serverPort) == false)
+    {
+        LOG_ERROR("failed to create server on port " + std::to_string(SakuraRoot::m_serverPort));
+        return false;
+    }
+
+    // get predefined provisioning tree
+    TreeItem* provisioningTree = SakuraRoot::m_currentGarden->getRessource("sakura_provisioning");
+    assert(provisioningTree != nullptr);
+
+    // prepare values for provisioning subtree
+    DataMap values;
+    values.insert("executable_path", new DataValue(SakuraRoot::m_executablePath), true);
+    values.insert("server_port", new DataValue(SakuraRoot::m_serverPort), true);
+    values.insert("server_ip_address", new DataValue(SakuraRoot::m_serverAddress), true);
+
+    // create and initialize one counter-instance for all new subtrees
+    SubtreeQueue::ActiveCounter* counter = new SubtreeQueue::ActiveCounter();
+    counter->shouldCount = static_cast<uint32_t>(seedItem->childs.size());
+    std::vector<SubtreeQueue::SubtreeObject*> spawnedObjects;
+
+    // iterate of all hosts, which are defined within the seed-file
+    for(SeedPart* part : seedItem->childs)
+    {
+        std::vector<std::string> tags;
+
+        // get and convert tags inside the part
+        DataArray* unconvertedTags = dynamic_cast<DataArray*>(part->values.get("tags"));
+        if(unconvertedTags != nullptr)
+        {
+            for(uint32_t i = 0; i < unconvertedTags->size(); i++)
+            {
+                tags.push_back(unconvertedTags->get(i)->toString());
+            }
+        }
+
+        // set host specific values
+        values.insert("target_path", part->values.get("target_path"), true);
+        values.insert("client_ip_address", part->values.get("ip_address"), true);
+        values.insert("ssh_user", part->values.get("ssh_user"), true);
+        values.insert("ssh_port", part->values.get("ssh_port"), true);
+        values.insert("ssh_key_path", part->values.get("ssh_key_path"), true);
+
+        // register host based on the information
+        SakuraRoot::m_networking->registerHost(part->id, tags);
+
+        // provision seed in separate thread
+        SubtreeQueue::SubtreeObject* object = new SubtreeQueue::SubtreeObject();
+        object->subtree = provisioningTree->copy();
+        object->items = values;
+        object->hirarchy = m_hierarchy;
+        object->activeCounter = counter;
+        object->filePath = filePath;
+
+        m_queue->addSubtreeObject(object);
+        spawnedObjects.push_back(object);
+    }
+
+    // wait until the created subtree was fully processed by the worker-threads
+    while(counter->isEqual() == false) {
+        std::this_thread::sleep_for(chronoMilliSec(10));
+    }
+
+    // wait until all hosts ready or until timeout after 10 seconds
+    uint32_t maxTries = 100;
+    // TODO: make timeout configurable
+    while(maxTries > 0)
+    {
+        if(SakuraRoot::m_networking->areAllHostsReady() == true) {
+            break;
+        }
+
+        usleep(100000);
+        maxTries--;
+    }
+
+    // if timeout then fail
+    if(maxTries == 0)
+    {
+        // TODO: better error
+        LOG_ERROR("TIMEOUT");
+        return false;
+    }
+
+    // send all tree-files, templates and files too all hosts, which are defined within the seed
+    SakuraRoot::m_networking->sendDataToAll(*SakuraRoot::m_currentGarden);
+
+    return true;
+}
+
+/**
+ * @brief process a seed-trigger-item
+ *
+ * @param seed-trigger object, which should be processed
+ *
+ * @return true if successful, else false
+ */
+bool
+SakuraThread::processSeedTrigger(SeedTriggerItem* seedItem)
 {
     LOG_DEBUG("processSeed");
 
@@ -451,7 +562,8 @@ SakuraThread::processSeedTrigger(SeedTrigger* seedItem)
  * @return true if successful, else false
  */
 bool
-SakuraThread::processIf(IfBranching* ifCondition, const std::string &filePath)
+SakuraThread::processIf(IfBranching* ifCondition,
+                        const std::string &filePath)
 {
     LOG_DEBUG("processIf");
 
@@ -512,13 +624,12 @@ SakuraThread::processIf(IfBranching* ifCondition, const std::string &filePath)
  * @brief process a for-each-loop
  *
  * @param subtree object, which should be processed
- * @param parallel true, to encapsulate each cycle of the loop into a subtree-object and add these
- *                 to the subtree-queue, to be processed by multiple worker-threads
  *
  * @return true if successful, else false
  */
 bool
-SakuraThread::processForEach(ForEachBranching* subtree, const std::string &filePath)
+SakuraThread::processForEach(ForEachBranching* subtree,
+                             const std::string &filePath)
 {
     LOG_DEBUG("processForEach");
 
@@ -613,13 +724,12 @@ SakuraThread::processForEach(ForEachBranching* subtree, const std::string &fileP
  * @brief process a for-loop
  *
  * @param subtree object, which should be processed
- * @param parallel true, to encapsulate each cycle of the loop into a subtree-object and add these
- *                 to the subtree-queue, to be processed by multiple worker-threads
  *
  * @return true if successful, else false
  */
 bool
-SakuraThread::processFor(ForBranching* subtree, const std::string &filePath)
+SakuraThread::processFor(ForBranching* subtree,
+                         const std::string &filePath)
 {
     LOG_DEBUG("processFor");
 
@@ -732,7 +842,8 @@ SakuraThread::processFor(ForBranching* subtree, const std::string &filePath)
  * @return true if successful, else false
  */
 bool
-SakuraThread::processSequeniellPart(SequentiellPart* subtree, const std::string &filePath)
+SakuraThread::processSequeniellPart(SequentiellPart* subtree,
+                                    const std::string &filePath)
 {
     LOG_DEBUG("processSequeniellPart");
 
@@ -754,7 +865,8 @@ SakuraThread::processSequeniellPart(SequentiellPart* subtree, const std::string 
  * @return true if successful, else false
  */
 bool
-SakuraThread::processParallelPart(ParallelPart* parallelPart, const std::string &filePath)
+SakuraThread::processParallelPart(ParallelPart* parallelPart,
+                                  const std::string &filePath)
 {
     LOG_DEBUG("processParallelPart");
 

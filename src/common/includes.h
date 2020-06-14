@@ -59,16 +59,17 @@ using Kitsunemimi::ProcessResult;
 using Kitsunemimi::runSyncProcess;
 
 #include <libKitsunemimiSakuraParser/sakura_items.h>
+#include <libKitsunemimiSakuraParser/sakura_garden.h>
 using Kitsunemimi::Sakura::BlossomItem;
 using Kitsunemimi::Sakura::SakuraItem;
 using Kitsunemimi::Sakura::ValueItem;
 using Kitsunemimi::Sakura::ValueItemMap;
 using Kitsunemimi::Sakura::BlossomGroupItem;
 using Kitsunemimi::Sakura::TreeItem;
-using Kitsunemimi::Sakura::SeedItem;
+using Kitsunemimi::Sakura::SeedInitItem;
 using Kitsunemimi::Sakura::SeedPart;
 using Kitsunemimi::Sakura::SubtreeItem;
-using Kitsunemimi::Sakura::SeedTrigger;
+using Kitsunemimi::Sakura::SeedTriggerItem;
 using Kitsunemimi::Sakura::IfBranching;
 using Kitsunemimi::Sakura::ForEachBranching;
 using Kitsunemimi::Sakura::ForBranching;

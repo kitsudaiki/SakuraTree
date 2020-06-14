@@ -48,7 +48,6 @@ int main(int argc, char *argv[])
     std::string initialTreeId = "";
     std::string inputPath = "";
 
-    std::string seedPath = "";
     DataMap itemInputValues;
 
     std::string listenAddress = "";
@@ -71,13 +70,6 @@ int main(int argc, char *argv[])
     {
         initialTreeId = argParser.getStringValues("init-tree-id")[0];
         std::cout << "init-tree-id: " << initialTreeId << std::endl;
-    }
-
-    // seed-file
-    if(argParser.wasSet("seed-path"))
-    {
-        seedPath = argParser.getStringValues("seed-path")[0];
-        std::cout << "seeseed-pathd: " << seedPath << std::endl;
     }
 
     // input-values
@@ -134,7 +126,6 @@ int main(int argc, char *argv[])
     else
     {
         root->startProcess(inputPath,
-                           seedPath,
                            itemInputValues,
                            initialTreeId,
                            listenAddress,
