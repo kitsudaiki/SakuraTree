@@ -45,7 +45,8 @@
 #include <processing/blossoms/files/common_files/path_chmod_blossom.h>
 #include <processing/blossoms/files/common_files/path_chown_blossom.h>
 
-#include <processing/blossoms/files/template_files/template_create_blossom.h>
+#include <processing/blossoms/files/template_files/template_create_file_blossom.h>
+#include <processing/blossoms/files/template_files/template_create_string_blossom.h>
 
 #include <processing/blossoms/files/text_files/text_append_blossom.h>
 #include <processing/blossoms/files/text_files/text_read_blossom.h>
@@ -121,8 +122,12 @@ getBlossom(const std::string blossomGroupType,
 
     if(blossomGroupType == "template")
     {
-        if(blossomType == "create") {
-            return new TemplateCreateBlossom();
+        if(blossomType == "create_file") {
+            return new TemplateCreateFileBlossom();
+        }
+
+        if(blossomType == "create_string") {
+            return new TemplateCreateStringBlossom();
         }
     }
 

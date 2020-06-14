@@ -21,7 +21,7 @@
  */
 
 #include "template_create_blossom_test.h"
-#include <processing/blossoms/files/template_files/template_create_blossom.h>
+#include <processing/blossoms/files/template_files/template_create_file_blossom.h>
 #include <libKitsunemimiPersistence/files/text_file.h>
 
 namespace SakuraTree
@@ -69,7 +69,7 @@ TemplateCreateBlossom_Test::initTask_test()
 {
     BlossomItem fakeItem;
     fakeItem.blossomPath = "/tmp/";
-    TemplateCreateBlossom fakeCreateBlossom;
+    TemplateCreateFileBlossom fakeCreateBlossom;
 
     fakeItem.values.insert("source_path", new DataValue(m_localTemplatePath));
     fakeItem.values.insert("dest_path", new DataValue(m_destinationFile));
@@ -96,7 +96,7 @@ TemplateCreateBlossom_Test::preCheck_test()
     fakeItem.blossomPath = "/tmp/";
     fakeItem.values.insert("source_path", new DataValue(m_localTemplatePath));
     fakeItem.values.insert("dest_path", new DataValue(m_destinationFile));
-    TemplateCreateBlossom fakeCopyBlossom;
+    TemplateCreateFileBlossom fakeCopyBlossom;
 
     fakeCopyBlossom.initBlossom(fakeItem);
     fakeCopyBlossom.preCheck(fakeItem);
@@ -140,7 +140,7 @@ TemplateCreateBlossom_Test::runTask_test()
     fakeItem.blossomPath = "/tmp/";
     fakeItem.values.insert("source_path", new DataValue(m_localTemplatePath));
     fakeItem.values.insert("dest_path", new DataValue(m_destinationFile));
-    TemplateCreateBlossom fakeCopyBlossom;
+    TemplateCreateFileBlossom fakeCopyBlossom;
 
     fakeCopyBlossom.initBlossom(fakeItem);
     fakeCopyBlossom.runTask(fakeItem);
@@ -159,7 +159,7 @@ TemplateCreateBlossom_Test::postCheck_test()
     fakeItem.blossomPath = "/tmp/";
     fakeItem.values.insert("source_path", new DataValue(m_localTemplatePath));
     fakeItem.values.insert("dest_path", new DataValue(m_destinationFile));
-    TemplateCreateBlossom fakeCopyBlossom;
+    TemplateCreateFileBlossom fakeCopyBlossom;
 
     fakeCopyBlossom.initBlossom(fakeItem);
     fakeCopyBlossom.runTask(fakeItem);
@@ -181,7 +181,7 @@ TemplateCreateBlossom_Test::closeTask_test()
     fakeItem.blossomPath = "/tmp/";
     fakeItem.values.insert("source_path", new DataValue(m_localTemplatePath));
     fakeItem.values.insert("dest_path", new DataValue(m_destinationFile));
-    TemplateCreateBlossom fakeCopyBlossom;
+    TemplateCreateFileBlossom fakeCopyBlossom;
 
     fakeCopyBlossom.initBlossom(fakeItem);
     fakeCopyBlossom.closeBlossom(fakeItem);

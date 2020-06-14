@@ -56,8 +56,8 @@ void
 AssertBlossom::runTask(BlossomItem &blossomItem)
 {
     std::map<std::string, ValueItem>::iterator it;
-    for(it = blossomItem.values.begin();
-        it != blossomItem.values.end();
+    for(it = blossomItem.values.m_valueMap.begin();
+        it != blossomItem.values.m_valueMap.end();
         it++)
     {
         const std::string isValue = blossomItem.parentValues->get(it->first)->toString();

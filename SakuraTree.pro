@@ -74,7 +74,6 @@ HEADERS += \
     src/processing/blossoms/files/ini_files/ini_delete_entry_blossom.h \
     src/processing/blossoms/files/ini_files/ini_read_entry_blossom.h \
     src/processing/blossoms/files/ini_files/ini_set_entry_blossom.h \
-    src/processing/blossoms/files/template_files/template_create_blossom.h \
     src/processing/blossoms/files/text_files/text_append_blossom.h \
     src/processing/blossoms/files/text_files/text_read_blossom.h \
     src/processing/blossoms/files/text_files/text_replace_blossom.h \
@@ -110,13 +109,15 @@ HEADERS += \
     src/processing/blossoms/files/common_files/path_rename_blossom.h \
     src/processing/blossoms/special/item_update_blossom.h \
     src/args.h \
-    src/config.h
+    src/config.h \
+    src/processing/blossoms/files/template_files/template_create_file_blossom.h \
+    src/processing/blossoms/files/template_files/template_create_string_blossom.h \
+    src/processing/blossoms/files/template_files/template_methods.h
 
 SOURCES += \
     src/processing/blossoms/files/ini_files/ini_delete_entry_blossom.cpp \
     src/processing/blossoms/files/ini_files/ini_read_entry_blossom.cpp \
     src/processing/blossoms/files/ini_files/ini_set_entry_blossom.cpp \
-    src/processing/blossoms/files/template_files/template_create_blossom.cpp \
     src/processing/blossoms/files/text_files/text_append_blossom.cpp \
     src/processing/blossoms/files/text_files/text_read_blossom.cpp \
     src/processing/blossoms/files/text_files/text_replace_blossom.cpp \
@@ -148,7 +149,10 @@ SOURCES += \
     src/processing/blossoms/files/common_files/path_copy_blossom.cpp \
     src/processing/blossoms/files/common_files/path_delete_blossom.cpp \
     src/processing/blossoms/files/common_files/path_rename_blossom.cpp \
-    src/processing/blossoms/special/item_update_blossom.cpp
+    src/processing/blossoms/special/item_update_blossom.cpp \
+    src/processing/blossoms/files/template_files/template_create_file_blossom.cpp \
+    src/processing/blossoms/files/template_files/template_create_string_blossom.cpp \
+    src/processing/blossoms/files/template_files/template_methods.cpp
 
 CONFIG(run_tests) {
 TARGET = SakuraTree_Test

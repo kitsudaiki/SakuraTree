@@ -64,8 +64,8 @@ PrintBlossom::runTask(BlossomItem &blossomItem)
     tableItem.addColumn("value", "Value");
 
     std::map<std::string, ValueItem>::iterator it;
-    for(it = blossomItem.values.begin();
-        it != blossomItem.values.end();
+    for(it = blossomItem.values.m_valueMap.begin();
+        it != blossomItem.values.m_valueMap.end();
         it++)
     {
         tableItem.addRow(std::vector<std::string>{it->first, it->second.item->toString(true)});
