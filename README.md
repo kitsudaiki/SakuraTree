@@ -11,28 +11,70 @@
 </p>
 
 
-## Description
-
-This is/should become a simple-to-use and fast automation tool to deploy tools and files on multiple nodes. 
-
-The primary goals are:
-
-* easy to use
-* fast execution
-* fast debugging
-
-
 ## Documentation
-
-Documentation for version 0.2.0: 
-
-https://gitlab.com/tobiasanker/Sakura-Project-Documentation/-/jobs/394246432/artifacts/browse
 
 Documentation for latest master-version: 
 
 https://gitlab.com/tobiasanker/Sakura-Project-Documentation/builds/artifacts/master/browse?job=build
 
-**IMPORTANT**: The master-version of the documentation actually differs from the master of the code, because the code has a bit bigger restructure for the multi-node support.
+**IMPORTANT**: The master-version of the documentation actually differs from the master of the code. The documentation is compatible with the current state of the implementation, but there are some implemented features not in the documentation at the moment (see ticket: https://github.com/tobiasanker/SakuraTree/issues/136). If you should be interested in this project, then let me know and I will prioritize the update of the documentation.
+
+
+Documentation for version 0.2.0: 
+
+https://gitlab.com/tobiasanker/Sakura-Project-Documentation/-/jobs/394246432/artifacts/browse
+
+
+## Description
+
+This is/should become a simple-to-use and fast automation tool to deploy tools and files on multiple nodes. 
+
+Core Features
+-------------
+
+**Be aware, that most of the planed core-features are not implemented at the moment**
+
+
+**simple language**
+
+Chef contains the full power of Ruby. That brings many functionalities, but makes it hard to write and to understand. Ansible is more easy with its YAML files, but this makes things like loops and conditionals really cumbersome. So I wanted to create my own description language, which is designed for automation. Based on the cherry trees the structure is: seeds create trees and trees own blossoms.
+
+**easily multi-threading**
+
+*current state: implemented*
+
+I often encountered things while deploying one or multiple nodes, which could be done parallel within one node. In Ansible and Chef this is not really intended. This is a big time loss. So I designed the language and the current implementation, so that you can easily create multiple threads and decide which tasks should run parallel and even loops can be spread over multiple threads.
+
+**hierarchical client-server-architecture**
+
+*current state: prototype (prototypical Implemented, but not documented now)*
+
+Similar to Chef, this tool has a client-server-architecture. But this was not enough. Each SakuraTree process can work as client and/or server. So you can create a hierarchical structure of clients and servers for faster data transfer. For example let's say you have a very big image and want to copy it to each node of a deployment with hundreds of nodes. With the ability to spawn new clients and servers within the deployment, you can copy this to one node, which in turn copies the file to two other nodes and these nodes again copy it to the next four nodes and so on.
+
+**live-debugging**
+
+*current state: not implemented now (planned for version 0.4.0)*
+
+Debugging in Ansible and Chef is really slow. When you run into an error and you want to test your fix, you have to run all from the beginning. The changes which were already done in the last run will not be done again but even so the new run can take minutes or hours, until it comes to the point which you attempted to fix. Furthermore, in case the fix was not correct, you have to run this again and wait a massive amount of time and try to process other tasks while waiting. So the plan is that each node stores its process in a local sqlite database to record which task was done and what the input and output was. So after a bugfix, the old process could continue at the point where it failed in the last run.
+
+**rollback-function**
+
+*current state: not implemented now*
+
+For each action a reverse action should be defined to rollback as much as possible. This is also necessary for the live-debugging in the case, that some tasks are deleted or moved while fixing a problem.
+
+**additional command output**
+
+*current state: not implemented now*
+
+When working with an automation tool it's easy to forget each step to create the same setup without the tool. So I'd like a feature to generate a simple manual out of the used scripts with all necessary command-line calls, some simple comments and step descriptions. This could also help debugging.
+
+**graphical monitoring**
+
+*current state: not implemented now*
+
+This is a feature which may be added when the rest works fine and is ready for productive use. Plain text output of deploying is sometimes hard to follow, especially when having many parallel tasks on multiple nodes. Therefore it would be nice to have a monitoring to follow the process, which supports debugging capabilities.
+
 
 ## Build
 
