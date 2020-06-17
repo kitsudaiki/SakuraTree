@@ -178,7 +178,10 @@ SakuraRoot::startProcess(const std::string &inputPath,
     // get initial tree-file
     if(Kitsunemimi::Persistence::isFile(inputPath))
     {
-        tree = m_currentGarden->getTree(inputPath);
+        const std::string parent = Kitsunemimi::Persistence::getParent(inputPath);
+        const std::string relPath = Kitsunemimi::Persistence::getRelativePath(inputPath, parent);
+
+        tree = m_currentGarden->getTree(relPath, parent);
     }
     else
     {
