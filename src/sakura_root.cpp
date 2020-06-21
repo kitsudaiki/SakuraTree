@@ -149,7 +149,6 @@ SakuraRoot::startProcess(const std::string &configFilePath)
 bool
 SakuraRoot::startProcess(const std::string &inputPath,
                          const DataMap &initialValues,
-                         const std::string &initialTreeId,
                          const std::string &serverAddress,
                          const uint16_t serverPort)
 {
@@ -166,8 +165,13 @@ SakuraRoot::startProcess(const std::string &inputPath,
         return false;
     }
 
+    std::string treeFile = inputPath;
+    if(Kitsunemimi::Persistence::isDir(treeFile)) {
+        treeFile = treeFile + "/root.tree";
+    }
+
     // process real task
-    if(m_currentGarden->addTree(inputPath, errorMessage) == false)
+    if(m_currentGarden->addTree(treeFile, errorMessage) == false)
     {
         LOG_ERROR("failed to add trees\n    " + errorMessage);
         return false;
@@ -183,22 +187,10 @@ SakuraRoot::startProcess(const std::string &inputPath,
 
         tree = m_currentGarden->getTree(relPath, parent);
     }
-    else
-    {
-        if(initialTreeId != "") {
-            tree = m_currentGarden->getTreeById(initialTreeId);
-        } else {
-            tree = m_currentGarden->getTree(inputPath);
-        }
-
-    }
 
     if(tree == nullptr)
     {
         std::string errorMessage = "No tree found for the input-path " + inputPath;
-        if(initialTreeId != "") {
-            errorMessage += " and initial tree id : \"" + initialTreeId + "\"";
-        }
         LOG_ERROR(errorMessage);
         return false;
     }
