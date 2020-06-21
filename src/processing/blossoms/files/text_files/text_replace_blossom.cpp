@@ -53,7 +53,7 @@ TextReplaceBlossom::initBlossom(BlossomItem &blossomItem)
 void
 TextReplaceBlossom::preCheck(BlossomItem &blossomItem)
 {
-    if(Kitsunemimi::Persistence::doesPathExist(m_filePath) == false)
+    if(bfs::exists(m_filePath) == false)
     {
         blossomItem.success = false;
         blossomItem.outputMessage = "path "
@@ -62,7 +62,7 @@ TextReplaceBlossom::preCheck(BlossomItem &blossomItem)
         return;
     }
 
-    if(Kitsunemimi::Persistence::isFile(m_filePath) == false)
+    if(bfs::is_regular_file(m_filePath) == false)
     {
         blossomItem.success = false;
         blossomItem.outputMessage = "path "

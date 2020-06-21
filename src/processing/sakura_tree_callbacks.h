@@ -49,6 +49,7 @@ void objectTransferCallback(void* target,
                             const uint64_t dataSize)
 {
     SakuraRoot* rootClass = static_cast<SakuraRoot*>(target);
+    std::string errorMessage = "";
 
     //----------------------------------------------------------------------------------------------
     if(objectType == TREE_OBJECT_TYPE)
@@ -58,15 +59,10 @@ void objectTransferCallback(void* target,
         Kitsunemimi::Sakura::SakuraParsing parser;
         const std::string content(static_cast<const char*>(data), dataSize);
 
-        std::string errorMessage = "";
-        SakuraItem* parsedItem = parser.parseString(content, errorMessage)->copy();
-
-        TreeItem* parsedTree = dynamic_cast<TreeItem*>(parsedItem);
-        parsedTree->relativePath = path;
-        parsedTree->rootPath = "/tmp";
-        parsedTree->unparsedConent = content;
-
-        rootClass->m_currentGarden->trees.insert(std::make_pair(path, parsedTree));
+        parser.parseTreeString(*rootClass->m_currentGarden,
+                               path,
+                               content,
+                               errorMessage);
     }
     //----------------------------------------------------------------------------------------------
     if(objectType == RESSOURCE_OBJECT_TYPE)
@@ -76,13 +72,9 @@ void objectTransferCallback(void* target,
         Kitsunemimi::Sakura::SakuraParsing parser;
         const std::string content(static_cast<const char*>(data), dataSize);
 
-        std::string errorMessage = "";
-        SakuraItem* parsedItem = parser.parseString(content, errorMessage)->copy();
-
-        TreeItem* parsedTree = dynamic_cast<TreeItem*>(parsedItem);
-        parsedTree->unparsedConent = content;
-
-        rootClass->m_currentGarden->resources.insert(std::make_pair(path, parsedTree));
+        parser.parseRessourceString(*rootClass->m_currentGarden,
+                                    content,
+                                    errorMessage);
     }
     //----------------------------------------------------------------------------------------------
     if(objectType == FILE_OBJECT_TYPE)

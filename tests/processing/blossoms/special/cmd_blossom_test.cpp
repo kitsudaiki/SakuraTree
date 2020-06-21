@@ -96,12 +96,12 @@ CmdBlossom_Test::runTask_test()
     fakeItem.values.insert("command", new DataValue(m_command));
     CmdBlossom fakeCmdBlossom;
 
-    TEST_EQUAL(Kitsunemimi::Persistence::doesPathExist(m_filePath),  false);
+    TEST_EQUAL(bfs::exists(m_filePath),  false);
 
     fakeCmdBlossom.initBlossom(fakeItem);
     fakeCmdBlossom.runTask(fakeItem);
     TEST_EQUAL(fakeItem.success, true);
-    TEST_EQUAL(Kitsunemimi::Persistence::doesPathExist(m_filePath),  true);
+    TEST_EQUAL(bfs::exists(m_filePath),  true);
 
     runSyncProcess("rm " + m_filePath);
 }
