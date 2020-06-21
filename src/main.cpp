@@ -44,8 +44,6 @@ int main(int argc, char *argv[])
 
     bool enableDebug = false;
     bool useConfigFile = false;
-
-    std::string initialTreeId = "";
     std::string inputPath = "";
 
     DataMap itemInputValues;
@@ -63,13 +61,6 @@ int main(int argc, char *argv[])
     // check if config-file should be used
     if(argParser.wasSet("use-config")) {
         useConfigFile = true;
-    }
-
-    // initial tree-id
-    if(argParser.wasSet("init-tree-id"))
-    {
-        initialTreeId = argParser.getStringValues("init-tree-id")[0];
-        std::cout << "init-tree-id: " << initialTreeId << std::endl;
     }
 
     // input-values
@@ -127,7 +118,6 @@ int main(int argc, char *argv[])
     {
         root->startProcess(inputPath,
                            itemInputValues,
-                           initialTreeId,
                            listenAddress,
                            listenPort);
     }
