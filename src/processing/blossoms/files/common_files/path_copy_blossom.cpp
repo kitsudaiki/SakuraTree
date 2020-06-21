@@ -53,8 +53,8 @@ PathCopyBlossom::initBlossom(BlossomItem &blossomItem)
     if(m_sourcePath.at(0) != '/')
     {
         m_localStorage = true;
-        m_sourcePath = SakuraRoot::m_currentGarden->getRelativePath(blossomItem.blossomPath,
-                                                                    "files/" + m_sourcePath);
+        m_sourcePath = bfs::relative(bfs::path(blossomItem.blossomPath),
+                                     bfs::path("files/" + m_sourcePath)).string();
     }
 
     blossomItem.success = true;
@@ -68,7 +68,7 @@ PathCopyBlossom::preCheck(BlossomItem &blossomItem)
 {
     if(m_localStorage == false)
     {
-        if(Kitsunemimi::Persistence::doesPathExist(m_sourcePath) == false)
+        if(bfs::exists(m_sourcePath) == false)
         {
             blossomItem.success = false;
             blossomItem.outputMessage = "COPY FAILED: source-path "
@@ -133,7 +133,7 @@ PathCopyBlossom::runTask(BlossomItem &blossomItem)
     if(m_mode != "")
     {
         std::string command = "chmod ";
-        if(Kitsunemimi::Persistence::isDir(m_destinationPath)) {
+        if(bfs::is_directory(m_destinationPath)) {
             command += "-R ";
         }
         command += m_mode + " ";
@@ -154,7 +154,7 @@ PathCopyBlossom::runTask(BlossomItem &blossomItem)
     if(m_owner != "")
     {
         std::string command = "chown ";
-        if(Kitsunemimi::Persistence::isDir(m_destinationPath)) {
+        if(bfs::is_directory(m_destinationPath)) {
             command += "-R ";
         }
         command += m_owner + ":" + m_owner + " ";
@@ -180,7 +180,7 @@ PathCopyBlossom::runTask(BlossomItem &blossomItem)
 void
 PathCopyBlossom::postCheck(BlossomItem &blossomItem)
 {
-    if(Kitsunemimi::Persistence::doesPathExist(m_destinationPath) == false)
+    if(bfs::exists(m_destinationPath) == false)
     {
         blossomItem.success = false;
         blossomItem.outputMessage = "was not able to copy from "

@@ -44,6 +44,7 @@
 #include <unistd.h>
 
 #include <boost/filesystem.hpp>
+namespace bfs = boost::filesystem;
 
 #include <libKitsunemimiCommon/common_items/data_items.h>
 using Kitsunemimi::DataItem;

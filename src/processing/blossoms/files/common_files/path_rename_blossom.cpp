@@ -65,15 +65,15 @@ PathRenameBlossom::initBlossom(BlossomItem &blossomItem)
 void
 PathRenameBlossom::preCheck(BlossomItem &blossomItem)
 {
-    if(Kitsunemimi::Persistence::doesPathExist(m_path) == false
-            && Kitsunemimi::Persistence::doesPathExist(m_newFilePath))
+    if(bfs::exists(m_path) == false
+            && bfs::exists(m_newFilePath))
     {
         blossomItem.skip = true;
         blossomItem.success = true;
         return;
     }
 
-    if(Kitsunemimi::Persistence::doesPathExist(m_path) == false)
+    if(bfs::exists(m_path) == false)
     {
         blossomItem.success = false;
         blossomItem.outputMessage = "source-path "
@@ -112,14 +112,14 @@ PathRenameBlossom::runTask(BlossomItem &blossomItem)
 void
 PathRenameBlossom::postCheck(BlossomItem &blossomItem)
 {
-    if(Kitsunemimi::Persistence::isFile(m_path))
+    if(bfs::is_regular_file(m_path))
     {
         blossomItem.success = false;
         blossomItem.outputMessage = "old object still exist";
         return;
     }
 
-    if(Kitsunemimi::Persistence::doesPathExist(m_newFilePath) == false)
+    if(bfs::exists(m_newFilePath) == false)
     {
         blossomItem.success = false;
         blossomItem.outputMessage = "was not able to rename from "

@@ -51,7 +51,7 @@ TextReadBlossom::initBlossom(BlossomItem &blossomItem)
 void
 TextReadBlossom::preCheck(BlossomItem &blossomItem)
 {
-    if(Kitsunemimi::Persistence::doesPathExist(m_filePath) == false)
+    if(bfs::exists(m_filePath) == false)
     {
         blossomItem.success = false;
         blossomItem.outputMessage = "path "
@@ -60,7 +60,7 @@ TextReadBlossom::preCheck(BlossomItem &blossomItem)
         return;
     }
 
-    if(Kitsunemimi::Persistence::isFile(m_filePath) == false)
+    if(bfs::is_regular_file(m_filePath) == false)
     {
         blossomItem.success = false;
         blossomItem.outputMessage = "path "

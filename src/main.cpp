@@ -98,9 +98,9 @@ int main(int argc, char *argv[])
     inputPath = argParser.getStringValues("input-path")[0];
     std::cout << "input-path: " << inputPath << std::endl;
 
-    if(Kitsunemimi::Persistence::isDir(inputPath)
+    if(bfs::is_directory(inputPath)
             && argParser.wasSet("init-tree-id") == false
-            && Kitsunemimi::Persistence::isFile(inputPath + "/root.tree") == false)
+            && bfs::is_regular_file(inputPath + "/root.tree") == false)
     {
         LOG_ERROR("Because the input-path is a directory"
                    ", init-tree-id have to be set as well or "

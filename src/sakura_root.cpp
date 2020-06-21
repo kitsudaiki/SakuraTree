@@ -166,7 +166,7 @@ SakuraRoot::startProcess(const std::string &inputPath,
     }
 
     std::string treeFile = inputPath;
-    if(Kitsunemimi::Persistence::isDir(treeFile)) {
+    if(bfs::is_directory(treeFile)) {
         treeFile = treeFile + "/root.tree";
     }
 
@@ -180,12 +180,12 @@ SakuraRoot::startProcess(const std::string &inputPath,
     SakuraItem* tree = nullptr;
 
     // get initial tree-file
-    if(Kitsunemimi::Persistence::isFile(inputPath))
+    if(bfs::is_regular_file(inputPath))
     {
-        const std::string parent = Kitsunemimi::Persistence::getParent(inputPath);
-        const std::string relPath = Kitsunemimi::Persistence::getRelativePath(inputPath, parent);
+        const bfs::path parent = bfs::path(inputPath).parent_path();
+        const std::string relPath = bfs::relative(inputPath, parent).string();
 
-        tree = m_currentGarden->getTree(relPath, parent);
+        tree = m_currentGarden->getTree(relPath, parent.string());
     }
 
     if(tree == nullptr)

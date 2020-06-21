@@ -59,7 +59,7 @@ IniSetEntryBlossom::initBlossom(BlossomItem &blossomItem)
 void
 IniSetEntryBlossom::preCheck(BlossomItem &blossomItem)
 {
-    if(Kitsunemimi::Persistence::doesPathExist(m_filePath) == false)
+    if(bfs::exists(m_filePath) == false)
     {
         blossomItem.success = false;
         blossomItem.outputMessage = "file-path "

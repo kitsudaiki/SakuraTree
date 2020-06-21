@@ -53,8 +53,8 @@ TemplateCreateFileBlossom::initBlossom(BlossomItem &blossomItem)
     m_permission = blossomItem.values.getValueAsString("permission");
 
     // create source-path
-    m_templatePath = SakuraRoot::m_currentGarden->getRelativePath(blossomItem.blossomPath,
-                                                                  "templates/" + m_templatePath);
+    m_templatePath = bfs::relative(blossomItem.blossomPath,
+                                   bfs::path("templates/" + m_templatePath)).string();
 
     blossomItem.success = true;
 }
@@ -74,7 +74,7 @@ TemplateCreateFileBlossom::preCheck(BlossomItem &blossomItem)
     }
 
     // check if template-file already exist
-    if(Kitsunemimi::Persistence::doesPathExist(m_destinationPath))
+    if(bfs::exists(m_destinationPath))
     {
         // read the already existing file and compare it the current file-content
         std::string existingFileContent;

@@ -49,7 +49,7 @@ PathDeleteBlossom::initBlossom(BlossomItem &blossomItem)
 void
 PathDeleteBlossom::preCheck(BlossomItem &blossomItem)
 {
-    if(Kitsunemimi::Persistence::isFile(m_path) == false)
+    if(bfs::exists(m_path) == false)
     {
         blossomItem.success = false;
         blossomItem.outputMessage = "path doesn't exist: " + m_path;
@@ -84,7 +84,7 @@ PathDeleteBlossom::runTask(BlossomItem &blossomItem)
 void
 PathDeleteBlossom::postCheck(BlossomItem &blossomItem)
 {
-    if(Kitsunemimi::Persistence::isFile(m_path))
+    if(bfs::is_regular_file(m_path))
     {
         blossomItem.success = false;
         blossomItem.outputMessage = "path still exist: " + m_path;
