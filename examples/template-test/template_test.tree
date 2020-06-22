@@ -1,0 +1,36 @@
+["test templates"]
+- dest_path = "/tmp/test_template"
+- converted_output = ""
+- read_output = ""
+- test_input = "new test-template"
+
+
+template("create a template")
+- source_path = "test_template.j2"
+-> create_file:
+    - dest_path = dest_path
+    - owner = "neptune"
+    - permission = 666
+    - variables = { - checker = 42
+					- name = test_input }
+    
+-> create_string:
+    - variables = { - checker = 42
+					- name = test_input }
+    - blossom_output >> converted_output
+
+
+text_file("read written file")
+- file_path = dest_path
+-> read:
+    - blossom_output >> read_output
+
+
+print("debug-output")
+- converted_output = converted_output
+- read_output = read_output
+
+
+assert("compare")
+- converted_output == read_output
+
