@@ -53,8 +53,9 @@ PathCopyBlossom::initBlossom(BlossomItem &blossomItem)
     if(m_sourcePath.at(0) != '/')
     {
         m_localStorage = true;
-        m_sourcePath = bfs::relative(bfs::path(blossomItem.blossomPath),
-                                     bfs::path("files/" + m_sourcePath)).string();
+        const bfs::path filePath = bfs::path("files") / bfs::path(m_sourcePath);
+        m_sourcePath = SakuraRoot::m_currentGarden->getRelativePath(blossomItem.blossomPath,
+                                                                    filePath).string();
     }
 
     blossomItem.success = true;

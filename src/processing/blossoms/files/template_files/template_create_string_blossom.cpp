@@ -44,9 +44,9 @@ TemplateCreateStringBlossom::initBlossom(BlossomItem &blossomItem)
     m_templatePath = blossomItem.values.getValueAsString("source_path");
 
     // create source-path
-    m_templatePath = bfs::relative(blossomItem.blossomPath,
-                                   bfs::path("templates/" + m_templatePath)).string();
-
+    const bfs::path templatePath = bfs::path("templates") / bfs::path(m_templatePath);
+    m_templatePath = SakuraRoot::m_currentGarden->getRelativePath(blossomItem.blossomPath,
+                                                                  templatePath).string();
     blossomItem.success = true;
 }
 
