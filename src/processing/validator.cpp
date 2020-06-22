@@ -84,7 +84,7 @@ checkOutput(BlossomItem &blossomItem,
             const std::string message = "variable \""
                                         + it->first
                                         + "\" is declared as output-variable, "
-                                          "but the blossom has not"
+                                          "but the blossom has no "
                                           "output, which could be written into a variable.";
             SakuraRoot::m_root->createError(blossomItem,
                                             "converter",
@@ -213,6 +213,14 @@ checkSakuraItem(SakuraItem* sakuraItem,
         BlossomGroupItem* blossomGroupItem = dynamic_cast<BlossomGroupItem*>(sakuraItem);
         for(BlossomItem* blossomItem : blossomGroupItem->blossoms)
         {
+            blossomItem->blossomGroupType = blossomGroupItem->blossomGroupType;
+            blossomItem->blossomName = blossomGroupItem->id;
+
+            overrideItems(blossomItem->values,
+                          blossomGroupItem->values,
+                          false,
+                          true);
+
             if(checkSakuraItem(blossomItem, filePath) == false) {
                 return false;
             }
@@ -266,6 +274,27 @@ checkSakuraItem(SakuraItem* sakuraItem,
     // TODO: error-message
 
     return false;
+}
+
+/**
+ * @brief checkAllItems
+ * @param garden
+ * @return
+ */
+bool
+checkAllItems(const SakuraGarden &garden)
+{
+    std::map<std::string, TreeItem*>::const_iterator mapIt;
+    for(mapIt = garden.trees.begin();
+        mapIt != garden.trees.end();
+        mapIt++)
+    {
+        if(checkSakuraItem(mapIt->second) == false) {
+            return false;
+        }
+    }
+
+    return true;
 }
 
 }

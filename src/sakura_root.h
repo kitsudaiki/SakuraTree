@@ -37,7 +37,6 @@ class SakuraNetwork;
 }
 namespace Project {
 class Session;
-class SakuraGarden;
 }
 }
 

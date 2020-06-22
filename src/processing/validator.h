@@ -38,6 +38,8 @@ bool checkBlossomItem(BlossomItem &blossomItem,
 bool checkSakuraItem(SakuraItem* sakuraItem,
                      const std::string &filePath = "");
 
+bool checkAllItems(const SakuraGarden &garden);
+
 }
 
 #endif // VALIDATOR_H
