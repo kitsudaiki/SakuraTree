@@ -38,7 +38,7 @@ TemplateCreateFileBlossom::TemplateCreateFileBlossom()
     m_requiredKeys.insert("dest_path", new DataValue(true));
     m_requiredKeys.insert("owner", new DataValue(false));
     m_requiredKeys.insert("permission", new DataValue(false));
-    m_requiredKeys.insert("*", new DataValue(false));
+    m_requiredKeys.insert("variables", new DataValue(true));
 }
 
 /**
