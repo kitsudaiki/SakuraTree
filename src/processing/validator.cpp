@@ -1,5 +1,5 @@
 /**
- * @file        common_converter_methods.cpp
+ * @file        validator.cpp
  *
  * @author      Tobias Anker <tobias.anker@kitsunemimi.moe>
  *
@@ -20,7 +20,7 @@
  *      limitations under the License.
  */
 
-#include "common_converter_methods.h"
+#include "validator.h"
 
 #include <processing/blossoms/blossom_getter.h>
 #include <processing/blossoms/blossom.h>
@@ -162,6 +162,107 @@ checkBlossomItem(BlossomItem &blossomItem,
     }
 
     return true;
+}
+
+
+/**
+ * @brief central method of the thread to check the current part of the execution-tree
+ *
+ * @param sakuraItem subtree, which should be checked
+ *
+ * @return true if successful, else false
+ */
+bool
+checkSakuraItem(SakuraItem* sakuraItem)
+{
+    //----------------------------------------------------------------------------------------------
+    if(sakuraItem->getType() == SakuraItem::SEQUENTIELL_ITEM)
+    {
+        SequentiellPart* sequential = dynamic_cast<SequentiellPart*>(sakuraItem);
+        for(SakuraItem* item : sequential->childs)
+        {
+            if(checkSakuraItem(item) == false) {
+                return false;
+            }
+        }
+        return true;
+    }
+    //----------------------------------------------------------------------------------------------
+    if(sakuraItem->getType() == SakuraItem::TREE_ITEM)
+    {
+        TreeItem* subtreeItem = dynamic_cast<TreeItem*>(sakuraItem);
+        return checkSakuraItem(subtreeItem->childs);
+    }
+    //----------------------------------------------------------------------------------------------
+    if(sakuraItem->getType() == SakuraItem::SUBTREE_ITEM)
+    {
+        return true;
+    }
+    //----------------------------------------------------------------------------------------------
+    if(sakuraItem->getType() == SakuraItem::BLOSSOM_ITEM)
+    {
+        BlossomItem* blossomItem = dynamic_cast<BlossomItem*>(sakuraItem);
+        return checkBlossomItem(*blossomItem);
+    }
+    //----------------------------------------------------------------------------------------------
+    if(sakuraItem->getType() == SakuraItem::BLOSSOM_GROUP_ITEM)
+    {
+        BlossomGroupItem* blossomGroupItem = dynamic_cast<BlossomGroupItem*>(sakuraItem);
+        for(BlossomItem* blossomItem : blossomGroupItem->blossoms)
+        {
+            if(checkSakuraItem(blossomItem) == false) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+    //----------------------------------------------------------------------------------------------
+    if(sakuraItem->getType() == SakuraItem::IF_ITEM)
+    {
+        IfBranching* ifBranching = dynamic_cast<IfBranching*>(sakuraItem);
+        if(checkSakuraItem(ifBranching->ifContent) == false) {
+            return false;
+        }
+
+        if(checkSakuraItem(ifBranching->elseContent) == false) {
+            return false;
+        }
+
+        return true;
+    }
+    //----------------------------------------------------------------------------------------------
+    if(sakuraItem->getType() == SakuraItem::FOR_EACH_ITEM)
+    {
+        ForEachBranching* forEachBranching = dynamic_cast<ForEachBranching*>(sakuraItem);
+        return checkSakuraItem(forEachBranching->content);
+    }
+    //----------------------------------------------------------------------------------------------
+    if(sakuraItem->getType() == SakuraItem::FOR_ITEM)
+    {
+        ForBranching* forBranching = dynamic_cast<ForBranching*>(sakuraItem);
+        return checkSakuraItem(forBranching->content);
+    }
+    //----------------------------------------------------------------------------------------------
+    if(sakuraItem->getType() == SakuraItem::PARALLEL_ITEM)
+    {
+        ParallelPart* parallel = dynamic_cast<ParallelPart*>(sakuraItem);
+        return checkSakuraItem(parallel->childs);
+    }
+    //----------------------------------------------------------------------------------------------
+    if(sakuraItem->getType() == SakuraItem::SEED_ITEM)
+    {
+        return true;
+    }
+    //----------------------------------------------------------------------------------------------
+    if(sakuraItem->getType() == SakuraItem::SEED_TRIGGER_ITEM)
+    {
+        return true;
+    }
+    //----------------------------------------------------------------------------------------------
+    // TODO: error-message
+
+    return false;
 }
 
 }

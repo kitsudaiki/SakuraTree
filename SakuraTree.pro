@@ -101,7 +101,6 @@ HEADERS += \
     src/common.h \
     src/sakura_root.h \
     src/processing/common/value_item_functions.h \
-    src/converter/common_converter_methods.h \
     src/processing/blossoms/files/common_files/path_chmod_blossom.h \
     src/processing/blossoms/files/common_files/path_chown_blossom.h \
     src/processing/blossoms/files/common_files/path_copy_blossom.h \
@@ -112,7 +111,8 @@ HEADERS += \
     src/config.h \
     src/processing/blossoms/files/template_files/template_create_file_blossom.h \
     src/processing/blossoms/files/template_files/template_create_string_blossom.h \
-    src/processing/blossoms/files/template_files/template_methods.h
+    src/processing/blossoms/files/template_files/template_methods.h \
+    src/processing/validator.h
 
 SOURCES += \
     src/processing/blossoms/files/ini_files/ini_delete_entry_blossom.cpp \
@@ -143,7 +143,6 @@ SOURCES += \
     src/processing/subtree_queue.cpp \
     src/processing/thread_pool.cpp \
     src/sakura_root.cpp \
-    src/converter/common_converter_methods.cpp \
     src/processing/blossoms/files/common_files/path_chmod_blossom.cpp \
     src/processing/blossoms/files/common_files/path_chown_blossom.cpp \
     src/processing/blossoms/files/common_files/path_copy_blossom.cpp \
@@ -152,7 +151,8 @@ SOURCES += \
     src/processing/blossoms/special/item_update_blossom.cpp \
     src/processing/blossoms/files/template_files/template_create_file_blossom.cpp \
     src/processing/blossoms/files/template_files/template_create_string_blossom.cpp \
-    src/processing/blossoms/files/template_files/template_methods.cpp
+    src/processing/blossoms/files/template_files/template_methods.cpp \
+    src/processing/validator.cpp
 
 CONFIG(run_tests) {
 TARGET = SakuraTree_Test

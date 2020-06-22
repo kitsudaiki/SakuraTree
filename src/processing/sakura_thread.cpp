@@ -424,7 +424,7 @@ SakuraThread::processSubtree(SubtreeItem* subtreeItem,
  * @return true if successful, else false
  */
 bool
-SakuraThread::processSeedInit(Sakura::SeedInitItem *seedItem,
+SakuraThread::processSeedInit(SeedInitItem *seedItem,
                               const std::string &filePath)
 {
     LOG_DEBUG("processSeedInit");
