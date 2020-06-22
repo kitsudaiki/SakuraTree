@@ -49,7 +49,7 @@ checkBlossomItem(BlossomItem &blossomItem)
     }
 
     result = checkBlossomItem(blossomItem, blossom->m_requiredKeys);
-    if(result == true) {
+    if(result) {
         result = checkOutput(blossomItem, blossom->m_hasOutput);
     }
 
@@ -173,7 +173,8 @@ checkBlossomItem(BlossomItem &blossomItem,
  * @return true if successful, else false
  */
 bool
-checkSakuraItem(SakuraItem* sakuraItem)
+checkSakuraItem(SakuraItem* sakuraItem,
+                const std::string &filePath)
 {
     //----------------------------------------------------------------------------------------------
     if(sakuraItem->getType() == SakuraItem::SEQUENTIELL_ITEM)
@@ -181,7 +182,7 @@ checkSakuraItem(SakuraItem* sakuraItem)
         SequentiellPart* sequential = dynamic_cast<SequentiellPart*>(sakuraItem);
         for(SakuraItem* item : sequential->childs)
         {
-            if(checkSakuraItem(item) == false) {
+            if(checkSakuraItem(item, filePath) == false) {
                 return false;
             }
         }
@@ -190,8 +191,9 @@ checkSakuraItem(SakuraItem* sakuraItem)
     //----------------------------------------------------------------------------------------------
     if(sakuraItem->getType() == SakuraItem::TREE_ITEM)
     {
-        TreeItem* subtreeItem = dynamic_cast<TreeItem*>(sakuraItem);
-        return checkSakuraItem(subtreeItem->childs);
+        TreeItem* treeItem = dynamic_cast<TreeItem*>(sakuraItem);
+        const std::string completePath = treeItem->rootPath + "/" + treeItem->relativePath;
+        return checkSakuraItem(treeItem->childs, completePath);
     }
     //----------------------------------------------------------------------------------------------
     if(sakuraItem->getType() == SakuraItem::SUBTREE_ITEM)
@@ -202,6 +204,7 @@ checkSakuraItem(SakuraItem* sakuraItem)
     if(sakuraItem->getType() == SakuraItem::BLOSSOM_ITEM)
     {
         BlossomItem* blossomItem = dynamic_cast<BlossomItem*>(sakuraItem);
+        blossomItem->blossomPath = filePath;
         return checkBlossomItem(*blossomItem);
     }
     //----------------------------------------------------------------------------------------------
@@ -210,7 +213,7 @@ checkSakuraItem(SakuraItem* sakuraItem)
         BlossomGroupItem* blossomGroupItem = dynamic_cast<BlossomGroupItem*>(sakuraItem);
         for(BlossomItem* blossomItem : blossomGroupItem->blossoms)
         {
-            if(checkSakuraItem(blossomItem) == false) {
+            if(checkSakuraItem(blossomItem, filePath) == false) {
                 return false;
             }
         }
@@ -221,11 +224,11 @@ checkSakuraItem(SakuraItem* sakuraItem)
     if(sakuraItem->getType() == SakuraItem::IF_ITEM)
     {
         IfBranching* ifBranching = dynamic_cast<IfBranching*>(sakuraItem);
-        if(checkSakuraItem(ifBranching->ifContent) == false) {
+        if(checkSakuraItem(ifBranching->ifContent, filePath) == false) {
             return false;
         }
 
-        if(checkSakuraItem(ifBranching->elseContent) == false) {
+        if(checkSakuraItem(ifBranching->elseContent, filePath) == false) {
             return false;
         }
 
@@ -235,19 +238,19 @@ checkSakuraItem(SakuraItem* sakuraItem)
     if(sakuraItem->getType() == SakuraItem::FOR_EACH_ITEM)
     {
         ForEachBranching* forEachBranching = dynamic_cast<ForEachBranching*>(sakuraItem);
-        return checkSakuraItem(forEachBranching->content);
+        return checkSakuraItem(forEachBranching->content, filePath);
     }
     //----------------------------------------------------------------------------------------------
     if(sakuraItem->getType() == SakuraItem::FOR_ITEM)
     {
         ForBranching* forBranching = dynamic_cast<ForBranching*>(sakuraItem);
-        return checkSakuraItem(forBranching->content);
+        return checkSakuraItem(forBranching->content, filePath);
     }
     //----------------------------------------------------------------------------------------------
     if(sakuraItem->getType() == SakuraItem::PARALLEL_ITEM)
     {
         ParallelPart* parallel = dynamic_cast<ParallelPart*>(sakuraItem);
-        return checkSakuraItem(parallel->childs);
+        return checkSakuraItem(parallel->childs, filePath);
     }
     //----------------------------------------------------------------------------------------------
     if(sakuraItem->getType() == SakuraItem::SEED_ITEM)

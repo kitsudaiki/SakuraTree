@@ -35,7 +35,8 @@ bool checkBlossomItem(BlossomItem &blossomItem,
                       DataMap &requiredKeys);
 
 
-bool checkSakuraItem(SakuraItem* sakuraItem);
+bool checkSakuraItem(SakuraItem* sakuraItem,
+                     const std::string &filePath = "");
 
 }
 
