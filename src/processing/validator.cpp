@@ -1,5 +1,5 @@
 /**
- * @file        common_converter_methods.cpp
+ * @file        validator.cpp
  *
  * @author      Tobias Anker <tobias.anker@kitsunemimi.moe>
  *
@@ -20,7 +20,7 @@
  *      limitations under the License.
  */
 
-#include "common_converter_methods.h"
+#include "validator.h"
 
 #include <processing/blossoms/blossom_getter.h>
 #include <processing/blossoms/blossom.h>
@@ -49,7 +49,7 @@ checkBlossomItem(BlossomItem &blossomItem)
     }
 
     result = checkBlossomItem(blossomItem, blossom->m_requiredKeys);
-    if(result == true) {
+    if(result) {
         result = checkOutput(blossomItem, blossom->m_hasOutput);
     }
 
@@ -84,7 +84,7 @@ checkOutput(BlossomItem &blossomItem,
             const std::string message = "variable \""
                                         + it->first
                                         + "\" is declared as output-variable, "
-                                          "but the blossom has not"
+                                          "but the blossom has no "
                                           "output, which could be written into a variable.";
             SakuraRoot::m_root->createError(blossomItem,
                                             "converter",
@@ -157,6 +157,139 @@ checkBlossomItem(BlossomItem &blossomItem,
             SakuraRoot::m_root->createError(blossomItem,
                                             "converter",
                                             message);
+            return false;
+        }
+    }
+
+    return true;
+}
+
+
+/**
+ * @brief central method of the thread to check the current part of the execution-tree
+ *
+ * @param sakuraItem subtree, which should be checked
+ *
+ * @return true if successful, else false
+ */
+bool
+checkSakuraItem(SakuraItem* sakuraItem,
+                const std::string &filePath)
+{
+    //----------------------------------------------------------------------------------------------
+    if(sakuraItem->getType() == SakuraItem::SEQUENTIELL_ITEM)
+    {
+        SequentiellPart* sequential = dynamic_cast<SequentiellPart*>(sakuraItem);
+        for(SakuraItem* item : sequential->childs)
+        {
+            if(checkSakuraItem(item, filePath) == false) {
+                return false;
+            }
+        }
+        return true;
+    }
+    //----------------------------------------------------------------------------------------------
+    if(sakuraItem->getType() == SakuraItem::TREE_ITEM)
+    {
+        TreeItem* treeItem = dynamic_cast<TreeItem*>(sakuraItem);
+        const std::string completePath = treeItem->rootPath + "/" + treeItem->relativePath;
+        return checkSakuraItem(treeItem->childs, completePath);
+    }
+    //----------------------------------------------------------------------------------------------
+    if(sakuraItem->getType() == SakuraItem::SUBTREE_ITEM)
+    {
+        return true;
+    }
+    //----------------------------------------------------------------------------------------------
+    if(sakuraItem->getType() == SakuraItem::BLOSSOM_ITEM)
+    {
+        BlossomItem* blossomItem = dynamic_cast<BlossomItem*>(sakuraItem);
+        blossomItem->blossomPath = filePath;
+        return checkBlossomItem(*blossomItem);
+    }
+    //----------------------------------------------------------------------------------------------
+    if(sakuraItem->getType() == SakuraItem::BLOSSOM_GROUP_ITEM)
+    {
+        BlossomGroupItem* blossomGroupItem = dynamic_cast<BlossomGroupItem*>(sakuraItem);
+        for(BlossomItem* blossomItem : blossomGroupItem->blossoms)
+        {
+            blossomItem->blossomGroupType = blossomGroupItem->blossomGroupType;
+            blossomItem->blossomName = blossomGroupItem->id;
+
+            overrideItems(blossomItem->values,
+                          blossomGroupItem->values,
+                          false,
+                          true);
+
+            if(checkSakuraItem(blossomItem, filePath) == false) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+    //----------------------------------------------------------------------------------------------
+    if(sakuraItem->getType() == SakuraItem::IF_ITEM)
+    {
+        IfBranching* ifBranching = dynamic_cast<IfBranching*>(sakuraItem);
+        if(checkSakuraItem(ifBranching->ifContent, filePath) == false) {
+            return false;
+        }
+
+        if(checkSakuraItem(ifBranching->elseContent, filePath) == false) {
+            return false;
+        }
+
+        return true;
+    }
+    //----------------------------------------------------------------------------------------------
+    if(sakuraItem->getType() == SakuraItem::FOR_EACH_ITEM)
+    {
+        ForEachBranching* forEachBranching = dynamic_cast<ForEachBranching*>(sakuraItem);
+        return checkSakuraItem(forEachBranching->content, filePath);
+    }
+    //----------------------------------------------------------------------------------------------
+    if(sakuraItem->getType() == SakuraItem::FOR_ITEM)
+    {
+        ForBranching* forBranching = dynamic_cast<ForBranching*>(sakuraItem);
+        return checkSakuraItem(forBranching->content, filePath);
+    }
+    //----------------------------------------------------------------------------------------------
+    if(sakuraItem->getType() == SakuraItem::PARALLEL_ITEM)
+    {
+        ParallelPart* parallel = dynamic_cast<ParallelPart*>(sakuraItem);
+        return checkSakuraItem(parallel->childs, filePath);
+    }
+    //----------------------------------------------------------------------------------------------
+    if(sakuraItem->getType() == SakuraItem::SEED_ITEM)
+    {
+        return true;
+    }
+    //----------------------------------------------------------------------------------------------
+    if(sakuraItem->getType() == SakuraItem::SEED_TRIGGER_ITEM)
+    {
+        return true;
+    }
+    //----------------------------------------------------------------------------------------------
+    // TODO: error-message
+
+    return false;
+}
+
+/**
+ * @brief checkAllItems
+ * @param garden
+ * @return
+ */
+bool
+checkAllItems(const SakuraGarden &garden)
+{
+    std::map<std::string, TreeItem*>::const_iterator mapIt;
+    for(mapIt = garden.trees.begin();
+        mapIt != garden.trees.end();
+        mapIt++)
+    {
+        if(checkSakuraItem(mapIt->second) == false) {
             return false;
         }
     }

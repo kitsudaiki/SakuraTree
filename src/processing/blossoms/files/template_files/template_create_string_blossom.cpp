@@ -31,8 +31,10 @@ namespace SakuraTree
 TemplateCreateStringBlossom::TemplateCreateStringBlossom()
     : Blossom()
 {
+    m_hasOutput = true;
+
     m_requiredKeys.insert("source_path", new DataValue(true));
-    m_requiredKeys.insert("*", new DataValue(false));
+    m_requiredKeys.insert("variables", new DataValue(true));
 }
 
 /**

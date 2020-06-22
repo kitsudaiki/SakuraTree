@@ -1,5 +1,5 @@
 /**
- * @file        common_converter_methods.h
+ * @file        validator.h
  *
  * @author      Tobias Anker <tobias.anker@kitsunemimi.moe>
  *
@@ -20,8 +20,8 @@
  *      limitations under the License.
  */
 
-#ifndef COMMON_CONVERTER_METHODS_H
-#define COMMON_CONVERTER_METHODS_H
+#ifndef VALIDATOR_H
+#define VALIDATOR_H
 
 #include <common.h>
 
@@ -34,6 +34,12 @@ bool checkBlossomItem(BlossomItem &blossomItem);
 bool checkBlossomItem(BlossomItem &blossomItem,
                       DataMap &requiredKeys);
 
+
+bool checkSakuraItem(SakuraItem* sakuraItem,
+                     const std::string &filePath = "");
+
+bool checkAllItems(const SakuraGarden &garden);
+
 }
 
-#endif // COMMON_CONVERTER_METHODS_H
+#endif // VALIDATOR_H

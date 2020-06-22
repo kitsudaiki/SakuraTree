@@ -27,6 +27,7 @@
 #include <processing/sakura_thread.h>
 #include <processing/sakura_tree_callbacks.h>
 #include <processing/thread_pool.h>
+#include <processing/validator.h>
 
 #include <libKitsunemimiSakuraNetwork/sakura_network.h>
 #include <libKitsunemimiSakuraParser/sakura_parsing.h>
@@ -195,11 +196,18 @@ SakuraRoot::startProcess(const std::string &inputPath,
         return false;
     }
 
+    // validate parsed blossoms
+    if(checkAllItems(*m_currentGarden) == false)
+    {
+        LOG_ERROR("\n" + m_errorOutput.toString());
+        return false;
+    }
+
     // process tree-file with initial values
     if(runProcess(tree, initialValues) == false)
     {
         if(m_errorOutput.getNumberOfRows() > 0) {
-            LOG_ERROR(m_errorOutput.toString());
+            LOG_ERROR("\n" + m_errorOutput.toString());
         }
         return false;
     }
@@ -302,33 +310,28 @@ SakuraRoot::createError(const std::string &errorLocation,
 
     if(possibleSolution.size() > 0)
     {
-        SakuraRoot::m_errorOutput.addRow(
-                    std::vector<std::string>{"possible solution",
-                                             possibleSolution});
+        SakuraRoot::m_errorOutput.addRow(std::vector<std::string>{"possible solution",
+                                                                  possibleSolution});
     }
     if(blossomType.size() > 0)
     {
-        SakuraRoot::m_errorOutput.addRow(
-                    std::vector<std::string>{"blossom-type",
-                                             blossomType});
+        SakuraRoot::m_errorOutput.addRow(std::vector<std::string>{"blossom-type",
+                                                                  blossomType});
     }
     if(blossomGroupType.size() > 0)
     {
-        SakuraRoot::m_errorOutput.addRow(
-                    std::vector<std::string>{"blossom-group-type",
-                                             blossomGroupType});
+        SakuraRoot::m_errorOutput.addRow(std::vector<std::string>{"blossom-group-type",
+                                                                  blossomGroupType});
     }
     if(blossomName.size() > 0)
     {
-        SakuraRoot::m_errorOutput.addRow(
-                    std::vector<std::string>{"blossom-name",
-                                             blossomName});
+        SakuraRoot::m_errorOutput.addRow(std::vector<std::string>{"blossom-name",
+                                                                  blossomName});
     }
     if(blossomFilePath.size() > 0)
     {
-        SakuraRoot::m_errorOutput.addRow(
-                    std::vector<std::string>{"blossom-file-path",
-                                             blossomFilePath});
+        SakuraRoot::m_errorOutput.addRow(std::vector<std::string>{"blossom-file-path",
+                                                                  blossomFilePath});
     }
 
     SakuraRoot::m_errorOutput.addRow(std::vector<std::string>{"", ""});

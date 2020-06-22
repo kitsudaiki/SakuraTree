@@ -61,6 +61,7 @@ using Kitsunemimi::runSyncProcess;
 
 #include <libKitsunemimiSakuraParser/sakura_items.h>
 #include <libKitsunemimiSakuraParser/sakura_garden.h>
+using Kitsunemimi::Sakura::SakuraGarden;
 using Kitsunemimi::Sakura::BlossomItem;
 using Kitsunemimi::Sakura::SakuraItem;
 using Kitsunemimi::Sakura::ValueItem;
