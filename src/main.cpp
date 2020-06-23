@@ -100,16 +100,6 @@ int main(int argc, char *argv[])
     }
     std::cout<<"absolute input-path: "<<inputPath<<std::endl;
 
-
-    if(bfs::is_directory(inputPath)
-            && argParser.wasSet("init-tree-id") == false
-            && bfs::is_regular_file(inputPath.string() + "/root.sakura") == false)
-    {
-        LOG_ERROR("Because the input-path is a directory"
-                   ", init-tree-id have to be set as well or "
-                   "the directory have to contain a 'root.sakura'-file.");
-    }
-
     SakuraTree::SakuraRoot* root = new SakuraTree::SakuraRoot(std::string(argv[0]),
                                                               enableDebug);
 
