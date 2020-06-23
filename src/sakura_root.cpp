@@ -168,7 +168,7 @@ SakuraRoot::startProcess(const std::string &inputPath,
     // set default-file in case that a directory instead of a file was selected
     std::string treeFile = inputPath;
     if(bfs::is_directory(treeFile)) {
-        treeFile = treeFile + "/root.sakura";
+        treeFile = treeFile + "/root.tree";
     }
 
     // parse all files
