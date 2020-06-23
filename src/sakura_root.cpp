@@ -161,8 +161,7 @@ SakuraRoot::startProcess(const std::string &inputPath,
     // load predefined trees
     if(loadPredefinedSubtrees(errorMessage) == false)
     {
-        LOG_ERROR("Failed to load predefined trees");
-        LOG_ERROR("    " + errorMessage);
+        LOG_ERROR("Failed to load predefined trees\n    " + errorMessage);
         return false;
     }
 
@@ -172,7 +171,7 @@ SakuraRoot::startProcess(const std::string &inputPath,
         treeFile = treeFile + "/root.sakura";
     }
 
-    // process real task
+    // parse all files
     if(m_currentGarden->addTree(treeFile, errorMessage) == false)
     {
         LOG_ERROR("failed to add trees\n    " + errorMessage);
@@ -192,8 +191,7 @@ SakuraRoot::startProcess(const std::string &inputPath,
 
     if(tree == nullptr)
     {
-        std::string errorMessage = "No tree found for the input-path " + inputPath;
-        LOG_ERROR(errorMessage);
+        LOG_ERROR("No tree found for the input-path " + inputPath);
         return false;
     }
 
@@ -306,11 +304,10 @@ SakuraRoot::createError(const std::string &errorLocation,
     if(SakuraRoot::m_errorOutput.getNumberOfRows() > 0) {
         SakuraRoot::m_errorOutput.addRow(std::vector<std::string>{"", ""});
     }
+
     if(errorLocation.size() > 0) {
         SakuraRoot::m_errorOutput.addRow(std::vector<std::string>{"location", errorLocation});
     }
-
-    SakuraRoot::m_errorOutput.addRow(std::vector<std::string>{"error-message", errorMessage});
 
     if(possibleSolution.size() > 0)
     {
@@ -337,6 +334,8 @@ SakuraRoot::createError(const std::string &errorLocation,
         SakuraRoot::m_errorOutput.addRow(std::vector<std::string>{"blossom-file-path",
                                                                   blossomFilePath});
     }
+
+    SakuraRoot::m_errorOutput.addRow(std::vector<std::string>{"error-message", errorMessage});
 }
 
 /**
