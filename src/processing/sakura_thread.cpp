@@ -514,7 +514,7 @@ SakuraThread::processSeedInit(SeedInitItem *seedItem,
         return false;
     }
 
-    // send all tree-files, templates and files too all hosts, which are defined within the seed
+    // send all sakura-files, templates and files too all hosts, which are defined within the seed
     SakuraRoot::m_networking->sendDataToAll(*SakuraRoot::m_currentGarden);
 
     return true;

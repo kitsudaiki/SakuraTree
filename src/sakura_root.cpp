@@ -166,9 +166,10 @@ SakuraRoot::startProcess(const std::string &inputPath,
         return false;
     }
 
+    // set default-file in case that a directory instead of a file was selected
     std::string treeFile = inputPath;
     if(bfs::is_directory(treeFile)) {
-        treeFile = treeFile + "/root.tree";
+        treeFile = treeFile + "/root.sakura";
     }
 
     // process real task
@@ -180,7 +181,7 @@ SakuraRoot::startProcess(const std::string &inputPath,
 
     SakuraItem* tree = nullptr;
 
-    // get initial tree-file
+    // get initial sakura-file
     if(bfs::is_regular_file(inputPath))
     {
         const bfs::path parent = bfs::path(inputPath).parent_path();
@@ -203,7 +204,7 @@ SakuraRoot::startProcess(const std::string &inputPath,
         return false;
     }
 
-    // process tree-file with initial values
+    // process sakura-file with initial values
     if(runProcess(tree, initialValues) == false)
     {
         if(m_errorOutput.getNumberOfRows() > 0) {
@@ -302,10 +303,13 @@ SakuraRoot::createError(const std::string &errorLocation,
                         const std::string &blossomName,
                         const std::string &blossomFilePath)
 {
-    SakuraRoot::m_errorOutput.addRow(std::vector<std::string>{"ERROR", ""});
+    if(SakuraRoot::m_errorOutput.getNumberOfRows() > 0) {
+        SakuraRoot::m_errorOutput.addRow(std::vector<std::string>{"", ""});
+    }
     if(errorLocation.size() > 0) {
         SakuraRoot::m_errorOutput.addRow(std::vector<std::string>{"location", errorLocation});
     }
+
     SakuraRoot::m_errorOutput.addRow(std::vector<std::string>{"error-message", errorMessage});
 
     if(possibleSolution.size() > 0)
@@ -333,8 +337,6 @@ SakuraRoot::createError(const std::string &errorLocation,
         SakuraRoot::m_errorOutput.addRow(std::vector<std::string>{"blossom-file-path",
                                                                   blossomFilePath});
     }
-
-    SakuraRoot::m_errorOutput.addRow(std::vector<std::string>{"", ""});
 }
 
 /**
@@ -392,7 +394,7 @@ SakuraRoot::printOutput(const std::string &output)
     // draw separator line
     std::string line(terminalWidth, '=');
 
-    std::cout<<line<<"\n\n"<<output<<"\n"<<std::endl;
+    LOG_INFO(line + "\n\n" + output + "\n");
 
     m_mutex.unlock();
 }

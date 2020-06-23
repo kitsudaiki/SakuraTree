@@ -17,7 +17,7 @@ registerArguments(Kitsunemimi::Args::ArgParser &argparser)
 
 
     argparser.registerString("init-tree-id,t",
-                             "Id of the initial tree-file within the choosen directory");
+                             "Id of the initial sakura-file within the choosen directory");
 
     argparser.registerString("item-input,i",
                              "Key-value-pairs to override the initial values inside of the file");

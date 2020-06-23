@@ -13,7 +13,6 @@ template("create a template")
     - permission = 666
     - variables = { - checker = 42
 					- name = test_input }
-    
 -> create_string:
     - variables = { - checker = 42
 					- name = test_input }

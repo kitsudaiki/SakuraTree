@@ -551,14 +551,6 @@ convertBlossomOutput(const BlossomItem &blossom)
     }
 
     // print error-output
-    if(blossom.success == false)
-    {
-        // TODO: red error output
-        output += "\n";
-        output += SakuraRoot::m_root->m_errorOutput.toString(200) + "\n";
-    }
-
-    // print error-output
     if(blossom.outputMessage.size() > 0
             && blossom.success)
     {
