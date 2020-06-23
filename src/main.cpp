@@ -44,8 +44,6 @@ int main(int argc, char *argv[])
 
     bool enableDebug = false;
     bool useConfigFile = false;
-    std::string inputPath = "";
-
     DataMap itemInputValues;
 
     std::string listenAddress = "";
@@ -95,28 +93,23 @@ int main(int argc, char *argv[])
     }
 
     // input-path
-    inputPath = argParser.getStringValues("input-path")[0];
+    bfs::path inputPath = argParser.getStringValues("input-path")[0];
     std::cout << "input-path: " << inputPath << std::endl;
-
-    if(bfs::is_directory(inputPath)
-            && argParser.wasSet("init-tree-id") == false
-            && bfs::is_regular_file(inputPath + "/root.sakura") == false)
-    {
-        LOG_ERROR("Because the input-path is a directory"
-                   ", init-tree-id have to be set as well or "
-                   "the directory have to contain a 'root.sakura'-file.");
+    if(inputPath.is_relative()) {
+        inputPath = bfs::absolute(inputPath);
     }
+    std::cout<<"absolute input-path: "<<inputPath<<std::endl;
 
     SakuraTree::SakuraRoot* root = new SakuraTree::SakuraRoot(std::string(argv[0]),
                                                               enableDebug);
 
     if(useConfigFile)
     {
-        root->startProcess(inputPath);
+        root->startProcess(inputPath.string());
     }
     else
     {
-        root->startProcess(inputPath,
+        root->startProcess(inputPath.string(),
                            itemInputValues,
                            listenAddress,
                            listenPort);

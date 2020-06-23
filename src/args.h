@@ -15,10 +15,6 @@ registerArguments(Kitsunemimi::Args::ArgParser &argparser)
     argparser.registerPlain("use-config,c",
                             "Use a config-file as input.");
 
-
-    argparser.registerString("init-tree-id,t",
-                             "Id of the initial sakura-file within the choosen directory");
-
     argparser.registerString("item-input,i",
                              "Key-value-pairs to override the initial values inside of the file");
 
