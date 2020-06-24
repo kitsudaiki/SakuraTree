@@ -195,6 +195,19 @@ SakuraRoot::startProcess(const std::string &inputPath,
         return false;
     }
 
+    // check if input-values match with the first tree
+    const std::vector<std::string> failedInput = checkInput(tree->values, initialValues);
+    if(failedInput.size() > 0)
+    {
+        std::string errorMessage = "Following input-values are not valid for the initial tress:\n";
+        for(const std::string& item : failedInput)
+        {
+            errorMessage += "    " + item + "\n";
+        }
+        LOG_ERROR(errorMessage);
+        return false;
+    }
+
     // validate parsed blossoms
     if(checkAllItems(*m_currentGarden) == false)
     {

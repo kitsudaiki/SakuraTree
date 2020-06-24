@@ -27,6 +27,7 @@
 #include <processing/blossoms/blossom.h>
 #include <libKitsunemimiJinja2/jinja2_converter.h>
 #include <processing/common/value_item_functions.h>
+#include <libKitsunemimiSakuraParser/value_item_map.h>
 
 using Kitsunemimi::Jinja2::Jinja2Converter;
 
@@ -496,6 +497,33 @@ overrideItems(ValueItemMap &original,
             original.insert(overrideIt->first, temp, true);
         }
     }
+}
+
+/**
+ * @brief check if given values match with existing one of a value-item-map
+ *
+ * @param original original, which should contain the values
+ * @param itemInputValues map which is checked agains the original
+ *
+ * @return list of key, which doesn't match
+ */
+const std::vector<std::string>
+checkInput(ValueItemMap &original,
+           const DataMap &itemInputValues)
+{
+    std::vector<std::string> result;
+
+    std::map<std::string, DataItem*>::const_iterator it;
+    for(it = itemInputValues.m_map.begin();
+        it != itemInputValues.m_map.end();
+        it++)
+    {
+        if(original.contains(it->first) == false) {
+            result.push_back(it->first);
+        }
+    }
+
+    return result;
 }
 
 /**
