@@ -65,6 +65,10 @@ void overrideItems(ValueItemMap &original,
                    const ValueItemMap &override,
                    bool onlyExisting = false,
                    bool onlyNotExisting = false);
+
+const std::vector<std::string> checkInput(Kitsunemimi::Sakura::ValueItemMap &original,
+                                          const DataMap &itemInputValues);
+
 const std::vector<std::string> checkItems(DataMap &items);
 const std::string convertBlossomOutput(const BlossomItem &blossom);
 
