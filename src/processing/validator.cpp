@@ -37,20 +37,21 @@ namespace SakuraTree
  * @return true, if all necessary values are set, else false
  */
 bool
-checkBlossomItem(BlossomItem &blossomItem)
+checkBlossomItem(BlossomItem &blossomItem,
+                 std::string &errorMessage)
 {
     bool result = false;
 
     Blossom* blossom = getBlossom(blossomItem.blossomGroupType, blossomItem.blossomType);
     if(blossom == nullptr)
     {
-        SakuraRoot::m_root->createError(blossomItem, "converter", "unknow blossom-type");
+        errorMessage = createError(blossomItem, "converter", "unknow blossom-type");
         return false;
     }
 
-    result = checkBlossomItem(blossomItem, blossom->m_requiredKeys);
+    result = checkBlossomItem(blossomItem, blossom->m_requiredKeys, errorMessage);
     if(result) {
-        result = checkOutput(blossomItem, blossom->m_hasOutput);
+        result = checkOutput(blossomItem, blossom->m_hasOutput, errorMessage);
     }
 
     delete blossom;
@@ -69,7 +70,8 @@ checkBlossomItem(BlossomItem &blossomItem)
  */
 bool
 checkOutput(BlossomItem &blossomItem,
-            const bool hasOutput)
+            const bool hasOutput,
+            std::string &errorMessage)
 {
     std::map<std::string, ValueItem>::const_iterator it;
     for(it = blossomItem.values.m_valueMap.begin();
@@ -86,9 +88,7 @@ checkOutput(BlossomItem &blossomItem,
                                         + "\" is declared as output-variable, "
                                           "but the blossom has no "
                                           "output, which could be written into a variable.";
-            SakuraRoot::m_root->createError(blossomItem,
-                                            "converter",
-                                            message);
+            errorMessage = createError(blossomItem, "validator", message);
             return false;
         }
     }
@@ -108,7 +108,8 @@ checkOutput(BlossomItem &blossomItem,
  */
 bool
 checkBlossomItem(BlossomItem &blossomItem,
-                 DataMap &requiredKeys)
+                 DataMap &requiredKeys,
+                 std::string &errorMessage)
 {
     // if "*" is in the list of required key, there is more allowed as the list contains items
     // for example the print-blossom allows all key
@@ -128,9 +129,7 @@ checkBlossomItem(BlossomItem &blossomItem,
                 const std::string message = "variable \""
                                             + it->first
                                             + "\" is not in the list of allowed keys";
-                SakuraRoot::m_root->createError(blossomItem,
-                                                "converter",
-                                                message);
+                errorMessage = createError(blossomItem, "validator", message);
                 return false;
             }
         }
@@ -154,9 +153,7 @@ checkBlossomItem(BlossomItem &blossomItem,
             const std::string message = "variable \""
                                         + it->first
                                         + "\" is required, but is not set.";
-            SakuraRoot::m_root->createError(blossomItem,
-                                            "converter",
-                                            message);
+            errorMessage = createError(blossomItem, "validator", message);
             return false;
         }
     }
@@ -174,7 +171,8 @@ checkBlossomItem(BlossomItem &blossomItem,
  */
 bool
 checkSakuraItem(SakuraItem* sakuraItem,
-                const std::string &filePath)
+                const std::string &filePath,
+                std::string &errorMessage)
 {
     //----------------------------------------------------------------------------------------------
     if(sakuraItem->getType() == SakuraItem::SEQUENTIELL_ITEM)
@@ -182,7 +180,7 @@ checkSakuraItem(SakuraItem* sakuraItem,
         SequentiellPart* sequential = dynamic_cast<SequentiellPart*>(sakuraItem);
         for(SakuraItem* item : sequential->childs)
         {
-            if(checkSakuraItem(item, filePath) == false) {
+            if(checkSakuraItem(item, filePath, errorMessage) == false) {
                 return false;
             }
         }
@@ -193,7 +191,7 @@ checkSakuraItem(SakuraItem* sakuraItem,
     {
         TreeItem* treeItem = dynamic_cast<TreeItem*>(sakuraItem);
         const std::string completePath = treeItem->rootPath + "/" + treeItem->relativePath;
-        return checkSakuraItem(treeItem->childs, completePath);
+        return checkSakuraItem(treeItem->childs, completePath, errorMessage);
     }
     //----------------------------------------------------------------------------------------------
     if(sakuraItem->getType() == SakuraItem::SUBTREE_ITEM)
@@ -205,7 +203,7 @@ checkSakuraItem(SakuraItem* sakuraItem,
     {
         BlossomItem* blossomItem = dynamic_cast<BlossomItem*>(sakuraItem);
         blossomItem->blossomPath = filePath;
-        return checkBlossomItem(*blossomItem);
+        return checkBlossomItem(*blossomItem, errorMessage);
     }
     //----------------------------------------------------------------------------------------------
     if(sakuraItem->getType() == SakuraItem::BLOSSOM_GROUP_ITEM)
@@ -221,7 +219,7 @@ checkSakuraItem(SakuraItem* sakuraItem,
                           false,
                           true);
 
-            if(checkSakuraItem(blossomItem, filePath) == false) {
+            if(checkSakuraItem(blossomItem, filePath, errorMessage) == false) {
                 return false;
             }
         }
@@ -232,11 +230,11 @@ checkSakuraItem(SakuraItem* sakuraItem,
     if(sakuraItem->getType() == SakuraItem::IF_ITEM)
     {
         IfBranching* ifBranching = dynamic_cast<IfBranching*>(sakuraItem);
-        if(checkSakuraItem(ifBranching->ifContent, filePath) == false) {
+        if(checkSakuraItem(ifBranching->ifContent, filePath, errorMessage) == false) {
             return false;
         }
 
-        if(checkSakuraItem(ifBranching->elseContent, filePath) == false) {
+        if(checkSakuraItem(ifBranching->elseContent, filePath, errorMessage) == false) {
             return false;
         }
 
@@ -246,19 +244,19 @@ checkSakuraItem(SakuraItem* sakuraItem,
     if(sakuraItem->getType() == SakuraItem::FOR_EACH_ITEM)
     {
         ForEachBranching* forEachBranching = dynamic_cast<ForEachBranching*>(sakuraItem);
-        return checkSakuraItem(forEachBranching->content, filePath);
+        return checkSakuraItem(forEachBranching->content, filePath, errorMessage);
     }
     //----------------------------------------------------------------------------------------------
     if(sakuraItem->getType() == SakuraItem::FOR_ITEM)
     {
         ForBranching* forBranching = dynamic_cast<ForBranching*>(sakuraItem);
-        return checkSakuraItem(forBranching->content, filePath);
+        return checkSakuraItem(forBranching->content, filePath, errorMessage);
     }
     //----------------------------------------------------------------------------------------------
     if(sakuraItem->getType() == SakuraItem::PARALLEL_ITEM)
     {
         ParallelPart* parallel = dynamic_cast<ParallelPart*>(sakuraItem);
-        return checkSakuraItem(parallel->childs, filePath);
+        return checkSakuraItem(parallel->childs, filePath, errorMessage);
     }
     //----------------------------------------------------------------------------------------------
     if(sakuraItem->getType() == SakuraItem::SEED_ITEM)
@@ -282,14 +280,14 @@ checkSakuraItem(SakuraItem* sakuraItem,
  * @return
  */
 bool
-checkAllItems(const SakuraGarden &garden)
+checkAllItems(const SakuraGarden &garden, std::string &errorMessage)
 {
     std::map<std::string, TreeItem*>::const_iterator mapIt;
     for(mapIt = garden.trees.begin();
         mapIt != garden.trees.end();
         mapIt++)
     {
-        if(checkSakuraItem(mapIt->second) == false) {
+        if(checkSakuraItem(mapIt->second, "", errorMessage) == false) {
             return false;
         }
     }

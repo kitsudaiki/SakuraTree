@@ -48,19 +48,40 @@ private:
 
     void run();
 
-    bool processSakuraItem(SakuraItem* sakuraItem, const std::string &filePath);
+    bool processSakuraItem(SakuraItem* sakuraItem,
+                           const std::string &filePath,
+                           std::string &errorMessage);
 
-    bool processBlossom(BlossomItem &blossomItem, const std::string &filePath);
-    bool processBlossomGroup(BlossomGroupItem &blossomGroupItem, const std::string &filePath);
-    bool processTree(TreeItem* treeItem);
-    bool processSubtree(SubtreeItem* subtreeItem, const std::string &filePath);
-    bool processSeedInit(SeedInitItem* seedItem, const std::string &filePath);
-    bool processSeedTrigger(SeedTriggerItem* seedItem);
-    bool processIf(IfBranching* ifCondition, const std::string &filePath);
-    bool processForEach(ForEachBranching* subtree, const std::string &filePath);
-    bool processFor(ForBranching* subtree, const std::string &filePath);
-    bool processSequeniellPart(SequentiellPart* subtree, const std::string &filePath);
-    bool processParallelPart(ParallelPart* parallelPart, const std::string &filePath);
+    bool processBlossom(BlossomItem &blossomItem,
+                        const std::string &filePath,
+                        std::string &errorMessage);
+    bool processBlossomGroup(BlossomGroupItem &blossomGroupItem,
+                             const std::string &filePath,
+                             std::string &errorMessage);
+    bool processTree(TreeItem* treeItem,
+                     std::string &errorMessage);
+    bool processSubtree(SubtreeItem* subtreeItem,
+                        const std::string &filePath,
+                        std::string &errorMessage);
+    bool processSeedInit(SeedInitItem* seedItem,
+                         const std::string &filePath, std::string &);
+    bool processSeedTrigger(SeedTriggerItem* seedItem,
+                            std::string &errorMessage);
+    bool processIf(IfBranching* ifCondition,
+                   const std::string &filePath,
+                   std::string &errorMessage);
+    bool processForEach(ForEachBranching* subtree,
+                        const std::string &filePath,
+                        std::string &errorMessage);
+    bool processFor(ForBranching* subtree,
+                    const std::string &filePath,
+                    std::string &errorMessage);
+    bool processSequeniellPart(SequentiellPart* subtree,
+                               const std::string &filePath,
+                               std::string &errorMessage);
+    bool processParallelPart(ParallelPart* parallelPart,
+                             const std::string &filePath,
+                             std::string &errorMessage);
 
 };
 

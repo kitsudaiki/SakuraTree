@@ -36,7 +36,8 @@ Blossom::~Blossom() {}
  * @return
  */
 void
-Blossom::growBlossom(BlossomItem &blossomItem)
+Blossom::growBlossom(BlossomItem &blossomItem,
+                     std::string &errorMessage)
 {
     //----------------------------------------------------------------------------------------------
     LOG_DEBUG("initBlossom " + blossomItem.blossomName);
@@ -45,9 +46,7 @@ Blossom::growBlossom(BlossomItem &blossomItem)
 
     if(blossomItem.success == false)
     {
-        SakuraRoot::m_root->createError(blossomItem,
-                                        "blossom init",
-                                        blossomItem.outputMessage);
+        errorMessage = createError(blossomItem, "blossom init", blossomItem.outputMessage);
         return;
     }
 
@@ -58,9 +57,7 @@ Blossom::growBlossom(BlossomItem &blossomItem)
 
     if(blossomItem.success == false)
     {
-        SakuraRoot::m_root->createError(blossomItem,
-                                        "blossom pre-check",
-                                        blossomItem.outputMessage);
+        errorMessage = createError(blossomItem, "blossom pre-check", blossomItem.outputMessage);
         return;
     }
 
@@ -75,9 +72,7 @@ Blossom::growBlossom(BlossomItem &blossomItem)
 
     if(blossomItem.success == false)
     {
-        SakuraRoot::m_root->createError(blossomItem,
-                                        "blossom execute",
-                                        blossomItem.outputMessage);
+        errorMessage = createError(blossomItem, "blossom execute", blossomItem.outputMessage);
         return;
     }
 
@@ -88,9 +83,7 @@ Blossom::growBlossom(BlossomItem &blossomItem)
 
     if(blossomItem.success == false)
     {
-        SakuraRoot::m_root->createError(blossomItem,
-                                        "blossom post-check",
-                                        blossomItem.outputMessage);
+        errorMessage = createError(blossomItem, "blossom post-check", blossomItem.outputMessage);
         return;
     }
 
@@ -101,9 +94,7 @@ Blossom::growBlossom(BlossomItem &blossomItem)
 
     if(blossomItem.success == false)
     {
-        SakuraRoot::m_root->createError(blossomItem,
-                                        "blossom close",
-                                        blossomItem.outputMessage);
+        errorMessage = createError(blossomItem, "blossom close", blossomItem.outputMessage);
         return;
     }
 

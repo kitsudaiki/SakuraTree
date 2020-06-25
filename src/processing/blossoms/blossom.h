@@ -37,7 +37,8 @@ public:
     Blossom();
     virtual ~Blossom();
 
-    void growBlossom(BlossomItem &blossomItem);
+    void growBlossom(BlossomItem &blossomItem,
+                     std::string &errorMessage);
 
     DataMap m_requiredKeys;
     bool m_hasOutput = false;

@@ -233,7 +233,7 @@ fillJinja2Template(ValueItem &valueItem,
 
     if(ret == false)
     {
-        SakuraRoot::m_root->createError("jinja2-converter", convertResult);
+        errorMessage = createError("jinja2-converter", errorMessage);
         return false;
     }
 
@@ -587,6 +587,80 @@ convertBlossomOutput(const BlossomItem &blossom)
     }
 
     return output;
+}
+
+
+/**
+ * @brief create an error-output
+ *
+ * @param blossomItem blossom-item with information of the error-location
+ * @param errorLocation location where the error appeared
+ * @param errorMessage message to describe, what was wrong
+ * @param possibleSolution message with a possible solution to solve the problem
+ */
+const std::string
+createError(const BlossomItem &blossomItem,
+            const std::string &errorLocation,
+            const std::string &errorMessage,
+            const std::string &possibleSolution)
+{
+    return createError(errorLocation,
+                       errorMessage,
+                       possibleSolution,
+                       blossomItem.blossomType,
+                       blossomItem.blossomGroupType,
+                       blossomItem.blossomName,
+                       blossomItem.blossomPath);
+}
+
+/**
+ * @brief create an error-output
+ *
+ * @param errorLocation location where the error appeared
+ * @param errorMessage message to describe, what was wrong
+ * @param possibleSolution message with a possible solution to solve the problem
+ * @param blossomType type of the blossom, where the error appeared
+ * @param blossomGroup type of the blossom-group, where the error appeared
+ * @param blossomName name of the blossom in the script to specify the location
+ * @param blossomFilePath file-path, where the error had appeared
+ */
+const std::string
+createError(const std::string &errorLocation,
+            const std::string &errorMessage,
+            const std::string &possibleSolution,
+            const std::string &blossomType,
+            const std::string &blossomGroupType,
+            const std::string &blossomName,
+            const std::string &blossomFilePath)
+{
+    Kitsunemimi::TableItem errorOutput;
+    // initialize error-output
+    errorOutput.addColumn("Field");
+    errorOutput.addColumn("Value");
+
+    if(errorLocation.size() > 0) {
+        errorOutput.addRow(std::vector<std::string>{"location", errorLocation});
+    }
+
+    if(possibleSolution.size() > 0) {
+        errorOutput.addRow(std::vector<std::string>{"possible solution", possibleSolution});
+    }
+    if(blossomType.size() > 0) {
+        errorOutput.addRow(std::vector<std::string>{"blossom-type", blossomType});
+    }
+    if(blossomGroupType.size() > 0) {
+        errorOutput.addRow(std::vector<std::string>{"blossom-group-type", blossomGroupType});
+    }
+    if(blossomName.size() > 0) {
+        errorOutput.addRow(std::vector<std::string>{"blossom-name", blossomName});
+    }
+    if(blossomFilePath.size() > 0) {
+        errorOutput.addRow(std::vector<std::string>{"blossom-file-path", blossomFilePath});
+    }
+
+    errorOutput.addRow(std::vector<std::string>{"error-message", errorMessage});
+
+    return errorOutput.toString(200);
 }
 
 }

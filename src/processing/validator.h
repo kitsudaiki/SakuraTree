@@ -29,16 +29,21 @@ namespace SakuraTree
 {
 
 bool checkOutput(BlossomItem &blossomItem,
-                 const bool hasOutput);
-bool checkBlossomItem(BlossomItem &blossomItem);
+                 const bool hasOutput,
+                 std::string &errorMessage);
 bool checkBlossomItem(BlossomItem &blossomItem,
-                      DataMap &requiredKeys);
+                      std::string &errorMessage);
+bool checkBlossomItem(BlossomItem &blossomItem,
+                      DataMap &requiredKey,
+                      std::string &errorMessages);
 
 
 bool checkSakuraItem(SakuraItem* sakuraItem,
-                     const std::string &filePath = "");
+                     const std::string &filePath,
+                     std::string &errorMessage);
 
-bool checkAllItems(const SakuraGarden &garden);
+bool checkAllItems(const SakuraGarden &garden,
+                   std::string &errorMessage);
 
 }
 

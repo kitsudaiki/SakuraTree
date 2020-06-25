@@ -50,7 +50,6 @@ SakuraRoot* SakuraRoot::m_root = nullptr;
 std::string SakuraRoot::m_executablePath = "";
 std::string SakuraRoot::m_serverAddress = "127.0.0.1";
 uint16_t SakuraRoot::m_serverPort = 1337;
-TableItem SakuraRoot::m_errorOutput;
 Jinja2Converter* SakuraRoot::m_jinja2Converter = nullptr;
 Kitsunemimi::Sakura::SakuraGarden* SakuraRoot::m_currentGarden = nullptr;
 Kitsunemimi::Sakura::SakuraNetwork* SakuraRoot::m_networking = nullptr;
@@ -70,10 +69,6 @@ SakuraRoot::SakuraRoot(const std::string &executablePath,
     m_executablePath = executablePath;
     m_jinja2Converter = new Jinja2Converter();
     m_currentGarden = new Kitsunemimi::Sakura::SakuraGarden();
-
-    // initialize error-output
-    m_errorOutput.addColumn("Field");
-    m_errorOutput.addColumn("Value");
 
     // initialize thread-pool
     // TODO: make the number of initialized threads configurable
@@ -209,18 +204,18 @@ SakuraRoot::startProcess(const std::string &inputPath,
     }
 
     // validate parsed blossoms
-    if(checkAllItems(*m_currentGarden) == false)
+    errorMessage = "";
+    if(checkAllItems(*m_currentGarden, errorMessage) == false)
     {
-        LOG_ERROR("\n" + m_errorOutput.toString());
+        LOG_ERROR("\n" + errorMessage);
         return false;
     }
 
     // process sakura-file with initial values
-    if(runProcess(tree, initialValues) == false)
+    errorMessage = "";
+    if(runProcess(tree, initialValues, errorMessage) == false)
     {
-        if(m_errorOutput.getNumberOfRows() > 0) {
-            LOG_ERROR("\n" + m_errorOutput.toString());
-        }
+        LOG_ERROR("\n" + errorMessage);
         return false;
     }
 
@@ -269,86 +264,6 @@ SakuraRoot::startSubtreeProcess(const std::string &relativePath,
     m_threadPool->m_queue.addSubtreeObject(object);
 
     return true;
-}
-
-/**
- * @brief create an error-output
- *
- * @param blossomItem blossom-item with information of the error-location
- * @param errorLocation location where the error appeared
- * @param errorMessage message to describe, what was wrong
- * @param possibleSolution message with a possible solution to solve the problem
- */
-void
-SakuraRoot::createError(const BlossomItem &blossomItem,
-                        const std::string &errorLocation,
-                        const std::string &errorMessage,
-                        const std::string &possibleSolution)
-{
-    createError(errorLocation,
-                errorMessage,
-                possibleSolution,
-                blossomItem.blossomType,
-                blossomItem.blossomGroupType,
-                blossomItem.blossomName,
-                blossomItem.blossomPath);
-}
-
-/**
- * @brief create an error-output
- *
- * @param errorLocation location where the error appeared
- * @param errorMessage message to describe, what was wrong
- * @param possibleSolution message with a possible solution to solve the problem
- * @param blossomType type of the blossom, where the error appeared
- * @param blossomGroup type of the blossom-group, where the error appeared
- * @param blossomName name of the blossom in the script to specify the location
- * @param blossomFilePath file-path, where the error had appeared
- */
-void
-SakuraRoot::createError(const std::string &errorLocation,
-                        const std::string &errorMessage,
-                        const std::string &possibleSolution,
-                        const std::string &blossomType,
-                        const std::string &blossomGroupType,
-                        const std::string &blossomName,
-                        const std::string &blossomFilePath)
-{
-    if(SakuraRoot::m_errorOutput.getNumberOfRows() > 0) {
-        SakuraRoot::m_errorOutput.addRow(std::vector<std::string>{"", ""});
-    }
-
-    if(errorLocation.size() > 0) {
-        SakuraRoot::m_errorOutput.addRow(std::vector<std::string>{"location", errorLocation});
-    }
-
-    if(possibleSolution.size() > 0)
-    {
-        SakuraRoot::m_errorOutput.addRow(std::vector<std::string>{"possible solution",
-                                                                  possibleSolution});
-    }
-    if(blossomType.size() > 0)
-    {
-        SakuraRoot::m_errorOutput.addRow(std::vector<std::string>{"blossom-type",
-                                                                  blossomType});
-    }
-    if(blossomGroupType.size() > 0)
-    {
-        SakuraRoot::m_errorOutput.addRow(std::vector<std::string>{"blossom-group-type",
-                                                                  blossomGroupType});
-    }
-    if(blossomName.size() > 0)
-    {
-        SakuraRoot::m_errorOutput.addRow(std::vector<std::string>{"blossom-name",
-                                                                  blossomName});
-    }
-    if(blossomFilePath.size() > 0)
-    {
-        SakuraRoot::m_errorOutput.addRow(std::vector<std::string>{"blossom-file-path",
-                                                                  blossomFilePath});
-    }
-
-    SakuraRoot::m_errorOutput.addRow(std::vector<std::string>{"error-message", errorMessage});
 }
 
 /**
@@ -417,7 +332,8 @@ SakuraRoot::printOutput(const std::string &output)
  */
 bool
 SakuraRoot::runProcess(SakuraItem* item,
-                       const DataMap &initialValues)
+                       const DataMap &initialValues,
+                       std::string &errorMessage)
 {
     // run process by adding the tree as subtree-object to the subtree-queue to be processed by
     // one of the worker-threads
@@ -434,8 +350,9 @@ SakuraRoot::runProcess(SakuraItem* item,
     }
 
     // error-output
-    // TODO: better solution necessary instead of checking the number of rows
-    if(m_errorOutput.getNumberOfRows() > 0) {
+    if(object->activeCounter->success == false)
+    {
+        errorMessage = object->activeCounter->outputMessage;
         return false;
     }
 
