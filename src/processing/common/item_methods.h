@@ -40,6 +40,7 @@ bool getProcessedItem(ValueItem &valueItem,
                       DataMap &insertValues,
                       std::string &errorMessage);
 
+// fill functions
 bool fillIdentifierItem(ValueItem &valueItem,
                         DataMap &insertValues,
                         std::string &errorMessage);
@@ -55,6 +56,7 @@ bool fillInputValueItemMap(ValueItemMap &items,
 bool fillOutputValueItemMap(ValueItemMap &items,
                             DataItem* output);
 
+// override functions
 void overrideItems(DataMap &original,
                    const DataMap &override,
                    bool onlyExisting = true);
@@ -66,11 +68,26 @@ void overrideItems(ValueItemMap &original,
                    bool onlyExisting = false,
                    bool onlyNotExisting = false);
 
+// check items
 const std::vector<std::string> checkInput(Kitsunemimi::Sakura::ValueItemMap &original,
                                           const DataMap &itemInputValues);
-
 const std::vector<std::string> checkItems(DataMap &items);
+
+// convert
 const std::string convertBlossomOutput(const BlossomItem &blossom);
+
+// error-output
+const std::string createError(const BlossomItem &blossomItem,
+                              const std::string &errorLocation,
+                              const std::string &errorMessage,
+                              const std::string &possibleSolution = "");
+const std::string createError(const std::string &errorLocation,
+                              const std::string &errorMessage,
+                              const std::string &possibleSolution = "",
+                              const std::string &blossomType = "",
+                              const std::string &blossomGroupType = "",
+                              const std::string &blossomName = "",
+                              const std::string &blossomFilePath = "");
 
 }
 

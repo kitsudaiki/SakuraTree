@@ -66,19 +66,6 @@ public:
                              Kitsunemimi::Project::Session* session,
                              const uint64_t blockerId);
 
-    // error-output
-    void createError(const BlossomItem &blossomItem,
-                     const std::string &errorLocation,
-                     const std::string &errorMessage,
-                     const std::string &possibleSolution = "");
-    void createError(const std::string &errorLocation,
-                     const std::string &errorMessage,
-                     const std::string &possibleSolution = "",
-                     const std::string &blossomType = "",
-                     const std::string &blossomGroupType = "",
-                     const std::string &blossomName = "",
-                     const std::string &blossomFilePath = "");
-
     // output
     void printOutput(const BlossomGroupItem &blossomGroupItem);
     void printOutput(const BlossomItem &blossomItem);
@@ -90,7 +77,6 @@ public:
     static std::string m_serverAddress;
     static uint16_t m_serverPort;
     static Jinja2Converter* m_jinja2Converter;
-    static Kitsunemimi::TableItem m_errorOutput;
     static Kitsunemimi::Sakura::SakuraGarden* m_currentGarden;
     static Kitsunemimi::Sakura::SakuraNetwork* m_networking;
 
@@ -103,7 +89,8 @@ private:
     std::mutex m_mutex;
 
     bool runProcess(SakuraItem* item,
-                    const DataMap &initialValues);
+                    const DataMap &initialValues,
+                    std::string &errorMessage);
     bool processSeed(const std::string &seedPath,
                      const std::string &serverAddress,
                      const uint16_t serverPort,
