@@ -25,12 +25,12 @@
 
 #include <common.h>
 #include <libKitsunemimiCommon/threading/thread.h>
+#include <processing/subtree_queue.h>
 
 using namespace Kitsunemimi;
 
 namespace SakuraTree
 {
-class SubtreeQueue;
 
 class SakuraThread
         : public Kitsunemimi::Thread
@@ -42,6 +42,7 @@ public:
 private:
     bool m_started = false;
     SubtreeQueue* m_queue;
+    SubtreeQueue::SubtreeObject* m_currentSubtree = nullptr;
 
     DataMap m_parentValues;
     std::vector<std::string> m_hierarchy;

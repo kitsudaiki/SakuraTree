@@ -29,7 +29,6 @@
 #include <processing/common/item_methods.h>
 #include <processing/blossoms/blossom.h>
 #include <processing/blossoms/blossom_getter.h>
-#include <processing/subtree_queue.h>
 
 #include <libKitsunemimiJinja2/jinja2_converter.h>
 #include <libKitsunemimiPersistence/logger/logger.h>
@@ -65,42 +64,45 @@ SakuraThread::run()
     m_started = true;
     while(m_abort == false)
     {
-        SubtreeQueue::SubtreeObject* currentSubtree = m_queue->getSubtreeObject();
+        m_currentSubtree = m_queue->getSubtreeObject();
 
-        if(currentSubtree != nullptr)
+        if(m_currentSubtree != nullptr)
         {
-            if(currentSubtree->subtree != nullptr)
+            if(m_currentSubtree->subtree != nullptr)
             {
-                if(currentSubtree->session != nullptr) {
+                if(m_currentSubtree->session != nullptr) {
                     LOG_DEBUG("start Subcall");
                 }
 
                 // process input-values
-                m_hierarchy = currentSubtree->hirarchy;
-                overrideItems(m_parentValues, currentSubtree->subtree->values, false);
-                overrideItems(m_parentValues, currentSubtree->items, false);
+                m_hierarchy = m_currentSubtree->hirarchy;
+                overrideItems(m_parentValues, m_currentSubtree->subtree->values, false);
+                overrideItems(m_parentValues, m_currentSubtree->items, false);
 
                 // run the real task
                 std::string errorMessage = "";
-                const bool result = processSakuraItem(currentSubtree->subtree,
-                                                      currentSubtree->filePath,
+                const bool result = processSakuraItem(m_currentSubtree->subtree,
+                                                      m_currentSubtree->filePath,
                                                       errorMessage);
                 // handle result
                 if(result) {
-                    overrideItems(currentSubtree->items, m_parentValues, true);
+                    overrideItems(m_currentSubtree->items, m_parentValues, true);
                 } else {
-                    currentSubtree->activeCounter->registerError(errorMessage);
+                    m_currentSubtree->activeCounter->registerError(errorMessage);
                 }
 
                 // increase active-counter as last step, so the source subtree can check, if all
                 // spawned subtrees are finished
-                currentSubtree->activeCounter->increaseCounter();
+                m_currentSubtree->activeCounter->increaseCounter();
 
-                if(currentSubtree->session != nullptr)
+                // handle the case, that this thread was spawned remotely ba a seed-trigger
+                if(m_currentSubtree->session != nullptr)
                 {
                     char response[50];
                     LOG_DEBUG("FINISH Subcall");
-                    currentSubtree->session->sendResponse(response, 50, currentSubtree->blockerId);
+                    m_currentSubtree->session->sendResponse(response,
+                                                            50,
+                                                            m_currentSubtree->blockerId);
                 }
             }
         }
@@ -123,6 +125,11 @@ SakuraThread::processSakuraItem(SakuraItem* sakuraItem,
                                 const std::string &filePath,
                                 std::string &errorMessage)
 {
+    // case that another thread has failed
+    if(m_currentSubtree->activeCounter->success == false) {
+        return false;
+    }
+
     //----------------------------------------------------------------------------------------------
     if(sakuraItem->getType() == SakuraItem::SEQUENTIELL_ITEM)
     {
