@@ -791,8 +791,7 @@ SakuraThread::processFor(ForBranching* subtree,
             // add the counter-variable as new value to be accessable within the loop
             m_parentValues.insert(subtree->tempVarName, new DataValue(i), true);
 
-            const bool result = processSakuraItem(subtree->content, filePath, errorMessage);
-            if(result == false) {
+            if(processSakuraItem(subtree->content->copy(), filePath, errorMessage) == false) {
                 return false;
             }
         }
