@@ -296,6 +296,7 @@ SakuraThread::processBlossomGroup(BlossomGroupItem &blossomGroupItem,
     }
 
     // print blossom-group
+    blossomGroupItem.id = convertResult;
     blossomGroupItem.nameHirarchie = m_hierarchy;
     blossomGroupItem.nameHirarchie.push_back("BLOSSOM-GROUP: " + blossomGroupItem.id);
     SakuraRoot::m_root->printOutput(blossomGroupItem);
@@ -308,7 +309,7 @@ SakuraThread::processBlossomGroup(BlossomGroupItem &blossomGroupItem,
         blossomItem->nameHirarchie = m_hierarchy;
         blossomItem->blossomName = blossomGroupItem.id;
         blossomItem->blossomGroupType = blossomGroupItem.blossomGroupType;
-        blossomItem->nameHirarchie.push_back("BLOSSOM: " + convertResult);
+        blossomItem->nameHirarchie.push_back("BLOSSOM: " + blossomGroupItem.id);
 
         // copy values of the blossom-group into the blossom, but only values, which are not defined
         // which in the blossom
