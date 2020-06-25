@@ -126,8 +126,9 @@ SakuraThread::processSakuraItem(SakuraItem* sakuraItem,
                                 std::string &errorMessage)
 {
     // case that another thread has failed
+    // only the failing thread return the false as result
     if(m_currentSubtree->activeCounter->success == false) {
-        return false;
+        return true;
     }
 
     //----------------------------------------------------------------------------------------------
