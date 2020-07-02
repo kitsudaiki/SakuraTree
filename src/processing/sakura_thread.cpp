@@ -376,7 +376,7 @@ SakuraThread::processSubtree(SubtreeItem* subtreeItem,
 {
     LOG_DEBUG("processSubtree");
 
-    // get subtree-file based on the required path
+    // get sakura-file based on the required path
     Kitsunemimi::Sakura::SakuraGarden* treeHandler = SakuraRoot::m_root->m_currentGarden;
     const bfs::path relPath = treeHandler->getRelativePath(filePath, subtreeItem->nameOrPath);
     SakuraItem* newSubtree = treeHandler->getTree(relPath, SakuraRoot::m_currentGarden->rootPath);
