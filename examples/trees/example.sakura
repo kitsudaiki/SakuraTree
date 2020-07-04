@@ -4,15 +4,19 @@
 - test_output2 = "test"
 - test_map = { "test": ["poi1", "poi2"]}
 
-if(test_output == "test2")
+if(test_output == "test")
 {
 
     template("create a template")
     - source_path = "test_template.j2"
     - dest_path = "/tmp/test_template"
-    -> create:
-       - checker = 42
-       - name = "test-template"
+    - owner = "neptune"
+    - permission = 666
+    -> create_file:
+       - variables = {
+           - checker = 42
+           - name = "test-template"
+        }
 
     text_file("read template")
     - file_path = "/tmp/test_template"
@@ -48,6 +52,12 @@ if(test_output == "test2")
             - output = packages.get(i)
         }
     }
+
+    path("copy test-ini-file")
+    -> copy:
+        - source_path = "test_file"
+        - dest_path = "/tmp/test_file"
+        
 
     ini_file("get value from a test-ini-file")
     - file_path = "/tmp/test_file"
