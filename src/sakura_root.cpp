@@ -163,7 +163,7 @@ SakuraRoot::startProcess(const std::string &inputPath,
     // set default-file in case that a directory instead of a file was selected
     std::string treeFile = inputPath;
     if(bfs::is_directory(treeFile)) {
-        treeFile = treeFile + "/root.tree";
+        treeFile = treeFile + "/root.sakura";
     }
 
     // parse all files
@@ -176,17 +176,17 @@ SakuraRoot::startProcess(const std::string &inputPath,
     SakuraItem* tree = nullptr;
 
     // get initial sakura-file
-    if(bfs::is_regular_file(inputPath))
+    if(bfs::is_regular_file(treeFile))
     {
-        const bfs::path parent = bfs::path(inputPath).parent_path();
-        const std::string relPath = bfs::relative(inputPath, parent).string();
+        const bfs::path parent = bfs::path(treeFile).parent_path();
+        const std::string relPath = bfs::relative(treeFile, parent).string();
 
         tree = m_currentGarden->getTree(relPath, parent.string());
     }
 
     if(tree == nullptr)
     {
-        LOG_ERROR("No tree found for the input-path " + inputPath);
+        LOG_ERROR("No tree found for the input-path " + treeFile);
         return false;
     }
 
