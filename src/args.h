@@ -28,9 +28,9 @@ registerArguments(Kitsunemimi::Args::ArgParser &argparser)
 
     // required input
     argparser.registerString("input-path",
-                             "Directory- or file-path for the tree-input. If this path is a "
-                             "directory, the argument init-tree-id is also required to identify "
-                             "the tree inside of the directory.",
+                             "Relative or absolut path to the initial sakura-file or to the "
+                             "directory, which contains the sakura.root file, which should be "
+                             "executed.",
                              true,
                              true);
 
