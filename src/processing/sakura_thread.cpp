@@ -261,7 +261,7 @@ SakuraThread::processBlossom(BlossomItem &blossomItem,
     SakuraRoot::m_root->printOutput(blossomItem);
 
     // write processing result back to parent
-    fillOutputValueItemMap(blossomItem.values, blossomItem.blossomOutput);
+    fillBlossomOutputValueItemMap(blossomItem.values, blossomItem.blossomOutput);
 
     // TODO: override only with the output-values to avoid unnecessary conflicts
     overrideItems(m_parentValues, blossomItem.values);
@@ -931,14 +931,23 @@ SakuraThread::runSubtreeCall(SakuraItem* newSubtree,
         return false;
     }
 
-    // pre-process subtree
-    overrideItems(newSubtree->values, values, false);
+    DataMap parentBackup = m_parentValues;
+    m_parentValues.clear();
 
-    // post-process subtree
+    // pre-process subtree
     overrideItems(newSubtree->values, values, false);
     overrideItems(m_parentValues, newSubtree->values, false);
 
-    return processSakuraItem(newSubtree, filePath, errorMessage);
+    const bool ret = processSakuraItem(newSubtree, filePath, errorMessage);
+    if(ret == false) {
+        return false;
+    }
+
+    fillSubtreeOutputValueItemMap(newSubtree->values, &m_parentValues);
+    m_parentValues = parentBackup;
+    overrideItems(m_parentValues, newSubtree->values);
+
+    return true;
 }
 
 }

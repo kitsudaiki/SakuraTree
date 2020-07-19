@@ -1,0 +1,9 @@
+["test"]
+- host = ""
+
+subtree("next/test.sakura")
+- test_name = "test"
+- test_name >> host
+
+print("check subtree-result")
+- host = host
