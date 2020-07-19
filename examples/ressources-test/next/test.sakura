@@ -1,0 +1,5 @@
+["ressource test"]
+- test_name = ""
+
+print_hostname("call test-ressource")
+- host_name = test_name
