@@ -84,6 +84,11 @@ private:
                              const std::string &filePath,
                              std::string &errorMessage);
 
+    bool runSubtreeCall(SakuraItem* newSubtree,
+                        ValueItemMap &values,
+                        const std::string &filePath,
+                        std::string &errorMessage);
+
 };
 
 }

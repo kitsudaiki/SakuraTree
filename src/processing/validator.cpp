@@ -42,6 +42,11 @@ checkBlossomItem(BlossomItem &blossomItem,
 {
     bool result = false;
 
+    TreeItem* item = SakuraRoot::m_currentGarden->getRessource(blossomItem.blossomType);
+    if(item != nullptr) {
+        return true;
+    }
+
     Blossom* blossom = getBlossom(blossomItem.blossomGroupType, blossomItem.blossomType);
     if(blossom == nullptr)
     {
