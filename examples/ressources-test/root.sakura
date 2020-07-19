@@ -1,0 +1,4 @@
+["test"]
+
+subtree("next/test.sakura")
+- test_name = "test"
