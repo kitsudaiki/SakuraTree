@@ -332,8 +332,8 @@ fillInputValueItemMap(ValueItemMap &items,
  * @return true, if the output was written in at least one point of the value-item-map
  */
 bool
-fillOutputValueItemMap(ValueItemMap &items,
-                       DataItem* output)
+fillBlossomOutputValueItemMap(ValueItemMap &items,
+                              DataItem* output)
 {
     bool found = false;
 
@@ -347,6 +347,40 @@ fillOutputValueItemMap(ValueItemMap &items,
         {
             ValueItem valueItem;
             valueItem.item = output->copy();
+            valueItem.type = ValueItem::OUTPUT_PAIR_TYPE;
+            it->second = valueItem;
+            found = true;
+        }
+    }
+
+    return found;
+}
+
+
+/**
+ * @brief wirte the output of a subtree or ressource back into a value-item-map
+ *
+ * @param items value-item-map, where the output should be inserted
+ * @param output output of the blossom-item as data-item
+ *
+ * @return true, if the output was written in at least one point of the value-item-map
+ */
+bool
+fillSubtreeOutputValueItemMap(ValueItemMap &items,
+                              DataMap* output)
+{
+    bool found = false;
+
+    std::map<std::string, ValueItem>::iterator it;
+    for(it = items.m_valueMap.begin();
+        it != items.m_valueMap.end();
+        it++)
+    {
+        // replace only as output-marked values
+        if(it->second.type == ValueItem::OUTPUT_PAIR_TYPE)
+        {
+            ValueItem valueItem;
+            valueItem.item = output->get(it->second.item->toString())->copy();
             valueItem.type = ValueItem::OUTPUT_PAIR_TYPE;
             it->second = valueItem;
             found = true;
