@@ -1,0 +1,11 @@
+["parse json"]
+- input = "{ \"test\": 2, \"asdf\": { \"xyz\": 42 } }"
+- parsed_content = ""
+
+
+item_update("parse json")
+- parsed_content = input.parse_json()
+
+
+print("debug-output")
+- xyz = parsed_content.get("asdf").get("xyz")
