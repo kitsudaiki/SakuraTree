@@ -32,5 +32,7 @@ DataValue* containsValue(DataItem* item, DataValue* key, std::string &errorMessa
 DataArray* appendValue(DataArray* item, DataItem* value, std::string &errorMessage);
 DataMap* insertValue(DataMap* item, DataValue* key, DataItem* value, std::string &errorMessage);
 DataArray* clearEmpty(DataArray* item, std::string &errorMessage);
+DataItem* parseJson(DataValue* intput, std::string &errorMessage);
+
 
 #endif // VALUE_ITEM_FUNCTIONS_H
