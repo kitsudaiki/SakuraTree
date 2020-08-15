@@ -59,6 +59,7 @@ public:
     bool startProcess(const std::string &configFilePath);
     bool startProcess(const std::string &inputPath,
                       const DataMap &initialValues,
+                      const bool dryRun = false,
                       const std::string &serverAddress = "",
                       const uint16_t serverPort = 1337);
     bool startSubtreeProcess(const std::string &relativePath,

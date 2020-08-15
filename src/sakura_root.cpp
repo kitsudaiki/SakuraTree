@@ -145,6 +145,7 @@ SakuraRoot::startProcess(const std::string &configFilePath)
 bool
 SakuraRoot::startProcess(const std::string &inputPath,
                          const DataMap &initialValues,
+                         const bool dryRun,
                          const std::string &serverAddress,
                          const uint16_t serverPort)
 {
@@ -211,6 +212,13 @@ SakuraRoot::startProcess(const std::string &inputPath,
         return false;
     }
 
+    // in case of a dry-run, cancel here before executing the scripts
+    if(dryRun)
+    {
+        LOG_INFO("dry-run successfully finished", GREEN_COLOR);
+        return true;
+    }
+
     // process sakura-file with initial values
     errorMessage = "";
     if(runProcess(tree, initialValues, errorMessage) == false)
@@ -219,7 +227,7 @@ SakuraRoot::startProcess(const std::string &inputPath,
         return false;
     }
 
-    LOG_INFO("finish");
+    LOG_INFO("finish", GREEN_COLOR);
 
     // close connection to all hosts
     m_networking->closeAllSessions();
