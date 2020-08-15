@@ -43,7 +43,6 @@ int main(int argc, char *argv[])
     }
 
     bool enableDebug = false;
-    bool useConfigFile = false;
     DataMap itemInputValues;
 
     std::string listenAddress = "";
@@ -54,11 +53,6 @@ int main(int argc, char *argv[])
     {
         enableDebug = true;
         Kitsunemimi::Persistence::setDebugFlag(true);
-    }
-
-    // check if config-file should be used
-    if(argParser.wasSet("use-config")) {
-        useConfigFile = true;
     }
 
     // input-values
@@ -103,7 +97,7 @@ int main(int argc, char *argv[])
     SakuraTree::SakuraRoot* root = new SakuraTree::SakuraRoot(std::string(argv[0]),
                                                               enableDebug);
 
-    if(useConfigFile)
+    if(argParser.wasSet("use-config"))
     {
         root->startProcess(inputPath.string());
     }
@@ -111,6 +105,7 @@ int main(int argc, char *argv[])
     {
         root->startProcess(inputPath.string(),
                            itemInputValues,
+                           argParser.wasSet("dry-run"),
                            listenAddress,
                            listenPort);
     }
