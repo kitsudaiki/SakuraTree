@@ -22,6 +22,7 @@
 
 #include <processing/common/value_item_functions.h>
 #include <libKitsunemimiCommon/common_methods/string_methods.h>
+#include <libKitsunemimiJson/json_item.h>
 
 using Kitsunemimi::splitStringByDelimiter;
 
@@ -320,4 +321,34 @@ clearEmpty(DataArray* item,
     }
 
     return result;
+}
+
+/**
+ * @brief parse a json-formated string into a data-item
+ *
+ * @param intput input-value with the json-formated content
+ * @param errorMessage error-message for output
+ *
+ * @return nullptr, if failed, else a data-item with the parsed content
+ */
+DataItem*
+parseJson(DataValue* intput,
+          std::string &errorMessage)
+{
+    // precheck
+    if(intput == nullptr)
+    {
+        errorMessage = "inputs for size-function are invalid";
+        return nullptr;
+    }
+
+    // try to parse json
+    Kitsunemimi::Json::JsonItem jsonItem;
+    if(jsonItem.parse(intput->toString(), errorMessage))
+    {
+        DataItem* resultItem = jsonItem.getItemContent()->copy();
+        return resultItem;
+    }
+
+    return nullptr;
 }

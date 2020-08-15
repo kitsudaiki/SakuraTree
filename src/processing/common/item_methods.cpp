@@ -165,6 +165,18 @@ getProcessedItem(ValueItem &valueItem,
             continue;
         }
         //------------------------------------------------------------------------------------------
+        if(type == "parse_json")
+        {
+            if(functionItem.arguments.size() != 0) {
+                return false;
+            }
+
+            valueItem.item = parseJson(valueItem.item->toValue(),
+                                       errorMessage);
+
+            continue;
+        }
+        //------------------------------------------------------------------------------------------
 
         valueItem.item = nullptr;
     }
