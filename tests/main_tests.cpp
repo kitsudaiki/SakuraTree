@@ -40,18 +40,18 @@
 int
 main(int argc, char *argv[])
 {
-    SakuraTree::ValueItemsFunctions_Test();
-    SakuraTree::ItemMethods_Test();
-    //SakuraTree::PathChmodBlossom_Test();
-    //SakuraTree::PathChownBlossom_Test();
-    SakuraTree::PathCopyBlossom_Test();
-    SakuraTree::PathDeleteBlossom_Test();
-    SakuraTree::PathRenameBlossom_Test();
-    SakuraTree::TemplateCreateBlossom_Test();
-    SakuraTree::CmdBlossom_Test();
-    SakuraTree::TextReadBlossom_Test();
-    SakuraTree::TextWriteBlossom_Test();
-    SakuraTree::TextAppendBlossom_Test();
-    SakuraTree::TextReplaceBlossom_Test();
+    ValueItemsFunctions_Test();
+    ItemMethods_Test();
+    //PathChmodBlossom_Test();
+    //PathChownBlossom_Test();
+    PathCopyBlossom_Test();
+    PathDeleteBlossom_Test();
+    PathRenameBlossom_Test();
+    TemplateCreateBlossom_Test();
+    CmdBlossom_Test();
+    TextReadBlossom_Test();
+    TextWriteBlossom_Test();
+    TextAppendBlossom_Test();
+    TextReplaceBlossom_Test();
     return 0;
 }

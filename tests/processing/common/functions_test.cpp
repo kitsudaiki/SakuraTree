@@ -22,9 +22,6 @@
 
 #include "functions_test.h"
 
-namespace SakuraTree
-{
-
 /**
  * @brief constructor
  */
@@ -255,6 +252,4 @@ ValueItemsFunctions_Test::insertValue_test()
     // negative tests
     result = insertValue(nullptr, new DataValue("12345"), new DataValue("12345"), errorMessage);
     checkNullptr(result);
-}
-
 }

@@ -27,8 +27,6 @@
 #include <libKitsunemimiCommon/test_helper/compare_test_helper.h>
 #include <processing/common/item_methods.h>
 
-namespace SakuraTree
-{
 class SakuraRoot;
 
 class ItemMethods_Test
@@ -46,7 +44,5 @@ private:
 
     SakuraRoot* m_root = nullptr;
 };
-
-}
 
 #endif // COMMON_METHODS_TEST_H

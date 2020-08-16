@@ -24,9 +24,6 @@
 #include <libKitsunemimiPersistence/files/file_methods.h>
 #include <libKitsunemimiPersistence/files/text_file.h>
 
-namespace SakuraTree
-{
-
 TextReplaceBlossom::TextReplaceBlossom()
     : Blossom()
 {
@@ -113,6 +110,4 @@ void
 TextReplaceBlossom::closeBlossom(BlossomItem &blossomItem)
 {
     blossomItem.success = true;
-}
-
 }

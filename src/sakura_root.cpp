@@ -43,9 +43,6 @@
 
 #include <sakura_provisioning_subtree.h>
 
-namespace SakuraTree
-{
-
 SakuraRoot* SakuraRoot::m_root = nullptr;
 std::string SakuraRoot::m_executablePath = "";
 std::string SakuraRoot::m_serverAddress = "127.0.0.1";
@@ -109,7 +106,7 @@ SakuraRoot::startProcess(const std::string &configFilePath)
     }
 
     // load config definition
-    SakuraTree::registerConfigs();
+    registerConfigs();
 
     const bool debug = GET_BOOL_CONFIG("DEFAULT", "debug", success);
     Kitsunemimi::Persistence::initFileLogger("/tmp/", "SakuraTree_log", debug);
@@ -384,6 +381,4 @@ SakuraRoot::loadPredefinedSubtrees(std::string &errorMessage)
     }
 
     return true;
-}
-
 }

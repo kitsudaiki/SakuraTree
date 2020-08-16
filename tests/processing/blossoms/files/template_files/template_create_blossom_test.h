@@ -27,9 +27,6 @@
 #include <libKitsunemimiCommon/test_helper/compare_test_helper.h>
 #include <sakura_root.h>
 
-namespace SakuraTree
-{
-
 class TemplateCreateBlossom_Test
         : public Kitsunemimi::CompareTestHelper
 {
@@ -53,7 +50,5 @@ private:
 
     SakuraRoot* m_root = nullptr;
 };
-
-}
 
 #endif // TEMPLATE_CREATE_BLOSSOM_TEST_H

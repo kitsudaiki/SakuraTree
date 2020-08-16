@@ -26,9 +26,6 @@
 #include <common.h>
 #include <libKitsunemimiCommon/test_helper/compare_test_helper.h>
 
-namespace SakuraTree
-{
-
 class PathDeleteBlossom_Test
         : public Kitsunemimi::CompareTestHelper
 {
@@ -45,7 +42,5 @@ private:
 
     std::string m_path = "";
 };
-
-}
 
 #endif // PATH_DELETE_BLOSSOM_TEST_H

@@ -26,9 +26,6 @@
 #include <common.h>
 #include <libKitsunemimiCommon/test_helper/compare_test_helper.h>
 
-namespace SakuraTree
-{
-
 class TextReadBlossom_Test
         : public Kitsunemimi::CompareTestHelper
 {
@@ -46,7 +43,5 @@ private:
     std::string m_path = "";
     std::string m_text = "";
 };
-
-}
 
 #endif // TEXT_READ_BLOSSOM_TEST_H

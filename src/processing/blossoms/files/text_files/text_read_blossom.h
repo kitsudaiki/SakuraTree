@@ -25,8 +25,6 @@
 
 #include <processing/blossoms/blossom.h>
 
-namespace SakuraTree
-{
 class TextReadBlossom_Test;
 
 class TextReadBlossom
@@ -47,7 +45,5 @@ private:
 
     std::string m_filePath = "";
 };
-
-}
 
 #endif // TEXT_READ_BLOSSOM_H

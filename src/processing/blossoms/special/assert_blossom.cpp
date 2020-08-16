@@ -22,9 +22,6 @@
 
 #include "assert_blossom.h"
 
-namespace SakuraTree
-{
-
 AssertBlossom::AssertBlossom()
     : Blossom()
 {
@@ -94,6 +91,4 @@ void
 AssertBlossom::closeBlossom(BlossomItem &blossomItem)
 {
     blossomItem.success = true;
-}
-
 }

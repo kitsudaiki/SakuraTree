@@ -26,14 +26,9 @@
 #include <common.h>
 #include <sakura_root.h>
 
-namespace SakuraTree
-{
-
 bool convertTemplate(std::string &output,
                      const std::string &templatePath,
                      const ValueItemMap &values,
                      std::string &errorMessage);
-
-}
 
 #endif // TEMPLATE_METHODS_H

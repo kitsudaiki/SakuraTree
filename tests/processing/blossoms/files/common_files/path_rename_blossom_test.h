@@ -26,9 +26,6 @@
 #include <common.h>
 #include <libKitsunemimiCommon/test_helper/compare_test_helper.h>
 
-namespace SakuraTree
-{
-
 class PathRenameBlossom_Test
         : public Kitsunemimi::CompareTestHelper
 {
@@ -47,7 +44,5 @@ private:
     std::string m_destinationFileName = "";
     std::string m_destinationFile = "";
 };
-
-}
 
 #endif // PATH_RENAME_BLOSSOM_TEST_H

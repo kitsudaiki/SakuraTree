@@ -28,9 +28,6 @@
 #include <processing/common/item_methods.h>
 #include <libKitsunemimiPersistence/logger/logger.h>
 
-namespace SakuraTree
-{
-
 class Blossom
 {
 public:
@@ -50,7 +47,5 @@ protected:
     virtual void postCheck(BlossomItem &blossomItem) = 0;
     virtual void closeBlossom(BlossomItem &blossomItem) = 0;
 };
-
-}
 
 #endif // BLOSSOM_H

@@ -27,8 +27,6 @@
 #include <libKitsunemimiCommon/test_helper/compare_test_helper.h>
 #include <processing/common/value_item_functions.h>
 
-namespace SakuraTree
-{
 class ValueItemsFunctions_Test
         : public Kitsunemimi::CompareTestHelper
 {
@@ -45,7 +43,5 @@ private:
 
     void checkNullptr(DataItem *value);
 };
-
-}
 
 #endif // VALUE_ITEMS_FUNCTIONS_TEST_H

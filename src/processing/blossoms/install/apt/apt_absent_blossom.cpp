@@ -23,9 +23,6 @@
 #include "apt_absent_blossom.h"
 #include <processing/blossoms/install/apt/apt_methods.h>
 
-namespace SakuraTree
-{
-
 AptAbsentBlossom::AptAbsentBlossom()
     : Blossom()
 {
@@ -137,6 +134,4 @@ AptAbsentBlossom::closeBlossom(BlossomItem &blossomItem)
 {
     m_packageNames.clear();
     blossomItem.success = true;
-}
-
 }

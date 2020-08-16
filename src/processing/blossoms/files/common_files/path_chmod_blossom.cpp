@@ -23,9 +23,6 @@
 #include "path_chmod_blossom.h"
 #include <libKitsunemimiPersistence/files/file_methods.h>
 
-namespace SakuraTree
-{
-
 PathChmodBlossom::PathChmodBlossom()
     : Blossom()
 {
@@ -99,6 +96,4 @@ void
 PathChmodBlossom::closeBlossom(BlossomItem &blossomItem)
 {
     blossomItem.success = true;
-}
-
 }

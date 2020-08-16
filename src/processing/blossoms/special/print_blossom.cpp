@@ -24,9 +24,6 @@
 #include <libKitsunemimiCommon/common_items/table_item.h>
 #include <libKitsunemimiPersistence/files/text_file.h>
 
-namespace SakuraTree
-{
-
 PrintBlossom::PrintBlossom()
     : Blossom()
 {
@@ -90,6 +87,4 @@ void
 PrintBlossom::closeBlossom(BlossomItem &blossomItem)
 {
     blossomItem.success = true;
-}
-
 }

@@ -25,8 +25,6 @@
 
 #include <processing/blossoms/blossom.h>
 
-namespace SakuraTree
-{
 class TextAppendBlossom_Test;
 
 class TextAppendBlossom
@@ -48,7 +46,5 @@ private:
     std::string m_filePath = "";
     std::string m_newText = "";
 };
-
-}
 
 #endif // TEXT_APPEND_BLOSSOM_H

@@ -23,9 +23,6 @@
 #include "thread_pool.h"
 #include <processing/sakura_thread.h>
 
-namespace SakuraTree
-{
-
 /**
  * @brief constructor
  *
@@ -62,6 +59,4 @@ ThreadPool::clearChildThreads()
         delete childThread;
     }
     m_childThreads.clear();
-}
-
 }

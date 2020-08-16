@@ -26,9 +26,6 @@
 #include <common.h>
 #include <libKitsunemimiCommon/test_helper/compare_test_helper.h>
 
-namespace SakuraTree
-{
-
 class TextReplaceBlossom_Test
         : public Kitsunemimi::CompareTestHelper
 {
@@ -49,7 +46,5 @@ private:
     std::string m_oldText = "";
     std::string m_newText = "";
 };
-
-}
 
 #endif // TEXT_REPLACE_BLOSSOM_TEST_H

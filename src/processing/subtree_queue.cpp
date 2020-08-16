@@ -22,9 +22,6 @@
 
 #include "subtree_queue.h"
 
-namespace SakuraTree
-{
-
 /**
  * @brief constructor
  */
@@ -62,6 +59,4 @@ SubtreeQueue::getSubtreeObject()
     m_lock.unlock();
 
     return subtree;
-}
-
 }

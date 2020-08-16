@@ -94,8 +94,8 @@ int main(int argc, char *argv[])
     }
     std::cout<<"absolute input-path: "<<inputPath<<std::endl;
 
-    SakuraTree::SakuraRoot* root = new SakuraTree::SakuraRoot(std::string(argv[0]),
-                                                              enableDebug);
+    SakuraRoot* root = new SakuraRoot(std::string(argv[0]),
+                                                  enableDebug);
 
     if(argParser.wasSet("use-config"))
     {

@@ -24,9 +24,6 @@
 #include <libKitsunemimiPersistence/files/file_methods.h>
 #include <libKitsunemimiPersistence/files/text_file.h>
 
-namespace SakuraTree
-{
-
 TextReadBlossom::TextReadBlossom()
     : Blossom()
 {
@@ -110,6 +107,4 @@ void
 TextReadBlossom::closeBlossom(BlossomItem &blossomItem)
 {
     blossomItem.success = true;
-}
-
 }

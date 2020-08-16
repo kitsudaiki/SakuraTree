@@ -25,9 +25,6 @@
 
 #include <processing/blossoms/blossom.h>
 
-namespace SakuraTree
-{
-
 class PathChownBlossom
         : public Blossom
 {
@@ -45,7 +42,5 @@ private:
     std::string m_path = "";
     std::string m_owner = "";
 };
-
-}
 
 #endif // PATH_CHOWN_BLOSSOM_H

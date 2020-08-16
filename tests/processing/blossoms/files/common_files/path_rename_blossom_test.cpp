@@ -23,9 +23,6 @@
 #include "path_rename_blossom_test.h"
 #include <processing/blossoms/files/common_files/path_rename_blossom.h>
 
-namespace SakuraTree
-{
-
 PathRenameBlossom_Test::PathRenameBlossom_Test()
     : Kitsunemimi::CompareTestHelper("PathRenameBlossom_Test")
 {
@@ -174,6 +171,4 @@ PathRenameBlossom_Test::closeTask_test()
     fakeRenameBlossom.initBlossom(fakeItem);
     fakeRenameBlossom.closeBlossom(fakeItem);
     TEST_EQUAL(fakeItem.success, true);
-}
-
 }

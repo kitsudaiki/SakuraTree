@@ -26,9 +26,6 @@
 #include <processing/blossoms/blossom.h>
 #include <unistd.h>
 
-namespace SakuraTree
-{
-
 class SshCmdCreateFileBlossom
         : public Blossom
 {
@@ -50,7 +47,5 @@ private:
     std::string m_filePath = "";
     std::string m_fileContent = "";
 };
-
-}
 
 #endif // SSH_CREATE_PATH_BLOSSOM_H

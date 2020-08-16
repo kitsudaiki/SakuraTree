@@ -24,9 +24,6 @@
 
 #include <libKitsunemimiCommon/common_methods/string_methods.h>
 
-namespace SakuraTree
-{
-
 SshCmdBlossom::SshCmdBlossom()
     : Blossom()
 {
@@ -113,6 +110,4 @@ void
 SshCmdBlossom::closeBlossom(BlossomItem &blossomItem)
 {
     blossomItem.success = true;
-}
-
 }

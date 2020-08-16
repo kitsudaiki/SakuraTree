@@ -23,9 +23,6 @@
 #include "item_update_blossom.h"
 #include <processing/common/item_methods.h>
 
-namespace SakuraTree
-{
-
 ItemUpdateBlossom::ItemUpdateBlossom()
     : Blossom()
 {
@@ -77,6 +74,4 @@ void
 ItemUpdateBlossom::closeBlossom(BlossomItem &blossomItem)
 {
     blossomItem.success = true;
-}
-
 }

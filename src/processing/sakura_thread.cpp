@@ -34,9 +34,6 @@
 #include <libKitsunemimiPersistence/logger/logger.h>
 #include <libKitsunemimiPersistence/files/file_methods.h>
 
-namespace SakuraTree
-{
-
 /**
  * @brief constructor
  *
@@ -948,6 +945,4 @@ SakuraThread::runSubtreeCall(SakuraItem* newSubtree,
     overrideItems(m_parentValues, newSubtree->values);
 
     return true;
-}
-
 }

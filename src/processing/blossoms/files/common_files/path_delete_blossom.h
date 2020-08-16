@@ -25,8 +25,6 @@
 
 #include <processing/blossoms/blossom.h>
 
-namespace SakuraTree
-{
 class PathDeleteBlossom_Test;
 
 class PathDeleteBlossom
@@ -47,7 +45,5 @@ private:
 
     std::string m_path = "";
 };
-
-}
 
 #endif // PATH_DELETE_BLOSSOM_H

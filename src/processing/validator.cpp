@@ -26,9 +26,6 @@
 #include <processing/blossoms/blossom.h>
 #include <sakura_root.h>
 
-namespace SakuraTree
-{
-
 /**
  * @brief check if all values are set inside a blossom-item
  *
@@ -298,6 +295,4 @@ checkAllItems(const SakuraGarden &garden, std::string &errorMessage)
     }
 
     return true;
-}
-
 }

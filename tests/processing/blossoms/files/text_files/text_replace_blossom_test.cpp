@@ -24,9 +24,6 @@
 #include <processing/blossoms/files/text_files/text_replace_blossom.h>
 #include <libKitsunemimiPersistence/files/text_file.h>
 
-namespace SakuraTree
-{
-
 TextReplaceBlossom_Test::TextReplaceBlossom_Test()
     : Kitsunemimi::CompareTestHelper("TextReplaceBlossom_Test")
 {
@@ -166,6 +163,4 @@ TextReplaceBlossom_Test::closeTask_test()
     replaceBlossom.initBlossom(blossomItem);
     replaceBlossom.closeBlossom(blossomItem);
     TEST_EQUAL(blossomItem.success, true);
-}
-
 }

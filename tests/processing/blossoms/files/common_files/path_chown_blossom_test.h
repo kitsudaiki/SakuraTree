@@ -26,9 +26,6 @@
 #include <common.h>
 #include <libKitsunemimiCommon/test_helper/compare_test_helper.h>
 
-namespace SakuraTree
-{
-
 class PathChownBlossom_Test
         : public Kitsunemimi::CompareTestHelper
 {
@@ -42,7 +39,5 @@ private:
     void postCheck_test();
     void closeTask_test();
 };
-
-}
 
 #endif // PATH_CHOWN_BLOSSOM_TEST_H

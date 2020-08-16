@@ -30,9 +30,6 @@
 #include <libKitsunemimiCommon/buffer/data_buffer.h>
 #include <libKitsunemimiPersistence/logger/logger.h>
 
-namespace SakuraTree
-{
-
 enum objectType
 {
     UNDEFINED_OBJECT_TYPE = 0,
@@ -124,8 +121,6 @@ void sessionCallback(void* ,
                      const std::string)
 {
     //SakuraRoot* rootClass = static_cast<SakuraRoot*>(target);
-}
-
 }
 
 #endif // SAKURA_TREE_CALLBACKS_H

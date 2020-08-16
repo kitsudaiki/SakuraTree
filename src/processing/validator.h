@@ -25,9 +25,6 @@
 
 #include <common.h>
 
-namespace SakuraTree
-{
-
 bool checkOutput(BlossomItem &blossomItem,
                  const bool hasOutput,
                  std::string &errorMessage);
@@ -44,7 +41,5 @@ bool checkSakuraItem(SakuraItem* sakuraItem,
 
 bool checkAllItems(const SakuraGarden &garden,
                    std::string &errorMessage);
-
-}
 
 #endif // VALIDATOR_H

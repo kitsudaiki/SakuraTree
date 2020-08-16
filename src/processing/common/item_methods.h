@@ -33,8 +33,7 @@ class Jinja2Converter;
 }
 
 using Kitsunemimi::DataMap;
-namespace SakuraTree
-{
+
 
 bool getProcessedItem(ValueItem &valueItem,
                       DataMap &insertValues,
@@ -90,7 +89,5 @@ const std::string createError(const std::string &errorLocation,
                               const std::string &blossomGroupType = "",
                               const std::string &blossomName = "",
                               const std::string &blossomFilePath = "");
-
-}
 
 #endif // COMMON_METHODS_H

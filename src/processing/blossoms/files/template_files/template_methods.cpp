@@ -24,9 +24,6 @@
 
 #include <libKitsunemimiJinja2/jinja2_converter.h>
 
-namespace SakuraTree
-{
-
 /**
  * @brief convert a jinja2-template with values into a new string
  *
@@ -92,6 +89,4 @@ convertTemplate(std::string &output,
     }
 
     return true;
-}
-
 }

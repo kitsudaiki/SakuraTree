@@ -29,9 +29,6 @@
 
 using namespace Kitsunemimi;
 
-namespace SakuraTree
-{
-
 class SakuraThread
         : public Kitsunemimi::Thread
 {
@@ -90,7 +87,5 @@ private:
                         std::string &errorMessage);
 
 };
-
-}
 
 #endif // SAKURA_THREAD_H

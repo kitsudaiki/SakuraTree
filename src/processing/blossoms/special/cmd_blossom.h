@@ -25,8 +25,6 @@
 
 #include <processing/blossoms/blossom.h>
 
-namespace SakuraTree
-{
 class CmdBlossom_Test;
 
 class CmdBlossom
@@ -50,7 +48,5 @@ private:
     bool m_ignoreResult = false;
     bool m_trimOutput = false;
 };
-
-}
 
 #endif // CMD_BLOSSOM_H

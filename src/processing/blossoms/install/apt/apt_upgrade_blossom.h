@@ -25,9 +25,6 @@
 
 #include <processing/blossoms/blossom.h>
 
-namespace SakuraTree
-{
-
 class AptUpgradeBlossom
         : public Blossom
 {
@@ -46,7 +43,5 @@ private:
     std::string m_action = "";
     std::vector<std::string> m_packageNames;
 };
-
-}
 
 #endif // APT_UPGRADE_BLOSSOM_H

@@ -26,9 +26,6 @@
 #include <common.h>
 #include <libKitsunemimiCommon/test_helper/compare_test_helper.h>
 
-namespace SakuraTree
-{
-
 class CmdBlossom_Test
         : public Kitsunemimi::CompareTestHelper
 {
@@ -47,7 +44,5 @@ private:
     std::string m_filePath = "";
     std::string m_command = "";
 };
-
-}
 
 #endif // CMD_BLOSSOM_TEST_H

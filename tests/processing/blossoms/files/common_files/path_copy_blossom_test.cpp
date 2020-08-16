@@ -23,9 +23,6 @@
 #include "path_copy_blossom_test.h"
 #include <processing/blossoms/files/common_files/path_copy_blossom.h>
 
-namespace SakuraTree
-{
-
 PathCopyBlossom_Test::PathCopyBlossom_Test()
     : Kitsunemimi::CompareTestHelper("PathCopyBlossom_Test")
 {
@@ -162,6 +159,4 @@ PathCopyBlossom_Test::closeTask_test()
     fakeCopyBlossom.initBlossom(fakeItem);
     fakeCopyBlossom.closeBlossom(fakeItem);
     TEST_EQUAL(fakeItem.success, true);
-}
-
 }
