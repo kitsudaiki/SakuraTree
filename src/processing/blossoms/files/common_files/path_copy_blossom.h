@@ -25,8 +25,6 @@
 
 #include <processing/blossoms/blossom.h>
 
-namespace SakuraTree
-{
 class PathCopyBlossom_Test;
 
 class PathCopyBlossom
@@ -51,7 +49,5 @@ private:
     std::string m_owner = "";
     bool m_localStorage = false;
 };
-
-}
 
 #endif // PATH_COPY_BLOSSOM_H

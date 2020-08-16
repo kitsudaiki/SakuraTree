@@ -25,9 +25,6 @@
 #include <sakura_root.h>
 #include <libKitsunemimiJinja2/jinja2_converter.h>
 
-namespace SakuraTree
-{
-
 /**
  * @brief constructor
  */
@@ -115,6 +112,4 @@ void
 ItemMethods_Test::cleanupTestCase()
 {
     delete m_root;
-}
-
 }

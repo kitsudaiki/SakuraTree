@@ -26,9 +26,6 @@
 #include <libKitsunemimiCommon/common_items/data_items.h>
 #include <libKitsunemimiPersistence/logger/logger.h>
 
-namespace SakuraTree
-{
-
 /**
  * @brief isInstalled check for a specific package, if this is installed
  *
@@ -154,6 +151,4 @@ getInstalledPackages()
     Kitsunemimi::splitStringByDelimiter(result, processResult.processOutput, '\n');
 
     return result;
-}
-
 }

@@ -25,8 +25,6 @@
 
 #include <processing/blossoms/blossom.h>
 
-namespace SakuraTree
-{
 class ExitBlossom
         : public Blossom
 {
@@ -42,7 +40,5 @@ protected:
 private:
     int m_exitStatus = 0;
 };
-
-}
 
 #endif // EXIT_BLOSSOM_H

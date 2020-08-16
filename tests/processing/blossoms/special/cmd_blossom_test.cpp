@@ -24,9 +24,6 @@
 #include <processing/blossoms/special/cmd_blossom.h>
 #include <libKitsunemimiPersistence/files/file_methods.h>
 
-namespace SakuraTree
-{
-
 CmdBlossom_Test::CmdBlossom_Test()
     : Kitsunemimi::CompareTestHelper("CmdBlossom_Test")
 {
@@ -134,6 +131,4 @@ CmdBlossom_Test::closeTask_test()
     fakeCmdBlossom.initBlossom(fakeItem);
     fakeCmdBlossom.closeBlossom(fakeItem);
     TEST_EQUAL(fakeItem.success, true);
-}
-
 }

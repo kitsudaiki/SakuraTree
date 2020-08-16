@@ -25,9 +25,6 @@
 
 #include <processing/blossoms/blossom.h>
 
-namespace SakuraTree
-{
-
 class AssertBlossom
         : public Blossom
 {
@@ -42,7 +39,5 @@ protected:
     void postCheck(BlossomItem &blossomItem);
     void closeBlossom(BlossomItem &blossomItem);
 };
-
-}
 
 #endif // ASSERT_BLOSSOM_H

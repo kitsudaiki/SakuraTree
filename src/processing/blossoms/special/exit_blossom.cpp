@@ -22,9 +22,6 @@
 
 #include "exit_blossom.h"
 
-namespace SakuraTree
-{
-
 ExitBlossom::ExitBlossom()
     : Blossom()
 {
@@ -78,6 +75,4 @@ void
 ExitBlossom::closeBlossom(BlossomItem &blossomItem)
 {
     blossomItem.success = true;
-}
-
 }

@@ -28,9 +28,6 @@
 #include <libKitsunemimiPersistence/files/file_methods.h>
 #include <libKitsunemimiPersistence/files/text_file.h>
 
-namespace SakuraTree
-{
-
 TemplateCreateFileBlossom::TemplateCreateFileBlossom()
     : Blossom()
 {
@@ -185,6 +182,4 @@ void
 TemplateCreateFileBlossom::closeBlossom(BlossomItem &blossomItem)
 {
     blossomItem.success = true;
-}
-
 }

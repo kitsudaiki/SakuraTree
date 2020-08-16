@@ -24,9 +24,6 @@
 #include <sakura_root.h>
 #include <processing/common/item_methods.h>
 
-namespace SakuraTree
-{
-
 Blossom::Blossom() {}
 
 Blossom::~Blossom() {}
@@ -101,6 +98,4 @@ Blossom::growBlossom(BlossomItem &blossomItem,
     //----------------------------------------------------------------------------------------------
 
     return;
-}
-
 }

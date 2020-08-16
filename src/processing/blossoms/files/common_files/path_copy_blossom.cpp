@@ -26,8 +26,6 @@
 #include <libKitsunemimiPersistence/files/binary_file.h>
 #include <libKitsunemimiCommon/common_methods/string_methods.h>
 
-namespace SakuraTree
-{
 using Kitsunemimi::splitStringByDelimiter;
 
 PathCopyBlossom::PathCopyBlossom()
@@ -201,6 +199,4 @@ void
 PathCopyBlossom::closeBlossom(BlossomItem &blossomItem)
 {
     blossomItem.success = true;
-}
-
 }

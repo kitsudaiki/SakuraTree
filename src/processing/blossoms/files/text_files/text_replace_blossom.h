@@ -25,8 +25,6 @@
 
 #include <processing/blossoms/blossom.h>
 
-namespace SakuraTree
-{
 class TextReplaceBlossom_Test;
 
 class TextReplaceBlossom
@@ -49,7 +47,5 @@ private:
     std::string m_oldText = "";
     std::string m_newText = "";
 };
-
-}
 
 #endif // TEXT_REPLACE_BLOSSOM_H

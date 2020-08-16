@@ -23,9 +23,6 @@
 #include "path_chown_blossom.h"
 #include <libKitsunemimiPersistence/files/file_methods.h>
 
-namespace SakuraTree
-{
-
 PathChownBlossom::PathChownBlossom()
     : Blossom()
 {
@@ -99,6 +96,4 @@ void
 PathChownBlossom::closeBlossom(BlossomItem &blossomItem)
 {
     blossomItem.success = true;
-}
-
 }

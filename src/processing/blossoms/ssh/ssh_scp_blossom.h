@@ -25,9 +25,6 @@
 
 #include <processing/blossoms/blossom.h>
 
-namespace SakuraTree
-{
-
 class SshScpBlossom
         : public Blossom
 {
@@ -49,7 +46,5 @@ private:
     std::string m_sourcePath = "";
     std::string m_targetPath = "";
 };
-
-}
 
 #endif // SCP_BLOSSOM_H

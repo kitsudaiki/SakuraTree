@@ -25,9 +25,6 @@
 
 #include <common.h>
 
-namespace SakuraTree
-{
-
 bool isInstalled(const std::string &package);
 
 const std::string createPackageList(const std::vector<std::string> &packageList);
@@ -35,7 +32,5 @@ const std::string createPackageList(const std::vector<std::string> &packageList)
 const std::vector<std::string> getInstalledPackages(const std::vector<std::string> &packageList);
 const std::vector<std::string> getAbsendPackages(const std::vector<std::string> &packageList);
 const std::vector<std::string> getInstalledPackages();
-
-}
 
 #endif // APT_METHODS_H

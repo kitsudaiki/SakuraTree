@@ -23,9 +23,6 @@
 #include "path_delete_blossom_test.h"
 #include <processing/blossoms/files/common_files/path_delete_blossom.h>
 
-namespace SakuraTree
-{
-
 PathDeleteBlossom_Test::PathDeleteBlossom_Test()
     : Kitsunemimi::CompareTestHelper("PathDeleteBlossom_Test")
 {
@@ -146,6 +143,4 @@ PathDeleteBlossom_Test::closeTask_test()
     fakeDeleteBlossom.initBlossom(fakeItem);
     fakeDeleteBlossom.closeBlossom(fakeItem);
     TEST_EQUAL(fakeItem.success, true);
-}
-
 }

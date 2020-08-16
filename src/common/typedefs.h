@@ -42,10 +42,8 @@ struct Result
     DataItem* item = nullptr;
 };
 
-namespace SakuraTree {
 class SakuraBranch;
-}
-typedef std::map<std::string, SakuraTree::SakuraBranch*> BranchMap;
+typedef std::map<std::string, SakuraBranch*> BranchMap;
 
 
 #endif // TYPEDEFS_H

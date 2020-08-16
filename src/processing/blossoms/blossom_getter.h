@@ -25,13 +25,9 @@
 
 #include <common.h>
 
-namespace SakuraTree
-{
 class Blossom;
 
 Blossom* getBlossom(const std::string blossomGroupType,
                     const std::string blossomType);
-
-}
 
 #endif // BLOSSOM_GETTER_H

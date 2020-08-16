@@ -22,9 +22,6 @@
 
 #include "path_chmod_blossom_test.h"
 
-namespace SakuraTree
-{
-
 PathChmodBlossom_Test::PathChmodBlossom_Test()
     : Kitsunemimi::CompareTestHelper("PathChmodBlossom_Test")
 {
@@ -77,7 +74,5 @@ PathChmodBlossom_Test::postCheck_test()
 void
 PathChmodBlossom_Test::closeTask_test()
 {
-
-}
 
 }

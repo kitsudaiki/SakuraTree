@@ -25,8 +25,6 @@
 
 #include <processing/blossoms/blossom.h>
 
-namespace SakuraTree
-{
 class TemplateCreateBlossom_Test;
 
 class TemplateCreateFileBlossom
@@ -53,7 +51,5 @@ private:
 
     std::string m_convertedContent = "";
 };
-
-}
 
 #endif // TEMPLATE_CREATE_FILE_BLOSSOM_H

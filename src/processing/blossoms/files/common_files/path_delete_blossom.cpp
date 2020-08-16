@@ -23,9 +23,6 @@
 #include "path_delete_blossom.h"
 #include <libKitsunemimiPersistence/files/file_methods.h>
 
-namespace SakuraTree
-{
-
 PathDeleteBlossom::PathDeleteBlossom()
     : Blossom()
 {
@@ -101,6 +98,4 @@ void
 PathDeleteBlossom::closeBlossom(BlossomItem &blossomItem)
 {
     blossomItem.success = true;
-}
-
 }

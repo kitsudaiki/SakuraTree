@@ -23,9 +23,6 @@
 #include "apt_upgrade_blossom.h"
 #include <processing/blossoms/install/apt/apt_methods.h>
 
-namespace SakuraTree
-{
-
 AptUpgradeBlossom::AptUpgradeBlossom()
     : Blossom() {}
 
@@ -77,6 +74,4 @@ void
 AptUpgradeBlossom::closeBlossom(BlossomItem &blossomItem)
 {
     blossomItem.success = true;
-}
-
 }

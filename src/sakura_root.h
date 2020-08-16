@@ -42,8 +42,6 @@ class Session;
 
 using Kitsunemimi::Jinja2::Jinja2Converter;
 
-namespace SakuraTree
-{
 class SakuraThread;
 class ThreadPool;
 
@@ -73,7 +71,7 @@ public:
     void printOutput(const std::string &output);
 
     // static values
-    static SakuraTree::SakuraRoot* m_root;
+    static SakuraRoot* m_root;
     static std::string m_executablePath;
     static std::string m_serverAddress;
     static uint16_t m_serverPort;
@@ -100,7 +98,5 @@ private:
                               std::string &errorMessage);
     bool loadPredefinedSubtrees(std::string &errorMessage);
 };
-
-}
 
 #endif // SAKURA_ROOT_H

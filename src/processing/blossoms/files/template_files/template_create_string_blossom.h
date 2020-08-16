@@ -25,9 +25,6 @@
 
 #include <processing/blossoms/blossom.h>
 
-namespace SakuraTree
-{
-
 class TemplateCreateStringBlossom
         : public Blossom
 {
@@ -45,7 +42,5 @@ protected:
 private:
     std::string m_templatePath = "";
 };
-
-}
 
 #endif // TEMPLATE_CREATE_STRING_BLOSSOM_H

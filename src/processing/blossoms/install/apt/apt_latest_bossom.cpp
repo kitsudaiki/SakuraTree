@@ -23,9 +23,6 @@
 #include "apt_latest_blossom.h"
 #include <processing/blossoms/install/apt/apt_methods.h>
 
-namespace SakuraTree
-{
-
 AptLatestBlossom::AptLatestBlossom()
     : Blossom()
 {
@@ -131,6 +128,4 @@ AptLatestBlossom::closeBlossom(BlossomItem &blossomItem)
 {
     m_packageNames.clear();
     blossomItem.success = true;
-}
-
 }

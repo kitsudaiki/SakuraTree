@@ -24,9 +24,6 @@
 #include <processing/blossoms/files/text_files/text_append_blossom.h>
 #include <libKitsunemimiPersistence/files/text_file.h>
 
-namespace SakuraTree
-{
-
 TextAppendBlossom_Test::TextAppendBlossom_Test()
     : Kitsunemimi::CompareTestHelper("TextAppendBlossom_Test")
 {
@@ -157,6 +154,4 @@ TextAppendBlossom_Test::closeTask_test()
     appendBlossom.initBlossom(blossomItem);
     appendBlossom.closeBlossom(blossomItem);
     TEST_EQUAL(blossomItem.success, true);
-}
-
 }

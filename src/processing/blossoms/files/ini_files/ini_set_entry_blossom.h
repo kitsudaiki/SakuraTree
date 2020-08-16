@@ -25,9 +25,6 @@
 
 #include <processing/blossoms/blossom.h>
 
-namespace SakuraTree
-{
-
 class IniSetEntryBlossom
         : public Blossom
 {
@@ -47,7 +44,5 @@ private:
     std::string m_entry = "";
     std::string m_value = "";
 };
-
-}
 
 #endif // INI_SET_ENTRY_BLOSSOM_H

@@ -57,9 +57,6 @@
 #include <processing/blossoms/files/ini_files/ini_read_entry_blossom.h>
 #include <processing/blossoms/files/ini_files/ini_set_entry_blossom.h>
 
-namespace SakuraTree
-{
-
 /**
  * request a new blossom-object to process the requested task
  *
@@ -180,6 +177,4 @@ getBlossom(const std::string blossomGroupType,
     }
 
     return nullptr;
-}
-
 }

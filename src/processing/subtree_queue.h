@@ -26,9 +26,6 @@
 #include <common.h>
 #include <libKitsunemimiProjectNetwork/session.h>
 
-namespace SakuraTree
-{
-
 class SubtreeQueue
 {
 public:
@@ -119,7 +116,5 @@ private:
     std::queue<SubtreeObject*> m_queue;
 
 };
-
-}
 
 #endif // SUBTREE_QUEUE_H

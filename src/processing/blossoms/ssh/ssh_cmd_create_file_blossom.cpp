@@ -24,9 +24,6 @@
 
 #include <libKitsunemimiCommon/common_methods/string_methods.h>
 
-namespace SakuraTree
-{
-
 SshCmdCreateFileBlossom::SshCmdCreateFileBlossom()
     : Blossom()
 {
@@ -141,6 +138,4 @@ void
 SshCmdCreateFileBlossom::closeBlossom(BlossomItem &blossomItem)
 {
     blossomItem.success = true;
-}
-
 }

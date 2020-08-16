@@ -28,8 +28,6 @@
 #include <sakura_root.h>
 #include <processing/subtree_queue.h>
 
-namespace SakuraTree
-{
 class SakuraThread;
 
 class ThreadPool
@@ -45,7 +43,5 @@ private:
 
     std::vector<SakuraThread*> m_childThreads;
 };
-
-}
 
 #endif // THREAD_POOL_H

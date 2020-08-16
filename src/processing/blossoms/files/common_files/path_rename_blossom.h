@@ -25,8 +25,6 @@
 
 #include <processing/blossoms/blossom.h>
 
-namespace SakuraTree
-{
 class PathRenameBlossom_Test;
 
 class PathRenameBlossom
@@ -49,7 +47,5 @@ private:
     std::string m_newFileName = "";
     std::string m_newFilePath = "";
 };
-
-}
 
 #endif // PATH_RENAME_BLOSSOM_H

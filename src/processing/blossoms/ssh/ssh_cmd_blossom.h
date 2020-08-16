@@ -26,9 +26,6 @@
 #include <processing/blossoms/blossom.h>
 #include <unistd.h>
 
-namespace SakuraTree
-{
-
 class SshCmdBlossom
         : public Blossom
 {
@@ -49,7 +46,5 @@ private:
     std::string m_port = "";
     std::string m_sshKey = "";
 };
-
-}
 
 #endif // SSH_BLOSSOM_H

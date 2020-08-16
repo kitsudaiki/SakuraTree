@@ -24,9 +24,6 @@
 #include <processing/blossoms/files/template_files/template_create_file_blossom.h>
 #include <libKitsunemimiPersistence/files/text_file.h>
 
-namespace SakuraTree
-{
-
 TemplateCreateBlossom_Test::TemplateCreateBlossom_Test()
     : Kitsunemimi::CompareTestHelper("TemplateCreateBlossom_Test")
 {
@@ -186,6 +183,4 @@ TemplateCreateBlossom_Test::closeTask_test()
     fakeCopyBlossom.initBlossom(fakeItem);
     fakeCopyBlossom.closeBlossom(fakeItem);
     TEST_EQUAL(fakeItem.success, true);
-}
-
 }

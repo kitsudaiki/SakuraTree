@@ -27,9 +27,6 @@
 
 using Kitsunemimi::Ini::IniItem;
 
-namespace SakuraTree
-{
-
 IniReadEntryBlossom::IniReadEntryBlossom()
     : Blossom()
 {
@@ -119,6 +116,4 @@ void
 IniReadEntryBlossom::closeBlossom(BlossomItem &blossomItem)
 {
     blossomItem.success = true;
-}
-
 }

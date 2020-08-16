@@ -31,9 +31,6 @@
 
 using Kitsunemimi::Jinja2::Jinja2Converter;
 
-namespace SakuraTree
-{
-
 /**
  * @brief process a value-item by handling its function-calls
  *
@@ -707,6 +704,4 @@ createError(const std::string &errorLocation,
     errorOutput.addRow(std::vector<std::string>{"error-message", errorMessage});
 
     return errorOutput.toString(200);
-}
-
 }

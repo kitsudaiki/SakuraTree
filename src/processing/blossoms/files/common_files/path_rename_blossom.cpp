@@ -25,8 +25,6 @@
 #include <libKitsunemimiCommon/common_methods/string_methods.h>
 #include <libKitsunemimiCommon/common_methods/vector_methods.h>
 
-namespace SakuraTree
-{
 using Kitsunemimi::splitStringByDelimiter;
 
 PathRenameBlossom::PathRenameBlossom()
@@ -139,6 +137,4 @@ void
 PathRenameBlossom::closeBlossom(BlossomItem &blossomItem)
 {
     blossomItem.success = true;
-}
-
 }

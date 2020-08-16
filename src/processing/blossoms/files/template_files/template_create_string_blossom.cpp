@@ -25,9 +25,6 @@
 
 #include <sakura_root.h>
 
-namespace SakuraTree
-{
-
 TemplateCreateStringBlossom::TemplateCreateStringBlossom()
     : Blossom()
 {
@@ -94,6 +91,4 @@ void
 TemplateCreateStringBlossom::closeBlossom(BlossomItem &blossomItem)
 {
     blossomItem.success = true;
-}
-
 }
