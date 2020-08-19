@@ -305,10 +305,13 @@ SakuraThread::processBlossomGroup(BlossomGroupItem &blossomGroupItem,
         TreeItem* item = SakuraRoot::m_currentGarden->getRessource(blossomItem->blossomType);
         if(item != nullptr)
         {
-            return runSubtreeCall(item,
-                                  blossomItem->values,
-                                  blossomItem->blossomPath,
-                                  errorMessage);
+            const bool ret = runSubtreeCall(item,
+                                            blossomItem->values,
+                                            blossomItem->blossomPath,
+                                            errorMessage);
+            delete item;
+
+            return ret;
         }
 
         // update blossom-item with group-values for console-output
@@ -394,10 +397,13 @@ SakuraThread::processSubtree(SubtreeItem* subtreeItem,
         return false;
     }
 
-    return runSubtreeCall(newSubtree,
-                          subtreeItem->values,
-                          filePath,
-                          errorMessage);
+    const bool ret = runSubtreeCall(newSubtree,
+                                    subtreeItem->values,
+                                    filePath,
+                                    errorMessage);
+    delete newSubtree;
+
+    return ret;
 }
 
 /**
