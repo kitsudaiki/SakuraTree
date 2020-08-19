@@ -216,6 +216,8 @@ SakuraRoot::startProcess(const std::string &inputPath,
         return true;
     }
 
+    LOG_INFO(ASCII_LOGO, PINK_COLOR);
+
     // process sakura-file with initial values
     errorMessage = "";
     if(runProcess(tree, initialValues, errorMessage) == false)
