@@ -130,7 +130,7 @@ libKitsunemimiJinja2 | master | https://github.com/kitsudaiki/libKitsunemimiJinj
 libKitsunemimiIni | master | https://github.com/kitsudaiki/libKitsunemimiIni.git
 libKitsunemimiNetwork | master | https://github.com/kitsudaiki/libKitsunemimiNetwork.git
 libKitsunemimiProjectNetwork | master | https://github.com/kitsudaiki/libKitsunemimiProjectNetwork.git
-libKitsunemimiSakuraParser | master | https://github.com/kitsudaiki/libKitsunemimiSakuraParser.git
+libKitsunemimiSakuraLang | master | https://github.com/kitsudaiki/libKitsunemimiSakuraLang.git
 libKitsunemimiSakuraNetwork | master | https://github.com/kitsudaiki/libKitsunemimiSakuraNetwork.git
 
 ### build programm

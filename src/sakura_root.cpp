@@ -30,8 +30,8 @@
 #include <processing/validator.h>
 
 #include <libKitsunemimiSakuraNetwork/sakura_network.h>
-#include <libKitsunemimiSakuraParser/sakura_parsing.h>
-#include <libKitsunemimiSakuraParser/sakura_items.h>
+#include <libKitsunemimiSakuraLang/sakura_parsing.h>
+#include <libKitsunemimiSakuraLang/sakura_items.h>
 
 #include <libKitsunemimiJinja2/jinja2_converter.h>
 #include <libKitsunemimiJson/json_item.h>

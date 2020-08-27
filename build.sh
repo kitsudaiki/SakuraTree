@@ -81,7 +81,7 @@ get_required_kitsune_lib_repo "libKitsunemimiJinja2" "master" 1
 echo ""
 echo "###########################################################################################################"
 echo ""
-get_required_kitsune_lib_repo "libKitsunemimiSakuraParser" "ressources-broken-for-multiple-calls" 1
+get_required_kitsune_lib_repo "libKitsunemimiSakuraLang" "ressources-broken-for-multiple-calls" 1
 echo ""
 echo "###########################################################################################################"
 echo ""

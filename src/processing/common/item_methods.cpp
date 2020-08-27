@@ -27,7 +27,7 @@
 #include <processing/blossoms/blossom.h>
 #include <libKitsunemimiJinja2/jinja2_converter.h>
 #include <processing/common/value_item_functions.h>
-#include <libKitsunemimiSakuraParser/value_item_map.h>
+#include <libKitsunemimiSakuraLang/value_item_map.h>
 
 using Kitsunemimi::Jinja2::Jinja2Converter;
 

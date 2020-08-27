@@ -26,7 +26,7 @@
 #include <sakura_root.h>
 
 #include <libKitsunemimiProjectNetwork/session.h>
-#include <libKitsunemimiSakuraParser/sakura_parsing.h>
+#include <libKitsunemimiSakuraLang/sakura_parsing.h>
 #include <libKitsunemimiCommon/buffer/data_buffer.h>
 #include <libKitsunemimiPersistence/logger/logger.h>
 
