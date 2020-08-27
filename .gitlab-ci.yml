@@ -1,16 +1,21 @@
-image: registry.gitlab.com/tobiasanker/kitsunemimi-docker-files/ci_runner_unittest:1.0.0
+image: registry.gitlab.com/kitsudaiki/kitsunemimi-ci-docker-images/normal-tests:1.0.0
+
+stages:
+  - build
 
 build:
+  stage: build
   script:
     - echo Working on branch $CI_COMMIT_REF_NAME
-
+    - pwd
     - apt-get update
-    - apt-get install -y libboost-filesystem-dev libssl-dev xxd
-
-    - cd /builds/tobiasanker/SakuraTree
+    - apt-get install -y libboost-filesystem-dev libssl-dev
     - ./build.sh test
-
-    - export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:'/builds/tobiasanker/result'
-
+    - mkdir upload
+    - cp -r ../result/* upload/
+  artifacts:
+    paths:
+      - upload
+    expire_in: 1 week
   tags:
     - docker

@@ -1,8 +1,8 @@
 # SakuraTree
 
-![Gitlab pipeline status](https://img.shields.io/gitlab/pipeline/tobiasanker/SakuraTree?label=build%20and%20test&style=flat-square)
-![GitHub tag (latest SemVer)](https://img.shields.io/github/v/tag/tobiasanker/SakuraTree?label=version&style=flat-square)
-![GitHub](https://img.shields.io/github/license/tobiasanker/SakuraTree?style=flat-square)
+![Gitlab pipeline status](https://img.shields.io/gitlab/pipeline/kitsudaiki/SakuraTree?label=build%20and%20test&style=flat-square)
+![GitHub tag (latest SemVer)](https://img.shields.io/github/v/tag/kitsudaiki/SakuraTree?label=version&style=flat-square)
+![GitHub](https://img.shields.io/github/license/kitsudaiki/SakuraTree?style=flat-square)
 ![C++Version](https://img.shields.io/badge/c%2B%2B-14-blue?style=flat-square)
 ![Platform](https://img.shields.io/badge/platform-Linux--x64-lightgrey?style=flat-square)
 
@@ -15,14 +15,14 @@
 
 Documentation for latest master-version: 
 
-https://gitlab.com/tobiasanker/Sakura-Project-Documentation/builds/artifacts/master/browse?job=build
+https://gitlab.com/kitsudaiki/Sakura-Project-Documentation/builds/artifacts/master/browse?job=build
 
-**IMPORTANT**: The master-version of the documentation actually differs from the master of the code. The documentation is compatible with the current state of the implementation, but there are some implemented features not in the documentation at the moment (see ticket: https://github.com/tobiasanker/SakuraTree/issues/136). If you should be interested in this project, then let me know and I will prioritize the update of the documentation.
+**IMPORTANT**: The master-version of the documentation actually differs from the master of the code. The documentation is compatible with the current state of the implementation, but there are some implemented features not in the documentation at the moment (see ticket: https://github.com/kitsudaiki/SakuraTree/issues/136). If you should be interested in this project, then let me know and I will prioritize the update of the documentation.
 
 
 Documentation for version 0.2.0: 
 
-https://gitlab.com/tobiasanker/Sakura-Project-Documentation/-/jobs/394246432/artifacts/browse
+https://gitlab.com/kitsudaiki/Sakura-Project-Documentation/-/jobs/394246432/artifacts/browse
 
 
 ## Description
@@ -122,16 +122,16 @@ These repositories will be downloaded automatically by the build script of the t
 
 Repository-Name | Version-Tag | Download-Path
 --- | --- | ---
-libKitsunemimiCommon | master | https://github.com/tobiasanker/libKitsunemimiCommon.git
-libKitsunemimiPersistence | master | https://github.com/tobiasanker/libKitsunemimiPersistence.git
-libKitsunemimiArgs | master| https://github.com/tobiasanker/libKitsunemimiArgs.git
-libKitsunemimiJson | master | https://github.com/tobiasanker/libKitsunemimiJson.git
-libKitsunemimiJinja2 | master | https://github.com/tobiasanker/libKitsunemimiJinja2.git
-libKitsunemimiIni | master | https://github.com/tobiasanker/libKitsunemimiIni.git
-libKitsunemimiNetwork | master | https://github.com/tobiasanker/libKitsunemimiNetwork.git
-libKitsunemimiProjectNetwork | master | https://github.com/tobiasanker/libKitsunemimiProjectNetwork.git
-libKitsunemimiSakuraParser | master | https://github.com/tobiasanker/libKitsunemimiSakuraParser.git
-libKitsunemimiSakuraNetwork | master | https://github.com/tobiasanker/libKitsunemimiSakuraNetwork.git
+libKitsunemimiCommon | master | https://github.com/kitsudaiki/libKitsunemimiCommon.git
+libKitsunemimiPersistence | master | https://github.com/kitsudaiki/libKitsunemimiPersistence.git
+libKitsunemimiArgs | master| https://github.com/kitsudaiki/libKitsunemimiArgs.git
+libKitsunemimiJson | master | https://github.com/kitsudaiki/libKitsunemimiJson.git
+libKitsunemimiJinja2 | master | https://github.com/kitsudaiki/libKitsunemimiJinja2.git
+libKitsunemimiIni | master | https://github.com/kitsudaiki/libKitsunemimiIni.git
+libKitsunemimiNetwork | master | https://github.com/kitsudaiki/libKitsunemimiNetwork.git
+libKitsunemimiProjectNetwork | master | https://github.com/kitsudaiki/libKitsunemimiProjectNetwork.git
+libKitsunemimiSakuraLang | master | https://github.com/kitsudaiki/libKitsunemimiSakuraLang.git
+libKitsunemimiSakuraNetwork | master | https://github.com/kitsudaiki/libKitsunemimiSakuraNetwork.git
 
 ### build programm
 

@@ -54,10 +54,10 @@ LIBS += -L../libKitsunemimiIni/src/debug -lKitsunemimiIni
 LIBS += -L../libKitsunemimiIni/src/release -lKitsunemimiIni
 INCLUDEPATH += ../libKitsunemimiIni/include
 
-LIBS += -L../libKitsunemimiSakuraParser/src -lKitsunemimiSakuraParser
-LIBS += -L../libKitsunemimiSakuraParser/src/debug -lKitsunemimiSakuraParser
-LIBS += -L../libKitsunemimiSakuraParser/src/release -lKitsunemimiSakuraParser
-INCLUDEPATH += ../libKitsunemimiSakuraParser/include
+LIBS += -L../libKitsunemimiSakuraLang/src -lKitsunemimiSakuraLang
+LIBS += -L../libKitsunemimiSakuraLang/src/debug -lKitsunemimiSakuraLang
+LIBS += -L../libKitsunemimiSakuraLang/src/release -lKitsunemimiSakuraLang
+INCLUDEPATH += ../libKitsunemimiSakuraLang/include
 
 LIBS +=  -lboost_filesystem -lboost_system -lssl -lcrypto
 

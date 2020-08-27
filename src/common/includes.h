@@ -59,8 +59,8 @@ using Kitsunemimi::Json::JsonItem;
 using Kitsunemimi::ProcessResult;
 using Kitsunemimi::runSyncProcess;
 
-#include <libKitsunemimiSakuraParser/sakura_items.h>
-#include <libKitsunemimiSakuraParser/sakura_garden.h>
+#include <libKitsunemimiSakuraLang/sakura_items.h>
+#include <libKitsunemimiSakuraLang/sakura_garden.h>
 using Kitsunemimi::Sakura::SakuraGarden;
 using Kitsunemimi::Sakura::BlossomItem;
 using Kitsunemimi::Sakura::SakuraItem;
