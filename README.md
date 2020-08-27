@@ -122,16 +122,17 @@ These repositories will be downloaded automatically by the build script of the t
 
 Repository-Name | Version-Tag | Download-Path
 --- | --- | ---
-libKitsunemimiCommon | master | https://github.com/kitsudaiki/libKitsunemimiCommon.git
-libKitsunemimiPersistence | master | https://github.com/kitsudaiki/libKitsunemimiPersistence.git
-libKitsunemimiArgs | master| https://github.com/kitsudaiki/libKitsunemimiArgs.git
-libKitsunemimiJson | master | https://github.com/kitsudaiki/libKitsunemimiJson.git
-libKitsunemimiJinja2 | master | https://github.com/kitsudaiki/libKitsunemimiJinja2.git
-libKitsunemimiIni | master | https://github.com/kitsudaiki/libKitsunemimiIni.git
-libKitsunemimiNetwork | master | https://github.com/kitsudaiki/libKitsunemimiNetwork.git
-libKitsunemimiProjectNetwork | master | https://github.com/kitsudaiki/libKitsunemimiProjectNetwork.git
-libKitsunemimiSakuraLang | master | https://github.com/kitsudaiki/libKitsunemimiSakuraLang.git
-libKitsunemimiSakuraNetwork | master | https://github.com/kitsudaiki/libKitsunemimiSakuraNetwork.git
+libKitsunemimiCommon | v0.15.1 | https://github.com/kitsudaiki/libKitsunemimiCommon.git
+libKitsunemimiPersistence | v0.10.0 | https://github.com/kitsudaiki/libKitsunemimiPersistence.git
+libKitsunemimiArgs | v0.2.0 | https://github.com/kitsudaiki/libKitsunemimiArgs.git
+libKitsunemimiConfig | v0.2.3 | https://github.com/kitsudaiki/libKitsunemimiConfig.git
+libKitsunemimiJson | v0.10.3 | https://github.com/kitsudaiki/libKitsunemimiJson.git
+libKitsunemimiJinja2 | v0.7.3 | https://github.com/kitsudaiki/libKitsunemimiJinja2.git
+libKitsunemimiIni | v0.4.4 | https://github.com/kitsudaiki/libKitsunemimiIni.git
+libKitsunemimiNetwork | v0.6.4 | https://github.com/kitsudaiki/libKitsunemimiNetwork.git
+libKitsunemimiProjectNetwork | v0.2.0 | https://github.com/kitsudaiki/libKitsunemimiProjectNetwork.git
+libKitsunemimiSakuraLang | v0.3.0 | https://github.com/kitsudaiki/libKitsunemimiSakuraLang.git
+libKitsunemimiSakuraNetwork | v0.1.0 | https://github.com/kitsudaiki/libKitsunemimiSakuraNetwork.git
 
 ### build programm
 
