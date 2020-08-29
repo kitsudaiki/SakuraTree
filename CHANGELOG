@@ -1,14 +1,96 @@
 # Changelog
 
+## [0.3.0ff] - 2020-08-29
+
+(Feature-Freeze)
+
+### Added
+
+#### General
+
+- capability to directly define map and assign them to items
+- post-aggregation for parallel-loops 
+- subtrees to call other sakura-files
+- predefined-subtrees
+- prototypical multi-node functionallity with first predefined subtree for node-provisioning over ssh
+- additional error-output
+- colored output
+- logo-output in ascii-art
+- add logging, primary for multi-node setup
+- add optional config-file input, primary for multi-node setup
+- `root.sakura`-file as entry-point, in case, that a directoy was choosed instead of a file
+- blossom-group header is now also printed in the output
+- input-path over cli can now also be a directory-path
+- input-path over cli can now also be a relative path
+
+#### Blossoms
+
+- `item_update` to update parent-values
+- `create_file` in new `template`-group, which is basically the old template-blossom
+- `create_string` in new `template`-group, to handle templates internal without writing them directly into a file after filling the template
+
+#### Blossom-flags
+
+- `ignore_errors`-flag for `cmd`-blossom to ignore the exit-code of the command
+- `trim_output`-flag for `cmd`-blossom to remove whitespaces and linebreaks at the beginning and the end of the output
+- `owner`-input for `copy`-blossom of the `path`-group
+- `mode`-input for `copy`-blossom of the `path`-group
+
+#### Functions
+
+- `append` for array-items
+- `clear_empty` to remove empty-entries from an array-item
+- `parse_json` to parse a json-formated string-item
+
+#### Flags
+- `-d`/`--debug`-flag to enable debug output
+- `--dry-run` to start a dry-run, which parse and checks the files (check not complete), but doesn't execute them
+
+#### Requriements
+
+- `libKitsunemimiSakuraNetwork`
+- `libKitsunemimiNetwork`
+- `libKitsunemimiSakuraLang` (originally `libKitsunemimiSakuraParser`)
+- `libKitsunemimiArgs`
+- `libKitsunemimiConfig`
+- `libssl`
+
+### Changed
+
+- Blossom-group-header now also handled as jinja2-string
+- restructure sakura-root- and sakura-thread-class
+- replaced argument-parser
+- moved sakura-item-handling into libKitsunemimiSakuraLang
+- file-endings should be now `.sakura` instead of `.tree`, because there are no tree- and seed-files anymore
+- templates, files, trees and the new resources are now stored in-memory. This was basically done for easier handling in the mulit-node-setup.
+- the initial file to execute, which is given by the cli, don't require a flag anymore
+
+### Fixed
+
+- input for loops (parallel and non-parallel) to be used multiple-times inside of the loop
+- error in parallel-loop now resulting in an break of the run
+- split template-blossom
+
+### Removed
+- removed converter for json-items to sakura-items, because the parser already directly creates sakura-items, so the converter is not necessary anymore
+- argument-parser of the boost-library is not a requirement anymore
+- `--seed-path`-flag
+- `SakuraTree`-namespace was removed from the source-files
+
+
+
 ## [0.2.0] - 2020-01-05
 
 ### Changed
 - complete syntax-rework
 
 ### Added
+
+#### General
+
 - documentation
 
-Added new blossom-types:
+#### Blossoms
 
 - `path`-blossoms for copy, delete, rename, chown and chmod for files and direcotries
 - `ini_file`-blossoms to set, get, and delete single entries and group in ini-files
@@ -20,7 +102,7 @@ Added new blossom-types:
 - `exit`-blossom to quit the current run, if necessary
 - `ssh`-blossoms to run shell-commands over ssh and to copy files over scp
 
-Added new functions-types:
+#### Functions
 
 - get(...) to get an item from a map or an array
 - size() to get the size of a map, array or stirng
@@ -28,7 +110,7 @@ Added new functions-types:
 - append(...) to add new items to existing arrays
 - split(...) to convert strings into array
 
-Other new structures:
+#### Other new structures
 
 - if-conditions
 - parallel-sections
@@ -37,8 +119,6 @@ Other new structures:
 - parallel-for-loops
 - parallel-for-each-loops
 
-### Depricated
-- the apt-blossoms, which were introduced in the PoC-state of version 0.1.0, are deprecated and will be reworked with version 0.3.0
 
 
 ## [0.1.0] - 2019-08-17
