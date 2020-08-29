@@ -20,10 +20,6 @@ https://gitlab.com/kitsudaiki/Sakura-Project-Documentation/builds/artifacts/mast
 **IMPORTANT**: The master-version of the documentation actually differs from the master of the code. The documentation is compatible with the current state of the implementation, but there are some implemented features not in the documentation at the moment (see ticket: https://github.com/kitsudaiki/SakuraTree/issues/136). If you should be interested in this project, then let me know and I will prioritize the update of the documentation.
 
 
-Documentation for version 0.2.0: 
-
-https://gitlab.com/kitsudaiki/Sakura-Project-Documentation/-/jobs/394246432/artifacts/browse
-
 
 ## Description
 
@@ -131,7 +127,7 @@ libKitsunemimiJinja2 | v0.7.3 | https://github.com/kitsudaiki/libKitsunemimiJinj
 libKitsunemimiIni | v0.4.4 | https://github.com/kitsudaiki/libKitsunemimiIni.git
 libKitsunemimiNetwork | v0.6.4 | https://github.com/kitsudaiki/libKitsunemimiNetwork.git
 libKitsunemimiProjectNetwork | v0.2.0 | https://github.com/kitsudaiki/libKitsunemimiProjectNetwork.git
-libKitsunemimiSakuraLang | v0.3.0 | https://github.com/kitsudaiki/libKitsunemimiSakuraLang.git
+libKitsunemimiSakuraLang | v0.3.1 | https://github.com/kitsudaiki/libKitsunemimiSakuraLang.git
 libKitsunemimiSakuraNetwork | v0.1.0 | https://github.com/kitsudaiki/libKitsunemimiSakuraNetwork.git
 
 ### build programm
