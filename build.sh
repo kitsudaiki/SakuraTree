@@ -51,6 +51,9 @@ function get_required_kitsune_lib_repo () {
 
 #-----------------------------------------------------------------------------------------------------------------
 
+echo ""
+echo "###########################################################################################################"
+echo ""
 get_required_kitsune_lib_repo "libKitsunemimiCommon" "v0.15.1" 4 "staticlib"
 echo ""
 echo "###########################################################################################################"
@@ -83,7 +86,7 @@ get_required_kitsune_lib_repo "libKitsunemimiJinja2" "v0.7.3" 1 "staticlib"
 echo ""
 echo "###########################################################################################################"
 echo ""
-get_required_kitsune_lib_repo "libKitsunemimiSakuraLang" "v0.3.0" 1 "staticlib"
+get_required_kitsune_lib_repo "libKitsunemimiSakuraLang" "v0.3.1" 1 "staticlib"
 echo ""
 echo "###########################################################################################################"
 echo ""
@@ -108,12 +111,13 @@ if [ $1 = "test" ]; then
     /usr/lib/x86_64-linux-gnu/qt5/bin/qmake "$PARENT_DIR/SakuraTree/SakuraTree.pro" -spec linux-g++ "CONFIG += optimize_full" "CONFIG+=run_tests"
     /usr/bin/make -j4
     # copy build-result and include-files into the result-directory
-    cp "$LIB_KITSUNE_SAKURA_TREE_DIR/SakuraTree_Test" "$RESULT_DIR/"
+    cp "$LIB_KITSUNE_SAKURA_TREE_DIR/src/SakuraTree" "$RESULT_DIR/"
+    cp "$LIB_KITSUNE_SAKURA_TREE_DIR/tests/unit_tests/SakuraTree_UnitTests" "$RESULT_DIR/"
 else
     /usr/lib/x86_64-linux-gnu/qt5/bin/qmake "$PARENT_DIR/SakuraTree/SakuraTree.pro" -spec linux-g++ "CONFIG += optimize_full"
     /usr/bin/make -j4
     # copy build-result and include-files into the result-directory
-    cp "$LIB_KITSUNE_SAKURA_TREE_DIR/SakuraTree" "$RESULT_DIR/"
+    cp "$LIB_KITSUNE_SAKURA_TREE_DIR/src/SakuraTree" "$RESULT_DIR/"
 fi
 
 #-----------------------------------------------------------------------------------------------------------------

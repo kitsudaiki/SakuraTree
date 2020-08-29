@@ -20,22 +20,22 @@
  *      limitations under the License.
  */
 
-#include <tests/processing/common/item_methods_test.h>
-#include <tests/processing/common/functions_test.h>
+#include <processing/common/item_methods_test.h>
+#include <processing/common/functions_test.h>
 
-#include <tests/processing/blossoms/files/common_files/path_chmod_blossom_test.h>
-#include <tests/processing/blossoms/files/common_files/path_chown_blossom_test.h>
-#include <tests/processing/blossoms/files/common_files/path_copy_blossom_test.h>
-#include <tests/processing/blossoms/files/common_files/path_delete_blossom_test.h>
-#include <tests/processing/blossoms/files/common_files/path_rename_blossom_test.h>
+#include <processing/blossoms/files/common_files/path_chmod_blossom_test.h>
+#include <processing/blossoms/files/common_files/path_chown_blossom_test.h>
+#include <processing/blossoms/files/common_files/path_copy_blossom_test.h>
+#include <processing/blossoms/files/common_files/path_delete_blossom_test.h>
+#include <processing/blossoms/files/common_files/path_rename_blossom_test.h>
 
-#include <tests/processing/blossoms/files/template_files/template_create_blossom_test.h>
-#include <tests/processing/blossoms/special/cmd_blossom_test.h>
+#include <processing/blossoms/files/template_files/template_create_blossom_test.h>
+#include <processing/blossoms/special/cmd_blossom_test.h>
 
-#include <tests/processing/blossoms/files/text_files/text_append_blossom_test.h>
-#include <tests/processing/blossoms/files/text_files/text_read_blossom_test.h>
-#include <tests/processing/blossoms/files/text_files/text_replace_blossom_test.h>
-#include <tests/processing/blossoms/files/text_files/text_write_blossom_test.h>
+#include <processing/blossoms/files/text_files/text_append_blossom_test.h>
+#include <processing/blossoms/files/text_files/text_read_blossom_test.h>
+#include <processing/blossoms/files/text_files/text_replace_blossom_test.h>
+#include <processing/blossoms/files/text_files/text_write_blossom_test.h>
 
 int
 main(int argc, char *argv[])

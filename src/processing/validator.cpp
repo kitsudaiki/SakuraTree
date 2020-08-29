@@ -47,7 +47,7 @@ checkBlossomItem(BlossomItem &blossomItem,
     Blossom* blossom = getBlossom(blossomItem.blossomGroupType, blossomItem.blossomType);
     if(blossom == nullptr)
     {
-        errorMessage = createError(blossomItem, "converter", "unknow blossom-type");
+        errorMessage = createError(blossomItem, "validator", "unknow blossom-type");
         return false;
     }
 

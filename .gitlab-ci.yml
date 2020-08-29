@@ -2,7 +2,8 @@ image: registry.gitlab.com/kitsudaiki/kitsunemimi-ci-docker-images/normal-tests:
 
 stages:
   - build
-
+  - test
+  
 build:
   stage: build
   script:
@@ -13,9 +14,34 @@ build:
     - ./build.sh test
     - mkdir upload
     - cp -r ../result/* upload/
+    - cp -r tests/functional_tests upload/
   artifacts:
     paths:
       - upload
     expire_in: 1 week
+  tags:
+    - docker
+
+#unit_tests:
+#  stage: test
+#  script: 
+#    - ls -l
+#    - upload/SakuraTree_UnitTests
+#  dependencies:
+#    - build
+#  tags:
+#    - docker
+
+functional_tests:
+  stage: test
+  script: 
+    - ls -l
+    - apt-get update
+    - apt-get install -y libboost-filesystem-dev libssl-dev
+    - upload/SakuraTree upload/functional_tests/parse-json-test
+    - upload/SakuraTree upload/functional_tests/subtree-ressources-test
+    - upload/SakuraTree upload/functional_tests/template-test
+  dependencies:
+    - build
   tags:
     - docker

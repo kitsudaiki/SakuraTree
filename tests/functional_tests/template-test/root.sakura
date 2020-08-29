@@ -9,7 +9,6 @@ template("create a template")
 - source_path = "test_template.j2"
 -> create_file:
     - dest_path = dest_path
-    - owner = "neptune"
     - permission = 666
     - variables = { - checker = 42
 					- name = test_input }

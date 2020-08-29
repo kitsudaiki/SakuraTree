@@ -99,15 +99,20 @@ int main(int argc, char *argv[])
 
     if(argParser.wasSet("use-config"))
     {
-        root->startProcess(inputPath.string());
+        if(root->startProcess(inputPath.string()) == false) {
+            return 1;
+        }
     }
     else
     {
-        root->startProcess(inputPath.string(),
-                           itemInputValues,
-                           argParser.wasSet("dry-run"),
-                           listenAddress,
-                           listenPort);
+        if(root->startProcess(inputPath.string(),
+                              itemInputValues,
+                              argParser.wasSet("dry-run"),
+                              listenAddress,
+                              listenPort) == false)
+        {
+            return 1;
+        }
     }
 
     return 0;
