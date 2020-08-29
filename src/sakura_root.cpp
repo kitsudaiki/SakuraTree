@@ -323,7 +323,10 @@ SakuraRoot::printOutput(const std::string &output)
     // get width of the termial to draw the separator-line
     struct winsize size;
     ioctl(STDOUT_FILENO, TIOCGWINSZ, &size);
-    const uint32_t terminalWidth = size.ws_col;
+    uint32_t terminalWidth = size.ws_col;
+    if(terminalWidth > 500) {
+        terminalWidth = 500;
+    }
 
     // draw separator line
     std::string line(terminalWidth, '=');

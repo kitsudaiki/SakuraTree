@@ -51,6 +51,9 @@ function get_required_kitsune_lib_repo () {
 
 #-----------------------------------------------------------------------------------------------------------------
 
+echo ""
+echo "###########################################################################################################"
+echo ""
 get_required_kitsune_lib_repo "libKitsunemimiCommon" "v0.15.1" 4 "staticlib"
 echo ""
 echo "###########################################################################################################"
@@ -83,7 +86,7 @@ get_required_kitsune_lib_repo "libKitsunemimiJinja2" "v0.7.3" 1 "staticlib"
 echo ""
 echo "###########################################################################################################"
 echo ""
-get_required_kitsune_lib_repo "libKitsunemimiSakuraLang" "v0.3.0" 1 "staticlib"
+get_required_kitsune_lib_repo "libKitsunemimiSakuraLang" "v0.3.1" 1 "staticlib"
 echo ""
 echo "###########################################################################################################"
 echo ""
