@@ -73,8 +73,8 @@ SakuraThread::run()
 
                 // process input-values
                 m_hierarchy = m_currentSubtree->hirarchy;
-                overrideItems(m_parentValues, m_currentSubtree->subtree->values, false);
-                overrideItems(m_parentValues, m_currentSubtree->items, false);
+                overrideItems(m_parentValues, m_currentSubtree->subtree->values, ALL);
+                overrideItems(m_parentValues, m_currentSubtree->items, ALL);
 
                 // run the real task
                 std::string errorMessage = "";
@@ -83,7 +83,7 @@ SakuraThread::run()
                                                       errorMessage);
                 // handle result
                 if(result) {
-                    overrideItems(m_currentSubtree->items, m_parentValues, true);
+                    overrideItems(m_currentSubtree->items, m_parentValues, ONLY_EXISTING);
                 } else {
                     m_currentSubtree->activeCounter->registerError(errorMessage);
                 }
@@ -261,7 +261,7 @@ SakuraThread::processBlossom(BlossomItem &blossomItem,
     fillBlossomOutputValueItemMap(blossomItem.values, blossomItem.blossomOutput);
 
     // TODO: override only with the output-values to avoid unnecessary conflicts
-    overrideItems(m_parentValues, blossomItem.values);
+    overrideItems(m_parentValues, blossomItem.values, ONLY_EXISTING);
 
     return true;
 }
@@ -306,8 +306,8 @@ SakuraThread::processBlossomGroup(BlossomGroupItem &blossomGroupItem,
         if(item != nullptr)
         {
             const bool ret = runSubtreeCall(item,
-                                            blossomItem->values,
-                                            blossomItem->blossomPath,
+                                            blossomGroupItem.values,
+                                            filePath,
                                             errorMessage);
             delete item;
 
@@ -325,8 +325,7 @@ SakuraThread::processBlossomGroup(BlossomGroupItem &blossomGroupItem,
         // which in the blossom
         overrideItems(blossomItem->values,
                       blossomGroupItem.values,
-                      false,
-                      true);
+                      ONLY_NON_EXISTING);
 
         if(processBlossom(*blossomItem, filePath, errorMessage) == false) {
             return false;
@@ -536,7 +535,7 @@ SakuraThread::processSeedTrigger(SeedTriggerItem* seedItem,
 
     // prepare values
     DataMap fullValues = m_parentValues;
-    overrideItems(fullValues, seedItem->values, false);
+    overrideItems(fullValues, seedItem->values, ALL);
 
     SakuraRoot::m_networking->triggerSeedByTag(seedItem->tag,
                                                seedItem->treeId,
@@ -641,7 +640,7 @@ SakuraThread::processForEach(ForEachBranching* subtree,
     {
         // backup the parent-values to avoid permanent merging with loop-internal values
         DataMap preBalueBackup = m_parentValues;
-        overrideItems(m_parentValues, subtree->values, false);
+        overrideItems(m_parentValues, subtree->values, ALL);
 
         for(uint32_t i = 0; i < array->size(); i++)
         {
@@ -655,7 +654,7 @@ SakuraThread::processForEach(ForEachBranching* subtree,
         // loop. That way, variables like the counter-variable are not added to the parent.
         DataMap postBalueBackup = m_parentValues;
         m_parentValues = preBalueBackup;
-        overrideItems(m_parentValues, postBalueBackup);
+        overrideItems(m_parentValues, postBalueBackup, ONLY_EXISTING);
     }
     else
     {
@@ -710,7 +709,7 @@ SakuraThread::processForEach(ForEachBranching* subtree,
             }
         }
 
-        overrideItems(m_parentValues, subtree->values, true);
+        overrideItems(m_parentValues, subtree->values, ONLY_EXISTING);
     }
 
     return true;
@@ -772,7 +771,7 @@ SakuraThread::processFor(ForBranching* subtree,
         // loop. That way, variables like the counter-variable are not added to the parent.
         DataMap postBalueBackup = m_parentValues;
         m_parentValues = preBalueBackup;
-        overrideItems(m_parentValues, postBalueBackup);
+        overrideItems(m_parentValues, postBalueBackup, ONLY_EXISTING);
     }
     else
     {
@@ -829,7 +828,7 @@ SakuraThread::processFor(ForBranching* subtree,
             }
         }
 
-        overrideItems(m_parentValues, subtree->values, true);
+        overrideItems(m_parentValues, subtree->values, ONLY_EXISTING);
     }
 
     return true;
@@ -938,8 +937,8 @@ SakuraThread::runSubtreeCall(SakuraItem* newSubtree,
     m_parentValues.clear();
 
     // pre-process subtree
-    overrideItems(newSubtree->values, values, false);
-    overrideItems(m_parentValues, newSubtree->values, false);
+    overrideItems(newSubtree->values, values, ALL);
+    overrideItems(m_parentValues, newSubtree->values, ALL);
 
     const bool ret = processSakuraItem(newSubtree, filePath, errorMessage);
     if(ret == false) {
@@ -948,7 +947,7 @@ SakuraThread::runSubtreeCall(SakuraItem* newSubtree,
 
     fillSubtreeOutputValueItemMap(newSubtree->values, &m_parentValues);
     m_parentValues = parentBackup;
-    overrideItems(m_parentValues, newSubtree->values);
+    overrideItems(m_parentValues, newSubtree->values, ONLY_EXISTING);
 
     return true;
 }

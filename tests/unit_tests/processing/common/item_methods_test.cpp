@@ -82,7 +82,7 @@ ItemMethods_Test::overrideItems_test()
     override.insert("y", new DataValue("poi"));
     override.insert("z", new DataValue("hmmm"));
 
-    overrideItems(original, override);
+    overrideItems(original, override, ONLY_EXISTING);
 
     TEST_EQUAL(original.size(), 2);
     TEST_EQUAL(original.get("x")->toString(), "{{test}}");

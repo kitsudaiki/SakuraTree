@@ -1,9 +1,0 @@
-["ressource test"]
-- test_name = ""
-
-print_hostname("call test-ressource")
-- host_name = test_name
-- host_name >> test_name
-
-print("check ressource-result")
-- test_name = test_name

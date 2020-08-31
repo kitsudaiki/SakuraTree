@@ -55,7 +55,7 @@ ItemUpdateBlossom::runTask(BlossomItem &blossomItem)
 {
     overrideItems(*blossomItem.parentValues,
                   blossomItem.values,
-                  true);
+                  ONLY_EXISTING);
 }
 
 /**

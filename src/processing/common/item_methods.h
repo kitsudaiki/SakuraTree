@@ -58,16 +58,22 @@ bool fillSubtreeOutputValueItemMap(ValueItemMap &items,
                                    DataMap *output);
 
 // override functions
+enum OverrideType
+{
+    ALL,
+    ONLY_EXISTING,
+    ONLY_NON_EXISTING
+};
+
 void overrideItems(DataMap &original,
                    const DataMap &override,
-                   bool onlyExisting = true);
+                   OverrideType type);
 void overrideItems(DataMap &original,
                    const ValueItemMap &override,
-                   bool onlyExisting = true);
+                   OverrideType type);
 void overrideItems(ValueItemMap &original,
                    const ValueItemMap &override,
-                   bool onlyExisting = false,
-                   bool onlyNotExisting = false);
+                   OverrideType type);
 
 // check items
 const std::vector<std::string> checkInput(Kitsunemimi::Sakura::ValueItemMap &original,

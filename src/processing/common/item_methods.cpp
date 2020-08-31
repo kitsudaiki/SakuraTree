@@ -405,13 +405,13 @@ fillSubtreeOutputValueItemMap(ValueItemMap &items,
  * @param original data-map with the original key-values, which should be updates with the
  *                 information of the override-map
  * @param override map with the new incoming information
- * @param onlyExisting true, of only replacing values of existing key, but not add new keys
+ * @param type type of override
  */
 void overrideItems(DataMap &original,
                    const DataMap &override,
-                   bool onlyExisting)
+                   OverrideType type)
 {
-    if(onlyExisting)
+    if(type == ONLY_EXISTING)
     {
         std::map<std::string, DataItem*>::const_iterator overrideIt;
         for(overrideIt = override.m_map.begin();
@@ -426,7 +426,7 @@ void overrideItems(DataMap &original,
             }
         }
     }
-    else
+    else if(type == ALL)
     {
         std::map<std::string, DataItem*>::const_iterator overrideIt;
         for(overrideIt = override.m_map.begin();
@@ -444,14 +444,14 @@ void overrideItems(DataMap &original,
  * @param original data-map with the original key-values, which should be updates with the
  *                 information of the override-map
  * @param override map with the new incoming information
- * @param onlyExisting true, of only replacing values of existing key, but not add new keys
+ * @param type type of override
  */
 void
 overrideItems(DataMap &original,
               const ValueItemMap &override,
-              bool onlyExisting)
+              OverrideType type)
 {
-    if(onlyExisting)
+    if(type == ONLY_EXISTING)
     {
         std::map<std::string, ValueItem>::const_iterator overrideIt;
         for(overrideIt = override.m_valueMap.begin();
@@ -466,7 +466,7 @@ overrideItems(DataMap &original,
             }
         }
     }
-    else
+    else if(type == ALL)
     {
         std::map<std::string, ValueItem>::const_iterator overrideIt;
         for(overrideIt = override.m_valueMap.begin();
@@ -484,18 +484,14 @@ overrideItems(DataMap &original,
  * @param original map with the original key-values, which should be updates with the
  *                 information of the override-map
  * @param override map with the new incoming information
- * @param onlyExisting true, to only replacing values of existing key, but not add new keys
- *                     (Default: false)
- * @param onlyNotExisting true, to only add new values, which are not already exist in the
- *                        original (Default: false)
+ * @param type type of override
  */
 void
 overrideItems(ValueItemMap &original,
               const ValueItemMap &override,
-              bool onlyExisting,
-              bool onlyNotExisting)
+              OverrideType type)
 {
-    if(onlyExisting)
+    if(type == ONLY_EXISTING)
     {
         std::map<std::string, ValueItem>::const_iterator overrideIt;
         for(overrideIt = override.m_valueMap.begin();
@@ -512,7 +508,7 @@ overrideItems(ValueItemMap &original,
             }
         }
     }
-    else if(onlyNotExisting)
+    else if(type == ONLY_NON_EXISTING)
     {
         std::map<std::string, ValueItem>::const_iterator overrideIt;
         for(overrideIt = override.m_valueMap.begin();
@@ -529,7 +525,7 @@ overrideItems(ValueItemMap &original,
             }
         }
     }
-    else
+    else if(type == ALL)
     {
         std::map<std::string, ValueItem>::const_iterator overrideIt;
         for(overrideIt = override.m_valueMap.begin();
