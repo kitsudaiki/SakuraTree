@@ -218,8 +218,7 @@ checkSakuraItem(SakuraItem* sakuraItem,
 
             overrideItems(blossomItem->values,
                           blossomGroupItem->values,
-                          false,
-                          true);
+                          ONLY_NON_EXISTING);
 
             if(checkSakuraItem(blossomItem, filePath, errorMessage) == false) {
                 return false;
