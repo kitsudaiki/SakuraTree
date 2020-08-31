@@ -306,8 +306,8 @@ SakuraThread::processBlossomGroup(BlossomGroupItem &blossomGroupItem,
         if(item != nullptr)
         {
             const bool ret = runSubtreeCall(item,
-                                            blossomItem->values,
-                                            blossomItem->blossomPath,
+                                            blossomGroupItem.values,
+                                            filePath,
                                             errorMessage);
             delete item;
 
