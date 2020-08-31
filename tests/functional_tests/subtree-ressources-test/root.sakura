@@ -1,9 +1,18 @@
-["test"]
-- host = ""
+["resource-subtree-test"]
+- test_text = "this is a test"
+- output_resource = ""
+- output_subtree = ""
 
-subtree("next/test.sakura")
-- test_name = "test"
-- test_name >> host
 
-print("check subtree-result")
-- host = host
+test_resource("call test-ressource")
+- test_text = test_text
+- test_text >> output_resource
+
+
+subtree("next/subtree.sakura")
+- test_text = test_text
+- test_text >> output_subtree
+
+
+assert("check result")
+- output_resource == output_subtree

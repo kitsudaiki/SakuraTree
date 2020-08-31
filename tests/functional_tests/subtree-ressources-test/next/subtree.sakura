@@ -1,0 +1,13 @@
+["subtree test"]
+- test_text = "{{}}"
+
+text_file("write into a text-file")
+- file_path = "/tmp/ressource-subtree-test"
+-> write:
+    - text = test_text
+-> read:
+    - blossom_output >> test_text
+
+
+item_update("change output for better test")
+- test_text = "asdf: {{test_text}}"
