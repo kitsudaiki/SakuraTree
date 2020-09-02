@@ -270,7 +270,16 @@ SakuraRoot::startSubtreeProcess(const std::string &relativePath,
     object->blockerId = blockerId;
     m_threadPool->m_queue.addSubtreeObject(object);
 
-    return true;
+    // error-output
+    bool result = object->activeCounter->success;
+    if(result == false) {
+        errorMessage = object->activeCounter->outputMessage;
+    }
+
+    delete object->activeCounter;
+    delete object;
+
+    return result;
 }
 
 /**
@@ -360,13 +369,15 @@ SakuraRoot::runProcess(SakuraItem* item,
     }
 
     // error-output
-    if(object->activeCounter->success == false)
-    {
+    bool result = object->activeCounter->success;
+    if(result == false) {
         errorMessage = object->activeCounter->outputMessage;
-        return false;
     }
 
-    return true;
+    delete object->activeCounter;
+    delete object;
+
+    return result;
 }
 
 /**
