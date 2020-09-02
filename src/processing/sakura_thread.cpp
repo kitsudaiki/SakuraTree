@@ -29,6 +29,7 @@
 #include <processing/common/item_methods.h>
 #include <processing/blossoms/blossom.h>
 #include <processing/blossoms/blossom_getter.h>
+#include <processing/subtree_calls.h>
 
 #include <libKitsunemimiJinja2/jinja2_converter.h>
 #include <libKitsunemimiPersistence/logger/logger.h>
@@ -437,8 +438,8 @@ SakuraThread::processSeedInit(SeedInitItem *seedItem,
     values.insert("server_ip_address", new DataValue(SakuraRoot::m_serverAddress), true);
 
     // create and initialize one counter-instance for all new subtrees
-    SubtreeQueue::ActiveCounter* counter = new SubtreeQueue::ActiveCounter();
-    counter->shouldCount = static_cast<uint32_t>(seedItem->childs.size());
+    SubtreeQueue::ActiveCounter* activeCounter = new SubtreeQueue::ActiveCounter();
+    activeCounter->shouldCount = static_cast<uint32_t>(seedItem->childs.size());
     std::vector<SubtreeQueue::SubtreeObject*> spawnedObjects;
 
     // iterate of all hosts, which are defined within the seed-file
@@ -450,8 +451,7 @@ SakuraThread::processSeedInit(SeedInitItem *seedItem,
         DataArray* unconvertedTags = dynamic_cast<DataArray*>(part->values.get("tags"));
         if(unconvertedTags != nullptr)
         {
-            for(uint32_t i = 0; i < unconvertedTags->size(); i++)
-            {
+            for(uint32_t i = 0; i < unconvertedTags->size(); i++) {
                 tags.push_back(unconvertedTags->get(i)->toString());
             }
         }
@@ -471,7 +471,7 @@ SakuraThread::processSeedInit(SeedInitItem *seedItem,
         object->subtree = provisioningTree->copy();
         object->items = values;
         object->hirarchy = m_hierarchy;
-        object->activeCounter = counter;
+        object->activeCounter = activeCounter;
         object->filePath = filePath;
 
         m_queue->addSubtreeObject(object);
@@ -479,7 +479,7 @@ SakuraThread::processSeedInit(SeedInitItem *seedItem,
     }
 
     // wait until the created subtree was fully processed by the worker-threads
-    while(counter->isEqual() == false) {
+    while(activeCounter->isEqual() == false) {
         std::this_thread::sleep_for(chronoMilliSec(10));
     }
 
@@ -503,6 +503,14 @@ SakuraThread::processSeedInit(SeedInitItem *seedItem,
         LOG_ERROR("TIMEOUT");
         return false;
     }
+
+    // free allocated resources
+    for(SubtreeQueue::SubtreeObject* obj : spawnedObjects)
+    {
+        delete obj->subtree;
+        delete obj;
+    }
+    delete activeCounter;
 
     // send all sakura-files, templates and files too all hosts, which are defined within the seed
     SakuraRoot::m_networking->sendDataToAll(*SakuraRoot::m_currentGarden);
@@ -655,67 +663,20 @@ SakuraThread::processForEach(ForEachBranching* subtree,
         DataMap postBalueBackup = m_parentValues;
         m_parentValues = preBalueBackup;
         overrideItems(m_parentValues, postBalueBackup, ONLY_EXISTING);
+
+        return true;
     }
     else
     {
-        // copy the parent-values
-        DataMap internalValues = m_parentValues;
-
-        // create and initialize one counter-instance for all new subtrees
-        SubtreeQueue::ActiveCounter* activeCounter = new SubtreeQueue::ActiveCounter();
-        activeCounter->shouldCount = static_cast<uint32_t>(array->size());
-        std::vector<SubtreeQueue::SubtreeObject*> spawnedObjects;
-
-        // iterate of all items of the array and for each item, create a subtree-object
-        // and add it to the subtree-queue for parallel processing
-        for(uint32_t i = 0; i < array->size(); i++)
-        {
-            internalValues.insert(subtree->tempVarName, array->get(i)->copy(), true);
-            SubtreeQueue::SubtreeObject* object = new SubtreeQueue::SubtreeObject();
-            object->subtree = subtree->content->copy();
-            object->items = internalValues;
-            object->hirarchy = m_hierarchy;
-            object->activeCounter = activeCounter;
-            object->filePath = filePath;
-
-            m_queue->addSubtreeObject(object);
-            spawnedObjects.push_back(object);
-        }
-
-        // wait until the created subtree was fully processed by the worker-threads
-        while(activeCounter->isEqual() == false) {
-            std::this_thread::sleep_for(chronoMilliSec(10));
-        }
-
-        // in case of on error, forward this error to the upper layer
-        bool result = activeCounter->success;
-        if(result == false) {
-            errorMessage = activeCounter->outputMessage;
-        }
-
-        // post-processing and cleanup
-        for(uint32_t i = 0; i < array->size(); i++)
-        {
-            std::string errorMessage = "";
-            if(fillInputValueItemMap(subtree->values,
-                                     spawnedObjects.at(static_cast<uint32_t>(i))->items,
-                                     errorMessage) == false)
-            {
-                errorMessage = createError("subtree-processing",
-                                           "error processing post-aggregation of for-loop:\n"
-                                           + errorMessage);
-                result = false;
-            }
-        }
-
-        overrideItems(m_parentValues, subtree->values, ONLY_EXISTING);
-
-        // free allocated resources
-        for(SubtreeQueue::SubtreeObject* obj : spawnedObjects) {
-            delete obj;
-        }
-        delete activeCounter;
-
+        const bool result = spawnParallelSubtreesLoop(subtree->content,
+                                                      0,
+                                                      array->size(),
+                                                      filePath,
+                                                      m_hierarchy,
+                                                      m_parentValues,
+                                                      subtree->tempVarName,
+                                                      array,
+                                                      errorMessage);
         return result;
     }
 }
@@ -743,7 +704,7 @@ SakuraThread::processFor(ForBranching* subtree,
         return false;
     }
 
-    const long startValue = subtree->start.item->toValue()->getLong();
+    const uint64_t startValue = static_cast<uint64_t>(subtree->start.item->toValue()->getLong());
 
     // get end-value
     if(fillValueItem(subtree->end, m_parentValues, errorMessage) == false)
@@ -754,7 +715,7 @@ SakuraThread::processFor(ForBranching* subtree,
         return false;
     }
 
-    const long endValue = subtree->end.item->toValue()->getLong();
+    const uint64_t endValue = static_cast<uint64_t>(subtree->end.item->toValue()->getLong());
 
     // process content normal or parallel via worker-threads
     if(subtree->parallel == false)
@@ -763,10 +724,10 @@ SakuraThread::processFor(ForBranching* subtree,
         DataMap preBalueBackup = m_parentValues;
         overrideItems(m_parentValues, subtree->values, ALL);
 
-        for(long i = startValue; i < endValue; i++)
+        for(uint64_t i = startValue; i < endValue; i++)
         {
             // add the counter-variable as new value to be accessable within the loop
-            m_parentValues.insert(subtree->tempVarName, new DataValue(i), true);
+            m_parentValues.insert(subtree->tempVarName, new DataValue(static_cast<long>(i)), true);
 
             if(processSakuraItem(subtree->content->copy(), filePath, errorMessage) == false) {
                 return false;
@@ -783,65 +744,15 @@ SakuraThread::processFor(ForBranching* subtree,
     }
     else
     {
-        // copy the parent-values
-        DataMap internalValues = m_parentValues;
-
-        // create and initialize one counter-instance for all new subtrees
-        SubtreeQueue::ActiveCounter* activeCounter = new SubtreeQueue::ActiveCounter();
-        activeCounter->shouldCount = static_cast<uint32_t>(endValue - startValue);
-        std::vector<SubtreeQueue::SubtreeObject*> spawnedObjects;
-
-        for(long i = startValue; i < endValue; i++)
-        {
-            // add the counter-variable as new value to be accessable within the loop
-            internalValues.insert(subtree->tempVarName, new DataValue(i), true);
-
-            // encapsulate the content of the loop together with the values and the counter-object
-            // as an subtree-object and add it to the subtree-queue
-            SubtreeQueue::SubtreeObject* object = new SubtreeQueue::SubtreeObject();
-            object->subtree = subtree->content->copy();
-            object->items = internalValues;
-            object->hirarchy = m_hierarchy;
-            object->activeCounter = activeCounter;
-            object->filePath = filePath;
-
-            m_queue->addSubtreeObject(object);
-            spawnedObjects.push_back(object);
-        }
-
-        // wait until the created subtree was fully processed by the worker-threads
-        while(activeCounter->isEqual() == false) {
-            std::this_thread::sleep_for(chronoMilliSec(10));
-        }
-
-        // in case of on error, forward this error to the upper layer
-        bool result = activeCounter->success;
-        if(result == false) {
-            errorMessage = activeCounter->outputMessage;
-        }
-
-        // post-processing and cleanup
-        for(long i = startValue; i < endValue; i++)
-        {
-            std::string errorMessage = "";
-            if(fillInputValueItemMap(subtree->values,
-                                     spawnedObjects.at(static_cast<uint32_t>(i))->items,
-                                     errorMessage) == false)
-            {
-                errorMessage = createError("subtree-processing",
-                                           "error processing post-aggregation of for-loop:\n"
-                                           + errorMessage);
-                result = false;
-            }
-        }
-
-        overrideItems(m_parentValues, subtree->values, ONLY_EXISTING);
-
-        // free allocated resources
-        for(SubtreeQueue::SubtreeObject* obj : spawnedObjects) {
-            delete obj;
-        }
-        delete activeCounter;
+        const bool result = spawnParallelSubtreesLoop(subtree->content,
+                                                      startValue,
+                                                      endValue,
+                                                      filePath,
+                                                      m_hierarchy,
+                                                      m_parentValues,
+                                                      subtree->tempVarName,
+                                                      nullptr,
+                                                      errorMessage);
 
         return result;
     }
@@ -887,42 +798,13 @@ SakuraThread::processParallelPart(ParallelPart* parallelPart,
 
     SequentiellPart* parts = dynamic_cast<SequentiellPart*>(parallelPart->childs);
 
-    // create and initialize all threads
-    SubtreeQueue::ActiveCounter* activeCounter = new SubtreeQueue::ActiveCounter();
-    activeCounter->shouldCount = static_cast<uint32_t>(parts->childs.size());
-    std::vector<SubtreeQueue::SubtreeObject*> spawnedObjects;
-
-    // encapsulate each subtree of the paralle part as subtree-object and add it to the
-    // subtree-queue for parallel processing
-    for(SakuraItem* item : parts->childs)
-    {
-        SubtreeQueue::SubtreeObject* object = new SubtreeQueue::SubtreeObject();
-        object->subtree = item->copy();
-        object->hirarchy = m_hierarchy;
-        object->items = m_parentValues;
-        object->activeCounter = activeCounter;
-        object->filePath = filePath;
-
-        m_queue->addSubtreeObject(object);
-        spawnedObjects.push_back(object);
-    }
-
-    // wait until the created subtree was fully processed by the worker-threads
-    while(activeCounter->isEqual() == false) {
-        std::this_thread::sleep_for(chronoMilliSec(10));
-    }
-
-    // in case of on error, forward this error to the upper layer
-    const bool result = activeCounter->success;
-    if(result == false) {
-        errorMessage = activeCounter->outputMessage;
-    }
-
-    // free allocated resources
-    for(SubtreeQueue::SubtreeObject* obj : spawnedObjects) {
-        delete obj;
-    }
-    delete activeCounter;
+    const bool result = spawnParallelSubtrees(parts->childs,
+                                              0,
+                                              parts->childs.size(),
+                                              filePath,
+                                              m_hierarchy,
+                                              m_parentValues,
+                                              errorMessage);
 
     return result;
 }

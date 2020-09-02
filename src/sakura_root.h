@@ -80,10 +80,10 @@ public:
     static Kitsunemimi::Sakura::SakuraNetwork* m_networking;
 
     bool m_enableDebug = false;
+    ThreadPool* m_threadPool = nullptr;
 
 private:
     SakuraThread* m_rootThread = nullptr;
-    ThreadPool* m_threadPool = nullptr;
 
     std::mutex m_mutex;
 

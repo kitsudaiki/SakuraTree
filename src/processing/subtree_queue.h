@@ -98,6 +98,7 @@ public:
         // map with all input-values for the subtree
         DataMap items;
         // shared counter-instance, which will be increased after the subtree was fully processed
+        bool deleteter = false;
         ActiveCounter* activeCounter = nullptr;
         // current position in the processing-hirarchy for status-output
         std::vector<std::string> hirarchy;
@@ -106,6 +107,15 @@ public:
 
         Kitsunemimi::Project::Session* session = nullptr;
         uint64_t blockerId = 0;
+
+        SubtreeObject() {}
+        ~SubtreeObject()
+        {
+            if(deleteter) {
+                delete activeCounter;
+            }
+            delete subtree;
+        }
     };
 
     void addSubtreeObject(SubtreeObject* newObject);

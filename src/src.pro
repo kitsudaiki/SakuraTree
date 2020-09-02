@@ -112,7 +112,7 @@ HEADERS += \
     processing/blossoms/files/template_files/template_create_file_blossom.h \
     processing/blossoms/files/template_files/template_create_string_blossom.h \
     processing/blossoms/files/template_files/template_methods.h \
-    processing/validator.h
+    processing/validator.h \
 
 SOURCES += \
     processing/blossoms/files/ini_files/ini_delete_entry_blossom.cpp \
@@ -153,7 +153,8 @@ SOURCES += \
     processing/blossoms/files/template_files/template_create_string_blossom.cpp \
     processing/blossoms/files/template_files/template_methods.cpp \
     processing/validator.cpp \
-    main.cpp
+    main.cpp \
+    processing/subtree_calls.cpp
 
 SAKURA_PROVISIONING_SUBTREE = predefined_subtrees/sakura_provisioning_subtree.tree
 
