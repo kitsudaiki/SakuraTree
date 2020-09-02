@@ -633,7 +633,7 @@ SakuraThread::processForEach(ForEachBranching* subtree,
         return false;
     }
 
-    DataArray* array = subtree->iterateArray.get("array")->toArray();
+    DataArray* array = subtree->iterateArray.get("array")->copy()->toArray();
 
     // process content normal or parallel via worker-threads
     if(subtree->parallel == false)
