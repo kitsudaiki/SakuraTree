@@ -28,6 +28,7 @@
 #include <processing/sakura_tree_callbacks.h>
 #include <processing/thread_pool.h>
 #include <processing/validator.h>
+#include <processing/subtree_calls.h>
 
 #include <libKitsunemimiSakuraNetwork/sakura_network.h>
 #include <libKitsunemimiSakuraLang/sakura_parsing.h>
@@ -259,25 +260,19 @@ SakuraRoot::startSubtreeProcess(const std::string &relativePath,
     std::string errorMessage = "";
     valuesJson.parse(values, errorMessage);
 
-    // run process by adding the tree as subtree-object to the subtree-queue to be processed by
-    // one of the worker-threads
-    SubtreeQueue::SubtreeObject* object = new SubtreeQueue::SubtreeObject();
-    object->subtree = processPlan;
-    object->items = *valuesJson.getItemContent()->copy()->toMap();
-    object->activeCounter = new SubtreeQueue::ActiveCounter();
-    object->activeCounter->shouldCount = 1;
-    object->session = session;
-    object->blockerId = blockerId;
-    m_threadPool->m_queue.addSubtreeObject(object);
+    std::vector<SakuraItem*> childs;
+    childs.push_back(processPlan);
+    std::vector<std::string> hierarchy;
 
-    // error-output
-    bool result = object->activeCounter->success;
-    if(result == false) {
-        errorMessage = object->activeCounter->outputMessage;
-    }
-
-    delete object->activeCounter;
-    delete object;
+    const bool result = spawnParallelSubtrees(childs,
+                                              0,
+                                              1,
+                                              "",
+                                              hierarchy,
+                                              *valuesJson.getItemContent()->toMap(),
+                                              errorMessage,
+                                              session,
+                                              blockerId);
 
     return result;
 }
@@ -354,28 +349,17 @@ SakuraRoot::runProcess(SakuraItem* item,
                        const DataMap &initialValues,
                        std::string &errorMessage)
 {
-    // run process by adding the tree as subtree-object to the subtree-queue to be processed by
-    // one of the worker-threads
-    SubtreeQueue::SubtreeObject* object = new SubtreeQueue::SubtreeObject();
-    object->subtree = item;
-    object->items = initialValues;
-    object->activeCounter = new SubtreeQueue::ActiveCounter();
-    object->activeCounter->shouldCount = 1;
-    m_threadPool->m_queue.addSubtreeObject(object);
+    std::vector<SakuraItem*> childs;
+    childs.push_back(item);
+    std::vector<std::string> hierarchy;
 
-    // wait until the created subtree was fully processed by the worker-threads
-    while(object->activeCounter->isEqual() == false) {
-        std::this_thread::sleep_for(chronoMilliSec(10));
-    }
-
-    // error-output
-    bool result = object->activeCounter->success;
-    if(result == false) {
-        errorMessage = object->activeCounter->outputMessage;
-    }
-
-    delete object->activeCounter;
-    delete object;
+    const bool result = spawnParallelSubtrees(childs,
+                                              0,
+                                              1,
+                                              "",
+                                              hierarchy,
+                                              initialValues,
+                                              errorMessage);
 
     return result;
 }
