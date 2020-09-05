@@ -30,7 +30,7 @@
 
 namespace Kitsunemimi
 {
-namespace Project {
+namespace Sakura {
 class Session;
 }
 }
@@ -41,7 +41,7 @@ class HostHandler
 struct Host
 {
     std::vector<std::string> tags;
-    Kitsunemimi::Project::Session* session = nullptr;
+    Kitsunemimi::Sakura::Session* session = nullptr;
 };
 
 public:
@@ -49,13 +49,13 @@ public:
 
     bool addHost(const std::string &hostName,
                  const std::vector<std::string> &tags,
-                 Kitsunemimi::Project::Session* session=nullptr);
+                 Kitsunemimi::Sakura::Session* session=nullptr);
     bool updateHost(const std::string &hostName,
-                    Kitsunemimi::Project::Session* session);
+                    Kitsunemimi::Sakura::Session* session);
 
-    Kitsunemimi::Project::Session* get(const std::string &hostName);
-    const std::vector<Kitsunemimi::Project::Session*> getByTag(const std::string &tag);
-    const std::vector<Kitsunemimi::Project::Session*> getAll();
+    Kitsunemimi::Sakura::Session* get(const std::string &hostName);
+    const std::vector<Kitsunemimi::Sakura::Session*> getByTag(const std::string &tag);
+    const std::vector<Kitsunemimi::Sakura::Session*> getAll();
 
     bool remove(const std::string &hostName);
 

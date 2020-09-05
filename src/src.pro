@@ -23,10 +23,10 @@ LIBS += -L../../libKitsunemimiSakuraLang/src/debug -lKitsunemimiSakuraLang
 LIBS += -L../../libKitsunemimiSakuraLang/src/release -lKitsunemimiSakuraLang
 INCLUDEPATH += ../../libKitsunemimiSakuraLang/include
 
-LIBS += -L../../libKitsunemimiProjectNetwork/src -lKitsunemimiProjectNetwork
-LIBS += -L../../libKitsunemimiProjectNetwork/src/debug -lKitsunemimiProjectNetwork
-LIBS += -L../../libKitsunemimiProjectNetwork/src/release -lKitsunemimiProjectNetwork
-INCLUDEPATH += ../../libKitsunemimiProjectNetwork/include
+LIBS += -L../../libKitsunemimiSakuraNetwork/src -lKitsunemimiSakuraNetwork
+LIBS += -L../../libKitsunemimiSakuraNetwork/src/debug -lKitsunemimiSakuraNetwork
+LIBS += -L../../libKitsunemimiSakuraNetwork/src/release -lKitsunemimiSakuraNetwork
+INCLUDEPATH += ../../libKitsunemimiSakuraNetwork/include
 
 LIBS += -L../../libKitsunemimiCommon/src -lKitsunemimiCommon
 LIBS += -L../../libKitsunemimiCommon/src/debug -lKitsunemimiCommon

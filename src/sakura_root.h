@@ -32,7 +32,7 @@ namespace Sakura {
 class SakuraNetwork;
 class SakuraLangInterface;
 }
-namespace Project {
+namespace Sakura {
 class Session;
 }
 }

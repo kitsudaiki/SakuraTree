@@ -32,7 +32,7 @@
 
 namespace Kitsunemimi
 {
-namespace Project {
+namespace Sakura {
 class Session;
 class SessionController;
 }
@@ -43,8 +43,8 @@ class SakuraGarden;
 
 class HostHandler;
 
-using Kitsunemimi::Project::Session;
-using Kitsunemimi::Project::SessionController;
+using Kitsunemimi::Sakura::Session;
+using Kitsunemimi::Sakura::SessionController;
 
 class SakuraNetwork
 {
@@ -85,9 +85,9 @@ public:
     bool sendDataToAll(const Kitsunemimi::Sakura::SakuraGarden &garden);
     bool sendDataToHost(const std::string &hostName,
                         const Kitsunemimi::Sakura::SakuraGarden &garden);
-    bool sendData(Kitsunemimi::Project::Session* session,
+    bool sendData(Kitsunemimi::Sakura::Session* session,
                   const Kitsunemimi::Sakura::SakuraGarden &garden);
-    bool sendData(Kitsunemimi::Project::Session* session,
+    bool sendData(Kitsunemimi::Sakura::Session* session,
                   const uint8_t objectType,
                   const std::string &path,
                   const void* data,
@@ -100,7 +100,7 @@ public:
     bool triggerSeedByTag(const std::string &tag,
                           const std::string &treeId,
                           const std::string &values);
-    bool triggerSeed(Kitsunemimi::Project::Session* session,
+    bool triggerSeed(Kitsunemimi::Sakura::Session* session,
                      const std::string &treeId,
                      const std::string &values);
 
@@ -113,7 +113,7 @@ public:
 
 
     HostHandler* m_hostHandler = nullptr;
-    Kitsunemimi::Project::SessionController* m_sessionController = nullptr;
+    Kitsunemimi::Sakura::SessionController* m_sessionController = nullptr;
 
     std::string m_address = "127.0.0.1";
     std::string m_hostName = "";

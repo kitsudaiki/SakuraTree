@@ -22,8 +22,8 @@
 
 #include "sakura_network.h"
 
-#include <libKitsunemimiProjectNetwork/session.h>
-#include <libKitsunemimiProjectNetwork/session_controller.h>
+#include <libKitsunemimiSakuraNetwork/session.h>
+#include <libKitsunemimiSakuraNetwork/session_controller.h>
 
 #include <libKitsunemimiSakuraLang/sakura_garden.h>
 #include <libKitsunemimiSakuraLang/items/sakura_items.h>
@@ -116,7 +116,7 @@ SakuraNetwork::isHostReady(const std::string hostName)
 bool
 SakuraNetwork::areAllHostsReady()
 {
-    const std::vector<Kitsunemimi::Project::Session*> sessions = m_hostHandler->getAll();
+    const std::vector<Kitsunemimi::Sakura::Session*> sessions = m_hostHandler->getAll();
 
     for(uint32_t i = 0; i < sessions.size(); i++)
     {
@@ -169,7 +169,7 @@ SakuraNetwork::closeAllSessions()
 bool
 SakuraNetwork::sendDataToAll(const Kitsunemimi::Sakura::SakuraGarden &garden)
 {
-    const std::vector<Kitsunemimi::Project::Session*> sessions = m_hostHandler->getAll();
+    const std::vector<Kitsunemimi::Sakura::Session*> sessions = m_hostHandler->getAll();
 
     for(uint32_t i = 0; i < sessions.size(); i++)
     {
@@ -205,7 +205,7 @@ SakuraNetwork::sendDataToHost(const std::string &hostName,
  * @return
  */
 bool
-SakuraNetwork::sendData(Kitsunemimi::Project::Session* session,
+SakuraNetwork::sendData(Kitsunemimi::Sakura::Session* session,
                         const Kitsunemimi::Sakura::SakuraGarden &garden)
 {
     if(session == nullptr) {
@@ -277,7 +277,7 @@ SakuraNetwork::sendData(Kitsunemimi::Project::Session* session,
  * @return
  */
 bool
-SakuraNetwork::sendData(Kitsunemimi::Project::Session* session,
+SakuraNetwork::sendData(Kitsunemimi::Sakura::Session* session,
                         const uint8_t objectType,
                         const std::string &path,
                         const void* data,
@@ -343,7 +343,7 @@ SakuraNetwork::triggerSeedByTag(const std::string &tag,
                                 const std::string &treeId,
                                 const std::string &values)
 {
-    const std::vector<Kitsunemimi::Project::Session*> sessions = m_hostHandler->getByTag(tag);
+    const std::vector<Kitsunemimi::Sakura::Session*> sessions = m_hostHandler->getByTag(tag);
 
     for(uint32_t i = 0; i < sessions.size(); i++)
     {
@@ -364,7 +364,7 @@ SakuraNetwork::triggerSeedByTag(const std::string &tag,
  * @return
  */
 bool
-SakuraNetwork::triggerSeed(Kitsunemimi::Project::Session* session,
+SakuraNetwork::triggerSeed(Kitsunemimi::Sakura::Session* session,
                            const std::string &treeId,
                            const std::string &values)
 {
