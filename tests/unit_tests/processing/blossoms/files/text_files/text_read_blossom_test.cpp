@@ -41,7 +41,7 @@ TextReadBlossom_Test::initTestCase()
     m_path = "/tmp/TextReadBlossom_Test_testfile";
     m_text = "this is a test-string";
 
-    BlossomItem fakeItem;
+    Kitsunemimi::Sakura::BlossomItem fakeItem;
     runSyncProcess("rm " + m_path);
 }
 
@@ -52,7 +52,7 @@ void
 TextReadBlossom_Test::initTask_test()
 {
     TextReadBlossom readBlossom;
-    BlossomItem blossomItem;
+    Kitsunemimi::Sakura::BlossomItem blossomItem;
 
     blossomItem.values.insert("file_path", new DataValue(m_path));
 
@@ -69,7 +69,7 @@ void
 TextReadBlossom_Test::preCheck_test()
 {
     TextReadBlossom readBlossom;
-    BlossomItem blossomItem;
+    Kitsunemimi::Sakura::BlossomItem blossomItem;
     blossomItem.values.insert("file_path", new DataValue(m_path));
 
     readBlossom.initBlossom(blossomItem);
@@ -102,7 +102,7 @@ TextReadBlossom_Test::runTask_test()
     std::string errorMessage = "";
 
     TextReadBlossom readBlossom;
-    BlossomItem blossomItem;
+    Kitsunemimi::Sakura::BlossomItem blossomItem;
     blossomItem.values.insert("file_path", new DataValue(m_path));
 
     Kitsunemimi::Persistence::writeFile(m_path, m_text, errorMessage, true);
@@ -122,7 +122,7 @@ void
 TextReadBlossom_Test::postCheck_test()
 {
     TextReadBlossom readBlossom;
-    BlossomItem blossomItem;
+    Kitsunemimi::Sakura::BlossomItem blossomItem;
     blossomItem.values.insert("file_path", new DataValue(m_path));
 
     readBlossom.postCheck(blossomItem);
@@ -137,7 +137,7 @@ void
 TextReadBlossom_Test::closeTask_test()
 {
     TextReadBlossom readBlossom;
-    BlossomItem blossomItem;
+    Kitsunemimi::Sakura::BlossomItem blossomItem;
     blossomItem.values.insert("file_path", new DataValue(m_path));
 
     readBlossom.initBlossom(blossomItem);

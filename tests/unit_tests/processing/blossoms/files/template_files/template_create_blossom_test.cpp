@@ -52,7 +52,7 @@ TemplateCreateBlossom_Test::initTestCase()
     m_localTemplatePath = "TemplateCreateBlossom_Test_testfile_source";
     m_destinationFile = "/tmp/TemplateCreateBlossom_Test_testfile_destination";
 
-    BlossomItem fakeItem;
+    Kitsunemimi::Sakura::BlossomItem fakeItem;
     runSyncProcess("mkdir /tmp/templates");
     runSyncProcess("rm " + m_templatePath);
     runSyncProcess("rm " + m_destinationFile);
@@ -64,7 +64,7 @@ TemplateCreateBlossom_Test::initTestCase()
 void
 TemplateCreateBlossom_Test::initTask_test()
 {
-    BlossomItem fakeItem;
+    Kitsunemimi::Sakura::BlossomItem fakeItem;
     fakeItem.blossomPath = "/tmp/";
     TemplateCreateFileBlossom fakeCreateBlossom;
 
@@ -89,7 +89,7 @@ TemplateCreateBlossom_Test::preCheck_test()
 {
     std::string errorMessage = "";
 
-    BlossomItem fakeItem;
+    Kitsunemimi::Sakura::BlossomItem fakeItem;
     fakeItem.blossomPath = "/tmp/";
     fakeItem.values.insert("source_path", new DataValue(m_localTemplatePath));
     fakeItem.values.insert("dest_path", new DataValue(m_destinationFile));
@@ -133,7 +133,7 @@ TemplateCreateBlossom_Test::preCheck_test()
 void
 TemplateCreateBlossom_Test::runTask_test()
 {
-    BlossomItem fakeItem;
+    Kitsunemimi::Sakura::BlossomItem fakeItem;
     fakeItem.blossomPath = "/tmp/";
     fakeItem.values.insert("source_path", new DataValue(m_localTemplatePath));
     fakeItem.values.insert("dest_path", new DataValue(m_destinationFile));
@@ -152,7 +152,7 @@ TemplateCreateBlossom_Test::runTask_test()
 void
 TemplateCreateBlossom_Test::postCheck_test()
 {
-    BlossomItem fakeItem;
+    Kitsunemimi::Sakura::BlossomItem fakeItem;
     fakeItem.blossomPath = "/tmp/";
     fakeItem.values.insert("source_path", new DataValue(m_localTemplatePath));
     fakeItem.values.insert("dest_path", new DataValue(m_destinationFile));
@@ -174,7 +174,7 @@ TemplateCreateBlossom_Test::postCheck_test()
 void
 TemplateCreateBlossom_Test::closeTask_test()
 {
-    BlossomItem fakeItem;
+    Kitsunemimi::Sakura::BlossomItem fakeItem;
     fakeItem.blossomPath = "/tmp/";
     fakeItem.values.insert("source_path", new DataValue(m_localTemplatePath));
     fakeItem.values.insert("dest_path", new DataValue(m_destinationFile));

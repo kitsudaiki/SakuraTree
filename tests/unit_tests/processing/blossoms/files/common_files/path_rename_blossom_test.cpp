@@ -44,7 +44,7 @@ PathRenameBlossom_Test::initTestCase()
     m_destinationFileName = "FileRenameBlossom_Test_testfile_destination";
     m_destinationFile = "/tmp/FileRenameBlossom_Test_testfile_destination";
 
-    BlossomItem fakeItem;
+    Kitsunemimi::Sakura::BlossomItem fakeItem;
     runSyncProcess("rm " + m_sourceFile);
     runSyncProcess("rm " + m_destinationFile);
 }
@@ -55,7 +55,7 @@ PathRenameBlossom_Test::initTestCase()
 void
 PathRenameBlossom_Test::initTask_test()
 {
-    BlossomItem fakeItem;
+    Kitsunemimi::Sakura::BlossomItem fakeItem;
     PathRenameBlossom fakeRenameBlossom;
 
     fakeItem.values.insert("path", new DataValue(m_sourceFile));
@@ -74,7 +74,7 @@ PathRenameBlossom_Test::initTask_test()
 void
 PathRenameBlossom_Test::preCheck_test()
 {
-    BlossomItem fakeItem;
+    Kitsunemimi::Sakura::BlossomItem fakeItem;
     fakeItem.values.insert("path", new DataValue(m_sourceFile));
     fakeItem.values.insert("new_name", new DataValue(m_destinationFileName));
 
@@ -110,7 +110,7 @@ PathRenameBlossom_Test::preCheck_test()
 void
 PathRenameBlossom_Test::runTask_test()
 {
-    BlossomItem fakeItem;
+    Kitsunemimi::Sakura::BlossomItem fakeItem;
     fakeItem.values.insert("path", new DataValue(m_sourceFile));
     fakeItem.values.insert("new_name", new DataValue(m_destinationFileName));
 
@@ -135,7 +135,7 @@ PathRenameBlossom_Test::runTask_test()
 void
 PathRenameBlossom_Test::postCheck_test()
 {
-    BlossomItem fakeItem;
+    Kitsunemimi::Sakura::BlossomItem fakeItem;
     fakeItem.values.insert("path", new DataValue(m_sourceFile));
     fakeItem.values.insert("new_name", new DataValue(m_destinationFileName));
 
@@ -162,7 +162,7 @@ PathRenameBlossom_Test::postCheck_test()
 void
 PathRenameBlossom_Test::closeTask_test()
 {
-    BlossomItem fakeItem;
+    Kitsunemimi::Sakura::BlossomItem fakeItem;
     fakeItem.values.insert("path", new DataValue(m_sourceFile));
     fakeItem.values.insert("new_name", new DataValue(m_destinationFileName));
 

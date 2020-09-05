@@ -43,7 +43,7 @@ PathCopyBlossom_Test::initTestCase()
     m_sourceFile = "/tmp/FileCopyBlossom_Test_testfile_source";
     m_destinationFile = "/tmp/FileCopyBlossom_Test_testfile_destination";
 
-    BlossomItem fakeItem;
+    Kitsunemimi::Sakura::BlossomItem fakeItem;
     runSyncProcess("rm " + m_sourceFile);
     runSyncProcess("rm " + m_destinationFile);
 }
@@ -54,7 +54,7 @@ PathCopyBlossom_Test::initTestCase()
 void
 PathCopyBlossom_Test::initTask_test()
 {
-    BlossomItem fakeItem;
+    Kitsunemimi::Sakura::BlossomItem fakeItem;
     PathCopyBlossom fakeCopyBlossom;
 
     fakeItem.values.insert("source_path", new DataValue(m_sourceFile));
@@ -73,7 +73,7 @@ PathCopyBlossom_Test::initTask_test()
 void
 PathCopyBlossom_Test::preCheck_test()
 {
-    BlossomItem fakeItem;
+    Kitsunemimi::Sakura::BlossomItem fakeItem;
     fakeItem.values.insert("source_path", new DataValue(m_sourceFile));
     fakeItem.values.insert("dest_path", new DataValue(m_destinationFile));
 
@@ -105,7 +105,7 @@ PathCopyBlossom_Test::preCheck_test()
 void
 PathCopyBlossom_Test::runTask_test()
 {
-    BlossomItem fakeItem;
+    Kitsunemimi::Sakura::BlossomItem fakeItem;
     fakeItem.values.insert("source_path", new DataValue(m_sourceFile));
     fakeItem.values.insert("dest_path", new DataValue(m_destinationFile));
 
@@ -127,7 +127,7 @@ PathCopyBlossom_Test::runTask_test()
 void
 PathCopyBlossom_Test::postCheck_test()
 {
-    BlossomItem fakeItem;
+    Kitsunemimi::Sakura::BlossomItem fakeItem;
     fakeItem.values.insert("source_path", new DataValue(m_sourceFile));
     fakeItem.values.insert("dest_path", new DataValue(m_destinationFile));
 
@@ -150,7 +150,7 @@ PathCopyBlossom_Test::postCheck_test()
 void
 PathCopyBlossom_Test::closeTask_test()
 {
-    BlossomItem fakeItem;
+    Kitsunemimi::Sakura::BlossomItem fakeItem;
     fakeItem.values.insert("source_path", new DataValue(m_sourceFile));
     fakeItem.values.insert("dest_path", new DataValue(m_destinationFile));
 

@@ -24,79 +24,39 @@
 #define SAKURA_ROOT_H
 
 #include <common.h>
-#include <unistd.h>
 #include <libKitsunemimiCommon/common_items/table_item.h>
 
 namespace Kitsunemimi
 {
-namespace Jinja2 {
-class Jinja2Converter;
-}
 namespace Sakura {
 class SakuraNetwork;
+class SakuraLangInterface;
 }
 namespace Project {
 class Session;
 }
 }
 
-using Kitsunemimi::Jinja2::Jinja2Converter;
-
-class SakuraThread;
-class ThreadPool;
-
 class SakuraRoot
 {
 
 public:
-    SakuraRoot(const std::string &executablePath,
-               const bool enableDebug = false);
+    SakuraRoot(const std::string &executablePath);
     ~SakuraRoot();
 
     // start processing
-    bool startProcess(const std::string &configFilePath);
     bool startProcess(const std::string &inputPath,
                       const DataMap &initialValues,
-                      const bool dryRun = false,
-                      const std::string &serverAddress = "",
-                      const uint16_t serverPort = 1337);
-    bool startSubtreeProcess(const std::string &relativePath,
-                             const std::string &values,
-                             Kitsunemimi::Project::Session* session,
-                             const uint64_t blockerId);
-
-    // output
-    void printOutput(const BlossomGroupItem &blossomGroupItem);
-    void printOutput(const BlossomItem &blossomItem);
-    void printOutput(const std::string &output);
+                      const bool enableDebug,
+                      const bool dryRun = false);
 
     // static values
     static SakuraRoot* m_root;
     static std::string m_executablePath;
-    static std::string m_serverAddress;
-    static uint16_t m_serverPort;
-    static Jinja2Converter* m_jinja2Converter;
-    static Kitsunemimi::Sakura::SakuraGarden* m_currentGarden;
-    static Kitsunemimi::Sakura::SakuraNetwork* m_networking;
-
-    bool m_enableDebug = false;
-    ThreadPool* m_threadPool = nullptr;
+    static Kitsunemimi::Sakura::SakuraLangInterface* m_interface;
 
 private:
-    SakuraThread* m_rootThread = nullptr;
-
-    std::mutex m_mutex;
-
-    bool runProcess(SakuraItem* item,
-                    const DataMap &initialValues,
-                    std::string &errorMessage);
-    bool processSeed(const std::string &seedPath,
-                     const std::string &serverAddress,
-                     const uint16_t serverPort,
-                     std::string &errorMessage);
-    SeedInitItem* prepareSeed(const std::string &seedPath,
-                              std::string &errorMessage);
-    bool loadPredefinedSubtrees(std::string &errorMessage);
+    void initBlossoms();
 };
 
 #endif // SAKURA_ROOT_H

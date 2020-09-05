@@ -23,59 +23,63 @@
 #include "sakura_root.h"
 #include <config.h>
 
-#include <processing/common/item_methods.h>
-#include <processing/sakura_thread.h>
-#include <processing/sakura_tree_callbacks.h>
-#include <processing/thread_pool.h>
-#include <processing/validator.h>
+#include <libKitsunemimiSakuraLang/sakura_lang_interface.h>
 
-#include <libKitsunemimiSakuraNetwork/sakura_network.h>
-#include <libKitsunemimiSakuraLang/sakura_parsing.h>
-#include <libKitsunemimiSakuraLang/sakura_items.h>
-
-#include <libKitsunemimiJinja2/jinja2_converter.h>
-#include <libKitsunemimiJson/json_item.h>
 #include <libKitsunemimiConfig/config_handler.h>
 #include <libKitsunemimiCommon/common_methods/string_methods.h>
 
 #include <libKitsunemimiPersistence/logger/logger.h>
 #include <libKitsunemimiPersistence/files/file_methods.h>
 
-#include <sakura_provisioning_subtree.h>
+#include <blossoms/install/apt/apt_absent_blossom.h>
+#include <blossoms/install/apt/apt_latest_blossom.h>
+#include <blossoms/install/apt/apt_present_blossom.h>
+#include <blossoms/install/apt/apt_update_blossom.h>
+#include <blossoms/install/apt/apt_upgrade_blossom.h>
+
+#include <blossoms/ssh/ssh_cmd_blossom.h>
+#include <blossoms/ssh/ssh_scp_blossom.h>
+#include <blossoms/ssh/ssh_cmd_create_file_blossom.h>
+
+#include <blossoms/special/print_blossom.h>
+#include <blossoms/special/cmd_blossom.h>
+#include <blossoms/special/assert_blossom.h>
+#include <blossoms/special/exit_blossom.h>
+#include <blossoms/special/item_update_blossom.h>
+
+#include <blossoms/files/common_files/path_copy_blossom.h>
+#include <blossoms/files/common_files/path_delete_blossom.h>
+#include <blossoms/files/common_files/path_rename_blossom.h>
+#include <blossoms/files/common_files/path_chmod_blossom.h>
+#include <blossoms/files/common_files/path_chown_blossom.h>
+
+#include <blossoms/files/template_files/template_create_file_blossom.h>
+#include <blossoms/files/template_files/template_create_string_blossom.h>
+
+#include <blossoms/files/text_files/text_append_blossom.h>
+#include <blossoms/files/text_files/text_read_blossom.h>
+#include <blossoms/files/text_files/text_replace_blossom.h>
+#include <blossoms/files/text_files/text_write_blossom.h>
+
+#include <blossoms/files/ini_files/ini_delete_entry_blossom.h>
+#include <blossoms/files/ini_files/ini_read_entry_blossom.h>
+#include <blossoms/files/ini_files/ini_set_entry_blossom.h>
 
 SakuraRoot* SakuraRoot::m_root = nullptr;
 std::string SakuraRoot::m_executablePath = "";
-std::string SakuraRoot::m_serverAddress = "127.0.0.1";
-uint16_t SakuraRoot::m_serverPort = 1337;
-Jinja2Converter* SakuraRoot::m_jinja2Converter = nullptr;
-Kitsunemimi::Sakura::SakuraGarden* SakuraRoot::m_currentGarden = nullptr;
-Kitsunemimi::Sakura::SakuraNetwork* SakuraRoot::m_networking = nullptr;
+Kitsunemimi::Sakura::SakuraLangInterface* SakuraRoot::m_interface = nullptr;
 
 /**
  * @brief constructor
  *
  * @param executablePath path of the current executed SakuraTree-binary
  */
-SakuraRoot::SakuraRoot(const std::string &executablePath,
-                       const bool enableDebug)
+SakuraRoot::SakuraRoot(const std::string &executablePath)
 {
-    m_enableDebug = enableDebug;
-
     // initialzed static variables
     m_root = this;
     m_executablePath = executablePath;
-    m_jinja2Converter = new Jinja2Converter();
-    m_currentGarden = new Kitsunemimi::Sakura::SakuraGarden();
-
-    // initialize thread-pool
-    // TODO: make the number of initialized threads configurable
-    m_threadPool = new ThreadPool(8);
-
-    m_networking = new Kitsunemimi::Sakura::SakuraNetwork(this,
-                                                          &sessionCallback,
-                                                          &objectTransferCallback,
-                                                          &seedTriggerCallback,
-                                                          &blossomOutputCallback);
+    m_interface = new Kitsunemimi::Sakura::SakuraLangInterface();
 }
 
 /**
@@ -83,49 +87,6 @@ SakuraRoot::SakuraRoot(const std::string &executablePath,
  */
 SakuraRoot::~SakuraRoot()
 {
-    // TODO: clear thread-pool and subtree-queue
-    if(m_rootThread != nullptr)
-    {
-        m_rootThread->stopThread();
-        delete m_rootThread;
-        m_rootThread = nullptr;
-    }
-}
-
-/**
- * @brief SakuraRoot::startProcess
- * @param configFilePath
- * @return
- */
-bool
-SakuraRoot::startProcess(const std::string &configFilePath)
-{
-    bool success = Kitsunemimi::Config::initConfig(configFilePath);
-    if(success == false) {
-        return false;
-    }
-
-    // load config definition
-    registerConfigs();
-
-    const bool debug = GET_BOOL_CONFIG("DEFAULT", "debug", success);
-    Kitsunemimi::Persistence::initFileLogger("/tmp/", "SakuraTree_log", debug);
-    Kitsunemimi::Persistence::setDebugFlag(debug);
-
-    const std::string address = GET_STRING_CONFIG("server", "server_address", success);
-    // TODO: log-error
-    assert(success);
-    const uint16_t port = static_cast<uint16_t>(GET_INT_CONFIG("server", "server_port", success));
-    // TODO: log-error
-    assert(success);
-    m_networking->createClientConnection(address, port);
-
-    // TODO: better solution
-    while(true) {
-        sleep(1);
-    }
-
-    return true;
 }
 
 /**
@@ -142,21 +103,12 @@ SakuraRoot::startProcess(const std::string &configFilePath)
 bool
 SakuraRoot::startProcess(const std::string &inputPath,
                          const DataMap &initialValues,
-                         const bool dryRun,
-                         const std::string &serverAddress,
-                         const uint16_t serverPort)
+                         const bool enableDebug,
+                         const bool dryRun)
 {
     std::string errorMessage = "";
 
-    m_serverAddress = serverAddress;
-    m_serverPort = serverPort;
-
-    // load predefined trees
-    if(loadPredefinedSubtrees(errorMessage) == false)
-    {
-        LOG_ERROR("Failed to load predefined trees\n    " + errorMessage);
-        return false;
-    }
+    initBlossoms();
 
     // set default-file in case that a directory instead of a file was selected
     std::string treeFile = inputPath;
@@ -164,220 +116,49 @@ SakuraRoot::startProcess(const std::string &inputPath,
         treeFile = treeFile + "/root.sakura";
     }
 
-    // parse all files
-    if(m_currentGarden->addTree(treeFile, errorMessage) == false)
-    {
-        LOG_ERROR("failed to add trees\n    " + errorMessage);
-        return false;
-    }
-
-    SakuraItem* tree = nullptr;
-
-    // get initial sakura-file
-    if(bfs::is_regular_file(treeFile))
-    {
-        const bfs::path parent = bfs::path(treeFile).parent_path();
-        const std::string relPath = bfs::relative(treeFile, parent).string();
-
-        tree = m_currentGarden->getTree(relPath, parent.string());
-    }
-
-    if(tree == nullptr)
-    {
-        LOG_ERROR("No tree found for the input-path " + treeFile);
-        return false;
-    }
-
-    // check if input-values match with the first tree
-    const std::vector<std::string> failedInput = checkInput(tree->values, initialValues);
-    if(failedInput.size() > 0)
-    {
-        std::string errorMessage = "Following input-values are not valid for the initial tress:\n";
-        for(const std::string& item : failedInput)
-        {
-            errorMessage += "    " + item + "\n";
-        }
-        LOG_ERROR(errorMessage);
-        return false;
-    }
-
-    // validate parsed blossoms
-    errorMessage = "";
-    if(checkAllItems(*m_currentGarden, errorMessage) == false)
-    {
-        LOG_ERROR("\n" + errorMessage);
-        return false;
-    }
-
-    // in case of a dry-run, cancel here before executing the scripts
-    if(dryRun)
-    {
-        LOG_INFO("dry-run successfully finished", GREEN_COLOR);
-        return true;
-    }
-
-    LOG_INFO(ASCII_LOGO, PINK_COLOR);
-
-    // process sakura-file with initial values
-    errorMessage = "";
-    if(runProcess(tree, initialValues, errorMessage) == false)
-    {
-        LOG_ERROR("\n" + errorMessage);
-        return false;
-    }
-
-    LOG_INFO("finish", GREEN_COLOR);
-
-    // close connection to all hosts
-    m_networking->closeAllSessions();
-
-    return true;
+    return m_interface->processFiles(treeFile,
+                                     initialValues,
+                                     enableDebug,
+                                     dryRun);
 }
 
 /**
- * @brief SakuraRoot::startSubtreeProcess
- * @param treeId
- * @param values
- * @return
- */
-bool
-SakuraRoot::startSubtreeProcess(const std::string &relativePath,
-                                const std::string &values,
-                                Kitsunemimi::Project::Session* session,
-                                const uint64_t blockerId)
-{
-    std::cout<<"startSubtreeProcess"<<std::endl;
-
-    // get tree
-    SakuraItem* processPlan = m_currentGarden->getTree(relativePath);
-    if(processPlan == nullptr) {
-        return false;
-    }
-
-    // run process
-    JsonItem valuesJson;
-    std::string errorMessage = "";
-    valuesJson.parse(values, errorMessage);
-
-    std::vector<SakuraItem*> childs;
-    childs.push_back(processPlan);
-    std::vector<std::string> hierarchy;
-
-    SubtreeQueue* queue = &m_threadPool->m_queue;
-    const bool result = queue->spawnParallelSubtrees(childs,
-                                                     0,
-                                                     1,
-                                                     "",
-                                                     hierarchy,
-                                                     *valuesJson.getItemContent()->toMap(),
-                                                     errorMessage,
-                                                     session,
-                                                     blockerId);
-    return result;
-}
-
-/**
- * @brief SakuraRoot::printOutput
- * @param blossomItem
+ * @brief SakuraRoot::initBlossoms
  */
 void
-SakuraRoot::printOutput(const BlossomGroupItem &blossomGroupItem)
+SakuraRoot::initBlossoms()
 {
-    std::string output = "";
+    m_interface->addBlossom("apt", "absent", new AptAbsentBlossom());
+    m_interface->addBlossom("apt", "latest", new AptLatestBlossom());
+    m_interface->addBlossom("apt", "present", new AptPresentBlossom());
+    m_interface->addBlossom("apt", "update", new AptUdateBlossom());
+    m_interface->addBlossom("apt", "upgrade", new AptUpgradeBlossom());
 
-    // print call-hierarchy
-    for(uint32_t i = 0; i < blossomGroupItem.nameHirarchie.size(); i++)
-    {
-        for(uint32_t j = 0; j < i; j++)
-        {
-            output += "   ";
-        }
-        output += blossomGroupItem.nameHirarchie.at(i) + "\n";
-    }
+    m_interface->addBlossom("ini_file", "delete", new IniDeleteEntryBlossom());
+    m_interface->addBlossom("ini_file", "read", new IniReadEntryBlossom());
+    m_interface->addBlossom("ini_file", "set", new IniSetEntryBlossom());
 
-    printOutput(output);
-}
+    m_interface->addBlossom("path", "chmod", new PathChmodBlossom());
+    m_interface->addBlossom("path", "chown", new PathChownBlossom());
+    m_interface->addBlossom("path", "copy", new PathCopyBlossom());
+    m_interface->addBlossom("path", "delete", new PathDeleteBlossom());
+    m_interface->addBlossom("path", "rename", new PathRenameBlossom());
 
-/**
- * @brief SakuraRoot::printOutput
- * @param blossomItem
- */
-void
-SakuraRoot::printOutput(const BlossomItem &blossomItem)
-{
-    const std::string output = convertBlossomOutput(blossomItem);
+    m_interface->addBlossom("template", "create_string", new TemplateCreateStringBlossom());
+    m_interface->addBlossom("template", "create_file", new TemplateCreateFileBlossom());
 
-    // only for prototyping hardcoded
-    //m_networking->sendBlossomOuput("127.0.0.1", "", output);
-    printOutput(output);
-}
+    m_interface->addBlossom("special", "assert", new AssertBlossom());
+    m_interface->addBlossom("special", "cmd", new CmdBlossom());
+    m_interface->addBlossom("special", "exit", new ExitBlossom());
+    m_interface->addBlossom("special", "item_update", new ItemUpdateBlossom());
+    m_interface->addBlossom("special", "print", new PrintBlossom());
 
-/**
- * @brief print output-string
- *
- * @param output string, which should be printed
- */
-void
-SakuraRoot::printOutput(const std::string &output)
-{
-    // TODO: use logger instead
-    m_mutex.lock();
+    m_interface->addBlossom("text_file", "append", new TextAppendBlossom());
+    m_interface->addBlossom("text_file", "read", new TextReadBlossom());
+    m_interface->addBlossom("text_file", "replace", new TextReplaceBlossom());
+    m_interface->addBlossom("text_file", "write", new TextWriteBlossom());
 
-    // get width of the termial to draw the separator-line
-    struct winsize size;
-    ioctl(STDOUT_FILENO, TIOCGWINSZ, &size);
-    uint32_t terminalWidth = size.ws_col;
-    if(terminalWidth > 500) {
-        terminalWidth = 500;
-    }
-
-    // draw separator line
-    std::string line(terminalWidth, '=');
-
-    LOG_INFO(line + "\n\n" + output + "\n");
-
-    m_mutex.unlock();
-}
-
-/**
- * @brief SakuraRoot::runProcess
- * @return
- */
-bool
-SakuraRoot::runProcess(SakuraItem* item,
-                       const DataMap &initialValues,
-                       std::string &errorMessage)
-{
-    std::vector<SakuraItem*> childs;
-    childs.push_back(item);
-    std::vector<std::string> hierarchy;
-
-    SubtreeQueue* queue = &m_threadPool->m_queue;
-    const bool result = queue->spawnParallelSubtrees(childs,
-                                                     0,
-                                                     1,
-                                                     "",
-                                                     hierarchy,
-                                                     initialValues,
-                                                     errorMessage);
-    return result;
-}
-
-/**
- * @brief load predefined subtrees
- */
-bool
-SakuraRoot::loadPredefinedSubtrees(std::string &errorMessage)
-{
-    // get predifile provisioning subtree
-    std::string provisioningSubtree(reinterpret_cast<char*>(sakura_provisioning_subtree_tree),
-                                    sakura_provisioning_subtree_tree_len);
-    Kitsunemimi::replaceSubstring(provisioningSubtree, "\\n", "\n");
-
-    bool ret = m_currentGarden->addResource(provisioningSubtree, errorMessage);
-    if(ret == false) {
-        return false;
-    }
-
-    return true;
+    m_interface->addBlossom("ssh", "file_create", new SshCmdCreateFileBlossom());
+    m_interface->addBlossom("ssh", "scp", new SshScpBlossom());
+    m_interface->addBlossom("ssh", "cmd", new SshCmdBlossom());
 }

@@ -39,7 +39,7 @@ PathDeleteBlossom_Test::initTestCase()
 {
     m_path = "/tmp/FileDeleteBlossom_Test_testfile";
 
-    BlossomItem fakeItem;
+    Kitsunemimi::Sakura::BlossomItem fakeItem;
     runSyncProcess("rm " + m_path);
 }
 
@@ -49,7 +49,7 @@ PathDeleteBlossom_Test::initTestCase()
 void
 PathDeleteBlossom_Test::initTask_test()
 {
-    BlossomItem fakeItem;
+    Kitsunemimi::Sakura::BlossomItem fakeItem;
     PathDeleteBlossom fakeDeleteBlossom;
 
     fakeItem.values.insert("path", new DataValue(m_path));
@@ -66,7 +66,7 @@ PathDeleteBlossom_Test::initTask_test()
 void
 PathDeleteBlossom_Test::preCheck_test()
 {
-    BlossomItem fakeItem;
+    Kitsunemimi::Sakura::BlossomItem fakeItem;
     fakeItem.values.insert("path", new DataValue(m_path));
 
     PathDeleteBlossom fakeDeleteBlossom;
@@ -89,7 +89,7 @@ PathDeleteBlossom_Test::preCheck_test()
 void
 PathDeleteBlossom_Test::runTask_test()
 {
-    BlossomItem fakeItem;
+    Kitsunemimi::Sakura::BlossomItem fakeItem;
     fakeItem.values.insert("path", new DataValue(m_path));
 
     PathDeleteBlossom fakeDeleteBlossom;
@@ -113,7 +113,7 @@ PathDeleteBlossom_Test::runTask_test()
 void
 PathDeleteBlossom_Test::postCheck_test()
 {
-    BlossomItem fakeItem;
+    Kitsunemimi::Sakura::BlossomItem fakeItem;
     fakeItem.values.insert("path", new DataValue(m_path));
 
     PathDeleteBlossom fakeDeleteBlossom;
@@ -135,7 +135,7 @@ PathDeleteBlossom_Test::postCheck_test()
 void
 PathDeleteBlossom_Test::closeTask_test()
 {
-    BlossomItem fakeItem;
+    Kitsunemimi::Sakura::BlossomItem fakeItem;
     fakeItem.values.insert("path", new DataValue(m_path));
 
     PathDeleteBlossom fakeDeleteBlossom;

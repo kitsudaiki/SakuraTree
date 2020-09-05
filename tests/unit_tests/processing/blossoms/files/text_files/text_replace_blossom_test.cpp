@@ -44,7 +44,7 @@ TextReplaceBlossom_Test::initTestCase()
     m_oldText = "test";
     m_newText = "fake";
 
-    BlossomItem fakeItem;
+    Kitsunemimi::Sakura::BlossomItem fakeItem;
     runSyncProcess("rm " + m_path);
 }
 
@@ -55,7 +55,7 @@ void
 TextReplaceBlossom_Test::initTask_test()
 {
     TextReplaceBlossom replaceBlossom;
-    BlossomItem blossomItem;
+    Kitsunemimi::Sakura::BlossomItem blossomItem;
 
     blossomItem.values.insert("file_path", new DataValue(m_path));
     blossomItem.values.insert("old_text", new DataValue(m_oldText));
@@ -76,7 +76,7 @@ void
 TextReplaceBlossom_Test::preCheck_test()
 {
     TextReplaceBlossom replaceBlossom;
-    BlossomItem blossomItem;
+    Kitsunemimi::Sakura::BlossomItem blossomItem;
     blossomItem.values.insert("file_path", new DataValue(m_path));
     blossomItem.values.insert("old_text", new DataValue(m_oldText));
     blossomItem.values.insert("new_text", new DataValue(m_newText));
@@ -111,7 +111,7 @@ TextReplaceBlossom_Test::runTask_test()
     std::string errorMessage = "";
 
     TextReplaceBlossom replaceBlossom;
-    BlossomItem blossomItem;
+    Kitsunemimi::Sakura::BlossomItem blossomItem;
     blossomItem.values.insert("file_path", new DataValue(m_path));
     blossomItem.values.insert("old_text", new DataValue(m_oldText));
     blossomItem.values.insert("new_text", new DataValue(m_newText));
@@ -138,7 +138,7 @@ void
 TextReplaceBlossom_Test::postCheck_test()
 {
     TextReplaceBlossom replaceBlossom;
-    BlossomItem blossomItem;
+    Kitsunemimi::Sakura::BlossomItem blossomItem;
     blossomItem.values.insert("file_path", new DataValue(m_path));
     blossomItem.values.insert("old_text", new DataValue(m_oldText));
     blossomItem.values.insert("new_text", new DataValue(m_newText));
@@ -155,7 +155,7 @@ void
 TextReplaceBlossom_Test::closeTask_test()
 {
     TextReplaceBlossom replaceBlossom;
-    BlossomItem blossomItem;
+    Kitsunemimi::Sakura::BlossomItem blossomItem;
     blossomItem.values.insert("file_path", new DataValue(m_path));
     blossomItem.values.insert("old_text", new DataValue(m_oldText));
     blossomItem.values.insert("new_text", new DataValue(m_newText));

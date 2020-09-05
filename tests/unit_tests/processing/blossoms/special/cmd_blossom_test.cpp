@@ -48,7 +48,7 @@ CmdBlossom_Test::initTestCase()
     m_filePath = "/tmp/CmdBlossom_Test_file";
     m_command = "touch " + m_filePath;
 
-    BlossomItem fakeItem;
+    Kitsunemimi::Sakura::BlossomItem fakeItem;
     runSyncProcess("rm " + m_filePath);
 }
 
@@ -58,7 +58,7 @@ CmdBlossom_Test::initTestCase()
 void
 CmdBlossom_Test::initTask_test()
 {
-    BlossomItem fakeItem;
+    Kitsunemimi::Sakura::BlossomItem fakeItem;
     fakeItem.blossomPath = "/tmp/";
     CmdBlossom fakeCmdBlossom;
 
@@ -74,7 +74,7 @@ CmdBlossom_Test::initTask_test()
 void
 CmdBlossom_Test::preCheck_test()
 {
-    BlossomItem fakeItem;
+    Kitsunemimi::Sakura::BlossomItem fakeItem;
     fakeItem.values.insert("command", new DataValue(m_command));
     CmdBlossom fakeCmdBlossom;
 
@@ -89,7 +89,7 @@ CmdBlossom_Test::preCheck_test()
 void
 CmdBlossom_Test::runTask_test()
 {
-    BlossomItem fakeItem;
+    Kitsunemimi::Sakura::BlossomItem fakeItem;
     fakeItem.values.insert("command", new DataValue(m_command));
     CmdBlossom fakeCmdBlossom;
 
@@ -109,7 +109,7 @@ CmdBlossom_Test::runTask_test()
 void
 CmdBlossom_Test::postCheck_test()
 {
-    BlossomItem fakeItem;
+    Kitsunemimi::Sakura::BlossomItem fakeItem;
     fakeItem.values.insert("command", new DataValue(m_command));
     CmdBlossom fakeCmdBlossom;
 
@@ -124,7 +124,7 @@ CmdBlossom_Test::postCheck_test()
 void
 CmdBlossom_Test::closeTask_test()
 {
-    BlossomItem fakeItem;
+    Kitsunemimi::Sakura::BlossomItem fakeItem;
     fakeItem.values.insert("command", new DataValue(m_command));
     CmdBlossom fakeCmdBlossom;
 
