@@ -94,26 +94,15 @@ int main(int argc, char *argv[])
     }
     std::cout<<"absolute input-path: "<<inputPath<<std::endl;
 
-    SakuraRoot* root = new SakuraRoot(std::string(argv[0]),
-                                                  enableDebug);
+    SakuraRoot* root = new SakuraRoot(std::string(argv[0]));
 
-    if(argParser.wasSet("use-config"))
+    if(root->startProcess(inputPath.string(),
+                          itemInputValues,
+                          enableDebug,
+                          argParser.wasSet("dry-run")))
     {
-        if(root->startProcess(inputPath.string()) == false) {
-            return 1;
-        }
-    }
-    else
-    {
-        if(root->startProcess(inputPath.string(),
-                              itemInputValues,
-                              argParser.wasSet("dry-run"),
-                              listenAddress,
-                              listenPort) == false)
-        {
-            return 1;
-        }
+        return 0;
     }
 
-    return 0;
+    return 1;
 }

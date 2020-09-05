@@ -4,6 +4,10 @@ TARGET = SakuraTree
 CONFIG += console
 CONFIG += c++14
 
+INCLUDEPATH += $$PWD \
+               src
+
+
 LIBS += -L../../libKitsunemimiArgs/src -lKitsunemimiArgs
 LIBS += -L../../libKitsunemimiArgs/src/debug -lKitsunemimiArgs
 LIBS += -L../../libKitsunemimiArgs/src/release -lKitsunemimiArgs
@@ -14,10 +18,10 @@ LIBS += -L../../libKitsunemimiConfig/src/debug -lKitsunemimiConfig
 LIBS += -L../../libKitsunemimiConfig/src/release -lKitsunemimiConfig
 INCLUDEPATH += ../../libKitsunemimiConfig/include
 
-LIBS += -L../../libKitsunemimiSakuraNetwork/src -lKitsunemimiSakuraNetwork
-LIBS += -L../../libKitsunemimiSakuraNetwork/src/debug -lKitsunemimiSakuraNetwork
-LIBS += -L../../libKitsunemimiSakuraNetwork/src/release -lKitsunemimiSakuraNetwork
-INCLUDEPATH += ../../libKitsunemimiSakuraNetwork/include
+LIBS += -L../../libKitsunemimiSakuraLang/src -lKitsunemimiSakuraLang
+LIBS += -L../../libKitsunemimiSakuraLang/src/debug -lKitsunemimiSakuraLang
+LIBS += -L../../libKitsunemimiSakuraLang/src/release -lKitsunemimiSakuraLang
+INCLUDEPATH += ../../libKitsunemimiSakuraLang/include
 
 LIBS += -L../../libKitsunemimiProjectNetwork/src -lKitsunemimiProjectNetwork
 LIBS += -L../../libKitsunemimiProjectNetwork/src/debug -lKitsunemimiProjectNetwork
@@ -54,106 +58,89 @@ LIBS += -L../../libKitsunemimiIni/src/debug -lKitsunemimiIni
 LIBS += -L../../libKitsunemimiIni/src/release -lKitsunemimiIni
 INCLUDEPATH += ../../libKitsunemimiIni/include
 
-LIBS += -L../../libKitsunemimiSakuraLang/src -lKitsunemimiSakuraLang
-LIBS += -L../../libKitsunemimiSakuraLang/src/debug -lKitsunemimiSakuraLang
-LIBS += -L../../libKitsunemimiSakuraLang/src/release -lKitsunemimiSakuraLang
-INCLUDEPATH += ../../libKitsunemimiSakuraLang/include
-
 LIBS +=  -lboost_filesystem -lboost_system -lssl -lcrypto
 
-INCLUDEPATH += $$PWD \
-               src
 
 HEADERS += \
+    blossoms/files/common_files/path_chmod_blossom.h \
+    blossoms/files/common_files/path_chown_blossom.h \
+    blossoms/files/common_files/path_copy_blossom.h \
+    blossoms/files/common_files/path_delete_blossom.h \
+    blossoms/files/common_files/path_rename_blossom.h \
+    blossoms/files/ini_files/ini_delete_entry_blossom.h \
+    blossoms/files/ini_files/ini_read_entry_blossom.h \
+    blossoms/files/ini_files/ini_set_entry_blossom.h \
+    blossoms/files/template_files/template_create_file_blossom.h \
+    blossoms/files/template_files/template_create_string_blossom.h \
+    blossoms/files/template_files/template_methods.h \
+    blossoms/files/text_files/text_append_blossom.h \
+    blossoms/files/text_files/text_read_blossom.h \
+    blossoms/files/text_files/text_replace_blossom.h \
+    blossoms/files/text_files/text_write_blossom.h \
+    blossoms/install/apt/apt_absent_blossom.h \
+    blossoms/install/apt/apt_latest_blossom.h \
+    blossoms/install/apt/apt_methods.h \
+    blossoms/install/apt/apt_present_blossom.h \
+    blossoms/install/apt/apt_update_blossom.h \
+    blossoms/install/apt/apt_upgrade_blossom.h \
+    blossoms/special/assert_blossom.h \
+    blossoms/special/cmd_blossom.h \
+    blossoms/special/exit_blossom.h \
+    blossoms/special/item_update_blossom.h \
+    blossoms/special/print_blossom.h \
+    blossoms/ssh/ssh_cmd_blossom.h \
+    blossoms/ssh/ssh_cmd_create_file_blossom.h \
+    blossoms/ssh/ssh_scp_blossom.h \
+    blossoms/blossom_getter.h \
     common/defines.h \
     common/enums.h \
     common/includes.h \
     common/typedefs.h \
-    items/sakura_items.h \
-    items/value_items.h \
-    processing/blossoms/files/ini_files/ini_delete_entry_blossom.h \
-    processing/blossoms/files/ini_files/ini_read_entry_blossom.h \
-    processing/blossoms/files/ini_files/ini_set_entry_blossom.h \
-    processing/blossoms/files/text_files/text_append_blossom.h \
-    processing/blossoms/files/text_files/text_read_blossom.h \
-    processing/blossoms/files/text_files/text_replace_blossom.h \
-    processing/blossoms/files/text_files/text_write_blossom.h \
-    processing/blossoms/install/apt/apt_absent_blossom.h \
-    processing/blossoms/install/apt/apt_latest_blossom.h \
-    processing/blossoms/install/apt/apt_methods.h \
-    processing/blossoms/install/apt/apt_present_blossom.h \
-    processing/blossoms/install/apt/apt_update_blossom.h \
-    processing/blossoms/install/apt/apt_upgrade_blossom.h \
-    processing/blossoms/special/assert_blossom.h \
-    processing/blossoms/special/cmd_blossom.h \
-    processing/blossoms/special/exit_blossom.h \
-    processing/blossoms/special/print_blossom.h \
-    processing/blossoms/ssh/ssh_cmd_blossom.h \
-    processing/blossoms/ssh/ssh_cmd_create_file_blossom.h \
-    processing/blossoms/ssh/ssh_scp_blossom.h \
-    processing/blossoms/blossom.h \
-    processing/blossoms/blossom_getter.h \
-    processing/common/item_methods.h \
-    processing/sakura_thread.h \
-    processing/sakura_tree_callbacks.h \
-    processing/subtree_queue.h \
-    processing/thread_pool.h \
-    common.h \
-    sakura_root.h \
-    processing/common/value_item_functions.h \
-    processing/blossoms/files/common_files/path_chmod_blossom.h \
-    processing/blossoms/files/common_files/path_chown_blossom.h \
-    processing/blossoms/files/common_files/path_copy_blossom.h \
-    processing/blossoms/files/common_files/path_delete_blossom.h \
-    processing/blossoms/files/common_files/path_rename_blossom.h \
-    processing/blossoms/special/item_update_blossom.h \
+    networking/host_handler.h \
+    networking/messages.h \
+    networking/network_callbacks.h \
+    networking/sakura_network.h \
     args.h \
+    common.h \
     config.h \
-    processing/blossoms/files/template_files/template_create_file_blossom.h \
-    processing/blossoms/files/template_files/template_create_string_blossom.h \
-    processing/blossoms/files/template_files/template_methods.h \
-    processing/validator.h
+    sakura_root.h \
+    sakura_tree_callbacks.h
 
 SOURCES += \
-    processing/blossoms/files/ini_files/ini_delete_entry_blossom.cpp \
-    processing/blossoms/files/ini_files/ini_read_entry_blossom.cpp \
-    processing/blossoms/files/ini_files/ini_set_entry_blossom.cpp \
-    processing/blossoms/files/text_files/text_append_blossom.cpp \
-    processing/blossoms/files/text_files/text_read_blossom.cpp \
-    processing/blossoms/files/text_files/text_replace_blossom.cpp \
-    processing/blossoms/files/text_files/text_write_blossom.cpp \
-    processing/blossoms/install/apt/apt_absent_blossom.cpp \
-    processing/blossoms/install/apt/apt_latest_bossom.cpp \
-    processing/blossoms/install/apt/apt_methods.cpp \
-    processing/blossoms/install/apt/apt_present_bossom.cpp \
-    processing/blossoms/install/apt/apt_update_blossom.cpp \
-    processing/blossoms/install/apt/apt_upgrade_blossom.cpp \
-    processing/blossoms/special/assert_blossom.cpp \
-    processing/blossoms/special/cmd_blossom.cpp \
-    processing/blossoms/special/exit_blossom.cpp \
-    processing/blossoms/special/print_blossom.cpp \
-    processing/blossoms/ssh/ssh_cmd_blossom.cpp \
-    processing/blossoms/ssh/ssh_cmd_create_file_blossom.cpp \
-    processing/blossoms/ssh/ssh_scp_blossom.cpp \
-    processing/blossoms/blossom.cpp \
-    processing/blossoms/blossom_getter.cpp \
-    processing/common/item_methods.cpp \
-    processing/common/value_item_functions.cpp \
-    processing/sakura_thread.cpp \
-    processing/subtree_queue.cpp \
-    processing/thread_pool.cpp \
-    sakura_root.cpp \
-    processing/blossoms/files/common_files/path_chmod_blossom.cpp \
-    processing/blossoms/files/common_files/path_chown_blossom.cpp \
-    processing/blossoms/files/common_files/path_copy_blossom.cpp \
-    processing/blossoms/files/common_files/path_delete_blossom.cpp \
-    processing/blossoms/files/common_files/path_rename_blossom.cpp \
-    processing/blossoms/special/item_update_blossom.cpp \
-    processing/blossoms/files/template_files/template_create_file_blossom.cpp \
-    processing/blossoms/files/template_files/template_create_string_blossom.cpp \
-    processing/blossoms/files/template_files/template_methods.cpp \
-    processing/validator.cpp \
-    main.cpp
+    blossoms/files/common_files/path_chmod_blossom.cpp \
+    blossoms/files/common_files/path_chown_blossom.cpp \
+    blossoms/files/common_files/path_copy_blossom.cpp \
+    blossoms/files/common_files/path_delete_blossom.cpp \
+    blossoms/files/common_files/path_rename_blossom.cpp \
+    blossoms/files/ini_files/ini_delete_entry_blossom.cpp \
+    blossoms/files/ini_files/ini_read_entry_blossom.cpp \
+    blossoms/files/ini_files/ini_set_entry_blossom.cpp \
+    blossoms/files/template_files/template_create_file_blossom.cpp \
+    blossoms/files/template_files/template_create_string_blossom.cpp \
+    blossoms/files/template_files/template_methods.cpp \
+    blossoms/files/text_files/text_append_blossom.cpp \
+    blossoms/files/text_files/text_read_blossom.cpp \
+    blossoms/files/text_files/text_replace_blossom.cpp \
+    blossoms/files/text_files/text_write_blossom.cpp \
+    blossoms/install/apt/apt_absent_blossom.cpp \
+    blossoms/install/apt/apt_latest_bossom.cpp \
+    blossoms/install/apt/apt_methods.cpp \
+    blossoms/install/apt/apt_present_bossom.cpp \
+    blossoms/install/apt/apt_update_blossom.cpp \
+    blossoms/install/apt/apt_upgrade_blossom.cpp \
+    blossoms/special/assert_blossom.cpp \
+    blossoms/special/cmd_blossom.cpp \
+    blossoms/special/exit_blossom.cpp \
+    blossoms/special/item_update_blossom.cpp \
+    blossoms/special/print_blossom.cpp \
+    blossoms/ssh/ssh_cmd_blossom.cpp \
+    blossoms/ssh/ssh_cmd_create_file_blossom.cpp \
+    blossoms/ssh/ssh_scp_blossom.cpp \
+    networking/host_handler.cpp \
+    networking/sakura_network.cpp \
+    main.cpp \
+    sakura_root.cpp
+
 
 SAKURA_PROVISIONING_SUBTREE = predefined_subtrees/sakura_provisioning_subtree.tree
 
@@ -167,6 +154,5 @@ sakura_provisioning_subtree.variable_out = HEADERS
 sakura_provisioning_subtree.CONFIG += target_predeps no_link
 
 QMAKE_EXTRA_COMPILERS += sakura_provisioning_subtree
-
 
 
