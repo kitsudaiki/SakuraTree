@@ -25,7 +25,7 @@
 
 #include <sakura_root.h>
 
-#include <libKitsunemimiProjectNetwork/session.h>
+#include <libKitsunemimiSakuraNetwork/session.h>
 #include <libKitsunemimiSakuraLang/sakura_parsing.h>
 #include <libKitsunemimiCommon/buffer/data_buffer.h>
 #include <libKitsunemimiPersistence/logger/logger.h>
@@ -104,7 +104,7 @@ enum objectType
 void seedTriggerCallback(void* target,
                          const std::string path,
                          const std::string values,
-                         Kitsunemimi::Project::Session* session,
+                         Kitsunemimi::Sakura::Session* session,
                          const uint64_t blockerId)
 {
     LOG_DEBUG("receive seed-trigger with relative path " + path);

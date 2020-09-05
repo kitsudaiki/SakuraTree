@@ -27,16 +27,16 @@
 #include "sakura_network.h"
 #include "host_handler.h"
 
-#include <libKitsunemimiProjectNetwork/session.h>
-#include <libKitsunemimiProjectNetwork/session_controller.h>
+#include <libKitsunemimiSakuraNetwork/session.h>
+#include <libKitsunemimiSakuraNetwork/session_controller.h>
 
 #include <libKitsunemimiCommon/buffer/data_buffer.h>
 
 #include <libKitsunemimiPersistence/logger/logger.h>
 
 
-using Kitsunemimi::Project::Session;
-using Kitsunemimi::Project::SessionController;
+using Kitsunemimi::Sakura::Session;
+using Kitsunemimi::Sakura::SessionController;
 
 void streamDataCallback(void* target,
                         Session*,

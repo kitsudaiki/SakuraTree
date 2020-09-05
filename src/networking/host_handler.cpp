@@ -21,7 +21,7 @@
  */
 
 #include "host_handler.h"
-#include <libKitsunemimiProjectNetwork/session.h>
+#include <libKitsunemimiSakuraNetwork/session.h>
 
 /**
  * @brief HostHandler::HostHandler
@@ -38,7 +38,7 @@ HostHandler::HostHandler() {}
 bool
 HostHandler::addHost(const std::string &hostName,
                      const std::vector<std::string> &tags,
-                     Kitsunemimi::Project::Session* session)
+                     Kitsunemimi::Sakura::Session* session)
 {
     std::map<std::string, Host>::const_iterator it;
     it = m_hosts.find(hostName);
@@ -64,7 +64,7 @@ HostHandler::addHost(const std::string &hostName,
  */
 bool
 HostHandler::updateHost(const std::string &hostName,
-                        Kitsunemimi::Project::Session* session)
+                        Kitsunemimi::Sakura::Session* session)
 {
     std::map<std::string, Host>::iterator it;
     it = m_hosts.find(hostName);
@@ -87,7 +87,7 @@ HostHandler::updateHost(const std::string &hostName,
  * @param hostName
  * @return
  */
-Kitsunemimi::Project::Session*
+Kitsunemimi::Sakura::Session*
 HostHandler::get(const std::string &hostName)
 {
     std::map<std::string, Host>::const_iterator it;
@@ -105,10 +105,10 @@ HostHandler::get(const std::string &hostName)
  * @param tag
  * @return
  */
-const std::vector<Kitsunemimi::Project::Session*>
+const std::vector<Kitsunemimi::Sakura::Session*>
 HostHandler::getByTag(const std::string &tag)
 {
-    std::vector<Kitsunemimi::Project::Session*> result;
+    std::vector<Kitsunemimi::Sakura::Session*> result;
 
     std::map<std::string, Host>::const_iterator it;
     for(it = m_hosts.begin();
@@ -130,10 +130,10 @@ HostHandler::getByTag(const std::string &tag)
  * @brief HostHandler::getAll
  * @return
  */
-const std::vector<Kitsunemimi::Project::Session*>
+const std::vector<Kitsunemimi::Sakura::Session*>
 HostHandler::getAll()
 {
-    std::vector<Kitsunemimi::Project::Session*>  result;
+    std::vector<Kitsunemimi::Sakura::Session*>  result;
 
     std::map<std::string, Host>::const_iterator it;
     for(it = m_hosts.begin();
