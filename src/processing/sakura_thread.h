@@ -85,6 +85,14 @@ private:
                         ValueItemMap &values,
                         const std::string &filePath,
                         std::string &errorMessage);
+    bool runLoop(SakuraItem* subtreeContent,
+                 const ValueItemMap &subtreeValues,
+                 const uint64_t startPos,
+                 const uint64_t endPos,
+                 const std::string &filePath,
+                 const std::string &tempVarName,
+                 DataArray* array,
+                 std::string &errorMessage);
 
 };
 

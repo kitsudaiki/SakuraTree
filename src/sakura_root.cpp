@@ -28,7 +28,6 @@
 #include <processing/sakura_tree_callbacks.h>
 #include <processing/thread_pool.h>
 #include <processing/validator.h>
-#include <processing/subtree_calls.h>
 
 #include <libKitsunemimiSakuraNetwork/sakura_network.h>
 #include <libKitsunemimiSakuraLang/sakura_parsing.h>
@@ -264,16 +263,16 @@ SakuraRoot::startSubtreeProcess(const std::string &relativePath,
     childs.push_back(processPlan);
     std::vector<std::string> hierarchy;
 
-    const bool result = spawnParallelSubtrees(childs,
-                                              0,
-                                              1,
-                                              "",
-                                              hierarchy,
-                                              *valuesJson.getItemContent()->toMap(),
-                                              errorMessage,
-                                              session,
-                                              blockerId);
-
+    SubtreeQueue* queue = &m_threadPool->m_queue;
+    const bool result = queue->spawnParallelSubtrees(childs,
+                                                     0,
+                                                     1,
+                                                     "",
+                                                     hierarchy,
+                                                     *valuesJson.getItemContent()->toMap(),
+                                                     errorMessage,
+                                                     session,
+                                                     blockerId);
     return result;
 }
 
@@ -353,14 +352,14 @@ SakuraRoot::runProcess(SakuraItem* item,
     childs.push_back(item);
     std::vector<std::string> hierarchy;
 
-    const bool result = spawnParallelSubtrees(childs,
-                                              0,
-                                              1,
-                                              "",
-                                              hierarchy,
-                                              initialValues,
-                                              errorMessage);
-
+    SubtreeQueue* queue = &m_threadPool->m_queue;
+    const bool result = queue->spawnParallelSubtrees(childs,
+                                                     0,
+                                                     1,
+                                                     "",
+                                                     hierarchy,
+                                                     initialValues,
+                                                     errorMessage);
     return result;
 }
 

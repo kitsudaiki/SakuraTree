@@ -29,7 +29,6 @@
 #include <processing/common/item_methods.h>
 #include <processing/blossoms/blossom.h>
 #include <processing/blossoms/blossom_getter.h>
-#include <processing/subtree_calls.h>
 
 #include <libKitsunemimiJinja2/jinja2_converter.h>
 #include <libKitsunemimiPersistence/logger/logger.h>
@@ -644,41 +643,32 @@ SakuraThread::processForEach(ForEachBranching* subtree,
     DataArray* array = subtree->iterateArray.get("array")->copy()->toArray();
 
     // process content normal or parallel via worker-threads
+    bool result = false;
     if(subtree->parallel == false)
     {
-        // backup the parent-values to avoid permanent merging with loop-internal values
-        DataMap preBalueBackup = m_parentValues;
-        overrideItems(m_parentValues, subtree->values, ALL);
-
-        for(uint32_t i = 0; i < array->size(); i++)
-        {
-            m_parentValues.insert(subtree->tempVarName, array->get(i), true);
-            if(processSakuraItem(subtree->content->copy(), filePath, errorMessage) == false) {
-                return false;
-            }
-        }
-
-        // restore the old parent values and update only the existing values with the one form the
-        // loop. That way, variables like the counter-variable are not added to the parent.
-        DataMap postBalueBackup = m_parentValues;
-        m_parentValues = preBalueBackup;
-        overrideItems(m_parentValues, postBalueBackup, ONLY_EXISTING);
-
-        return true;
+        result = runLoop(subtree->content,
+                         subtree->values,
+                         0,
+                         array->size(),
+                         filePath,
+                         subtree->tempVarName,
+                         array,
+                         errorMessage);
     }
     else
     {
-        const bool result = spawnParallelSubtreesLoop(subtree->content,
-                                                      0,
-                                                      array->size(),
-                                                      filePath,
-                                                      m_hierarchy,
-                                                      m_parentValues,
-                                                      subtree->tempVarName,
-                                                      array,
-                                                      errorMessage);
-        return result;
+        result = m_queue->spawnParallelSubtreesLoop(subtree->content,
+                                                    0,
+                                                    array->size(),
+                                                    filePath,
+                                                    m_hierarchy,
+                                                    m_parentValues,
+                                                    subtree->tempVarName,
+                                                    array,
+                                                    errorMessage);
     }
+
+    return result;
 }
 
 /**
@@ -718,44 +708,32 @@ SakuraThread::processFor(ForBranching* subtree,
     const uint64_t endValue = static_cast<uint64_t>(subtree->end.item->toValue()->getLong());
 
     // process content normal or parallel via worker-threads
+    bool result = false;
     if(subtree->parallel == false)
     {
-        // backup the parent-values to avoid permanent merging with loop-internal values
-        DataMap preBalueBackup = m_parentValues;
-        overrideItems(m_parentValues, subtree->values, ALL);
-
-        for(uint64_t i = startValue; i < endValue; i++)
-        {
-            // add the counter-variable as new value to be accessable within the loop
-            m_parentValues.insert(subtree->tempVarName, new DataValue(static_cast<long>(i)), true);
-
-            if(processSakuraItem(subtree->content->copy(), filePath, errorMessage) == false) {
-                return false;
-            }
-        }
-
-        // restore the old parent values and update only the existing values with the one form the
-        // loop. That way, variables like the counter-variable are not added to the parent.
-        DataMap postBalueBackup = m_parentValues;
-        m_parentValues = preBalueBackup;
-        overrideItems(m_parentValues, postBalueBackup, ONLY_EXISTING);
-
-        return true;
+        result = runLoop(subtree->content,
+                         subtree->values,
+                         startValue,
+                         endValue,
+                         filePath,
+                         subtree->tempVarName,
+                         nullptr,
+                         errorMessage);
     }
     else
     {
-        const bool result = spawnParallelSubtreesLoop(subtree->content,
-                                                      startValue,
-                                                      endValue,
-                                                      filePath,
-                                                      m_hierarchy,
-                                                      m_parentValues,
-                                                      subtree->tempVarName,
-                                                      nullptr,
-                                                      errorMessage);
-
-        return result;
+        result = m_queue->spawnParallelSubtreesLoop(subtree->content,
+                                                    startValue,
+                                                    endValue,
+                                                    filePath,
+                                                    m_hierarchy,
+                                                    m_parentValues,
+                                                    subtree->tempVarName,
+                                                    nullptr,
+                                                    errorMessage);
     }
+
+    return result;
 }
 
 /**
@@ -798,13 +776,13 @@ SakuraThread::processParallelPart(ParallelPart* parallelPart,
 
     SequentiellPart* parts = dynamic_cast<SequentiellPart*>(parallelPart->childs);
 
-    const bool result = spawnParallelSubtrees(parts->childs,
-                                              0,
-                                              parts->childs.size(),
-                                              filePath,
-                                              m_hierarchy,
-                                              m_parentValues,
-                                              errorMessage);
+    const bool result = m_queue->spawnParallelSubtrees(parts->childs,
+                                                       0,
+                                                       parts->childs.size(),
+                                                       filePath,
+                                                       m_hierarchy,
+                                                       m_parentValues,
+                                                       errorMessage);
 
     return result;
 }
@@ -848,6 +826,55 @@ SakuraThread::runSubtreeCall(SakuraItem* newSubtree,
     fillSubtreeOutputValueItemMap(newSubtree->values, &m_parentValues);
     m_parentValues = parentBackup;
     overrideItems(m_parentValues, newSubtree->values, ONLY_EXISTING);
+
+    return true;
+}
+
+/**
+ * @brief SakuraThread::runLoop
+ * @param subtreeContent
+ * @param subtreeValues
+ * @param startPos
+ * @param endPos
+ * @param filePath
+ * @param tempVarName
+ * @param array
+ * @param errorMessage
+ * @return
+ */
+bool
+SakuraThread::runLoop(SakuraItem* subtreeContent,
+                      const ValueItemMap &subtreeValues,
+                      const uint64_t startPos,
+                      const uint64_t endPos,
+                      const std::string &filePath,
+                      const std::string &tempVarName,
+                      DataArray* array,
+                      std::string &errorMessage)
+{
+    // backup the parent-values to avoid permanent merging with loop-internal values
+    DataMap preBalueBackup = m_parentValues;
+    overrideItems(m_parentValues, subtreeValues, ALL);
+
+    for(uint64_t i = startPos; i < endPos; i++)
+    {
+        // add the counter-variable as new value to be accessable within the loop
+        if(array != nullptr) {
+            m_parentValues.insert(tempVarName, array->get(i), true);
+        } else {
+            m_parentValues.insert(tempVarName, new DataValue(static_cast<long>(i)), true);
+        }
+
+        if(processSakuraItem(subtreeContent->copy(), filePath, errorMessage) == false) {
+            return false;
+        }
+    }
+
+    // restore the old parent values and update only the existing values with the one form the
+    // loop. That way, variables like the counter-variable are not added to the parent.
+    DataMap postBalueBackup = m_parentValues;
+    m_parentValues = preBalueBackup;
+    overrideItems(m_parentValues, postBalueBackup, ONLY_EXISTING);
 
     return true;
 }

@@ -126,8 +126,7 @@ HEADERS += \
     processing/blossoms/files/text_files/text_write_blossom_test.h \
     processing/blossoms/special/cmd_blossom_test.h \
     processing/common/functions_test.h \
-    processing/common/item_methods_test.h \
-    processing/subtree_calls.h
+    processing/common/item_methods_test.h
 
 SOURCES += \
     ../../src/processing/blossoms/files/ini_files/ini_delete_entry_blossom.cpp \
@@ -181,7 +180,6 @@ SOURCES += \
     processing/blossoms/special/cmd_blossom_test.cpp \
     processing/common/functions_test.cpp \
     processing/common/item_methods_test.cpp \
-    processing/subtree_calls.cpp \
     main.cpp
 
 

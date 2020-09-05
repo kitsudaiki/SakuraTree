@@ -37,6 +37,7 @@
 #include <stdlib.h>
 #include <mutex>
 #include <streambuf>
+#include <thread>
 #include <istream>
 #include <iterator>
 #include <queue>

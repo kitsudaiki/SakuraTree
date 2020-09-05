@@ -153,8 +153,7 @@ SOURCES += \
     processing/blossoms/files/template_files/template_create_string_blossom.cpp \
     processing/blossoms/files/template_files/template_methods.cpp \
     processing/validator.cpp \
-    main.cpp \
-    processing/subtree_calls.cpp
+    main.cpp
 
 SAKURA_PROVISIONING_SUBTREE = predefined_subtrees/sakura_provisioning_subtree.tree
 
