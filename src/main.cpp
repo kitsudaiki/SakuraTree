@@ -101,8 +101,8 @@ int main(int argc, char *argv[])
                           enableDebug,
                           argParser.wasSet("dry-run")))
     {
-        return 1;
+        return 0;
     }
 
-    return 0;
+    return 1;
 }
