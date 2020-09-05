@@ -11,7 +11,7 @@ build:
     - pwd
     - apt-get update
     - apt-get install -y libboost-filesystem-dev libssl-dev
-    - ./build.sh test
+    - ./build.sh
     - mkdir upload
     - cp -r ../result/* upload/
     - cp -r tests/functional_tests upload/
@@ -22,15 +22,6 @@ build:
   tags:
     - docker
 
-#unit_tests:
-#  stage: test
-#  script: 
-#    - ls -l
-#    - upload/SakuraTree_UnitTests
-#  dependencies:
-#    - build
-#  tags:
-#    - docker
 
 functional_tests:
   stage: test

@@ -106,19 +106,11 @@ LIB_KITSUNE_SAKURA_TREE_DIR="$BUILD_DIR/SakuraTree"
 mkdir -p $LIB_KITSUNE_SAKURA_TREE_DIR
 cd $LIB_KITSUNE_SAKURA_TREE_DIR
 
-# build SakuraTree library with qmake
-if [ $1 = "test" ]; then
-    /usr/lib/x86_64-linux-gnu/qt5/bin/qmake "$PARENT_DIR/SakuraTree/SakuraTree.pro" -spec linux-g++ "CONFIG += optimize_full" "CONFIG+=run_tests"
-    /usr/bin/make -j4
-    # copy build-result and include-files into the result-directory
-    cp "$LIB_KITSUNE_SAKURA_TREE_DIR/src/SakuraTree" "$RESULT_DIR/"
-    cp "$LIB_KITSUNE_SAKURA_TREE_DIR/tests/unit_tests/SakuraTree_UnitTests" "$RESULT_DIR/"
-else
-    /usr/lib/x86_64-linux-gnu/qt5/bin/qmake "$PARENT_DIR/SakuraTree/SakuraTree.pro" -spec linux-g++ "CONFIG += optimize_full"
-    /usr/bin/make -j4
-    # copy build-result and include-files into the result-directory
-    cp "$LIB_KITSUNE_SAKURA_TREE_DIR/src/SakuraTree" "$RESULT_DIR/"
-fi
+# build SakuraTree with qmake
+/usr/lib/x86_64-linux-gnu/qt5/bin/qmake "$PARENT_DIR/SakuraTree/SakuraTree.pro" -spec linux-g++ "CONFIG += optimize_full"
+/usr/bin/make -j4
+# copy build-result and include-files into the result-directory
+cp "$LIB_KITSUNE_SAKURA_TREE_DIR/src/SakuraTree" "$RESULT_DIR/"
 
 #-----------------------------------------------------------------------------------------------------------------
 
