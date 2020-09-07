@@ -31,6 +31,12 @@ PathChmodBlossom::PathChmodBlossom()
     m_requiredKeys.insert("permission", new Kitsunemimi::DataValue(true));
 }
 
+Kitsunemimi::Sakura::Blossom*
+PathChmodBlossom::createNewInstance()
+{
+    return new PathChmodBlossom();
+}
+
 /**
  * @brief initBlossom
  */

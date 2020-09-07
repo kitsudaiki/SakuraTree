@@ -35,6 +35,12 @@ IniDeleteEntryBlossom::IniDeleteEntryBlossom()
     m_requiredKeys.insert("entry", new Kitsunemimi::DataValue(false));
 }
 
+Kitsunemimi::Sakura::Blossom*
+IniDeleteEntryBlossom::createNewInstance()
+{
+    return new IniDeleteEntryBlossom();
+}
+
 /**
  * @brief initBlossom
  */

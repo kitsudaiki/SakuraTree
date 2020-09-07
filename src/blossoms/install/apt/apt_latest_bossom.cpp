@@ -29,6 +29,12 @@ AptLatestBlossom::AptLatestBlossom()
     m_requiredKeys.insert("packages", new Kitsunemimi::DataValue(true));
 }
 
+Kitsunemimi::Sakura::Blossom*
+AptLatestBlossom::createNewInstance()
+{
+    return new AptLatestBlossom();
+}
+
 /**
  * @brief AptLatestBlossom::initBlossom
  */

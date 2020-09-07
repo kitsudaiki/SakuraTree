@@ -29,6 +29,12 @@ AptAbsentBlossom::AptAbsentBlossom()
     m_requiredKeys.insert("packages", new Kitsunemimi::DataValue(true));
 }
 
+Kitsunemimi::Sakura::Blossom*
+AptAbsentBlossom::createNewInstance()
+{
+    return new AptAbsentBlossom();
+}
+
 /**
  * initBlossom
  */

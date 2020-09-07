@@ -31,6 +31,11 @@ TextWriteBlossom::TextWriteBlossom()
     m_requiredKeys.insert("text", new Kitsunemimi::DataValue(true));
 }
 
+Kitsunemimi::Sakura::Blossom* TextWriteBlossom::createNewInstance()
+{
+    return new TextWriteBlossom();
+}
+
 /**
  * @brief initBlossom
  */

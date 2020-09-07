@@ -91,7 +91,6 @@ HEADERS += \
     blossoms/ssh/ssh_cmd_blossom.h \
     blossoms/ssh/ssh_cmd_create_file_blossom.h \
     blossoms/ssh/ssh_scp_blossom.h \
-    blossoms/blossom_getter.h \
     common/defines.h \
     common/enums.h \
     common/includes.h \

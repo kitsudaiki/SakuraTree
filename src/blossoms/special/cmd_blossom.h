@@ -34,6 +34,8 @@ class CmdBlossom
 public:
     CmdBlossom();
 
+    Kitsunemimi::Sakura::Blossom* createNewInstance();
+
 protected:
     void initBlossom(Kitsunemimi::Sakura::BlossomItem &blossomItem);
     void preCheck(Kitsunemimi::Sakura::BlossomItem &blossomItem);

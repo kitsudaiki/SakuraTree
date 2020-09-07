@@ -42,6 +42,12 @@ PathCopyBlossom::PathCopyBlossom()
     m_requiredKeys.insert("owner", new Kitsunemimi::DataValue(false));
 }
 
+Kitsunemimi::Sakura::Blossom*
+PathCopyBlossom::createNewInstance()
+{
+    return new PathCopyBlossom();
+}
+
 /**
  * @brief initBlossom
  */

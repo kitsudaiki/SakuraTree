@@ -28,6 +28,12 @@ ExitBlossom::ExitBlossom()
     m_requiredKeys.insert("status", new Kitsunemimi::DataValue(false));
 }
 
+Kitsunemimi::Sakura::Blossom*
+ExitBlossom::createNewInstance()
+{
+    return new ExitBlossom();
+}
+
 /**
  * initBlossom
  */

@@ -35,6 +35,12 @@ CmdBlossom::CmdBlossom()
     m_requiredKeys.insert("trim_output", new Kitsunemimi::DataValue(false));
 }
 
+Kitsunemimi::Sakura::Blossom*
+CmdBlossom::createNewInstance()
+{
+    return new CmdBlossom();
+}
+
 /**
  * initBlossom
  */
