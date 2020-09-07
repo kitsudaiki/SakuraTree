@@ -28,6 +28,12 @@ AssertBlossom::AssertBlossom()
     m_requiredKeys.insert("*", new Kitsunemimi::DataValue(false));
 }
 
+Kitsunemimi::Sakura::Blossom*
+AssertBlossom::createNewInstance()
+{
+    return new AssertBlossom();
+}
+
 /**
  * initBlossom
  */

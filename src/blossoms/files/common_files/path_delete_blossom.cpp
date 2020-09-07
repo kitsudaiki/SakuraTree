@@ -29,6 +29,12 @@ PathDeleteBlossom::PathDeleteBlossom()
     m_requiredKeys.insert("path", new Kitsunemimi::DataValue(true));
 }
 
+Kitsunemimi::Sakura::Blossom*
+PathDeleteBlossom::createNewInstance()
+{
+    return new PathDeleteBlossom();
+}
+
 /**
  * @brief initBlossom
  */

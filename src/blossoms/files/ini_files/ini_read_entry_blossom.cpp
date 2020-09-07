@@ -37,6 +37,12 @@ IniReadEntryBlossom::IniReadEntryBlossom()
     m_requiredKeys.insert("entry", new Kitsunemimi::DataValue(true));
 }
 
+Kitsunemimi::Sakura::Blossom*
+IniReadEntryBlossom::createNewInstance()
+{
+    return new IniReadEntryBlossom();
+}
+
 /**
  * @brief initBlossom
  */

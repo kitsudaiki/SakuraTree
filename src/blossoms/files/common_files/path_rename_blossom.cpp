@@ -34,6 +34,12 @@ PathRenameBlossom::PathRenameBlossom()
     m_requiredKeys.insert("new_name", new Kitsunemimi::DataValue(true));
 }
 
+Kitsunemimi::Sakura::Blossom*
+PathRenameBlossom::createNewInstance()
+{
+    return new PathRenameBlossom();
+}
+
 /**
  * @brief initBlossom
  */

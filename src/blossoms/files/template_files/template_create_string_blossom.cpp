@@ -37,6 +37,12 @@ TemplateCreateStringBlossom::TemplateCreateStringBlossom()
     m_requiredKeys.insert("variables", new Kitsunemimi::DataValue(true));
 }
 
+Kitsunemimi::Sakura::Blossom*
+TemplateCreateStringBlossom::createNewInstance()
+{
+    return new TemplateCreateStringBlossom();
+}
+
 /**
  * initBlossom
  */

@@ -26,6 +26,12 @@
 AptUdateBlossom::AptUdateBlossom()
     : Blossom() {}
 
+Kitsunemimi::Sakura::Blossom*
+AptUdateBlossom::createNewInstance()
+{
+    return new AptUdateBlossom();
+}
+
 /**
  * initBlossom
  */

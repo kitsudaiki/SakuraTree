@@ -37,6 +37,12 @@ SshCmdBlossom::SshCmdBlossom()
     m_requiredKeys.insert("ssh_key", new Kitsunemimi::DataValue(false));
 }
 
+Kitsunemimi::Sakura::Blossom*
+SshCmdBlossom::createNewInstance()
+{
+    return new SshCmdBlossom();
+}
+
 /**
  * initBlossom
  */

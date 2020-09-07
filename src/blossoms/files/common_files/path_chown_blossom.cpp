@@ -31,6 +31,12 @@ PathChownBlossom::PathChownBlossom()
     m_requiredKeys.insert("owner", new Kitsunemimi::DataValue(true));
 }
 
+Kitsunemimi::Sakura::Blossom*
+PathChownBlossom::createNewInstance()
+{
+    return new PathChownBlossom();
+}
+
 /**
  * @brief initBlossom
  */

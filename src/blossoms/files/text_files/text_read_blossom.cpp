@@ -32,6 +32,12 @@ TextReadBlossom::TextReadBlossom()
     m_requiredKeys.insert("file_path", new Kitsunemimi::DataValue(true));
 }
 
+Kitsunemimi::Sakura::Blossom*
+TextReadBlossom::createNewInstance()
+{
+    return new TextReadBlossom();
+}
+
 /**
  * @brief initBlossom
  */

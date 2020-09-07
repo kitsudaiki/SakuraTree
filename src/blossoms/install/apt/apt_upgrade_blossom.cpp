@@ -26,6 +26,12 @@
 AptUpgradeBlossom::AptUpgradeBlossom()
     : Blossom() {}
 
+Kitsunemimi::Sakura::Blossom*
+AptUpgradeBlossom::createNewInstance()
+{
+    return new AptUpgradeBlossom();
+}
+
 /**
  * initBlossom
  */

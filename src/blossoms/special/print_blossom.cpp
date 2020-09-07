@@ -30,6 +30,12 @@ PrintBlossom::PrintBlossom()
     m_requiredKeys.insert("*", new Kitsunemimi::DataValue(false));
 }
 
+Kitsunemimi::Sakura::Blossom*
+PrintBlossom::createNewInstance()
+{
+    return new PrintBlossom();
+}
+
 /**
  * initBlossom
  */

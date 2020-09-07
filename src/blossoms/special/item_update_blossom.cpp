@@ -30,6 +30,12 @@ ItemUpdateBlossom::ItemUpdateBlossom()
     m_requiredKeys.insert("*", new Kitsunemimi::DataValue(false));
 }
 
+Kitsunemimi::Sakura::Blossom*
+ItemUpdateBlossom::createNewInstance()
+{
+    return new ItemUpdateBlossom();
+}
+
 /**
  * initBlossom
  */
