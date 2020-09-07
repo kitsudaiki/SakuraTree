@@ -22,7 +22,7 @@
 
 #include "item_update_blossom.h"
 
-#include <libKitsunemimiSakuraLang/items/item_methods.h>
+#include <libKitsunemimiSakuraLang/items/value_item_map.h>
 
 ItemUpdateBlossom::ItemUpdateBlossom()
     : Blossom()
@@ -60,9 +60,20 @@ ItemUpdateBlossom::preCheck(Kitsunemimi::Sakura::BlossomItem &blossomItem)
 void
 ItemUpdateBlossom::runTask(Kitsunemimi::Sakura::BlossomItem &blossomItem)
 {
-    overrideItems(*blossomItem.parentValues,
-                  blossomItem.values,
-                  Kitsunemimi::Sakura::ONLY_EXISTING);
+    std::map<std::string, Kitsunemimi::Sakura::ValueItem>::const_iterator overrideIt;
+    for(overrideIt = blossomItem.values.m_valueMap.begin();
+        overrideIt != blossomItem.values.m_valueMap.end();
+        overrideIt++)
+    {
+        std::map<std::string, DataItem*>::iterator originalIt;
+        originalIt = blossomItem.parentValues->m_map.find(overrideIt->first);
+
+        if(originalIt != blossomItem.parentValues->m_map.end()) {
+            blossomItem.parentValues->insert(overrideIt->first,
+                                             overrideIt->second.item->copy(),
+                                             true);
+        }
+    }
 }
 
 /**

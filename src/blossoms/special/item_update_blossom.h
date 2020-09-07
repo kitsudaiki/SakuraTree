@@ -23,6 +23,8 @@
 #ifndef ITEM_UPDATE_BLOSSOM_H
 #define ITEM_UPDATE_BLOSSOM_H
 
+#include <common.h>
+
 #include <libKitsunemimiSakuraLang/blossom.h>
 
 class ItemUpdateBlossom
