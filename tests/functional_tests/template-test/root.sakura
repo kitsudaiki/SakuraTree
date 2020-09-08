@@ -15,13 +15,13 @@ template("create a template")
 -> create_string:
     - variables = { - checker = 42
 					- name = test_input }
-    - blossom_output >> converted_output
+    - text >> converted_output
 
 
 text_file("read written file")
 - file_path = dest_path
 -> read:
-    - blossom_output >> read_output
+    - text >> read_output
 
 
 print("debug-output")

@@ -6,7 +6,7 @@ text_file("write into a text-file")
 -> write:
     - text = test_text
 -> read:
-    - blossom_output >> test_text
+    - text >> test_text
 
 
 item_update("change output for better test")
