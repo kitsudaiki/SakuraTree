@@ -22,34 +22,13 @@
 
 #include "assert_blossom.h"
 
+/**
+ * @brief constructor
+ */
 AssertBlossom::AssertBlossom()
     : Blossom()
 {
     m_requiredKeys.insert("*", new Kitsunemimi::DataValue(false));
-}
-
-Kitsunemimi::Sakura::Blossom*
-AssertBlossom::createNewInstance()
-{
-    return new AssertBlossom();
-}
-
-/**
- * initBlossom
- */
-void
-AssertBlossom::initBlossom(Kitsunemimi::Sakura::BlossomItem &blossomItem)
-{
-    blossomItem.success = true;
-}
-
-/**
- * preCheck
- */
-void
-AssertBlossom::preCheck(Kitsunemimi::Sakura::BlossomItem &blossomItem)
-{
-    blossomItem.success = true;
 }
 
 /**
@@ -79,22 +58,4 @@ AssertBlossom::runTask(Kitsunemimi::Sakura::BlossomItem &blossomItem)
 
         }
     }
-}
-
-/**
- * postCheck
- */
-void
-AssertBlossom::postCheck(Kitsunemimi::Sakura::BlossomItem &blossomItem)
-{
-    blossomItem.success = true;
-}
-
-/**
- * closeBlossom
- */
-void
-AssertBlossom::closeBlossom(Kitsunemimi::Sakura::BlossomItem &blossomItem)
-{
-    blossomItem.success = true;
 }

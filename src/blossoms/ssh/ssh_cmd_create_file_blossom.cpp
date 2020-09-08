@@ -25,6 +25,9 @@
 #include <libKitsunemimiCommon/common_methods/string_methods.h>
 #include <libKitsunemimiCommon/process_execution.h>
 
+/**
+ * @brief constructor
+ */
 SshCmdCreateFileBlossom::SshCmdCreateFileBlossom()
     : Blossom()
 {
@@ -36,60 +39,36 @@ SshCmdCreateFileBlossom::SshCmdCreateFileBlossom()
     m_requiredKeys.insert("ssh_key", new Kitsunemimi::DataValue(false));
 }
 
-Kitsunemimi::Sakura::Blossom*
-SshCmdCreateFileBlossom::createNewInstance()
-{
-    return new SshCmdCreateFileBlossom();
-}
-
-/**
- * initBlossom
- */
-void
-SshCmdCreateFileBlossom::initBlossom(Kitsunemimi::Sakura::BlossomItem &blossomItem)
-{
-    m_user = blossomItem.values.getValueAsString("user");
-    m_address = blossomItem.values.getValueAsString("address");
-    m_fileContent = blossomItem.values.getValueAsString("file_content");
-    m_filePath = blossomItem.values.getValueAsString("file_path");
-    m_port = blossomItem.values.getValueAsString("port");
-    m_sshKey = blossomItem.values.getValueAsString("ssh_key");
-
-    blossomItem.success = true;
-}
-
-/**
- * preCheck
- */
-void
-SshCmdCreateFileBlossom::preCheck(Kitsunemimi::Sakura::BlossomItem &blossomItem)
-{
-    //TODO: check per ssh if file already exist
-    blossomItem.success = true;
-}
-
 /**
  * runTask
  */
 void
 SshCmdCreateFileBlossom::runTask(Kitsunemimi::Sakura::BlossomItem &blossomItem)
 {
+    const std::string user = blossomItem.values.getValueAsString("user");
+    const std::string address = blossomItem.values.getValueAsString("address");
+    const std::string fileContent = blossomItem.values.getValueAsString("file_content");
+    const std::string filePath = blossomItem.values.getValueAsString("file_path");
+    const std::string port = blossomItem.values.getValueAsString("port");
+    const std::string sshKey = blossomItem.values.getValueAsString("ssh_key");
+
+
     std::string programm = "";
 
     programm += "ssh ";
-    if(m_port != "") {
-        programm += " -p " + m_port;
+    if(port != "") {
+        programm += " -p " + port;
     }
-    if(m_sshKey != "") {
-        programm += " -i " + m_sshKey;
+    if(sshKey != "") {
+        programm += " -i " + sshKey;
     }
 
     programm += " ";
-    programm += m_user;
+    programm += user;
     programm += "@";
-    programm += m_address;
+    programm += address;
     programm += " -T \"sudo rm ";
-    programm += m_filePath;
+    programm += filePath;
     programm += "\"";
 
     LOG_DEBUG("run command: " + programm);
@@ -102,24 +81,24 @@ SshCmdCreateFileBlossom::runTask(Kitsunemimi::Sakura::BlossomItem &blossomItem)
     programm = "";
 
     programm += "echo \"";
-    programm += m_fileContent;
+    programm += fileContent;
     programm += "\" | ";
 
     programm += "ssh ";
-    if(m_port != "") {
-        programm += " -p " + m_port;
+    if(port != "") {
+        programm += " -p " + port;
     }
-    if(m_sshKey != "") {
-        programm += " -i " + m_sshKey;
+    if(sshKey != "") {
+        programm += " -i " + sshKey;
     }
 
     programm += " ";
-    programm += m_user;
+    programm += user;
     programm += "@";
-    programm += m_address;
+    programm += address;
     // with "cat" instead of "tee" it doesn't work for files in root-context
     programm += " -T \"sudo tee -a ";
-    programm += m_filePath;
+    programm += filePath;
     programm += "\"";
 
     LOG_DEBUG("run command: " + programm);
@@ -127,22 +106,4 @@ SshCmdCreateFileBlossom::runTask(Kitsunemimi::Sakura::BlossomItem &blossomItem)
     processResult = Kitsunemimi::runSyncProcess(programm);
     blossomItem.success = processResult.success;
     blossomItem.outputMessage = processResult.processOutput;
-}
-
-/**
- * postCheck
- */
-void
-SshCmdCreateFileBlossom::postCheck(Kitsunemimi::Sakura::BlossomItem &blossomItem)
-{
-    blossomItem.success = true;
-}
-
-/**
- * closeBlossom
- */
-void
-SshCmdCreateFileBlossom::closeBlossom(Kitsunemimi::Sakura::BlossomItem &blossomItem)
-{
-    blossomItem.success = true;
 }

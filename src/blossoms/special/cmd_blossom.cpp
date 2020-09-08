@@ -25,6 +25,9 @@
 #include <libKitsunemimiCommon/common_methods/string_methods.h>
 #include <libKitsunemimiCommon/process_execution.h>
 
+/**
+ * @brief constructor
+ */
 CmdBlossom::CmdBlossom()
     : Blossom()
 {
@@ -35,26 +38,22 @@ CmdBlossom::CmdBlossom()
     m_requiredKeys.insert("trim_output", new Kitsunemimi::DataValue(false));
 }
 
-Kitsunemimi::Sakura::Blossom*
-CmdBlossom::createNewInstance()
-{
-    return new CmdBlossom();
-}
-
 /**
- * initBlossom
+ * runTask
  */
 void
-CmdBlossom::initBlossom(Kitsunemimi::Sakura::BlossomItem &blossomItem)
+CmdBlossom::runTask(Kitsunemimi::Sakura::BlossomItem &blossomItem)
 {
-    m_command = blossomItem.values.getValueAsString("command");
+    const std::string command = blossomItem.values.getValueAsString("command");
+    bool ignoreResult = false;
+    bool trimOutput = false;
 
     const Kitsunemimi::Sakura::ValueItem ignoreResultItem = blossomItem.values.getValueItem("ignore_errors");
     if(ignoreResultItem.item != nullptr)
     {
         if(ignoreResultItem.item->isBoolValue())
         {
-            m_ignoreResult = ignoreResultItem.item->getBool();
+            ignoreResult = ignoreResultItem.item->getBool();
             blossomItem.success = true;
         }
         else
@@ -70,7 +69,7 @@ CmdBlossom::initBlossom(Kitsunemimi::Sakura::BlossomItem &blossomItem)
     {
         if(trimOutputItem.item->isBoolValue())
         {
-            m_trimOutput = trimOutputItem.item->getBool();
+            trimOutput = trimOutputItem.item->getBool();
             blossomItem.success = true;
         }
         else
@@ -80,28 +79,13 @@ CmdBlossom::initBlossom(Kitsunemimi::Sakura::BlossomItem &blossomItem)
             blossomItem.success = false;
         }
     }
-}
 
-/**
- * preCheck
- */
-void
-CmdBlossom::preCheck(Kitsunemimi::Sakura::BlossomItem &blossomItem)
-{
-    blossomItem.success = true;
-}
 
-/**
- * runTask
- */
-void
-CmdBlossom::runTask(Kitsunemimi::Sakura::BlossomItem &blossomItem)
-{
-    LOG_DEBUG("run command: " + m_command);
-    Kitsunemimi::ProcessResult processResult = Kitsunemimi::runSyncProcess(m_command);
+    LOG_DEBUG("run command: " + command);
+    Kitsunemimi::ProcessResult processResult = Kitsunemimi::runSyncProcess(command);
     blossomItem.success = processResult.success;
 
-    if(m_ignoreResult) {
+    if(ignoreResult) {
         blossomItem.success = true;
     }
 
@@ -110,27 +94,10 @@ CmdBlossom::runTask(Kitsunemimi::Sakura::BlossomItem &blossomItem)
         blossomItem.outputMessage = processResult.processOutput;
     }
 
-    if(m_trimOutput) {
+    if(trimOutput) {
         Kitsunemimi::trim(processResult.processOutput);
     }
 
-    blossomItem.blossomOutput = new Kitsunemimi::DataValue(processResult.processOutput);
-}
-
-/**
- * postCheck
- */
-void
-CmdBlossom::postCheck(Kitsunemimi::Sakura::BlossomItem &blossomItem)
-{
-    blossomItem.success = true;
-}
-
-/**
- * closeBlossom
- */
-void
-CmdBlossom::closeBlossom(Kitsunemimi::Sakura::BlossomItem &blossomItem)
-{
-    blossomItem.success = true;
+    blossomItem.blossomOutput.insert("output",
+                                     new Kitsunemimi::DataValue(processResult.processOutput));
 }

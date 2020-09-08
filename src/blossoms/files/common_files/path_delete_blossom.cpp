@@ -29,79 +29,39 @@ PathDeleteBlossom::PathDeleteBlossom()
     m_requiredKeys.insert("path", new Kitsunemimi::DataValue(true));
 }
 
-Kitsunemimi::Sakura::Blossom*
-PathDeleteBlossom::createNewInstance()
-{
-    return new PathDeleteBlossom();
-}
-
-/**
- * @brief initBlossom
- */
-void
-PathDeleteBlossom::initBlossom(Kitsunemimi::Sakura::BlossomItem &blossomItem)
-{
-    m_path = blossomItem.values.getValueAsString("path");
-
-    blossomItem.success = true;
-}
-
-/**
- * @brief preCheck
- */
-void
-PathDeleteBlossom::preCheck(Kitsunemimi::Sakura::BlossomItem &blossomItem)
-{
-    if(bfs::exists(m_path) == false)
-    {
-        blossomItem.success = false;
-        blossomItem.outputMessage = "path doesn't exist: " + m_path;
-        return;
-    }
-
-    blossomItem.success = true;
-}
-
 /**
  * @brief runTask
  */
 void
 PathDeleteBlossom::runTask(Kitsunemimi::Sakura::BlossomItem &blossomItem)
 {
+    const std::string path = blossomItem.values.getValueAsString("path");
+
+    // precheck
+    if(bfs::exists(path) == false)
+    {
+        blossomItem.success = false;
+        blossomItem.outputMessage = "path doesn't exist: " + path;
+        return;
+    }
+
     std::string errorMessage = "";
-    const bool result = Kitsunemimi::Persistence::deleteFileOrDir(m_path, errorMessage);
+    const bool result = Kitsunemimi::Persistence::deleteFileOrDir(path, errorMessage);
 
     if(result == false)
     {
         blossomItem.success = false;
-        blossomItem.outputMessage = "wasn't able to delete target: " + m_path;
+        blossomItem.outputMessage = "wasn't able to delete target: " + path;
         return;
     }
 
-    blossomItem.success = true;
-}
-
-/**
- * @brief postCheck
- */
-void
-PathDeleteBlossom::postCheck(Kitsunemimi::Sakura::BlossomItem &blossomItem)
-{
-    if(bfs::is_regular_file(m_path))
+    // post-check
+    if(bfs::is_regular_file(path))
     {
         blossomItem.success = false;
-        blossomItem.outputMessage = "path still exist: " + m_path;
+        blossomItem.outputMessage = "path still exist: " + path;
         return;
     }
 
-    blossomItem.success = true;
-}
-
-/**
- * @brief closeBlossom
- */
-void
-PathDeleteBlossom::closeBlossom(Kitsunemimi::Sakura::BlossomItem &blossomItem)
-{
     blossomItem.success = true;
 }

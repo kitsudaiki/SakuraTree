@@ -34,21 +34,8 @@ class CmdBlossom
 public:
     CmdBlossom();
 
-    Kitsunemimi::Sakura::Blossom* createNewInstance();
-
 protected:
-    void initBlossom(Kitsunemimi::Sakura::BlossomItem &blossomItem);
-    void preCheck(Kitsunemimi::Sakura::BlossomItem &blossomItem);
     void runTask(Kitsunemimi::Sakura::BlossomItem &blossomItem);
-    void postCheck(Kitsunemimi::Sakura::BlossomItem &blossomItem);
-    void closeBlossom(Kitsunemimi::Sakura::BlossomItem &blossomItem);
-
-private:
-    friend CmdBlossom_Test;
-
-    std::string m_command = "";
-    bool m_ignoreResult = false;
-    bool m_trimOutput = false;
 };
 
 #endif // CMD_BLOSSOM_H

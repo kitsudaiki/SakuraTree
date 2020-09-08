@@ -24,35 +24,13 @@
 #include <libKitsunemimiCommon/common_items/table_item.h>
 #include <libKitsunemimiPersistence/files/text_file.h>
 
+/**
+ * @brief constructor
+ */
 PrintBlossom::PrintBlossom()
     : Blossom()
 {
     m_requiredKeys.insert("*", new Kitsunemimi::DataValue(false));
-}
-
-Kitsunemimi::Sakura::Blossom*
-PrintBlossom::createNewInstance()
-{
-    return new PrintBlossom();
-}
-
-/**
- * initBlossom
- */
-void
-PrintBlossom::initBlossom(Kitsunemimi::Sakura::BlossomItem &blossomItem)
-{
-    blossomItem.success = true;
-}
-
-/**
- * preCheck
- */
-void
-PrintBlossom::preCheck(Kitsunemimi::Sakura::BlossomItem &blossomItem)
-{
-    // TODO: check that at least one item is there to be printed
-    blossomItem.success = true;
 }
 
 /**
@@ -75,22 +53,4 @@ PrintBlossom::runTask(Kitsunemimi::Sakura::BlossomItem &blossomItem)
     }
 
     blossomItem.outputMessage = tableItem.toString(150);
-}
-
-/**
- * postCheck
- */
-void
-PrintBlossom::postCheck(Kitsunemimi::Sakura::BlossomItem &blossomItem)
-{
-    blossomItem.success = true;
-}
-
-/**
- * closeBlossom
- */
-void
-PrintBlossom::closeBlossom(Kitsunemimi::Sakura::BlossomItem &blossomItem)
-{
-    blossomItem.success = true;
 }

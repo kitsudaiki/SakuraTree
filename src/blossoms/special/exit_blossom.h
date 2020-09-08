@@ -31,17 +31,8 @@ class ExitBlossom
 public:
     ExitBlossom();
 
-    Kitsunemimi::Sakura::Blossom* createNewInstance();
-
 protected:
-    void initBlossom(Kitsunemimi::Sakura::BlossomItem &blossomItem);
-    void preCheck(Kitsunemimi::Sakura::BlossomItem &blossomItem);
     void runTask(Kitsunemimi::Sakura::BlossomItem &blossomItem);
-    void postCheck(Kitsunemimi::Sakura::BlossomItem &blossomItem);
-    void closeBlossom(Kitsunemimi::Sakura::BlossomItem &blossomItem);
-
-private:
-    int m_exitStatus = 0;
 };
 
 #endif // EXIT_BLOSSOM_H

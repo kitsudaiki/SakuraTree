@@ -33,6 +33,9 @@
 
 using Kitsunemimi::splitStringByDelimiter;
 
+/**
+ * @brief constructor
+ */
 PathCopyBlossom::PathCopyBlossom()
     : Blossom()
 {
@@ -42,96 +45,69 @@ PathCopyBlossom::PathCopyBlossom()
     m_requiredKeys.insert("owner", new Kitsunemimi::DataValue(false));
 }
 
-Kitsunemimi::Sakura::Blossom*
-PathCopyBlossom::createNewInstance()
-{
-    return new PathCopyBlossom();
-}
-
-/**
- * @brief initBlossom
- */
-void
-PathCopyBlossom::initBlossom(Kitsunemimi::Sakura::BlossomItem &blossomItem)
-{
-    m_sourcePath = blossomItem.values.getValueAsString("source_path");
-    m_destinationPath = blossomItem.values.getValueAsString("dest_path");
-    m_mode = blossomItem.values.getValueAsString("mode");
-    m_owner = blossomItem.values.getValueAsString("owner");
-
-    if(m_sourcePath.at(0) != '/')
-    {
-        m_localStorage = true;
-        const bfs::path filePath = bfs::path("files") / bfs::path(m_sourcePath);
-        m_sourcePath = SakuraRoot::m_interface->m_garden->getRelativePath(blossomItem.blossomPath,
-                                                                          filePath).string();
-    }
-
-    blossomItem.success = true;
-}
-
-/**
- * @brief preCheck
- */
-void
-PathCopyBlossom::preCheck(Kitsunemimi::Sakura::BlossomItem &blossomItem)
-{
-    if(m_localStorage == false)
-    {
-        if(bfs::exists(m_sourcePath) == false)
-        {
-            blossomItem.success = false;
-            blossomItem.outputMessage = "COPY FAILED: source-path "
-                                       + m_sourcePath
-                                       + " doesn't exist";
-            return;
-        }
-    }
-
-    // TODO: compare files, until then copy everytime
-    /* if(doesPathExist(m_destinationPath))
-    {
-        blossomItem.skip = true;
-        blossomItem.success = true;
-        return;
-    }*/
-
-    blossomItem.success = true;
-}
-
 /**
  * @brief runTask
  */
 void
 PathCopyBlossom::runTask(Kitsunemimi::Sakura::BlossomItem &blossomItem)
 {
+    std::string sourcePath = blossomItem.values.getValueAsString("source_path");
+    const std::string destinationPath = blossomItem.values.getValueAsString("dest_path");
+    const std::string mode = blossomItem.values.getValueAsString("mode");
+    const std::string owner = blossomItem.values.getValueAsString("owner");
+    bool localStorage = false;
+
+    // prepare source-path
+    if(sourcePath.at(0) != '/')
+    {
+        localStorage = true;
+        const bfs::path filePath = bfs::path("files") / bfs::path(sourcePath);
+        sourcePath = SakuraRoot::m_interface->garden->getRelativePath(blossomItem.blossomPath,
+                                                                      filePath).string();
+    }
+
+    // precheck
+    if(localStorage == false)
+    {
+        if(bfs::exists(sourcePath) == false)
+        {
+            blossomItem.success = false;
+            blossomItem.outputMessage = "COPY FAILED: source-path "
+                                       + sourcePath
+                                       + " doesn't exist";
+            return;
+        }
+    }
+
     bool copyResult = false;
     std::string errorMessage = "";
 
-    if(m_localStorage == true)
+    // run task
+    if(localStorage == true)
     {
-        Kitsunemimi::DataBuffer* buffer = SakuraRoot::m_interface->m_garden->getFile(m_sourcePath);
+        Kitsunemimi::DataBuffer* buffer = SakuraRoot::m_interface->garden->getFile(sourcePath);
 
         if(buffer == nullptr)
         {
             blossomItem.success = false;
             blossomItem.outputMessage = "couldn't find local file "
-                                       + m_sourcePath;
+                                       + sourcePath;
             return;
         }
 
-        Kitsunemimi::Persistence::deleteFileOrDir(m_destinationPath, errorMessage);
-        Kitsunemimi::Persistence::BinaryFile ouputFile(m_destinationPath);
+        Kitsunemimi::Persistence::deleteFileOrDir(destinationPath, errorMessage);
+        Kitsunemimi::Persistence::BinaryFile ouputFile(destinationPath);
         copyResult = ouputFile.writeCompleteFile(*buffer);
         ouputFile.closeFile();
     }
     else
     {
-        copyResult = Kitsunemimi::Persistence::copyPath(m_sourcePath,
-                                                        m_destinationPath,
+        copyResult = Kitsunemimi::Persistence::copyPath(sourcePath,
+                                                        destinationPath,
                                                         errorMessage);
     }
 
+    // check copy-result
     if(copyResult == false)
     {
         blossomItem.success = false;
@@ -140,14 +116,14 @@ PathCopyBlossom::runTask(Kitsunemimi::Sakura::BlossomItem &blossomItem)
     }
 
     // set mode if requested
-    if(m_mode != "")
+    if(mode != "")
     {
         std::string command = "chmod ";
-        if(bfs::is_directory(m_destinationPath)) {
+        if(bfs::is_directory(destinationPath)) {
             command += "-R ";
         }
-        command += m_mode + " ";
-        command += m_destinationPath;
+        command += mode + " ";
+        command += destinationPath;
 
         LOG_DEBUG("run command: " + command);
         ProcessResult processResult = runSyncProcess(command);
@@ -161,14 +137,14 @@ PathCopyBlossom::runTask(Kitsunemimi::Sakura::BlossomItem &blossomItem)
     }
 
     // set owner if requested
-    if(m_owner != "")
+    if(owner != "")
     {
         std::string command = "chown ";
-        if(bfs::is_directory(m_destinationPath)) {
+        if(bfs::is_directory(destinationPath)) {
             command += "-R ";
         }
-        command += m_owner + ":" + m_owner + " ";
-        command += m_destinationPath;
+        command += owner + ":" + owner + " ";
+        command += destinationPath;
 
         LOG_DEBUG("run command: " + command);
         ProcessResult processResult = runSyncProcess(command);
@@ -181,33 +157,16 @@ PathCopyBlossom::runTask(Kitsunemimi::Sakura::BlossomItem &blossomItem)
         }
     }
 
-    blossomItem.success = true;
-}
-
-/**
- * @brief postCheck
- */
-void
-PathCopyBlossom::postCheck(Kitsunemimi::Sakura::BlossomItem &blossomItem)
-{
-    if(bfs::exists(m_destinationPath) == false)
+    // post-check
+    if(bfs::exists(destinationPath) == false)
     {
         blossomItem.success = false;
         blossomItem.outputMessage = "was not able to copy from "
-                                   + m_sourcePath
+                                   + sourcePath
                                    + " to "
-                                   + m_destinationPath;
+                                   + destinationPath;
         return;
     }
 
-    blossomItem.success = true;
-}
-
-/**
- * @brief closeBlossom
- */
-void
-PathCopyBlossom::closeBlossom(Kitsunemimi::Sakura::BlossomItem &blossomItem)
-{
     blossomItem.success = true;
 }

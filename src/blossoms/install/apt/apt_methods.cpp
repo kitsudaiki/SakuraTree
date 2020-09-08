@@ -63,8 +63,7 @@ createPackageList(const std::vector<std::string> &packageList)
 {
     std::string result = "";
 
-    for(const std::string& package : packageList)
-    {
+    for(const std::string& package : packageList) {
         result += " " + package;
     }
 

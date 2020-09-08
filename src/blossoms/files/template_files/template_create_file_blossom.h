@@ -25,8 +25,6 @@
 
 #include <libKitsunemimiSakuraLang/blossom.h>
 
-class TemplateCreateBlossom_Test;
-
 class TemplateCreateFileBlossom
         : public Kitsunemimi::Sakura::Blossom
 {
@@ -34,24 +32,8 @@ class TemplateCreateFileBlossom
 public:
     TemplateCreateFileBlossom();
 
-    Kitsunemimi::Sakura::Blossom* createNewInstance();
-
 protected:
-    void initBlossom(Kitsunemimi::Sakura::BlossomItem &blossomItem);
-    void preCheck(Kitsunemimi::Sakura::BlossomItem &blossomItem);
     void runTask(Kitsunemimi::Sakura::BlossomItem &blossomItem);
-    void postCheck(Kitsunemimi::Sakura::BlossomItem &blossomItem);
-    void closeBlossom(Kitsunemimi::Sakura::BlossomItem &blossomItem);
-
-private:
-    friend TemplateCreateBlossom_Test;
-
-    std::string m_templatePath = "";
-    std::string m_destinationPath = "";
-    std::string m_owner = "";
-    std::string m_permission = "";
-
-    std::string m_convertedContent = "";
 };
 
 #endif // TEMPLATE_CREATE_FILE_BLOSSOM_H

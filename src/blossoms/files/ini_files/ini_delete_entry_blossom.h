@@ -31,19 +31,8 @@ class IniDeleteEntryBlossom
 public:
     IniDeleteEntryBlossom();
 
-    Kitsunemimi::Sakura::Blossom* createNewInstance();
-
 protected:
-    void initBlossom(Kitsunemimi::Sakura::BlossomItem &blossomItem);
-    void preCheck(Kitsunemimi::Sakura::BlossomItem &blossomItem);
     void runTask(Kitsunemimi::Sakura::BlossomItem &blossomItem);
-    void postCheck(Kitsunemimi::Sakura::BlossomItem &blossomItem);
-    void closeBlossom(Kitsunemimi::Sakura::BlossomItem &blossomItem);
-
-private:
-    std::string m_filePath = "";
-    std::string m_group = "";
-    std::string m_entry = "";
 };
 
 #endif // INI_DELETE_ENTRY_BLOSSOM_H

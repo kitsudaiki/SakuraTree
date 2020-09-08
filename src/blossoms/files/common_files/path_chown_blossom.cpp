@@ -24,45 +24,14 @@
 #include <libKitsunemimiPersistence/files/file_methods.h>
 #include <libKitsunemimiCommon/process_execution.h>
 
+/**
+ * @brief constructor
+ */
 PathChownBlossom::PathChownBlossom()
     : Blossom()
 {
     m_requiredKeys.insert("path", new Kitsunemimi::DataValue(true));
     m_requiredKeys.insert("owner", new Kitsunemimi::DataValue(true));
-}
-
-Kitsunemimi::Sakura::Blossom*
-PathChownBlossom::createNewInstance()
-{
-    return new PathChownBlossom();
-}
-
-/**
- * @brief initBlossom
- */
-void
-PathChownBlossom::initBlossom(Kitsunemimi::Sakura::BlossomItem &blossomItem)
-{
-    m_path = blossomItem.values.getValueAsString("path");
-    m_owner = blossomItem.values.getValueAsString("owner");
-
-    blossomItem.success = true;
-}
-
-/**
- * @brief preCheck
- */
-void
-PathChownBlossom::preCheck(Kitsunemimi::Sakura::BlossomItem &blossomItem)
-{
-    if(bfs::exists(m_path) == false)
-    {
-        blossomItem.success = false;
-        blossomItem.outputMessage = "path " + m_path + " doesn't exist";
-        return;
-    }
-
-    blossomItem.success = true;
 }
 
 /**
@@ -71,36 +40,29 @@ PathChownBlossom::preCheck(Kitsunemimi::Sakura::BlossomItem &blossomItem)
 void
 PathChownBlossom::runTask(Kitsunemimi::Sakura::BlossomItem &blossomItem)
 {
-    std::string command = "chown ";
+    const std::string path = blossomItem.values.getValueAsString("path");
+    const std::string owner = blossomItem.values.getValueAsString("owner");
 
-    if(bfs::is_directory(m_path)) {
-        command += "-R ";
+    // precheck
+    if(bfs::exists(path) == false)
+    {
+        blossomItem.success = false;
+        blossomItem.outputMessage = "path " + path + " doesn't exist";
+        return;
     }
 
-    command += m_owner + ":" + m_owner + " ";
-    command += m_path;
+    // create command
+    std::string command = "chown ";
+    if(bfs::is_directory(path)) {
+        command += "-R ";
+    }
+    command += owner + ":" + owner + " ";
+    command += path;
 
     LOG_DEBUG("run command: " + command);
 
+    // run command
     Kitsunemimi::ProcessResult processResult = Kitsunemimi::runSyncProcess(command);
     blossomItem.success = processResult.success;
     blossomItem.outputMessage = processResult.processOutput;
-}
-
-/**
- * @brief postCheck
- */
-void
-PathChownBlossom::postCheck(Kitsunemimi::Sakura::BlossomItem &blossomItem)
-{
-    blossomItem.success = true;
-}
-
-/**
- * @brief closeBlossom
- */
-void
-PathChownBlossom::closeBlossom(Kitsunemimi::Sakura::BlossomItem &blossomItem)
-{
-    blossomItem.success = true;
 }

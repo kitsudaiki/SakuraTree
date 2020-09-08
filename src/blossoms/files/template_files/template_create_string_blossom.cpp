@@ -26,8 +26,9 @@
 #include <libKitsunemimiSakuraLang/sakura_lang_interface.h>
 #include <libKitsunemimiSakuraLang/sakura_garden.h>
 
-#include <sakura_root.h>
-
+/**
+ * @brief constructor
+ */
 TemplateCreateStringBlossom::TemplateCreateStringBlossom()
     : Blossom()
 {
@@ -37,67 +38,26 @@ TemplateCreateStringBlossom::TemplateCreateStringBlossom()
     m_requiredKeys.insert("variables", new Kitsunemimi::DataValue(true));
 }
 
-Kitsunemimi::Sakura::Blossom*
-TemplateCreateStringBlossom::createNewInstance()
-{
-    return new TemplateCreateStringBlossom();
-}
-
-/**
- * initBlossom
- */
-void
-TemplateCreateStringBlossom::initBlossom(Kitsunemimi::Sakura::BlossomItem &blossomItem)
-{
-    m_templatePath = blossomItem.values.getValueAsString("source_path");
-
-    // create source-path
-    const bfs::path templatePath = bfs::path("templates") / bfs::path(m_templatePath);
-    m_templatePath = SakuraRoot::m_interface->m_garden->getRelativePath(blossomItem.blossomPath,
-                                                                        templatePath).string();
-    blossomItem.success = true;
-}
-
-/**
- * preCheck
- */
-void
-TemplateCreateStringBlossom::preCheck(Kitsunemimi::Sakura::BlossomItem &blossomItem)
-{
-    blossomItem.success = true;
-}
-
 /**
  * runTask
  */
 void
 TemplateCreateStringBlossom::runTask(Kitsunemimi::Sakura::BlossomItem &blossomItem)
 {
+    std::string templatePath = blossomItem.values.getValueAsString("source_path");
+
+    // create source-path
+    const bfs::path path = bfs::path("templates") / bfs::path(templatePath);
+    templatePath = SakuraRoot::m_interface->garden->getRelativePath(blossomItem.blossomPath,
+                                                                        path).string();
+
     std::string convertedContent = "";
     blossomItem.success = convertTemplate(convertedContent,
-                                          m_templatePath,
+                                          templatePath,
                                           blossomItem.values,
                                           blossomItem.outputMessage);
 
     if(blossomItem.success) {
-        blossomItem.blossomOutput = new DataValue(convertedContent);
+        blossomItem.blossomOutput.insert("text", new DataValue(convertedContent));
     }
-}
-
-/**
- * postCheck
- */
-void
-TemplateCreateStringBlossom::postCheck(Kitsunemimi::Sakura::BlossomItem &blossomItem)
-{
-    blossomItem.success = true;
-}
-
-/**
- * closeBlossom
- */
-void
-TemplateCreateStringBlossom::closeBlossom(Kitsunemimi::Sakura::BlossomItem &blossomItem)
-{
-    blossomItem.success = true;
 }

@@ -25,28 +25,14 @@
 
 #include <libKitsunemimiSakuraLang/blossom.h>
 
-class TextWriteBlossom_Test;
-
 class TextWriteBlossom
         : public Kitsunemimi::Sakura::Blossom
 {
 public:
     TextWriteBlossom();
 
-    Kitsunemimi::Sakura::Blossom* createNewInstance();
-
 protected:
-    void initBlossom(Kitsunemimi::Sakura::BlossomItem &blossomItem);
-    void preCheck(Kitsunemimi::Sakura::BlossomItem &blossomItem);
     void runTask(Kitsunemimi::Sakura::BlossomItem &blossomItem);
-    void postCheck(Kitsunemimi::Sakura::BlossomItem &blossomItem);
-    void closeBlossom(Kitsunemimi::Sakura::BlossomItem &blossomItem);
-
-private:
-    friend TextWriteBlossom_Test;
-
-    std::string m_filePath = "";
-    std::string m_text = "";
 };
 
 #endif // TEXT_WRITE_BLOSSOM_H

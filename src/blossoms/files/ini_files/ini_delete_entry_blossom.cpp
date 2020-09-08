@@ -27,6 +27,9 @@
 
 using Kitsunemimi::Ini::IniItem;
 
+/**
+ * @brief constructor
+ */
 IniDeleteEntryBlossom::IniDeleteEntryBlossom()
     : Blossom()
 {
@@ -35,52 +38,29 @@ IniDeleteEntryBlossom::IniDeleteEntryBlossom()
     m_requiredKeys.insert("entry", new Kitsunemimi::DataValue(false));
 }
 
-Kitsunemimi::Sakura::Blossom*
-IniDeleteEntryBlossom::createNewInstance()
-{
-    return new IniDeleteEntryBlossom();
-}
-
-/**
- * @brief initBlossom
- */
-void
-IniDeleteEntryBlossom::initBlossom(Kitsunemimi::Sakura::BlossomItem &blossomItem)
-{
-    m_filePath = blossomItem.values.getValueAsString("file_path");
-    m_group = blossomItem.values.getValueAsString("group");
-    m_entry = blossomItem.values.getValueAsString("entry");
-
-    blossomItem.success = true;
-}
-
-/**
- * @brief preCheck
- */
-void
-IniDeleteEntryBlossom::preCheck(Kitsunemimi::Sakura::BlossomItem &blossomItem)
-{
-    if(bfs::exists(m_filePath) == false)
-    {
-        blossomItem.success = false;
-        blossomItem.outputMessage = "file-path "
-                                   + m_filePath
-                                   + " doesn't exist";
-        return;
-    }
-
-    blossomItem.success = true;
-}
-
 /**
  * @brief runTask
  */
 void
 IniDeleteEntryBlossom::runTask(Kitsunemimi::Sakura::BlossomItem &blossomItem)
 {
+    const std::string filePath = blossomItem.values.getValueAsString("file_path");
+    const std::string group = blossomItem.values.getValueAsString("group");
+    const std::string entry = blossomItem.values.getValueAsString("entry");
+
+    // precheck
+    if(bfs::exists(filePath) == false)
+    {
+        blossomItem.success = false;
+        blossomItem.outputMessage = "file-path "
+                                   + filePath
+                                   + " doesn't exist";
+        return;
+    }
+
     std::string errorMessage = "";
     std::string fileContent = "";
-    bool result = Kitsunemimi::Persistence::readFile(fileContent, m_filePath, errorMessage);
+    bool result = Kitsunemimi::Persistence::readFile(fileContent, filePath, errorMessage);
 
     if(result == false)
     {
@@ -100,30 +80,12 @@ IniDeleteEntryBlossom::runTask(Kitsunemimi::Sakura::BlossomItem &blossomItem)
         return;
     }
 
-    if(m_entry == "") {
-        iniItem.removeGroup(m_group);
+    if(entry == "") {
+        iniItem.removeGroup(group);
     } else {
-        iniItem.removeEntry(m_group, m_entry);
+        iniItem.removeEntry(group, entry);
     }
 
     blossomItem.success = true;
 }
 
-/**
- * @brief postCheck
- */
-void
-IniDeleteEntryBlossom::postCheck(Kitsunemimi::Sakura::BlossomItem &blossomItem)
-{
-    // TODO:
-    blossomItem.success = true;
-}
-
-/**
- * @brief closeBlossom
- */
-void
-IniDeleteEntryBlossom::closeBlossom(Kitsunemimi::Sakura::BlossomItem &blossomItem)
-{
-    blossomItem.success = true;
-}

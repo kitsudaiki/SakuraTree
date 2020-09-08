@@ -31,20 +31,8 @@ class IniSetEntryBlossom
 public:
     IniSetEntryBlossom();
 
-    Kitsunemimi::Sakura::Blossom* createNewInstance();
-
 protected:
-    void initBlossom(Kitsunemimi::Sakura::BlossomItem &blossomItem);
-    void preCheck(Kitsunemimi::Sakura::BlossomItem &blossomItem);
     void runTask(Kitsunemimi::Sakura::BlossomItem &blossomItem);
-    void postCheck(Kitsunemimi::Sakura::BlossomItem &blossomItem);
-    void closeBlossom(Kitsunemimi::Sakura::BlossomItem &blossomItem);
-
-private:
-    std::string m_filePath = "";
-    std::string m_group = "";
-    std::string m_entry = "";
-    std::string m_value = "";
 };
 
 #endif // INI_SET_ENTRY_BLOSSOM_H

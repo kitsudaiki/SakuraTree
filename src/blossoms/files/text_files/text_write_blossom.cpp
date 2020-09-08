@@ -24,39 +24,14 @@
 #include <libKitsunemimiPersistence/files/file_methods.h>
 #include <libKitsunemimiPersistence/files/text_file.h>
 
+/**
+ * @brief constructor
+ */
 TextWriteBlossom::TextWriteBlossom()
     : Blossom()
 {
     m_requiredKeys.insert("file_path", new Kitsunemimi::DataValue(true));
     m_requiredKeys.insert("text", new Kitsunemimi::DataValue(true));
-}
-
-Kitsunemimi::Sakura::Blossom* TextWriteBlossom::createNewInstance()
-{
-    return new TextWriteBlossom();
-}
-
-/**
- * @brief initBlossom
- */
-void
-TextWriteBlossom::initBlossom(Kitsunemimi::Sakura::BlossomItem &blossomItem)
-{
-    m_filePath = blossomItem.values.getValueAsString("file_path");
-    m_text = blossomItem.values.getValueAsString("text");
-
-    blossomItem.success = true;
-}
-
-/**
- * @brief preCheck
- */
-void
-TextWriteBlossom::preCheck(Kitsunemimi::Sakura::BlossomItem &blossomItem)
-{
-    // TODO: check if directory exist
-
-    blossomItem.success = true;
 }
 
 /**
@@ -65,8 +40,11 @@ TextWriteBlossom::preCheck(Kitsunemimi::Sakura::BlossomItem &blossomItem)
 void
 TextWriteBlossom::runTask(Kitsunemimi::Sakura::BlossomItem &blossomItem)
 {
+    const std::string filePath = blossomItem.values.getValueAsString("file_path");
+    const std::string text = blossomItem.values.getValueAsString("text");
+
     std::string errorMessage = "";
-    bool result = Kitsunemimi::Persistence::writeFile(m_filePath, m_text, errorMessage, true);
+    bool result = Kitsunemimi::Persistence::writeFile(filePath, text, errorMessage, true);
 
     if(result == false)
     {
@@ -75,24 +53,5 @@ TextWriteBlossom::runTask(Kitsunemimi::Sakura::BlossomItem &blossomItem)
         return;
     }
 
-    blossomItem.success = true;
-}
-
-/**
- * @brief postCheck
- */
-void
-TextWriteBlossom::postCheck(Kitsunemimi::Sakura::BlossomItem &blossomItem)
-{
-
-    blossomItem.success = true;
-}
-
-/**
- * @brief closeBlossom
- */
-void
-TextWriteBlossom::closeBlossom(Kitsunemimi::Sakura::BlossomItem &blossomItem)
-{
     blossomItem.success = true;
 }

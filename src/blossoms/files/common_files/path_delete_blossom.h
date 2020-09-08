@@ -25,27 +25,14 @@
 
 #include <libKitsunemimiSakuraLang/blossom.h>
 
-class PathDeleteBlossom_Test;
-
 class PathDeleteBlossom
         : public Kitsunemimi::Sakura::Blossom
 {
 public:
     PathDeleteBlossom();
 
-    Kitsunemimi::Sakura::Blossom* createNewInstance();
-
 protected:
-    void initBlossom(Kitsunemimi::Sakura::BlossomItem &blossomItem);
-    void preCheck(Kitsunemimi::Sakura::BlossomItem &blossomItem);
     void runTask(Kitsunemimi::Sakura::BlossomItem &blossomItem);
-    void postCheck(Kitsunemimi::Sakura::BlossomItem &blossomItem);
-    void closeBlossom(Kitsunemimi::Sakura::BlossomItem &blossomItem);
-
-private:
-    friend PathDeleteBlossom_Test;
-
-    std::string m_path = "";
 };
 
 #endif // PATH_DELETE_BLOSSOM_H

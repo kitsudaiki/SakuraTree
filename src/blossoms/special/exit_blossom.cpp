@@ -22,36 +22,13 @@
 
 #include "exit_blossom.h"
 
+/**
+ * @brief constructor
+ */
 ExitBlossom::ExitBlossom()
     : Blossom()
 {
     m_requiredKeys.insert("status", new Kitsunemimi::DataValue(false));
-}
-
-Kitsunemimi::Sakura::Blossom*
-ExitBlossom::createNewInstance()
-{
-    return new ExitBlossom();
-}
-
-/**
- * initBlossom
- */
-void
-ExitBlossom::initBlossom(Kitsunemimi::Sakura::BlossomItem &blossomItem)
-{
-    m_exitStatus = blossomItem.values.get("status")->toValue()->getInt();
-
-    blossomItem.success = true;
-}
-
-/**
- * preCheck
- */
-void
-ExitBlossom::preCheck(Kitsunemimi::Sakura::BlossomItem &blossomItem)
-{
-    blossomItem.success = true;
 }
 
 /**
@@ -60,25 +37,7 @@ ExitBlossom::preCheck(Kitsunemimi::Sakura::BlossomItem &blossomItem)
 void
 ExitBlossom::runTask(Kitsunemimi::Sakura::BlossomItem &blossomItem)
 {
-    blossomItem.success = true;
+    const int exitStatus = blossomItem.values.get("status")->toValue()->getInt();
 
-    exit(m_exitStatus);
-}
-
-/**
- * postCheck
- */
-void
-ExitBlossom::postCheck(Kitsunemimi::Sakura::BlossomItem &blossomItem)
-{
-    blossomItem.success = true;
-}
-
-/**
- * closeBlossom
- */
-void
-ExitBlossom::closeBlossom(Kitsunemimi::Sakura::BlossomItem &blossomItem)
-{
-    blossomItem.success = true;
+    exit(exitStatus);
 }

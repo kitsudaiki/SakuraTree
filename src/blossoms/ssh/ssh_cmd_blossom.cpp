@@ -25,6 +25,9 @@
 #include <libKitsunemimiCommon/common_methods/string_methods.h>
 #include <libKitsunemimiCommon/process_execution.h>
 
+/**
+ * @brief constructor
+ */
 SshCmdBlossom::SshCmdBlossom()
     : Blossom()
 {
@@ -37,58 +40,33 @@ SshCmdBlossom::SshCmdBlossom()
     m_requiredKeys.insert("ssh_key", new Kitsunemimi::DataValue(false));
 }
 
-Kitsunemimi::Sakura::Blossom*
-SshCmdBlossom::createNewInstance()
-{
-    return new SshCmdBlossom();
-}
-
-/**
- * initBlossom
- */
-void
-SshCmdBlossom::initBlossom(Kitsunemimi::Sakura::BlossomItem &blossomItem)
-{
-    m_user = blossomItem.values.getValueAsString("user");
-    m_address = blossomItem.values.getValueAsString("address");
-    m_command = blossomItem.values.getValueAsString("command");
-    m_port = blossomItem.values.getValueAsString("port");
-    m_sshKey = blossomItem.values.getValueAsString("ssh_key");
-
-    blossomItem.success = true;
-}
-
-/**
- * preCheck
- */
-void
-SshCmdBlossom::preCheck(Kitsunemimi::Sakura::BlossomItem &blossomItem)
-{
-    //TODO: check per ssh if file already exist
-    blossomItem.success = true;
-}
-
 /**
  * runTask
  */
 void
 SshCmdBlossom::runTask(Kitsunemimi::Sakura::BlossomItem &blossomItem)
 {
+    const std::string user = blossomItem.values.getValueAsString("user");
+    const std::string address = blossomItem.values.getValueAsString("address");
+    const std::string command = blossomItem.values.getValueAsString("command");
+    const std::string port = blossomItem.values.getValueAsString("port");
+    const std::string sshKey = blossomItem.values.getValueAsString("ssh_key");
+
     std::string programm = "ssh ";
-    if(m_port != "") {
-        programm += " -p " + m_port;
+    if(port != "") {
+        programm += " -p " + port;
     }
-    if(m_sshKey != "") {
-        programm += " -i " + m_sshKey;
+    if(sshKey != "") {
+        programm += " -i " + sshKey;
     }
 
     programm += " ";
-    programm += m_user;
+    programm += user;
     programm += "@";
-    programm += m_address;
+    programm += address;
     programm += " -T ";
     programm += "\"";
-    programm += m_command;
+    programm += command;
     programm += "\"";
 
     LOG_DEBUG("run command: " + programm);
@@ -97,24 +75,7 @@ SshCmdBlossom::runTask(Kitsunemimi::Sakura::BlossomItem &blossomItem)
     blossomItem.success = processResult.success;
     blossomItem.outputMessage = processResult.processOutput;
 
-    blossomItem.blossomOutput = new Kitsunemimi::DataValue(processResult.processOutput);
-    blossomItem.success = true;
-}
-
-/**
- * postCheck
- */
-void
-SshCmdBlossom::postCheck(Kitsunemimi::Sakura::BlossomItem &blossomItem)
-{
-    blossomItem.success = true;
-}
-
-/**
- * closeBlossom
- */
-void
-SshCmdBlossom::closeBlossom(Kitsunemimi::Sakura::BlossomItem &blossomItem)
-{
+    blossomItem.blossomOutput.insert("output",
+                                     new Kitsunemimi::DataValue(processResult.processOutput));
     blossomItem.success = true;
 }

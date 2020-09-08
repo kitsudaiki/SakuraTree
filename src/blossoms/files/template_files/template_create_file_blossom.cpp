@@ -23,14 +23,15 @@
 #include "template_create_file_blossom.h"
 #include "template_methods.h"
 
-#include <sakura_root.h>
-
 #include <libKitsunemimiSakuraLang/sakura_lang_interface.h>
 #include <libKitsunemimiSakuraLang/sakura_garden.h>
 
 #include <libKitsunemimiPersistence/files/file_methods.h>
 #include <libKitsunemimiPersistence/files/text_file.h>
 
+/**
+ * @brief constructor
+ */
 TemplateCreateFileBlossom::TemplateCreateFileBlossom()
     : Blossom()
 {
@@ -41,39 +42,26 @@ TemplateCreateFileBlossom::TemplateCreateFileBlossom()
     m_requiredKeys.insert("variables", new Kitsunemimi::DataValue(true));
 }
 
-Kitsunemimi::Sakura::Blossom*
-TemplateCreateFileBlossom::createNewInstance()
-{
-    return new TemplateCreateFileBlossom();
-}
-
 /**
- * initBlossom
+ * runTask
  */
 void
-TemplateCreateFileBlossom::initBlossom(Kitsunemimi::Sakura::BlossomItem &blossomItem)
+TemplateCreateFileBlossom::runTask(Kitsunemimi::Sakura::BlossomItem &blossomItem)
 {
-    m_templatePath = blossomItem.values.getValueAsString("source_path");
-    m_destinationPath = blossomItem.values.getValueAsString("dest_path");
-    m_owner = blossomItem.values.getValueAsString("owner");
-    m_permission = blossomItem.values.getValueAsString("permission");
+    std::string templatePath = blossomItem.values.getValueAsString("source_path");
+    const std::string destinationPath = blossomItem.values.getValueAsString("dest_path");
+    const std::string owner = blossomItem.values.getValueAsString("owner");
+    const std::string permission = blossomItem.values.getValueAsString("permission");
 
     // create source-path
-    const bfs::path templatePath = bfs::path("templates") / bfs::path(m_templatePath);
-    m_templatePath = SakuraRoot::m_interface->m_garden->getRelativePath(blossomItem.blossomPath,
-                                                                        templatePath).string();
+    const bfs::path path = bfs::path("templates") / bfs::path(templatePath);
+    templatePath = SakuraRoot::m_interface->garden->getRelativePath(blossomItem.blossomPath,
+                                                                    path).string();
 
-    blossomItem.success = true;
-}
 
-/**
- * preCheck
- */
-void
-TemplateCreateFileBlossom::preCheck(Kitsunemimi::Sakura::BlossomItem &blossomItem)
-{
-    blossomItem.success = convertTemplate(m_convertedContent,
-                                          m_templatePath,
+    std::string convertedContent = "";
+    blossomItem.success = convertTemplate(convertedContent,
+                                          templatePath,
                                           blossomItem.values,
                                           blossomItem.outputMessage);
     if(blossomItem.success == false) {
@@ -81,15 +69,15 @@ TemplateCreateFileBlossom::preCheck(Kitsunemimi::Sakura::BlossomItem &blossomIte
     }
 
     // check if template-file already exist
-    if(bfs::exists(m_destinationPath))
+    if(bfs::exists(destinationPath))
     {
         // read the already existing file and compare it the current file-content
         std::string existingFileContent;
         const bool ret = Kitsunemimi::Persistence::readFile(existingFileContent,
-                                                            m_destinationPath,
+                                                            destinationPath,
                                                             blossomItem.outputMessage);
         if(ret == true
-                && m_convertedContent == existingFileContent)
+                && convertedContent == existingFileContent)
         {
             blossomItem.skip = true;
             blossomItem.success = true;
@@ -97,37 +85,30 @@ TemplateCreateFileBlossom::preCheck(Kitsunemimi::Sakura::BlossomItem &blossomIte
         }
     }
 
-    blossomItem.success = true;
-}
 
-/**
- * runTask
- */
-void
-TemplateCreateFileBlossom::runTask(Kitsunemimi::Sakura::BlossomItem &blossomItem)
-{
+
     std::string errorMessage = "";
-    blossomItem.success = Kitsunemimi::Persistence::writeFile(m_destinationPath,
-                                                              m_convertedContent,
+    blossomItem.success = Kitsunemimi::Persistence::writeFile(destinationPath,
+                                                              convertedContent,
                                                               errorMessage,
                                                               true);
     if(blossomItem.success == false)
     {
         blossomItem.success = false;
         blossomItem.outputMessage = "couldn't write template-file to "
-                                   + m_destinationPath +
+                                   + destinationPath +
                                    " with reason: "
                                    + errorMessage;
         return;
     }
 
     // set owner if defined
-    if(m_owner != "")
+    if(owner != "")
     {
         std::string command = "chown ";
 
-        command += m_owner + ":" + m_owner + " ";
-        command += m_destinationPath;
+        command += owner + ":" + owner + " ";
+        command += destinationPath;
 
         LOG_DEBUG("run command: " + command);
 
@@ -142,12 +123,12 @@ TemplateCreateFileBlossom::runTask(Kitsunemimi::Sakura::BlossomItem &blossomItem
     }
 
     // set permission if defined
-    if(m_permission != "")
+    if(permission != "")
     {
         std::string command = "chmod ";
 
-        command += m_permission + " ";
-        command += m_destinationPath;
+        command += permission + " ";
+        command += destinationPath;
 
         LOG_DEBUG("run command: " + command);
 
@@ -161,34 +142,16 @@ TemplateCreateFileBlossom::runTask(Kitsunemimi::Sakura::BlossomItem &blossomItem
         }
     }
 
-    blossomItem.success = true;
-}
-
-/**
- * postCheck
- */
-void
-TemplateCreateFileBlossom::postCheck(Kitsunemimi::Sakura::BlossomItem &blossomItem)
-{
     std::string fileContent = "";
     bool ret = Kitsunemimi::Persistence::readFile(fileContent,
-                                                  m_destinationPath,
+                                                  destinationPath,
                                                   blossomItem.outputMessage);
     if(ret == false
-            || m_convertedContent != fileContent)
+            || convertedContent != fileContent)
     {
         blossomItem.success = false;
         return;
     }
 
-    blossomItem.success = true;
-}
-
-/**
- * closeBlossom
- */
-void
-TemplateCreateFileBlossom::closeBlossom(Kitsunemimi::Sakura::BlossomItem &blossomItem)
-{
     blossomItem.success = true;
 }

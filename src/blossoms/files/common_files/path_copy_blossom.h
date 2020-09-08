@@ -25,31 +25,14 @@
 
 #include <libKitsunemimiSakuraLang/blossom.h>
 
-class PathCopyBlossom_Test;
-
 class PathCopyBlossom
         : public Kitsunemimi::Sakura::Blossom
 {
 public:
     PathCopyBlossom();
 
-    Kitsunemimi::Sakura::Blossom* createNewInstance();
-
 protected:
-    void initBlossom(Kitsunemimi::Sakura::BlossomItem &blossomItem);
-    void preCheck(Kitsunemimi::Sakura::BlossomItem &blossomItem);
     void runTask(Kitsunemimi::Sakura::BlossomItem &blossomItem);
-    void postCheck(Kitsunemimi::Sakura::BlossomItem &blossomItem);
-    void closeBlossom(Kitsunemimi::Sakura::BlossomItem &blossomItem);
-
-private:
-    friend PathCopyBlossom_Test;
-
-    std::string m_sourcePath = "";
-    std::string m_destinationPath = "";
-    std::string m_mode = "";
-    std::string m_owner = "";
-    bool m_localStorage = false;
 };
 
 #endif // PATH_COPY_BLOSSOM_H

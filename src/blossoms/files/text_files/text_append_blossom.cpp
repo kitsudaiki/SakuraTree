@@ -24,56 +24,14 @@
 #include <libKitsunemimiPersistence/files/file_methods.h>
 #include <libKitsunemimiPersistence/files/text_file.h>
 
+/**
+ * @brief constructor
+ */
 TextAppendBlossom::TextAppendBlossom()
     : Blossom()
 {
     m_requiredKeys.insert("file_path", new Kitsunemimi::DataValue(true));
     m_requiredKeys.insert("text", new Kitsunemimi::DataValue(true));
-}
-
-Kitsunemimi::Sakura::Blossom*
-TextAppendBlossom::createNewInstance()
-{
-    return new TextAppendBlossom();
-}
-
-/**
- * @brief initBlossom
- */
-void
-TextAppendBlossom::initBlossom(Kitsunemimi::Sakura::BlossomItem &blossomItem)
-{
-    m_filePath = blossomItem.values.getValueAsString("file_path");
-    m_newText = blossomItem.values.getValueAsString("text");
-
-    blossomItem.success = true;
-}
-
-/**
- * @brief preCheck
- */
-void
-TextAppendBlossom::preCheck(Kitsunemimi::Sakura::BlossomItem &blossomItem)
-{
-    if(bfs::exists(m_filePath) == false)
-    {
-        blossomItem.success = false;
-        blossomItem.outputMessage = "path "
-                                   + m_filePath
-                                   + " doesn't exist";
-        return;
-    }
-
-    if(bfs::is_regular_file(m_filePath) == false)
-    {
-        blossomItem.success = false;
-        blossomItem.outputMessage = "path "
-                                   + m_filePath
-                                   + " is not a file";
-        return;
-    }
-
-    blossomItem.success = true;
 }
 
 /**
@@ -82,8 +40,29 @@ TextAppendBlossom::preCheck(Kitsunemimi::Sakura::BlossomItem &blossomItem)
 void
 TextAppendBlossom::runTask(Kitsunemimi::Sakura::BlossomItem &blossomItem)
 {
+    const std::string filePath = blossomItem.values.getValueAsString("file_path");
+    const std::string newText = blossomItem.values.getValueAsString("text");
+
+    if(bfs::exists(filePath) == false)
+    {
+        blossomItem.success = false;
+        blossomItem.outputMessage = "path "
+                                   + filePath
+                                   + " doesn't exist";
+        return;
+    }
+
+    if(bfs::is_regular_file(filePath) == false)
+    {
+        blossomItem.success = false;
+        blossomItem.outputMessage = "path "
+                                   + filePath
+                                   + " is not a file";
+        return;
+    }
+
     std::string errorMessage = "";
-    const bool result = Kitsunemimi::Persistence::appendText(m_filePath, m_newText, errorMessage);
+    const bool result = Kitsunemimi::Persistence::appendText(filePath, newText, errorMessage);
 
     if(result == false)
     {
@@ -92,24 +71,5 @@ TextAppendBlossom::runTask(Kitsunemimi::Sakura::BlossomItem &blossomItem)
         return;
     }
 
-    blossomItem.success = true;
-}
-
-/**
- * @brief postCheck
- */
-void
-TextAppendBlossom::postCheck(Kitsunemimi::Sakura::BlossomItem &blossomItem)
-{
-
-    blossomItem.success = true;
-}
-
-/**
- * @brief closeBlossom
- */
-void
-TextAppendBlossom::closeBlossom(Kitsunemimi::Sakura::BlossomItem &blossomItem)
-{
     blossomItem.success = true;
 }

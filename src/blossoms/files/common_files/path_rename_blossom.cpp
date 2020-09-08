@@ -27,66 +27,14 @@
 
 using Kitsunemimi::splitStringByDelimiter;
 
+/**
+ * @brief constructor
+ */
 PathRenameBlossom::PathRenameBlossom()
     : Blossom()
 {
     m_requiredKeys.insert("path", new Kitsunemimi::DataValue(true));
     m_requiredKeys.insert("new_name", new Kitsunemimi::DataValue(true));
-}
-
-Kitsunemimi::Sakura::Blossom*
-PathRenameBlossom::createNewInstance()
-{
-    return new PathRenameBlossom();
-}
-
-/**
- * @brief initBlossom
- */
-void
-PathRenameBlossom::initBlossom(Kitsunemimi::Sakura::BlossomItem &blossomItem)
-{
-    m_path = blossomItem.values.getValueAsString("path");
-    m_newFileName = blossomItem.values.getValueAsString("new_name");
-
-    std::vector<std::string> stringParts;
-    splitStringByDelimiter(stringParts, m_path, '/');
-    stringParts[stringParts.size()-1] = m_newFileName;
-
-    Kitsunemimi::removeEmptyStrings(stringParts);
-    for(const std::string& stringPart : stringParts)
-    {
-        m_newFilePath += "/";
-        m_newFilePath += stringPart;
-    }
-
-    blossomItem.success = true;
-}
-
-/**
- * @brief preCheck
- */
-void
-PathRenameBlossom::preCheck(Kitsunemimi::Sakura::BlossomItem &blossomItem)
-{
-    if(bfs::exists(m_path) == false
-            && bfs::exists(m_newFilePath))
-    {
-        blossomItem.skip = true;
-        blossomItem.success = true;
-        return;
-    }
-
-    if(bfs::exists(m_path) == false)
-    {
-        blossomItem.success = false;
-        blossomItem.outputMessage = "source-path "
-                                   + m_path
-                                   + " doesn't exist";
-        return;
-    }
-
-    blossomItem.success = true;
 }
 
 /**
@@ -95,9 +43,42 @@ PathRenameBlossom::preCheck(Kitsunemimi::Sakura::BlossomItem &blossomItem)
 void
 PathRenameBlossom::runTask(Kitsunemimi::Sakura::BlossomItem &blossomItem)
 {
+    const std::string path = blossomItem.values.getValueAsString("path");
+    std::string newFileName = blossomItem.values.getValueAsString("new_name");
+
+    std::vector<std::string> stringParts;
+    splitStringByDelimiter(stringParts, path, '/');
+    stringParts[stringParts.size()-1] = newFileName;
+
+    Kitsunemimi::removeEmptyStrings(stringParts);
+    for(const std::string& stringPart : stringParts)
+    {
+         newFileName += "/";
+         newFileName += stringPart;
+    }
+
+
+    if(bfs::exists(path) == false
+             && bfs::exists(newFileName))
+    {
+         blossomItem.skip = true;
+         blossomItem.success = true;
+         return;
+    }
+
+    if(bfs::exists(path) == false)
+    {
+         blossomItem.success = false;
+         blossomItem.outputMessage = "source-path "
+                                    + path
+                                    + " doesn't exist";
+         return;
+    }
+
+
     std::string errorMessage = "";
-    bool renameResult = Kitsunemimi::Persistence::renameFileOrDir(m_path,
-                                                                  m_newFilePath,
+    bool renameResult = Kitsunemimi::Persistence::renameFileOrDir(path,
+                                                                  newFileName,
                                                                   errorMessage);
 
     if(renameResult == false)
@@ -107,40 +88,23 @@ PathRenameBlossom::runTask(Kitsunemimi::Sakura::BlossomItem &blossomItem)
         return;
     }
 
-    blossomItem.success = true;
-}
-
-/**
- * @brief postCheck
- */
-void
-PathRenameBlossom::postCheck(Kitsunemimi::Sakura::BlossomItem &blossomItem)
-{
-    if(bfs::is_regular_file(m_path))
+    if(bfs::is_regular_file(path))
     {
         blossomItem.success = false;
         blossomItem.outputMessage = "old object still exist";
         return;
     }
 
-    if(bfs::exists(m_newFilePath) == false)
+    if(bfs::exists(newFileName) == false)
     {
         blossomItem.success = false;
         blossomItem.outputMessage = "was not able to rename from "
-                                   + m_path
+                                   + path
                                    + " to "
-                                   + m_newFileName;
+                                   + newFileName;
         return;
     }
 
     blossomItem.success = true;
 }
 
-/**
- * @brief closeBlossom
- */
-void
-PathRenameBlossom::closeBlossom(Kitsunemimi::Sakura::BlossomItem &blossomItem)
-{
-    blossomItem.success = true;
-}

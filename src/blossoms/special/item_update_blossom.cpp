@@ -24,34 +24,13 @@
 
 #include <libKitsunemimiSakuraLang/items/value_item_map.h>
 
+/**
+ * @brief constructor
+ */
 ItemUpdateBlossom::ItemUpdateBlossom()
     : Blossom()
 {
     m_requiredKeys.insert("*", new Kitsunemimi::DataValue(false));
-}
-
-Kitsunemimi::Sakura::Blossom*
-ItemUpdateBlossom::createNewInstance()
-{
-    return new ItemUpdateBlossom();
-}
-
-/**
- * initBlossom
- */
-void
-ItemUpdateBlossom::initBlossom(Kitsunemimi::Sakura::BlossomItem &blossomItem)
-{
-    blossomItem.success = true;
-}
-
-/**
- * preCheck
- */
-void
-ItemUpdateBlossom::preCheck(Kitsunemimi::Sakura::BlossomItem &blossomItem)
-{
-    blossomItem.success = true;
 }
 
 /**
@@ -74,22 +53,4 @@ ItemUpdateBlossom::runTask(Kitsunemimi::Sakura::BlossomItem &blossomItem)
                                              true);
         }
     }
-}
-
-/**
- * postCheck
- */
-void
-ItemUpdateBlossom::postCheck(Kitsunemimi::Sakura::BlossomItem &blossomItem)
-{
-    blossomItem.success = true;
-}
-
-/**
- * closeBlossom
- */
-void
-ItemUpdateBlossom::closeBlossom(Kitsunemimi::Sakura::BlossomItem &blossomItem)
-{
-    blossomItem.success = true;
 }

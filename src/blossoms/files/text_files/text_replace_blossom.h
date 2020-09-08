@@ -25,29 +25,14 @@
 
 #include <libKitsunemimiSakuraLang/blossom.h>
 
-class TextReplaceBlossom_Test;
-
 class TextReplaceBlossom
         : public Kitsunemimi::Sakura::Blossom
 {
 public:
     TextReplaceBlossom();
 
-    Kitsunemimi::Sakura::Blossom* createNewInstance();
-
 protected:
-    void initBlossom(Kitsunemimi::Sakura::BlossomItem &blossomItem);
-    void preCheck(Kitsunemimi::Sakura::BlossomItem &blossomItem);
     void runTask(Kitsunemimi::Sakura::BlossomItem &blossomItem);
-    void postCheck(Kitsunemimi::Sakura::BlossomItem &blossomItem);
-    void closeBlossom(Kitsunemimi::Sakura::BlossomItem &blossomItem);
-
-private:
-    friend TextReplaceBlossom_Test;
-
-    std::string m_filePath = "";
-    std::string m_oldText = "";
-    std::string m_newText = "";
 };
 
 #endif // TEXT_REPLACE_BLOSSOM_H

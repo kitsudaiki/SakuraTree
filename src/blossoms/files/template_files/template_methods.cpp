@@ -44,7 +44,7 @@ convertTemplate(std::string &output,
                 std::string &errorMessage)
 {
     // read template-file
-    const std::string templateCont = SakuraRoot::m_interface->m_garden->getTemplate(templatePath);
+    const std::string templateCont = SakuraRoot::m_interface->garden->getTemplate(templatePath);
     if(templateCont == "")
     {
         errorMessage = "couldn't find template-file " + templatePath;
@@ -78,7 +78,7 @@ convertTemplate(std::string &output,
     }
 
     // create file-content form template
-    bool jinja2Result = SakuraRoot::m_interface->m_jinja2Converter->convert(output,
+    bool jinja2Result = SakuraRoot::m_interface->jinja2Converter->convert(output,
                                                                             templateCont,
                                                                             &inputData,
                                                                             errorMessage);

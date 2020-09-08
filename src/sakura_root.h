@@ -47,7 +47,6 @@ public:
     // start processing
     bool startProcess(const std::string &inputPath,
                       const DataMap &initialValues,
-                      const bool enableDebug,
                       const bool dryRun = false);
 
     // static values

@@ -23,57 +23,13 @@
 #include "apt_latest_blossom.h"
 #include <blossoms/install/apt/apt_methods.h>
 
+/**
+ * @brief constructor
+ */
 AptLatestBlossom::AptLatestBlossom()
     : Blossom()
 {
     m_requiredKeys.insert("packages", new Kitsunemimi::DataValue(true));
-}
-
-Kitsunemimi::Sakura::Blossom*
-AptLatestBlossom::createNewInstance()
-{
-    return new AptLatestBlossom();
-}
-
-/**
- * @brief AptLatestBlossom::initBlossom
- */
-void
-AptLatestBlossom::initBlossom(Kitsunemimi::Sakura::BlossomItem &blossomItem)
-{
-    DataArray* names = blossomItem.values.get("packages")->toArray();
-    if(names != nullptr)
-    {
-        // list of packages
-        for(uint32_t i = 0; i < names->size(); i++)
-        {
-            m_packageNames.push_back(names->get(i)->toString());
-        }
-    }
-    else
-    {
-        // single package
-        m_packageNames.push_back(blossomItem.values.get("packages")->toString());
-    }
-
-    // check if there are at least one package defined
-    if(m_packageNames.size() == 0)
-    {
-        blossomItem.success = false;
-        blossomItem.outputMessage = "no packages to defined";
-        return;
-    }
-
-    blossomItem.success = true;
-}
-
-/**
- * @brief AptLatestBlossom::preCheck
- */
-void
-AptLatestBlossom::preCheck(Kitsunemimi::Sakura::BlossomItem &blossomItem)
-{
-    blossomItem.success = true;
 }
 
 /**
@@ -82,10 +38,34 @@ AptLatestBlossom::preCheck(Kitsunemimi::Sakura::BlossomItem &blossomItem)
 void
 AptLatestBlossom::runTask(Kitsunemimi::Sakura::BlossomItem &blossomItem)
 {
+    std::vector<std::string> packageNames;
+
+    DataArray* names = blossomItem.values.get("packages")->toArray();
+    if(names != nullptr)
+    {
+        // list of packages
+        for(uint32_t i = 0; i < names->size(); i++) {
+            packageNames.push_back(names->get(i)->toString());
+        }
+    }
+    else
+    {
+        // single package
+        packageNames.push_back(blossomItem.values.get("packages")->toString());
+    }
+
+    // check if there are at least one package defined
+    if(packageNames.size() == 0)
+    {
+        blossomItem.success = false;
+        blossomItem.outputMessage = "no packages to defined";
+        return;
+    }
+
+
     // convert list into string
     std::string appendedList = "";
-    for(const std::string& packageName : m_packageNames)
-    {
+    for(const std::string& packageName : packageNames) {
         appendedList += packageName + " ";
     }
 
@@ -97,22 +77,15 @@ AptLatestBlossom::runTask(Kitsunemimi::Sakura::BlossomItem &blossomItem)
     ProcessResult processResult = runSyncProcess(programm);
     blossomItem.success = processResult.success;
     blossomItem.outputMessage = processResult.processOutput;
-}
 
-/**
- * @brief AptInstallBlossom::postCheck
- */
-void
-AptLatestBlossom::postCheck(Kitsunemimi::Sakura::BlossomItem &blossomItem)
-{
     // get list of not installed packages
-    m_packageNames = getAbsendPackages(m_packageNames);
+    packageNames = getAbsendPackages(packageNames);
 
     // if there are still some packages missing, create an error
-    if(m_packageNames.size() > 0)
+    if(packageNames.size() > 0)
     {
         std::string output = "couldn't install following packages: \n";
-        for(const std::string& packageName : m_packageNames)
+        for(const std::string& packageName : packageNames)
         {
             output += packageName + "\n";
         }
@@ -123,15 +96,5 @@ AptLatestBlossom::postCheck(Kitsunemimi::Sakura::BlossomItem &blossomItem)
         return;
     }
 
-    blossomItem.success = true;
-}
-
-/**
- * @brief AptInstallBlossom::closeBlossom
- */
-void
-AptLatestBlossom::closeBlossom(Kitsunemimi::Sakura::BlossomItem &blossomItem)
-{
-    m_packageNames.clear();
     blossomItem.success = true;
 }

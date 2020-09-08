@@ -23,32 +23,11 @@
 #include "apt_update_blossom.h"
 #include <blossoms/install/apt/apt_methods.h>
 
+/**
+ * @brief constructor
+ */
 AptUdateBlossom::AptUdateBlossom()
     : Blossom() {}
-
-Kitsunemimi::Sakura::Blossom*
-AptUdateBlossom::createNewInstance()
-{
-    return new AptUdateBlossom();
-}
-
-/**
- * initBlossom
- */
-void
-AptUdateBlossom::initBlossom(Kitsunemimi::Sakura::BlossomItem &blossomItem)
-{
-    blossomItem.success = true;
-}
-
-/**
- * preCheck
- */
-void
-AptUdateBlossom::preCheck(Kitsunemimi::Sakura::BlossomItem &blossomItem)
-{
-    blossomItem.success = true;
-}
 
 /**
  * runTask
@@ -62,22 +41,4 @@ AptUdateBlossom::runTask(Kitsunemimi::Sakura::BlossomItem &blossomItem)
     ProcessResult processResult = runSyncProcess(programm);
     blossomItem.success = processResult.success;
     blossomItem.outputMessage = processResult.processOutput;
-}
-
-/**
- * postCheck
- */
-void
-AptUdateBlossom::postCheck(Kitsunemimi::Sakura::BlossomItem &blossomItem)
-{
-    blossomItem.success = true;
-}
-
-/**
- * closeBlossom
- */
-void
-AptUdateBlossom::closeBlossom(Kitsunemimi::Sakura::BlossomItem &blossomItem)
-{
-    blossomItem.success = true;
 }

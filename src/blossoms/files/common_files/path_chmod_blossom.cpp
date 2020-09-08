@@ -24,45 +24,14 @@
 #include <libKitsunemimiPersistence/files/file_methods.h>
 #include <libKitsunemimiCommon/process_execution.h>
 
+/**
+ * @brief constructor
+ */
 PathChmodBlossom::PathChmodBlossom()
     : Blossom()
 {
     m_requiredKeys.insert("path", new Kitsunemimi::DataValue(true));
     m_requiredKeys.insert("permission", new Kitsunemimi::DataValue(true));
-}
-
-Kitsunemimi::Sakura::Blossom*
-PathChmodBlossom::createNewInstance()
-{
-    return new PathChmodBlossom();
-}
-
-/**
- * @brief initBlossom
- */
-void
-PathChmodBlossom::initBlossom(Kitsunemimi::Sakura::BlossomItem &blossomItem)
-{
-    m_path = blossomItem.values.getValueAsString("path");
-    m_permission = blossomItem.values.getValueAsString("permission");
-
-    blossomItem.success = true;
-}
-
-/**
- * @brief preCheck
- */
-void
-PathChmodBlossom::preCheck(Kitsunemimi::Sakura::BlossomItem &blossomItem)
-{
-    if(bfs::exists(m_path) == false)
-    {
-        blossomItem.success = false;
-        blossomItem.outputMessage = "path " + m_path + " doesn't exist";
-        return;
-    }
-
-    blossomItem.success = true;
 }
 
 /**
@@ -71,36 +40,30 @@ PathChmodBlossom::preCheck(Kitsunemimi::Sakura::BlossomItem &blossomItem)
 void
 PathChmodBlossom::runTask(Kitsunemimi::Sakura::BlossomItem &blossomItem)
 {
-    std::string command = "chmod ";
+    const std::string path = blossomItem.values.getValueAsString("path");
+    const std::string permission = blossomItem.values.getValueAsString("permission");
 
-    if(bfs::is_directory(m_path)) {
-        command += "-R ";
+    // precheck
+    if(bfs::exists(path) == false)
+    {
+        blossomItem.success = false;
+        blossomItem.outputMessage = "path " + path + " doesn't exist";
+        return;
     }
 
-    command += m_permission + " ";
-    command += m_path;
+    // create command
+    std::string command = "chmod ";
+    if(bfs::is_directory(path)) {
+        command += "-R ";
+    }
+    command += permission + " ";
+    command += path;
 
     LOG_DEBUG("run command: " + command);
 
+    // run command
     Kitsunemimi::ProcessResult processResult = Kitsunemimi::runSyncProcess(command);
     blossomItem.success = processResult.success;
     blossomItem.outputMessage = processResult.processOutput;
 }
 
-/**
- * @brief postCheck
- */
-void
-PathChmodBlossom::postCheck(Kitsunemimi::Sakura::BlossomItem &blossomItem)
-{
-    blossomItem.success = true;
-}
-
-/**
- * @brief closeBlossom
- */
-void
-PathChmodBlossom::closeBlossom(Kitsunemimi::Sakura::BlossomItem &blossomItem)
-{
-    blossomItem.success = true;
-}

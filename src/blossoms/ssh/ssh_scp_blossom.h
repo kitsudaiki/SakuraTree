@@ -31,22 +31,8 @@ class SshScpBlossom
 public:
     SshScpBlossom();
 
-    Kitsunemimi::Sakura::Blossom* createNewInstance();
-
 protected:
-    void initBlossom(Kitsunemimi::Sakura::BlossomItem &blossomItem);
-    void preCheck(Kitsunemimi::Sakura::BlossomItem &blossomItem);
     void runTask(Kitsunemimi::Sakura::BlossomItem &blossomItem);
-    void postCheck(Kitsunemimi::Sakura::BlossomItem &blossomItem);
-    void closeBlossom(Kitsunemimi::Sakura::BlossomItem &blossomItem);
-
-private:
-    std::string m_user = "";
-    std::string m_address = "";
-    std::string m_port = "";
-    std::string m_sshKey = "";
-    std::string m_sourcePath = "";
-    std::string m_targetPath = "";
 };
 
 #endif // SCP_BLOSSOM_H

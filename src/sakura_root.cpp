@@ -103,11 +103,8 @@ SakuraRoot::~SakuraRoot()
 bool
 SakuraRoot::startProcess(const std::string &inputPath,
                          const DataMap &initialValues,
-                         const bool enableDebug,
                          const bool dryRun)
 {
-    std::string errorMessage = "";
-
     initBlossoms();
 
     // set default-file in case that a directory instead of a file was selected
@@ -116,10 +113,19 @@ SakuraRoot::startProcess(const std::string &inputPath,
         treeFile = treeFile + "/root.sakura";
     }
 
-    return m_interface->processFiles(treeFile,
-                                     initialValues,
-                                     enableDebug,
-                                     dryRun);
+    std::string errorMessage = "";
+    const bool result = m_interface->processFiles(treeFile,
+                                                  initialValues,
+                                                  dryRun,
+                                                  errorMessage);
+
+    if(result) {
+        LOG_INFO("finish", GREEN_COLOR);
+    } else {
+        LOG_ERROR(errorMessage);
+    }
+
+    return result;
 }
 
 /**
@@ -128,37 +134,37 @@ SakuraRoot::startProcess(const std::string &inputPath,
 void
 SakuraRoot::initBlossoms()
 {
-    m_interface->addBlossom("apt", "absent", new AptAbsentBlossom());
-    m_interface->addBlossom("apt", "latest", new AptLatestBlossom());
-    m_interface->addBlossom("apt", "present", new AptPresentBlossom());
-    m_interface->addBlossom("apt", "update", new AptUdateBlossom());
-    m_interface->addBlossom("apt", "upgrade", new AptUpgradeBlossom());
+    assert(m_interface->addBlossom("apt", "absent", new AptAbsentBlossom()));
+    assert(m_interface->addBlossom("apt", "latest", new AptLatestBlossom()));
+    assert(m_interface->addBlossom("apt", "present", new AptPresentBlossom()));
+    assert(m_interface->addBlossom("apt", "update", new AptUdateBlossom()));
+    assert(m_interface->addBlossom("apt", "upgrade", new AptUpgradeBlossom()));
 
-    m_interface->addBlossom("ini_file", "delete", new IniDeleteEntryBlossom());
-    m_interface->addBlossom("ini_file", "read", new IniReadEntryBlossom());
-    m_interface->addBlossom("ini_file", "set", new IniSetEntryBlossom());
+    assert(m_interface->addBlossom("ini_file", "delete", new IniDeleteEntryBlossom()));
+    assert(m_interface->addBlossom("ini_file", "read", new IniReadEntryBlossom()));
+    assert(m_interface->addBlossom("ini_file", "set", new IniSetEntryBlossom()));
 
-    m_interface->addBlossom("path", "chmod", new PathChmodBlossom());
-    m_interface->addBlossom("path", "chown", new PathChownBlossom());
-    m_interface->addBlossom("path", "copy", new PathCopyBlossom());
-    m_interface->addBlossom("path", "delete", new PathDeleteBlossom());
-    m_interface->addBlossom("path", "rename", new PathRenameBlossom());
+    assert(m_interface->addBlossom("path", "chmod", new PathChmodBlossom()));
+    assert(m_interface->addBlossom("path", "chown", new PathChownBlossom()));
+    assert(m_interface->addBlossom("path", "copy", new PathCopyBlossom()));
+    assert(m_interface->addBlossom("path", "delete", new PathDeleteBlossom()));
+    assert(m_interface->addBlossom("path", "rename", new PathRenameBlossom()));
 
-    m_interface->addBlossom("template", "create_string", new TemplateCreateStringBlossom());
-    m_interface->addBlossom("template", "create_file", new TemplateCreateFileBlossom());
+    assert(m_interface->addBlossom("template", "create_string", new TemplateCreateStringBlossom()));
+    assert(m_interface->addBlossom("template", "create_file", new TemplateCreateFileBlossom()));
 
-    m_interface->addBlossom("special", "assert", new AssertBlossom());
-    m_interface->addBlossom("special", "cmd", new CmdBlossom());
-    m_interface->addBlossom("special", "exit", new ExitBlossom());
-    m_interface->addBlossom("special", "item_update", new ItemUpdateBlossom());
-    m_interface->addBlossom("special", "print", new PrintBlossom());
+    assert(m_interface->addBlossom("special", "assert", new AssertBlossom()));
+    assert(m_interface->addBlossom("special", "cmd", new CmdBlossom()));
+    assert(m_interface->addBlossom("special", "exit", new ExitBlossom()));
+    assert(m_interface->addBlossom("special", "item_update", new ItemUpdateBlossom()));
+    assert(m_interface->addBlossom("special", "print", new PrintBlossom()));
 
-    m_interface->addBlossom("text_file", "append", new TextAppendBlossom());
-    m_interface->addBlossom("text_file", "read", new TextReadBlossom());
-    m_interface->addBlossom("text_file", "replace", new TextReplaceBlossom());
-    m_interface->addBlossom("text_file", "write", new TextWriteBlossom());
+    assert(m_interface->addBlossom("text_file", "append", new TextAppendBlossom()));
+    assert(m_interface->addBlossom("text_file", "read", new TextReadBlossom()));
+    assert(m_interface->addBlossom("text_file", "replace", new TextReplaceBlossom()));
+    assert(m_interface->addBlossom("text_file", "write", new TextWriteBlossom()));
 
-    m_interface->addBlossom("ssh", "file_create", new SshCmdCreateFileBlossom());
-    m_interface->addBlossom("ssh", "scp", new SshScpBlossom());
-    m_interface->addBlossom("ssh", "cmd", new SshCmdBlossom());
+    assert(m_interface->addBlossom("ssh", "file_create", new SshCmdCreateFileBlossom()));
+    assert(m_interface->addBlossom("ssh", "scp", new SshScpBlossom()));
+    assert(m_interface->addBlossom("ssh", "cmd", new SshCmdBlossom()));
 }
