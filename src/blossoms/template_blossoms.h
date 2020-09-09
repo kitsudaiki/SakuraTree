@@ -1,5 +1,5 @@
 /**
- * @file        template_create_file_blossom.h
+ * @file        template_blossoms.h
  *
  * @author      Tobias Anker <tobias.anker@kitsunemimi.moe>
  *
@@ -20,11 +20,14 @@
  *      limitations under the License.
  */
 
-#ifndef TEMPLATE_CREATE_FILE_BLOSSOM_H
-#define TEMPLATE_CREATE_FILE_BLOSSOM_H
+#ifndef TEMPLATE_BLOSSOMS_H
+#define TEMPLATE_BLOSSOMS_H
 
-#include <libKitsunemimiSakuraLang/blossom.h>
+#include <common.h>
 
+//==================================================================================================
+// TemplateCreateFileBlossom
+//==================================================================================================
 class TemplateCreateFileBlossom
         : public Kitsunemimi::Sakura::Blossom
 {
@@ -33,7 +36,21 @@ public:
     TemplateCreateFileBlossom();
 
 protected:
-    void runTask(Kitsunemimi::Sakura::BlossomItem &blossomItem);
+    bool runTask(BlossomItem &blossomItem, std::string &errorMessage);
 };
 
-#endif // TEMPLATE_CREATE_FILE_BLOSSOM_H
+//==================================================================================================
+// TemplateCreateStringBlossom
+//==================================================================================================
+class TemplateCreateStringBlossom
+        : public Kitsunemimi::Sakura::Blossom
+{
+
+public:
+    TemplateCreateStringBlossom();
+
+protected:
+    bool runTask(BlossomItem &blossomItem, std::string &errorMessage);
+};
+
+#endif // TEMPLATE_BLOSSOMS_H

@@ -44,6 +44,10 @@
 #include <sys/ioctl.h>
 #include <unistd.h>
 
+#include <libKitsunemimiSakuraLang/blossom.h>
+using Kitsunemimi::Sakura::Blossom;
+using Kitsunemimi::Sakura::BlossomItem;
+
 #include <boost/filesystem.hpp>
 namespace bfs = boost::filesystem;
 

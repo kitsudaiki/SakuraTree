@@ -49,6 +49,8 @@ public:
                       const DataMap &initialValues,
                       const bool dryRun = false);
 
+    bool runCommand(const std::string &command, std::string &errorMessage);
+
     // static values
     static SakuraRoot* m_root;
     static std::string m_executablePath;

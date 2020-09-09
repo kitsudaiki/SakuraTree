@@ -13,9 +13,9 @@ template("create a template")
     - variables = { - checker = 42
 					- name = test_input }
 -> create_string:
+    - text >> converted_output
     - variables = { - checker = 42
 					- name = test_input }
-    - text >> converted_output
 
 
 text_file("read written file")

@@ -31,39 +31,13 @@
 #include <libKitsunemimiPersistence/logger/logger.h>
 #include <libKitsunemimiPersistence/files/file_methods.h>
 
-#include <blossoms/install/apt/apt_absent_blossom.h>
-#include <blossoms/install/apt/apt_latest_blossom.h>
-#include <blossoms/install/apt/apt_present_blossom.h>
-#include <blossoms/install/apt/apt_update_blossom.h>
-#include <blossoms/install/apt/apt_upgrade_blossom.h>
-
-#include <blossoms/ssh/ssh_cmd_blossom.h>
-#include <blossoms/ssh/ssh_scp_blossom.h>
-#include <blossoms/ssh/ssh_cmd_create_file_blossom.h>
-
-#include <blossoms/special/print_blossom.h>
-#include <blossoms/special/cmd_blossom.h>
-#include <blossoms/special/assert_blossom.h>
-#include <blossoms/special/exit_blossom.h>
-#include <blossoms/special/item_update_blossom.h>
-
-#include <blossoms/files/common_files/path_copy_blossom.h>
-#include <blossoms/files/common_files/path_delete_blossom.h>
-#include <blossoms/files/common_files/path_rename_blossom.h>
-#include <blossoms/files/common_files/path_chmod_blossom.h>
-#include <blossoms/files/common_files/path_chown_blossom.h>
-
-#include <blossoms/files/template_files/template_create_file_blossom.h>
-#include <blossoms/files/template_files/template_create_string_blossom.h>
-
-#include <blossoms/files/text_files/text_append_blossom.h>
-#include <blossoms/files/text_files/text_read_blossom.h>
-#include <blossoms/files/text_files/text_replace_blossom.h>
-#include <blossoms/files/text_files/text_write_blossom.h>
-
-#include <blossoms/files/ini_files/ini_delete_entry_blossom.h>
-#include <blossoms/files/ini_files/ini_read_entry_blossom.h>
-#include <blossoms/files/ini_files/ini_set_entry_blossom.h>
+#include <blossoms/apt_blossoms.h>
+#include <blossoms/ini_blossoms.h>
+#include <blossoms/path_blossoms.h>
+#include <blossoms/special_blossoms.h>
+#include <blossoms/ssh_blossoms.h>
+#include <blossoms/template_blossoms.h>
+#include <blossoms/text_blossoms.h>
 
 SakuraRoot* SakuraRoot::m_root = nullptr;
 std::string SakuraRoot::m_executablePath = "";
@@ -167,4 +141,20 @@ SakuraRoot::initBlossoms()
     assert(m_interface->addBlossom("ssh", "file_create", new SshCmdCreateFileBlossom()));
     assert(m_interface->addBlossom("ssh", "scp", new SshScpBlossom()));
     assert(m_interface->addBlossom("ssh", "cmd", new SshCmdBlossom()));
+}
+
+bool
+SakuraRoot::runCommand(const std::string &command, std::string &errorMessage)
+{
+    LOG_DEBUG("run command: " + command);
+
+    // run command
+    Kitsunemimi::ProcessResult processResult = Kitsunemimi::runSyncProcess(command);
+    if(processResult.success == false)
+    {
+        errorMessage = processResult.processOutput;
+        return false;
+    }
+
+    return true;
 }
