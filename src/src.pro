@@ -63,9 +63,7 @@ LIBS +=  -lboost_filesystem -lboost_system -lssl -lcrypto
 
 HEADERS += \
     common/defines.h \
-    common/enums.h \
     common/includes.h \
-    common/typedefs.h \
     networking/host_handler.h \
     networking/messages.h \
     networking/network_callbacks.h \
