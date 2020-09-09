@@ -101,6 +101,21 @@ convertTemplate(std::string &output,
     return true;
 }
 
+/**
+ * @brief getAbsoluteTemplatePath
+ * @param blossomItem
+ * @return
+ */
+const std::string
+getAbsoluteTemplatePath(BlossomItem &blossomItem)
+{
+    std::string templatePath = blossomItem.values.getValueAsString("source_path");
+    const bfs::path path = bfs::path("templates") / bfs::path(templatePath);
+    templatePath = SakuraRoot::m_interface->garden->getRelativePath(blossomItem.blossomPath,
+                                                                    path).string();
+    return templatePath;
+}
+
 //==================================================================================================
 // TemplateCreateFileBlossom
 //==================================================================================================
@@ -120,16 +135,10 @@ TemplateCreateFileBlossom::TemplateCreateFileBlossom()
 bool
 TemplateCreateFileBlossom::runTask(BlossomItem &blossomItem, std::string &errorMessage)
 {
-    std::string templatePath = blossomItem.values.getValueAsString("source_path");
+    const std::string templatePath = getAbsoluteTemplatePath(blossomItem);
     const std::string destinationPath = blossomItem.values.getValueAsString("dest_path");
     const std::string owner = blossomItem.values.getValueAsString("owner");
     const std::string permission = blossomItem.values.getValueAsString("permission");
-
-    // create source-path
-    const bfs::path path = bfs::path("templates") / bfs::path(templatePath);
-    templatePath = SakuraRoot::m_interface->garden->getRelativePath(blossomItem.blossomPath,
-                                                                    path).string();
-
 
     std::string convertedContent = "";
     bool ret = convertTemplate(convertedContent,
@@ -145,16 +154,13 @@ TemplateCreateFileBlossom::runTask(BlossomItem &blossomItem, std::string &errorM
     {
         // read the already existing file and compare it the current file-content
         std::string existingFileContent;
-        const bool ret = Kitsunemimi::Persistence::readFile(existingFileContent,
-                                                            destinationPath,
-                                                            errorMessage);
-        if(ret == true
-                && convertedContent == existingFileContent)
-        {
+        Kitsunemimi::Persistence::readFile(existingFileContent, destinationPath, errorMessage);
+        if(convertedContent == existingFileContent) {
             return true;
         }
     }
 
+    // write converted template into the file
     ret = Kitsunemimi::Persistence::writeFile(destinationPath,
                                               convertedContent,
                                               errorMessage,
@@ -186,6 +192,7 @@ TemplateCreateFileBlossom::runTask(BlossomItem &blossomItem, std::string &errorM
         }
     }
 
+    // post-check
     std::string fileContent = "";
     ret = Kitsunemimi::Persistence::readFile(fileContent, destinationPath, errorMessage);
     if(ret == false
@@ -215,12 +222,7 @@ TemplateCreateStringBlossom::TemplateCreateStringBlossom()
 bool
 TemplateCreateStringBlossom::runTask(BlossomItem &blossomItem, std::string &errorMessage)
 {
-    std::string templatePath = blossomItem.values.getValueAsString("source_path");
-
-    // create source-path
-    const bfs::path path = bfs::path("templates") / bfs::path(templatePath);
-    templatePath = SakuraRoot::m_interface->garden->getRelativePath(blossomItem.blossomPath,
-                                                                        path).string();
+    const std::string templatePath = getAbsoluteTemplatePath(blossomItem);
 
     std::string convertedContent = "";
     const bool ret = convertTemplate(convertedContent,

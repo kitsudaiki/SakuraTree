@@ -179,16 +179,13 @@ AptAbsentBlossom::runTask(BlossomItem &blossomItem, std::string &errorMessage)
         return true;
     }
 
-    // convert list into string
-    std::string appendedList = "";
-    for(const std::string& packageName : packageNames)
-    {
-        appendedList += packageName + " ";
+    // build command
+    std::string command = "sudo apt-get remove -y ";
+    for(const std::string& packageName : packageNames) {
+        command += packageName + " ";
     }
 
-    // build command
-    const std::string programm = "sudo apt-get remove -y " + appendedList;
-    if(SakuraRoot::m_root->runCommand(programm, errorMessage) == false) {
+    if(SakuraRoot::m_root->runCommand(command, errorMessage) == false) {
         return false;
     }
 

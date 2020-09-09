@@ -25,6 +25,29 @@
 #include <libKitsunemimiPersistence/files/file_methods.h>
 #include <libKitsunemimiPersistence/files/text_file.h>
 
+/**
+ * @brief checkFile
+ * @param filePath
+ * @return
+ */
+bool
+checkFile(const std::string &filePath, std::string &errorMessage)
+{
+    if(bfs::exists(filePath) == false)
+    {
+        errorMessage = "path " + filePath + " doesn't exist";
+        return false;
+    }
+
+    if(bfs::is_regular_file(filePath) == false)
+    {
+        errorMessage = "path " + filePath + " is not a file";
+        return false;
+    }
+
+    return true;
+}
+
 //==================================================================================================
 // TextAppendBlossom
 //==================================================================================================
@@ -44,15 +67,8 @@ TextAppendBlossom::runTask(BlossomItem &blossomItem, std::string &errorMessage)
     const std::string filePath = blossomItem.values.getValueAsString("file_path");
     const std::string newText = blossomItem.values.getValueAsString("text");
 
-    if(bfs::exists(filePath) == false)
-    {
-        errorMessage = "path " + filePath + " doesn't exist";
-        return false;
-    }
-
-    if(bfs::is_regular_file(filePath) == false)
-    {
-        errorMessage = "path " + filePath + " is not a file";
+    const bool ret = checkFile(filePath, errorMessage);
+    if(ret == false) {
         return false;
     }
 
@@ -78,15 +94,8 @@ TextReadBlossom::runTask(BlossomItem &blossomItem, std::string &errorMessage)
 {
     const std::string filePath = blossomItem.values.getValueAsString("file_path");
 
-    if(bfs::exists(filePath) == false)
-    {
-        errorMessage = "path " + filePath + " doesn't exist";
-        return false;
-    }
-
-    if(bfs::is_regular_file(filePath) == false)
-    {
-        errorMessage = "path " + filePath + " is not a file";
+    const bool ret = checkFile(filePath, errorMessage);
+    if(ret == false) {
         return false;
     }
 
@@ -123,15 +132,8 @@ TextReplaceBlossom::runTask(BlossomItem &blossomItem, std::string &errorMessage)
     const std::string oldText = blossomItem.values.getValueAsString("old_text");
     const std::string newText = blossomItem.values.getValueAsString("new_text");
 
-    if(bfs::exists(filePath) == false)
-    {
-        errorMessage = "path " + filePath + " doesn't exist";
-        return false;
-    }
-
-    if(bfs::is_regular_file(filePath) == false)
-    {
-        errorMessage = "path " + filePath + " is not a file";
+    const bool ret = checkFile(filePath, errorMessage);
+    if(ret == false) {
         return false;
     }
 
@@ -162,10 +164,5 @@ TextWriteBlossom::runTask(BlossomItem &blossomItem, std::string &errorMessage)
     const std::string filePath = blossomItem.values.getValueAsString("file_path");
     const std::string text = blossomItem.values.getValueAsString("text");
 
-    const bool result = Kitsunemimi::Persistence::writeFile(filePath,
-                                                            text,
-                                                            errorMessage,
-                                                            true);
-
-    return result;
+    return Kitsunemimi::Persistence::writeFile(filePath, text, errorMessage);
 }
