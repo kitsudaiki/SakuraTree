@@ -87,25 +87,23 @@ make | make | >= 4.0 | process the make-file, which is created by qmake to build
 qmake | qt5-qmake | >= 5.0 | This package provides the tool qmake, which is similar to cmake and create the make-file for compilation.
 FLEX | flex | >= 2.6 | Build the lexer-code for all used parser.
 GNU Bison | bison | >= 3.0 | Build the parser-code together with the lexer-code.
-xxd | xxd | >= 1.10 | converts text files into source code files
 
 Installation on Ubuntu/Debian:
 
 ```bash
-sudo apt-get install g++ make qt5-qmake bison flex xxd
+sudo apt-get install g++ make qt5-qmake bison flex
 ```
 
 #### required official libraries
 
 repository-name | version | task
 --- | --- | ---
-libssl-dev | >= 1.1.0l | For tls-encrypted data-transfer.
 libboost-filesystem-dev | >= 1.60 | Use for file-interactions like for example listing files in a directory or check if a path exist.
 
 Installation on Ubuntu/Debian:
 
 ```bash
-sudo apt-get install libssl-dev libboost-filesystem-dev
+sudo apt-get install libboost-filesystem-dev
 ```
 
 This are the version I have installed under Debian Stable via apt. Some older or newer version should work as well. I write my projects with the Qt-creator, but without Qt itself. Thats why qmake is required to build my projects.
@@ -125,9 +123,7 @@ libKitsunemimiConfig | v0.2.3 | https://github.com/kitsudaiki/libKitsunemimiConf
 libKitsunemimiJson | v0.10.3 | https://github.com/kitsudaiki/libKitsunemimiJson.git
 libKitsunemimiJinja2 | v0.7.3 | https://github.com/kitsudaiki/libKitsunemimiJinja2.git
 libKitsunemimiIni | v0.4.4 | https://github.com/kitsudaiki/libKitsunemimiIni.git
-libKitsunemimiNetwork | v0.6.4 | https://github.com/kitsudaiki/libKitsunemimiNetwork.git
 libKitsunemimiSakuraLang | v0.4.0 | https://github.com/kitsudaiki/libKitsunemimiSakuraLang.git
-libKitsunemimiSakuraNetwork | v0.3.0 | https://github.com/kitsudaiki/libKitsunemimiSakuraNetwork.git
 
 ### build programm
 
