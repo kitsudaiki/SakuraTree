@@ -23,8 +23,6 @@
 #include "template_blossoms.h"
 
 #include <libKitsunemimiSakuraLang/sakura_lang_interface.h>
-#include <libKitsunemimiSakuraLang/sakura_garden.h>
-#include <libKitsunemimiSakuraLang/items/sakura_items.h>
 
 #include <libKitsunemimiPersistence/files/file_methods.h>
 #include <libKitsunemimiPersistence/files/text_file.h>
@@ -46,47 +44,21 @@
 bool
 convertTemplate(std::string &output,
                 const std::string &templatePath,
-                const Kitsunemimi::Sakura::ValueItemMap &values,
+                Kitsunemimi::DataMap &values,
                 std::string &errorMessage)
 {
     // read template-file
-    const std::string templateCont = SakuraRoot::m_interface->garden->getTemplate(templatePath);
+    const std::string templateCont = SakuraRoot::m_interface->getTemplate(templatePath);
     if(templateCont == "")
     {
         errorMessage = "couldn't find template-file " + templatePath;
         return false;
     }
 
-    // get variables
-    Kitsunemimi::Sakura::ValueItemMap* variables = nullptr;
-    std::map<std::string, Kitsunemimi::Sakura::ValueItemMap*>::const_iterator variablesIt;
-    variablesIt = values.m_childMaps.find("variables");
-    if(variablesIt != values.m_childMaps.end())
-    {
-        variables = variablesIt->second;
-    }
-    else
-    {
-        errorMessage = "couldn't find variables in the template-values";
-        return false;
-    }
-
-    // convert value-item-map into data-map to be processable by the jinja2-library
-    DataMap inputData;
-    std::map<std::string, Kitsunemimi::Sakura::ValueItem>::const_iterator it;
-    for(it = variables->m_valueMap.begin();
-        it != variables->m_valueMap.end();
-        it++)
-    {
-        if(it->second.item != nullptr) {
-            inputData.insert(it->first, it->second.item->copy());
-        }
-    }
-
     // create file-content form template
     const bool jinja2Result = SakuraRoot::m_interface->jinja2Converter->convert(output,
                                                                                 templateCont,
-                                                                                &inputData,
+                                                                                &values,
                                                                                 errorMessage);
 
     if(jinja2Result == false)
@@ -103,16 +75,15 @@ convertTemplate(std::string &output,
 
 /**
  * @brief getAbsoluteTemplatePath
- * @param blossomItem
+ * @param blossomLeaf
  * @return
  */
 const std::string
-getAbsoluteTemplatePath(BlossomItem &blossomItem)
+getAbsoluteTemplatePath(BlossomLeaf &blossomLeaf)
 {
-    std::string templatePath = blossomItem.values.getValueAsString("source_path");
+    std::string templatePath = blossomLeaf.input.getStringByKey("source_path");
     const bfs::path path = bfs::path("templates") / bfs::path(templatePath);
-    templatePath = SakuraRoot::m_interface->garden->getRelativePath(blossomItem.blossomPath,
-                                                                    path).string();
+    templatePath = SakuraRoot::m_interface->getRelativePath(blossomLeaf.blossomPath, path).string();
     return templatePath;
 }
 
@@ -133,17 +104,17 @@ TemplateCreateFileBlossom::TemplateCreateFileBlossom()
  * runTask
  */
 bool
-TemplateCreateFileBlossom::runTask(BlossomItem &blossomItem, std::string &errorMessage)
+TemplateCreateFileBlossom::runTask(BlossomLeaf &blossomLeaf, std::string &errorMessage)
 {
-    const std::string templatePath = getAbsoluteTemplatePath(blossomItem);
-    const std::string destinationPath = blossomItem.values.getValueAsString("dest_path");
-    const std::string owner = blossomItem.values.getValueAsString("owner");
-    const std::string permission = blossomItem.values.getValueAsString("permission");
+    const std::string templatePath = getAbsoluteTemplatePath(blossomLeaf);
+    const std::string destinationPath = blossomLeaf.input.getStringByKey("dest_path");
+    const std::string owner = blossomLeaf.input.getStringByKey("owner");
+    const std::string permission = blossomLeaf.input.getStringByKey("permission");
 
     std::string convertedContent = "";
     bool ret = convertTemplate(convertedContent,
                                templatePath,
-                               blossomItem.values,
+                               *blossomLeaf.input.get("variables")->toMap(),
                                errorMessage);
     if(ret == false) {
         return false;
@@ -220,21 +191,21 @@ TemplateCreateStringBlossom::TemplateCreateStringBlossom()
  * runTask
  */
 bool
-TemplateCreateStringBlossom::runTask(BlossomItem &blossomItem, std::string &errorMessage)
+TemplateCreateStringBlossom::runTask(BlossomLeaf &blossomLeaf, std::string &errorMessage)
 {
-    const std::string templatePath = getAbsoluteTemplatePath(blossomItem);
+    const std::string templatePath = getAbsoluteTemplatePath(blossomLeaf);
 
     std::string convertedContent = "";
     const bool ret = convertTemplate(convertedContent,
                                      templatePath,
-                                     blossomItem.values,
+                                     *blossomLeaf.input.get("variables")->toMap(),
                                      errorMessage);
 
     if(ret == false) {
         return false;
     }
 
-    blossomItem.blossomOutput.insert("text", new DataValue(convertedContent));
+    blossomLeaf.output.insert("text", new DataValue(convertedContent));
 
     return true;
 }

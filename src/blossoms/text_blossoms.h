@@ -35,7 +35,7 @@ public:
     TextAppendBlossom();
 
 protected:
-    bool runTask(BlossomItem &blossomItem, std::string &errorMessage);
+    bool runTask(BlossomLeaf &blossomLeaf, std::string &errorMessage);
 };
 
 //==================================================================================================
@@ -48,7 +48,7 @@ public:
     TextReadBlossom();
 
 protected:
-    bool runTask(BlossomItem &blossomItem, std::string &errorMessage);
+    bool runTask(BlossomLeaf &blossomLeaf, std::string &errorMessage);
 };
 
 //==================================================================================================
@@ -61,7 +61,7 @@ public:
     TextReplaceBlossom();
 
 protected:
-    bool runTask(BlossomItem &blossomItem, std::string &errorMessage);
+    bool runTask(BlossomLeaf &blossomLeaf, std::string &errorMessage);
 };
 
 //==================================================================================================
@@ -74,7 +74,7 @@ public:
     TextWriteBlossom();
 
 protected:
-    bool runTask(BlossomItem &blossomItem, std::string &errorMessage);
+    bool runTask(BlossomLeaf &blossomLeaf, std::string &errorMessage);
 };
 
 #endif // TEXT_BLOSSOMS_H

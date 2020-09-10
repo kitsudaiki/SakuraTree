@@ -46,7 +46,7 @@
 
 #include <libKitsunemimiSakuraLang/blossom.h>
 using Kitsunemimi::Sakura::Blossom;
-using Kitsunemimi::Sakura::BlossomItem;
+using Kitsunemimi::Sakura::BlossomLeaf;
 
 #include <boost/filesystem.hpp>
 namespace bfs = boost::filesystem;
@@ -56,6 +56,8 @@ using Kitsunemimi::DataItem;
 using Kitsunemimi::DataArray;
 using Kitsunemimi::DataValue;
 using Kitsunemimi::DataMap;
+
+#include <libKitsunemimiPersistence/logger/logger.h>
 
 #include <libKitsunemimiJson/json_item.h>
 using Kitsunemimi::Json::JsonItem;

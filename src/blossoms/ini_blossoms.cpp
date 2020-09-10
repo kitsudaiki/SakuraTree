@@ -42,11 +42,11 @@ IniDeleteEntryBlossom::IniDeleteEntryBlossom()
  * @brief runTask
  */
 bool
-IniDeleteEntryBlossom::runTask(BlossomItem &blossomItem, std::string &errorMessage)
+IniDeleteEntryBlossom::runTask(BlossomLeaf &blossomLeaf, std::string &errorMessage)
 {
-    const std::string filePath = blossomItem.values.getValueAsString("file_path");
-    const std::string group = blossomItem.values.getValueAsString("group");
-    const std::string entry = blossomItem.values.getValueAsString("entry");
+    const std::string filePath = blossomLeaf.input.getStringByKey("file_path");
+    const std::string group = blossomLeaf.input.getStringByKey("group");
+    const std::string entry = blossomLeaf.input.getStringByKey("entry");
 
     // precheck
     if(bfs::exists(filePath) == false)
@@ -93,11 +93,11 @@ IniReadEntryBlossom::IniReadEntryBlossom()
  * @brief runTask
  */
 bool
-IniReadEntryBlossom::runTask(BlossomItem &blossomItem, std::string &errorMessage)
+IniReadEntryBlossom::runTask(BlossomLeaf &blossomLeaf, std::string &errorMessage)
 {
-    const std::string filePath = blossomItem.values.getValueAsString("file_path");
-    const std::string group = blossomItem.values.getValueAsString("group");
-    const std::string entry = blossomItem.values.getValueAsString("entry");
+    const std::string filePath = blossomLeaf.input.getStringByKey("file_path");
+    const std::string group = blossomLeaf.input.getStringByKey("group");
+    const std::string entry = blossomLeaf.input.getStringByKey("entry");
 
     // precheck
     if(bfs::exists(filePath) == false)
@@ -118,7 +118,7 @@ IniReadEntryBlossom::runTask(BlossomItem &blossomItem, std::string &errorMessage
         return false;
     }
 
-    blossomItem.blossomOutput.insert("value", iniItem.get(group, entry)->copy());
+    blossomLeaf.output.insert("value", iniItem.get(group, entry)->copy());
 
     return true;
 }
@@ -139,12 +139,12 @@ IniSetEntryBlossom::IniSetEntryBlossom()
  * @brief runTask
  */
 bool
-IniSetEntryBlossom::runTask(BlossomItem &blossomItem, std::string &errorMessage)
+IniSetEntryBlossom::runTask(BlossomLeaf &blossomLeaf, std::string &errorMessage)
 {
-    const std::string filePath = blossomItem.values.getValueAsString("file_path");
-    const std::string group = blossomItem.values.getValueAsString("group");
-    const std::string entry = blossomItem.values.getValueAsString("entry");
-    const std::string value = blossomItem.values.getValueAsString("value");
+    const std::string filePath = blossomLeaf.input.getStringByKey("file_path");
+    const std::string group = blossomLeaf.input.getStringByKey("group");
+    const std::string entry = blossomLeaf.input.getStringByKey("entry");
+    const std::string value = blossomLeaf.input.getStringByKey("value");
 
     // precheck
     if(bfs::exists(filePath) == false)

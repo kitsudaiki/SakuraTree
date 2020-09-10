@@ -36,7 +36,7 @@ public:
     AptAbsentBlossom();
 
 protected:
-    bool runTask(BlossomItem &blossomItem, std::string &errorMessage);
+    bool runTask(BlossomLeaf &blossomLeaf, std::string &errorMessage);
 };
 
 //==================================================================================================
@@ -50,7 +50,7 @@ public:
     AptLatestBlossom();
 
 protected:
-    bool runTask(BlossomItem &blossomItem, std::string &errorMessage);
+    bool runTask(BlossomLeaf &blossomLeaf, std::string &errorMessage);
 };
 
 //==================================================================================================
@@ -64,7 +64,7 @@ public:
     AptPresentBlossom();
 
 protected:
-    bool runTask(BlossomItem &blossomItem, std::string &errorMessage);
+    bool runTask(BlossomLeaf &blossomLeaf, std::string &errorMessage);
 };
 
 //==================================================================================================
@@ -78,7 +78,7 @@ public:
     AptUdateBlossom();
 
 protected:
-    bool runTask(BlossomItem &, std::string &errorMessage);
+    bool runTask(BlossomLeaf &, std::string &errorMessage);
 };
 
 //==================================================================================================
@@ -92,7 +92,7 @@ public:
     AptUpgradeBlossom();
 
 protected:
-    bool runTask(BlossomItem &, std::string &errorMessage);
+    bool runTask(BlossomLeaf &, std::string &errorMessage);
 };
 
 #endif // APT_BLOSSOMS_H

@@ -38,7 +38,7 @@ public:
     AssertBlossom();
 
 protected:
-    bool runTask(BlossomItem &blossomItem, std::string &errorMessage);
+    bool runTask(BlossomLeaf &blossomLeaf, std::string &errorMessage);
 };
 
 //==================================================================================================
@@ -52,7 +52,7 @@ public:
     CmdBlossom();
 
 protected:
-    bool runTask(BlossomItem &blossomItem, std::string &errorMessage);
+    bool runTask(BlossomLeaf &blossomLeaf, std::string &errorMessage);
 };
 
 //==================================================================================================
@@ -65,7 +65,7 @@ public:
     ExitBlossom();
 
 protected:
-    bool runTask(BlossomItem &blossomItem, std::string &errorMessage);
+    bool runTask(BlossomLeaf &blossomLeaf, std::string &errorMessage);
 };
 
 //==================================================================================================
@@ -79,7 +79,7 @@ public:
     ItemUpdateBlossom();
 
 protected:
-    bool runTask(BlossomItem &blossomItem, std::string &errorMessage);
+    bool runTask(BlossomLeaf &blossomLeaf, std::string &errorMessage);
 };
 
 //==================================================================================================
@@ -93,7 +93,7 @@ public:
     PrintBlossom();
 
 protected:
-    bool runTask(BlossomItem &blossomItem, std::string &errorMessage);
+    bool runTask(BlossomLeaf &blossomLeaf, std::string &errorMessage);
 };
 
 #endif // SPECIAL_BLOSSOMS_H

@@ -36,7 +36,7 @@ public:
     SshCmdBlossom();
 
 protected:
-    bool runTask(BlossomItem &blossomItem, std::string &errorMessage);
+    bool runTask(BlossomLeaf &blossomLeaf, std::string &errorMessage);
 };
 
 //==================================================================================================
@@ -49,7 +49,7 @@ public:
     SshCmdCreateFileBlossom();
 
 protected:
-    bool runTask(BlossomItem &blossomItem, std::string &errorMessage);
+    bool runTask(BlossomLeaf &blossomLeaf, std::string &errorMessage);
 };
 
 //==================================================================================================
@@ -62,7 +62,7 @@ public:
     SshScpBlossom();
 
 protected:
-    bool runTask(BlossomItem &blossomItem, std::string &errorMessage);
+    bool runTask(BlossomLeaf &blossomLeaf, std::string &errorMessage);
 };
 
 

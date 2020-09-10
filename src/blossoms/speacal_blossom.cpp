@@ -39,15 +39,15 @@ AssertBlossom::AssertBlossom()
  * runTask
  */
 bool
-AssertBlossom::runTask(BlossomItem &blossomItem, std::string &errorMessage)
+AssertBlossom::runTask(BlossomLeaf &blossomLeaf, std::string &errorMessage)
 {
-    std::map<std::string, Kitsunemimi::Sakura::ValueItem>::iterator it;
-    for(it = blossomItem.values.m_valueMap.begin();
-        it != blossomItem.values.m_valueMap.end();
+    std::map<std::string, Kitsunemimi::DataItem*>::iterator it;
+    for(it = blossomLeaf.input.m_map.begin();
+        it != blossomLeaf.input.m_map.end();
         it++)
     {
-        const std::string isValue = blossomItem.parentValues->get(it->first)->toString();
-        const std::string shouldValue = it->second.item->toString();
+        const std::string isValue = blossomLeaf.parentValues->get(it->first)->toString();
+        const std::string shouldValue = it->second->toString();
 
         if(isValue != shouldValue)
         {
@@ -82,38 +82,20 @@ CmdBlossom::CmdBlossom()
  * runTask
  */
 bool
-CmdBlossom::runTask(BlossomItem &blossomItem, std::string &errorMessage)
+CmdBlossom::runTask(BlossomLeaf &blossomLeaf, std::string &errorMessage)
 {
-    const std::string command = blossomItem.values.getValueAsString("command");
+    const std::string command = blossomLeaf.input.getStringByKey("command");
     bool ignoreResult = false;
     bool trimOutput = false;
 
-    const Kitsunemimi::Sakura::ValueItem ignoreResultItem = blossomItem.values.getValueItem("ignore_errors");
-    if(ignoreResultItem.item != nullptr)
-    {
-        if(ignoreResultItem.item->isBoolValue())
-        {
-            ignoreResult = ignoreResultItem.item->getBool();
-        }
-        else
-        {
-            errorMessage = "ignore_errors was set, but is not a bool-value";
-            return false;
-        }
+    Kitsunemimi::DataItem* ignoreResultItem = blossomLeaf.input.get("ignore_errors");
+    if(ignoreResultItem != nullptr) {
+        ignoreResult = ignoreResultItem->toValue()->getBool();
     }
 
-    const Kitsunemimi::Sakura::ValueItem trimOutputItem = blossomItem.values.getValueItem("trim_output");
-    if(trimOutputItem.item != nullptr)
-    {
-        if(trimOutputItem.item->isBoolValue())
-        {
-            trimOutput = trimOutputItem.item->getBool();
-        }
-        else
-        {
-            errorMessage = "trim_output was set, but is not a bool-value";
-            return false;
-        }
+    Kitsunemimi::DataItem* trimOutputItem = blossomLeaf.input.get("trim_output");
+    if(trimOutputItem != nullptr) {
+        trimOutput = trimOutputItem->toValue()->getBool();
     }
 
     LOG_DEBUG("run command: " + command);
@@ -131,7 +113,7 @@ CmdBlossom::runTask(BlossomItem &blossomItem, std::string &errorMessage)
         Kitsunemimi::trim(processResult.processOutput);
     }
 
-    blossomItem.blossomOutput.insert("output",
+    blossomLeaf.output.insert("output",
                                      new Kitsunemimi::DataValue(processResult.processOutput));
     return true;
 }
@@ -149,9 +131,9 @@ ExitBlossom::ExitBlossom()
  * runTask
  */
 bool
-ExitBlossom::runTask(BlossomItem &blossomItem, std::string &errorMessage)
+ExitBlossom::runTask(BlossomLeaf &blossomLeaf, std::string &errorMessage)
 {
-    const int exitStatus = blossomItem.values.get("status")->toValue()->getInt();
+    const int exitStatus = blossomLeaf.input.get("status")->toValue()->getInt();
 
     exit(exitStatus);
 }
@@ -169,19 +151,20 @@ ItemUpdateBlossom::ItemUpdateBlossom()
  * runTask
  */
 bool
-ItemUpdateBlossom::runTask(BlossomItem &blossomItem, std::string &errorMessage)
+ItemUpdateBlossom::runTask(BlossomLeaf &blossomLeaf, std::string &errorMessage)
 {
-    std::map<std::string, Kitsunemimi::Sakura::ValueItem>::const_iterator overrideIt;
-    for(overrideIt = blossomItem.values.m_valueMap.begin();
-        overrideIt != blossomItem.values.m_valueMap.end();
-        overrideIt++)
+    std::map<std::string, Kitsunemimi::DataItem*>::iterator it;
+    for(it = blossomLeaf.input.m_map.begin();
+        it != blossomLeaf.input.m_map.end();
+        it++)
     {
         std::map<std::string, DataItem*>::iterator originalIt;
-        originalIt = blossomItem.parentValues->m_map.find(overrideIt->first);
+        originalIt = blossomLeaf.parentValues->m_map.find(it->first);
 
-        if(originalIt != blossomItem.parentValues->m_map.end()) {
-            blossomItem.parentValues->insert(overrideIt->first,
-                                             overrideIt->second.item->copy(),
+        if(originalIt != blossomLeaf.parentValues->m_map.end())
+        {
+            blossomLeaf.parentValues->insert(it->first,
+                                             it->second->copy(),
                                              true);
         }
     }
@@ -202,22 +185,22 @@ PrintBlossom::PrintBlossom()
  * runTask
  */
 bool
-PrintBlossom::runTask(BlossomItem &blossomItem, std::string &errorMessage)
+PrintBlossom::runTask(BlossomLeaf &blossomLeaf, std::string &errorMessage)
 {
     std::string output = "";
     Kitsunemimi::TableItem tableItem;
     tableItem.addColumn("key", "Item-Name");
     tableItem.addColumn("value", "Value");
 
-    std::map<std::string, Kitsunemimi::Sakura::ValueItem>::iterator it;
-    for(it = blossomItem.values.m_valueMap.begin();
-        it != blossomItem.values.m_valueMap.end();
+    std::map<std::string, Kitsunemimi::DataItem*>::iterator it;
+    for(it = blossomLeaf.input.m_map.begin();
+        it != blossomLeaf.input.m_map.end();
         it++)
     {
-        tableItem.addRow(std::vector<std::string>{it->first, it->second.item->toString(true)});
+        tableItem.addRow(std::vector<std::string>{it->first, it->second->toString(true)});
     }
 
-    blossomItem.terminalOutput = tableItem.toString(150);
+    blossomLeaf.terminalOutput = tableItem.toString(150);
 
     return true;
 }

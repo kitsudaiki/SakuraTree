@@ -62,10 +62,10 @@ TextAppendBlossom::TextAppendBlossom()
  * @brief runTask
  */
 bool
-TextAppendBlossom::runTask(BlossomItem &blossomItem, std::string &errorMessage)
+TextAppendBlossom::runTask(BlossomLeaf &blossomLeaf, std::string &errorMessage)
 {
-    const std::string filePath = blossomItem.values.getValueAsString("file_path");
-    const std::string newText = blossomItem.values.getValueAsString("text");
+    const std::string filePath = blossomLeaf.input.getStringByKey("file_path");
+    const std::string newText = blossomLeaf.input.getStringByKey("text");
 
     const bool ret = checkFile(filePath, errorMessage);
     if(ret == false) {
@@ -90,9 +90,9 @@ TextReadBlossom::TextReadBlossom()
  * @brief runTask
  */
 bool
-TextReadBlossom::runTask(BlossomItem &blossomItem, std::string &errorMessage)
+TextReadBlossom::runTask(BlossomLeaf &blossomLeaf, std::string &errorMessage)
 {
-    const std::string filePath = blossomItem.values.getValueAsString("file_path");
+    const std::string filePath = blossomLeaf.input.getStringByKey("file_path");
 
     const bool ret = checkFile(filePath, errorMessage);
     if(ret == false) {
@@ -106,7 +106,7 @@ TextReadBlossom::runTask(BlossomItem &blossomItem, std::string &errorMessage)
         return false;
     }
 
-    blossomItem.blossomOutput.insert("text", new Kitsunemimi::DataValue(fileContent));
+    blossomLeaf.output.insert("text", new Kitsunemimi::DataValue(fileContent));
 
     return true;
 }
@@ -126,11 +126,11 @@ TextReplaceBlossom::TextReplaceBlossom()
  * @brief runTask
  */
 bool
-TextReplaceBlossom::runTask(BlossomItem &blossomItem, std::string &errorMessage)
+TextReplaceBlossom::runTask(BlossomLeaf &blossomLeaf, std::string &errorMessage)
 {
-    const std::string filePath = blossomItem.values.getValueAsString("file_path");
-    const std::string oldText = blossomItem.values.getValueAsString("old_text");
-    const std::string newText = blossomItem.values.getValueAsString("new_text");
+    const std::string filePath = blossomLeaf.input.getStringByKey("file_path");
+    const std::string oldText = blossomLeaf.input.getStringByKey("old_text");
+    const std::string newText = blossomLeaf.input.getStringByKey("new_text");
 
     const bool ret = checkFile(filePath, errorMessage);
     if(ret == false) {
@@ -159,10 +159,10 @@ TextWriteBlossom::TextWriteBlossom()
  * @brief runTask
  */
 bool
-TextWriteBlossom::runTask(BlossomItem &blossomItem, std::string &errorMessage)
+TextWriteBlossom::runTask(BlossomLeaf &blossomLeaf, std::string &errorMessage)
 {
-    const std::string filePath = blossomItem.values.getValueAsString("file_path");
-    const std::string text = blossomItem.values.getValueAsString("text");
+    const std::string filePath = blossomLeaf.input.getStringByKey("file_path");
+    const std::string text = blossomLeaf.input.getStringByKey("text");
 
     return Kitsunemimi::Persistence::writeFile(filePath, text, errorMessage);
 }

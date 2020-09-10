@@ -36,7 +36,7 @@ public:
     TemplateCreateFileBlossom();
 
 protected:
-    bool runTask(BlossomItem &blossomItem, std::string &errorMessage);
+    bool runTask(BlossomLeaf &blossomLeaf, std::string &errorMessage);
 };
 
 //==================================================================================================
@@ -50,7 +50,7 @@ public:
     TemplateCreateStringBlossom();
 
 protected:
-    bool runTask(BlossomItem &blossomItem, std::string &errorMessage);
+    bool runTask(BlossomLeaf &blossomLeaf, std::string &errorMessage);
 };
 
 #endif // TEMPLATE_BLOSSOMS_H

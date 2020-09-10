@@ -64,15 +64,10 @@ LIBS +=  -lboost_filesystem -lboost_system -lssl -lcrypto
 HEADERS += \
     common/defines.h \
     common/includes.h \
-    networking/host_handler.h \
-    networking/messages.h \
-    networking/network_callbacks.h \
-    networking/sakura_network.h \
     args.h \
     common.h \
     config.h \
     sakura_root.h \
-    sakura_tree_callbacks.h \
     blossoms/apt_blossoms.h \
     blossoms/ini_blossoms.h \
     blossoms/path_blossoms.h \
@@ -82,8 +77,6 @@ HEADERS += \
     blossoms/text_blossoms.h
 
 SOURCES += \
-    networking/host_handler.cpp \
-    networking/sakura_network.cpp \
     main.cpp \
     sakura_root.cpp \
     blossoms/apt_blossoms.cpp \
@@ -93,19 +86,3 @@ SOURCES += \
     blossoms/ssh_blossoms.cpp \
     blossoms/template_blossoms.cpp \
     blossoms/text_blossoms.cpp
-
-
-SAKURA_PROVISIONING_SUBTREE = predefined_subtrees/sakura_provisioning_subtree.tree
-
-OTHER_FILES +=  \
-    $$SAKURA_PROVISIONING_SUBTREE
-
-sakura_provisioning_subtree.input = SAKURA_PROVISIONING_SUBTREE
-sakura_provisioning_subtree.output = ${QMAKE_FILE_BASE}.h
-sakura_provisioning_subtree.commands = xxd -i ${QMAKE_FILE_IN} | sed 's/_________SakuraTree_src_predefined_subtrees_//g' > ${QMAKE_FILE_BASE}.h
-sakura_provisioning_subtree.variable_out = HEADERS
-sakura_provisioning_subtree.CONFIG += target_predeps no_link
-
-QMAKE_EXTRA_COMPILERS += sakura_provisioning_subtree
-
-

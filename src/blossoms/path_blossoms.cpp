@@ -26,13 +26,13 @@
 
 #include <libKitsunemimiPersistence/files/file_methods.h>
 #include <libKitsunemimiPersistence/files/binary_file.h>
+#include <libKitsunemimiPersistence/logger/logger.h>
 
 #include <libKitsunemimiCommon/process_execution.h>
 #include <libKitsunemimiCommon/common_methods/string_methods.h>
 #include <libKitsunemimiCommon/common_methods/vector_methods.h>
 
 #include <libKitsunemimiSakuraLang/sakura_lang_interface.h>
-#include <libKitsunemimiSakuraLang/sakura_garden.h>
 
 using Kitsunemimi::splitStringByDelimiter;
 
@@ -51,10 +51,10 @@ PathChmodBlossom::PathChmodBlossom()
  * @brief runTask
  */
 bool
-PathChmodBlossom::runTask(BlossomItem &blossomItem, std::string &errorMessage)
+PathChmodBlossom::runTask(BlossomLeaf &blossomLeaf, std::string &errorMessage)
 {
-    const std::string path = blossomItem.values.getValueAsString("path");
-    const std::string permission = blossomItem.values.getValueAsString("permission");
+    const std::string path = blossomLeaf.input.getStringByKey("path");
+    const std::string permission = blossomLeaf.input.getStringByKey("permission");
 
     // precheck
     if(bfs::exists(path) == false)
@@ -89,10 +89,10 @@ PathChownBlossom::PathChownBlossom()
  * @brief runTask
  */
 bool
-PathChownBlossom::runTask(BlossomItem &blossomItem, std::string &errorMessage)
+PathChownBlossom::runTask(BlossomLeaf &blossomLeaf, std::string &errorMessage)
 {
-    const std::string path = blossomItem.values.getValueAsString("path");
-    const std::string owner = blossomItem.values.getValueAsString("owner");
+    const std::string path = blossomLeaf.input.getStringByKey("path");
+    const std::string owner = blossomLeaf.input.getStringByKey("owner");
 
     // precheck
     if(bfs::exists(path) == false)
@@ -126,15 +126,15 @@ PathCopyBlossom::PathCopyBlossom()
 }
 /**
  * @brief PathCopyBlossom::runTask
- * @param blossomItem
+ * @param blossomLeaf
  */
 bool
-PathCopyBlossom::runTask(BlossomItem &blossomItem, std::string &errorMessage)
+PathCopyBlossom::runTask(BlossomLeaf &blossomLeaf, std::string &errorMessage)
 {
-    std::string sourcePath = blossomItem.values.getValueAsString("source_path");
-    const std::string destinationPath = blossomItem.values.getValueAsString("dest_path");
-    const std::string mode = blossomItem.values.getValueAsString("mode");
-    const std::string owner = blossomItem.values.getValueAsString("owner");
+    std::string sourcePath = blossomLeaf.input.getStringByKey("source_path");
+    const std::string destinationPath = blossomLeaf.input.getStringByKey("dest_path");
+    const std::string mode = blossomLeaf.input.getStringByKey("mode");
+    const std::string owner = blossomLeaf.input.getStringByKey("owner");
     bool localStorage = false;
 
     // prepare source-path
@@ -142,8 +142,8 @@ PathCopyBlossom::runTask(BlossomItem &blossomItem, std::string &errorMessage)
     {
         localStorage = true;
         const bfs::path filePath = bfs::path("files") / bfs::path(sourcePath);
-        sourcePath = SakuraRoot::m_interface->garden->getRelativePath(blossomItem.blossomPath,
-                                                                      filePath).string();
+        sourcePath = SakuraRoot::m_interface->getRelativePath(blossomLeaf.blossomPath,
+                                                              filePath).string();
     }
 
     // precheck
@@ -161,7 +161,7 @@ PathCopyBlossom::runTask(BlossomItem &blossomItem, std::string &errorMessage)
     // run task
     if(localStorage == true)
     {
-        Kitsunemimi::DataBuffer* buffer = SakuraRoot::m_interface->garden->getFile(sourcePath);
+        Kitsunemimi::DataBuffer* buffer = SakuraRoot::m_interface->getFile(sourcePath);
 
         if(buffer == nullptr)
         {
@@ -243,9 +243,9 @@ PathDeleteBlossom::PathDeleteBlossom()
  * @brief runTask
  */
 bool
-PathDeleteBlossom::runTask(BlossomItem &blossomItem, std::string &errorMessage)
+PathDeleteBlossom::runTask(BlossomLeaf &blossomLeaf, std::string &errorMessage)
 {
-    const std::string path = blossomItem.values.getValueAsString("path");
+    const std::string path = blossomLeaf.input.getStringByKey("path");
 
     // precheck
     if(bfs::exists(path) == false)
@@ -286,10 +286,10 @@ PathRenameBlossom::PathRenameBlossom()
  * @brief runTask
  */
 bool
-PathRenameBlossom::runTask(BlossomItem &blossomItem, std::string &errorMessage)
+PathRenameBlossom::runTask(BlossomLeaf &blossomLeaf, std::string &errorMessage)
 {
-    const std::string path = blossomItem.values.getValueAsString("path");
-    std::string newFileName = blossomItem.values.getValueAsString("new_name");
+    const std::string path = blossomLeaf.input.getStringByKey("path");
+    std::string newFileName = blossomLeaf.input.getStringByKey("new_name");
 
     std::vector<std::string> stringParts;
     splitStringByDelimiter(stringParts, path, '/');

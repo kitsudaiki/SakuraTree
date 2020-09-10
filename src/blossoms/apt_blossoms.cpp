@@ -147,11 +147,11 @@ AptAbsentBlossom::AptAbsentBlossom()
  * runTask
  */
 bool
-AptAbsentBlossom::runTask(BlossomItem &blossomItem, std::string &errorMessage)
+AptAbsentBlossom::runTask(BlossomLeaf &blossomLeaf, std::string &errorMessage)
 {
     std::vector<std::string> packageNames;
 
-    DataArray* names = blossomItem.values.get("packages")->toArray();
+    DataArray* names = blossomLeaf.input.get("packages")->toArray();
     if(names != nullptr)
     {
         // list of packages
@@ -163,7 +163,7 @@ AptAbsentBlossom::runTask(BlossomItem &blossomItem, std::string &errorMessage)
     else
     {
         // single package
-        packageNames.push_back(blossomItem.values.get("packages")->toString());
+        packageNames.push_back(blossomLeaf.input.getStringByKey("packages"));
     }
 
     // check if there are at least one package defined
@@ -195,9 +195,9 @@ AptAbsentBlossom::runTask(BlossomItem &blossomItem, std::string &errorMessage)
     // if there are still some packages left, create an error
     if(packageNames.size() > 0)
     {
-        blossomItem.terminalOutput = "couldn't remove following packages: \n";
+        blossomLeaf.terminalOutput = "couldn't remove following packages: \n";
         for(const std::string& packageName : packageNames) {
-            blossomItem.terminalOutput += "    " + packageName + "\n";
+            blossomLeaf.terminalOutput += "    " + packageName + "\n";
         }
 
         return false;
@@ -219,11 +219,11 @@ AptLatestBlossom::AptLatestBlossom()
  * @brief AptInstallBlossom::runTask
  */
 bool
-AptLatestBlossom::runTask(BlossomItem &blossomItem, std::string &errorMessage)
+AptLatestBlossom::runTask(BlossomLeaf &blossomLeaf, std::string &errorMessage)
 {
     std::vector<std::string> packageNames;
 
-    DataArray* names = blossomItem.values.get("packages")->toArray();
+    DataArray* names = blossomLeaf.input.get("packages")->toArray();
     if(names != nullptr)
     {
         // list of packages
@@ -234,7 +234,7 @@ AptLatestBlossom::runTask(BlossomItem &blossomItem, std::string &errorMessage)
     else
     {
         // single package
-        packageNames.push_back(blossomItem.values.get("packages")->toString());
+        packageNames.push_back(blossomLeaf.input.getStringByKey("packages"));
     }
 
     // check if there are at least one package defined
@@ -262,9 +262,9 @@ AptLatestBlossom::runTask(BlossomItem &blossomItem, std::string &errorMessage)
     // if there are still some packages missing, create an error
     if(packageNames.size() > 0)
     {
-        blossomItem.terminalOutput = "couldn't install following packages: \n";
+        blossomLeaf.terminalOutput = "couldn't install following packages: \n";
         for(const std::string& packageName : packageNames) {
-            blossomItem.terminalOutput += packageName + "\n";
+            blossomLeaf.terminalOutput += packageName + "\n";
         }
 
         return false;
@@ -286,11 +286,11 @@ AptPresentBlossom::AptPresentBlossom()
  * @brief AptInstallBlossom::runTask
  */
 bool
-AptPresentBlossom::runTask(BlossomItem &blossomItem, std::string &errorMessage)
+AptPresentBlossom::runTask(BlossomLeaf &blossomLeaf, std::string &errorMessage)
 {
     std::vector<std::string> packageNames;
 
-    DataArray* names = blossomItem.values.get("packages")->toArray();
+    DataArray* names = blossomLeaf.input.get("packages")->toArray();
     if(names != nullptr)
     {
         // list of packages
@@ -302,7 +302,7 @@ AptPresentBlossom::runTask(BlossomItem &blossomItem, std::string &errorMessage)
     else
     {
         // single package
-        packageNames.push_back(blossomItem.values.get("packages")->toString());
+        packageNames.push_back(blossomLeaf.input.getStringByKey("packages"));
     }
 
     // check if there are at least one package defined
@@ -336,9 +336,9 @@ AptPresentBlossom::runTask(BlossomItem &blossomItem, std::string &errorMessage)
     // if there are still some packages missing, create an error
     if(packageNames.size() > 0)
     {
-        blossomItem.terminalOutput = "couldn't install following packages: \n";
+        blossomLeaf.terminalOutput = "couldn't install following packages: \n";
         for(const std::string& packageName : packageNames) {
-            blossomItem.terminalOutput += "    " + packageName + "\n";
+            blossomLeaf.terminalOutput += "    " + packageName + "\n";
         }
 
         return false;
@@ -357,7 +357,7 @@ AptUdateBlossom::AptUdateBlossom()
  * runTask
  */
 bool
-AptUdateBlossom::runTask(BlossomItem &, std::string &errorMessage)
+AptUdateBlossom::runTask(BlossomLeaf &, std::string &errorMessage)
 {
     const std::string command = "sudo apt-get update";
     return SakuraRoot::m_root->runCommand(command, errorMessage);
@@ -374,7 +374,7 @@ AptUpgradeBlossom::AptUpgradeBlossom()
  * runTask
  */
 bool
-AptUpgradeBlossom::runTask(BlossomItem &, std::string &errorMessage)
+AptUpgradeBlossom::runTask(BlossomLeaf &, std::string &errorMessage)
 {
     const std::string command = "sudo apt-get -y upgrade";
     return SakuraRoot::m_root->runCommand(command, errorMessage);

@@ -44,13 +44,13 @@ SshCmdBlossom::SshCmdBlossom()
  * runTask
  */
 bool
-SshCmdBlossom::runTask(BlossomItem &blossomItem, std::string &errorMessage)
+SshCmdBlossom::runTask(BlossomLeaf &blossomLeaf, std::string &errorMessage)
 {
-    const std::string user = blossomItem.values.getValueAsString("user");
-    const std::string address = blossomItem.values.getValueAsString("address");
-    const std::string command = blossomItem.values.getValueAsString("command");
-    const std::string port = blossomItem.values.getValueAsString("port");
-    const std::string sshKey = blossomItem.values.getValueAsString("ssh_key");
+    const std::string user = blossomLeaf.input.getStringByKey("user");
+    const std::string address = blossomLeaf.input.getStringByKey("address");
+    const std::string command = blossomLeaf.input.getStringByKey("command");
+    const std::string port = blossomLeaf.input.getStringByKey("port");
+    const std::string sshKey = blossomLeaf.input.getStringByKey("ssh_key");
 
     std::string programm = "ssh ";
     if(port != "") {
@@ -78,7 +78,7 @@ SshCmdBlossom::runTask(BlossomItem &blossomItem, std::string &errorMessage)
         return false;
     }
 
-    blossomItem.blossomOutput.insert("output",
+    blossomLeaf.output.insert("output",
                                      new Kitsunemimi::DataValue(processResult.processOutput));
 
     return true;
@@ -102,14 +102,14 @@ SshCmdCreateFileBlossom::SshCmdCreateFileBlossom()
  * runTask
  */
 bool
-SshCmdCreateFileBlossom::runTask(BlossomItem &blossomItem, std::string &errorMessage)
+SshCmdCreateFileBlossom::runTask(BlossomLeaf &blossomLeaf, std::string &errorMessage)
 {
-    const std::string user = blossomItem.values.getValueAsString("user");
-    const std::string address = blossomItem.values.getValueAsString("address");
-    const std::string fileContent = blossomItem.values.getValueAsString("file_content");
-    const std::string filePath = blossomItem.values.getValueAsString("file_path");
-    const std::string port = blossomItem.values.getValueAsString("port");
-    const std::string sshKey = blossomItem.values.getValueAsString("ssh_key");
+    const std::string user = blossomLeaf.input.getStringByKey("user");
+    const std::string address = blossomLeaf.input.getStringByKey("address");
+    const std::string fileContent = blossomLeaf.input.getStringByKey("file_content");
+    const std::string filePath = blossomLeaf.input.getStringByKey("file_path");
+    const std::string port = blossomLeaf.input.getStringByKey("port");
+    const std::string sshKey = blossomLeaf.input.getStringByKey("ssh_key");
 
 
     std::string programm = "";
@@ -195,14 +195,14 @@ SshScpBlossom::SshScpBlossom()
  * runTask
  */
 bool
-SshScpBlossom::runTask(BlossomItem &blossomItem, std::string &errorMessage)
+SshScpBlossom::runTask(BlossomLeaf &blossomLeaf, std::string &errorMessage)
 {
-    const std::string user = blossomItem.values.getValueAsString("user");
-    const std::string address = blossomItem.values.getValueAsString("address");
-    const std::string targetPath = blossomItem.values.getValueAsString("target_path");
-    const std::string sourcePath = blossomItem.values.getValueAsString("source_path");
-    const std::string port = blossomItem.values.getValueAsString("port");
-    const std::string sshKey = blossomItem.values.getValueAsString("ssh_key");
+    const std::string user = blossomLeaf.input.getStringByKey("user");
+    const std::string address = blossomLeaf.input.getStringByKey("address");
+    const std::string targetPath = blossomLeaf.input.getStringByKey("target_path");
+    const std::string sourcePath = blossomLeaf.input.getStringByKey("source_path");
+    const std::string port = blossomLeaf.input.getStringByKey("port");
+    const std::string sshKey = blossomLeaf.input.getStringByKey("ssh_key");
 
 
     std::string programm = "scp ";
