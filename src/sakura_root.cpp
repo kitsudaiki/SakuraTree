@@ -81,6 +81,8 @@ SakuraRoot::startProcess(const std::string &inputPath,
 {
     initBlossoms();
 
+    LOG_INFO(ASCII_LOGO, PINK_COLOR);
+
     // set default-file in case that a directory instead of a file was selected
     std::string treeFile = inputPath;
     if(bfs::is_directory(treeFile)) {
