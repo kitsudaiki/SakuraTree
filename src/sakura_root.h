@@ -47,8 +47,9 @@ public:
     // start processing
     bool startProcess(const std::string &inputPath,
                       const DataMap &initialValues,
-                      const bool enableDebug,
                       const bool dryRun = false);
+
+    bool runCommand(const std::string &command, std::string &errorMessage);
 
     // static values
     static SakuraRoot* m_root;

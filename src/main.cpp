@@ -98,7 +98,6 @@ int main(int argc, char *argv[])
 
     if(root->startProcess(inputPath.string(),
                           itemInputValues,
-                          enableDebug,
                           argParser.wasSet("dry-run")))
     {
         return 0;

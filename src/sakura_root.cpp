@@ -31,39 +31,13 @@
 #include <libKitsunemimiPersistence/logger/logger.h>
 #include <libKitsunemimiPersistence/files/file_methods.h>
 
-#include <blossoms/install/apt/apt_absent_blossom.h>
-#include <blossoms/install/apt/apt_latest_blossom.h>
-#include <blossoms/install/apt/apt_present_blossom.h>
-#include <blossoms/install/apt/apt_update_blossom.h>
-#include <blossoms/install/apt/apt_upgrade_blossom.h>
-
-#include <blossoms/ssh/ssh_cmd_blossom.h>
-#include <blossoms/ssh/ssh_scp_blossom.h>
-#include <blossoms/ssh/ssh_cmd_create_file_blossom.h>
-
-#include <blossoms/special/print_blossom.h>
-#include <blossoms/special/cmd_blossom.h>
-#include <blossoms/special/assert_blossom.h>
-#include <blossoms/special/exit_blossom.h>
-#include <blossoms/special/item_update_blossom.h>
-
-#include <blossoms/files/common_files/path_copy_blossom.h>
-#include <blossoms/files/common_files/path_delete_blossom.h>
-#include <blossoms/files/common_files/path_rename_blossom.h>
-#include <blossoms/files/common_files/path_chmod_blossom.h>
-#include <blossoms/files/common_files/path_chown_blossom.h>
-
-#include <blossoms/files/template_files/template_create_file_blossom.h>
-#include <blossoms/files/template_files/template_create_string_blossom.h>
-
-#include <blossoms/files/text_files/text_append_blossom.h>
-#include <blossoms/files/text_files/text_read_blossom.h>
-#include <blossoms/files/text_files/text_replace_blossom.h>
-#include <blossoms/files/text_files/text_write_blossom.h>
-
-#include <blossoms/files/ini_files/ini_delete_entry_blossom.h>
-#include <blossoms/files/ini_files/ini_read_entry_blossom.h>
-#include <blossoms/files/ini_files/ini_set_entry_blossom.h>
+#include <blossoms/apt_blossoms.h>
+#include <blossoms/ini_blossoms.h>
+#include <blossoms/path_blossoms.h>
+#include <blossoms/special_blossoms.h>
+#include <blossoms/ssh_blossoms.h>
+#include <blossoms/template_blossoms.h>
+#include <blossoms/text_blossoms.h>
 
 SakuraRoot* SakuraRoot::m_root = nullptr;
 std::string SakuraRoot::m_executablePath = "";
@@ -103,12 +77,11 @@ SakuraRoot::~SakuraRoot()
 bool
 SakuraRoot::startProcess(const std::string &inputPath,
                          const DataMap &initialValues,
-                         const bool enableDebug,
                          const bool dryRun)
 {
-    std::string errorMessage = "";
-
     initBlossoms();
+
+    LOG_INFO(ASCII_LOGO, PINK_COLOR);
 
     // set default-file in case that a directory instead of a file was selected
     std::string treeFile = inputPath;
@@ -116,10 +89,19 @@ SakuraRoot::startProcess(const std::string &inputPath,
         treeFile = treeFile + "/root.sakura";
     }
 
-    return m_interface->processFiles(treeFile,
-                                     initialValues,
-                                     enableDebug,
-                                     dryRun);
+    std::string errorMessage = "";
+    const bool result = m_interface->processFiles(treeFile,
+                                                  initialValues,
+                                                  dryRun,
+                                                  errorMessage);
+
+    if(result) {
+        LOG_INFO("finish", GREEN_COLOR);
+    } else {
+        LOG_ERROR(errorMessage);
+    }
+
+    return result;
 }
 
 /**
@@ -128,37 +110,53 @@ SakuraRoot::startProcess(const std::string &inputPath,
 void
 SakuraRoot::initBlossoms()
 {
-    m_interface->addBlossom("apt", "absent", new AptAbsentBlossom());
-    m_interface->addBlossom("apt", "latest", new AptLatestBlossom());
-    m_interface->addBlossom("apt", "present", new AptPresentBlossom());
-    m_interface->addBlossom("apt", "update", new AptUdateBlossom());
-    m_interface->addBlossom("apt", "upgrade", new AptUpgradeBlossom());
+    assert(m_interface->addBlossom("apt", "absent", new AptAbsentBlossom()));
+    assert(m_interface->addBlossom("apt", "latest", new AptLatestBlossom()));
+    assert(m_interface->addBlossom("apt", "present", new AptPresentBlossom()));
+    assert(m_interface->addBlossom("apt", "update", new AptUdateBlossom()));
+    assert(m_interface->addBlossom("apt", "upgrade", new AptUpgradeBlossom()));
 
-    m_interface->addBlossom("ini_file", "delete", new IniDeleteEntryBlossom());
-    m_interface->addBlossom("ini_file", "read", new IniReadEntryBlossom());
-    m_interface->addBlossom("ini_file", "set", new IniSetEntryBlossom());
+    assert(m_interface->addBlossom("ini_file", "delete", new IniDeleteEntryBlossom()));
+    assert(m_interface->addBlossom("ini_file", "read", new IniReadEntryBlossom()));
+    assert(m_interface->addBlossom("ini_file", "set", new IniSetEntryBlossom()));
 
-    m_interface->addBlossom("path", "chmod", new PathChmodBlossom());
-    m_interface->addBlossom("path", "chown", new PathChownBlossom());
-    m_interface->addBlossom("path", "copy", new PathCopyBlossom());
-    m_interface->addBlossom("path", "delete", new PathDeleteBlossom());
-    m_interface->addBlossom("path", "rename", new PathRenameBlossom());
+    assert(m_interface->addBlossom("path", "chmod", new PathChmodBlossom()));
+    assert(m_interface->addBlossom("path", "chown", new PathChownBlossom()));
+    assert(m_interface->addBlossom("path", "copy", new PathCopyBlossom()));
+    assert(m_interface->addBlossom("path", "delete", new PathDeleteBlossom()));
+    assert(m_interface->addBlossom("path", "rename", new PathRenameBlossom()));
 
-    m_interface->addBlossom("template", "create_string", new TemplateCreateStringBlossom());
-    m_interface->addBlossom("template", "create_file", new TemplateCreateFileBlossom());
+    assert(m_interface->addBlossom("template", "create_string", new TemplateCreateStringBlossom()));
+    assert(m_interface->addBlossom("template", "create_file", new TemplateCreateFileBlossom()));
 
-    m_interface->addBlossom("special", "assert", new AssertBlossom());
-    m_interface->addBlossom("special", "cmd", new CmdBlossom());
-    m_interface->addBlossom("special", "exit", new ExitBlossom());
-    m_interface->addBlossom("special", "item_update", new ItemUpdateBlossom());
-    m_interface->addBlossom("special", "print", new PrintBlossom());
+    assert(m_interface->addBlossom("special", "assert", new AssertBlossom()));
+    assert(m_interface->addBlossom("special", "cmd", new CmdBlossom()));
+    assert(m_interface->addBlossom("special", "exit", new ExitBlossom()));
+    assert(m_interface->addBlossom("special", "item_update", new ItemUpdateBlossom()));
+    assert(m_interface->addBlossom("special", "print", new PrintBlossom()));
 
-    m_interface->addBlossom("text_file", "append", new TextAppendBlossom());
-    m_interface->addBlossom("text_file", "read", new TextReadBlossom());
-    m_interface->addBlossom("text_file", "replace", new TextReplaceBlossom());
-    m_interface->addBlossom("text_file", "write", new TextWriteBlossom());
+    assert(m_interface->addBlossom("text_file", "append", new TextAppendBlossom()));
+    assert(m_interface->addBlossom("text_file", "read", new TextReadBlossom()));
+    assert(m_interface->addBlossom("text_file", "replace", new TextReplaceBlossom()));
+    assert(m_interface->addBlossom("text_file", "write", new TextWriteBlossom()));
 
-    m_interface->addBlossom("ssh", "file_create", new SshCmdCreateFileBlossom());
-    m_interface->addBlossom("ssh", "scp", new SshScpBlossom());
-    m_interface->addBlossom("ssh", "cmd", new SshCmdBlossom());
+    assert(m_interface->addBlossom("ssh", "file_create", new SshCmdCreateFileBlossom()));
+    assert(m_interface->addBlossom("ssh", "scp", new SshScpBlossom()));
+    assert(m_interface->addBlossom("ssh", "cmd", new SshCmdBlossom()));
+}
+
+bool
+SakuraRoot::runCommand(const std::string &command, std::string &errorMessage)
+{
+    LOG_DEBUG("run command: " + command);
+
+    // run command
+    Kitsunemimi::ProcessResult processResult = Kitsunemimi::runSyncProcess(command);
+    if(processResult.success == false)
+    {
+        errorMessage = processResult.processOutput;
+        return false;
+    }
+
+    return true;
 }
