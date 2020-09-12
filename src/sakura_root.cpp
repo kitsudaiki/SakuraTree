@@ -24,7 +24,6 @@
 
 #include <libKitsunemimiSakuraLang/sakura_lang_interface.h>
 
-#include <libKitsunemimiConfig/config_handler.h>
 #include <libKitsunemimiCommon/common_methods/string_methods.h>
 
 #include <libKitsunemimiPersistence/logger/logger.h>

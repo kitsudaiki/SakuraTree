@@ -13,11 +13,6 @@ LIBS += -L../../libKitsunemimiArgs/src/debug -lKitsunemimiArgs
 LIBS += -L../../libKitsunemimiArgs/src/release -lKitsunemimiArgs
 INCLUDEPATH += ../../libKitsunemimiArgs/include
 
-LIBS += -L../../libKitsunemimiConfig/src -lKitsunemimiConfig
-LIBS += -L../../libKitsunemimiConfig/src/debug -lKitsunemimiConfig
-LIBS += -L../../libKitsunemimiConfig/src/release -lKitsunemimiConfig
-INCLUDEPATH += ../../libKitsunemimiConfig/include
-
 LIBS += -L../../libKitsunemimiSakuraLang/src -lKitsunemimiSakuraLang
 LIBS += -L../../libKitsunemimiSakuraLang/src/debug -lKitsunemimiSakuraLang
 LIBS += -L../../libKitsunemimiSakuraLang/src/release -lKitsunemimiSakuraLang
