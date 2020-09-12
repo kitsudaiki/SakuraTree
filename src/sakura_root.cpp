@@ -21,7 +21,6 @@
  */
 
 #include "sakura_root.h"
-#include <config.h>
 
 #include <libKitsunemimiSakuraLang/sakura_lang_interface.h>
 

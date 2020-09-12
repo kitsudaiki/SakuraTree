@@ -56,7 +56,6 @@ HEADERS += \
     common/includes.h \
     args.h \
     common.h \
-    config.h \
     sakura_root.h \
     blossoms/apt_blossoms.h \
     blossoms/ini_blossoms.h \
