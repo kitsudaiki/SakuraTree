@@ -45,9 +45,6 @@ int main(int argc, char *argv[])
     bool enableDebug = false;
     DataMap itemInputValues;
 
-    std::string listenAddress = "";
-    uint16_t listenPort = 0;
-
     // check debug-output
     if(argParser.wasSet("debug"))
     {
@@ -70,20 +67,6 @@ int main(int argc, char *argv[])
             }
             itemInputValues.insert(pair.at(0), new DataValue(pair.at(1)));
         }
-    }
-
-    // listen-address
-    if(argParser.wasSet("listen-address"))
-    {
-        listenAddress = argParser.getStringValues("listen-address")[0];
-        std::cout << "listen-address: " << listenAddress << std::endl;
-    }
-
-    // listen-port
-    if(argParser.wasSet("listen-port"))
-    {
-        listenPort = static_cast<uint16_t>(argParser.getIntValues("listen-port")[0]);
-        std::cout << "listen-port: " << listenPort << std::endl;
     }
 
     // input-path
