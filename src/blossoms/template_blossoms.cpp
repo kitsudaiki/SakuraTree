@@ -74,9 +74,11 @@ convertTemplate(std::string &output,
 }
 
 /**
- * @brief getAbsoluteTemplatePath
- * @param blossomLeaf
- * @return
+ * @brief get absolute template path
+ *
+ * @param blossomLeaf actual blossom-leaf
+ *
+ * @return absolute path
  */
 const std::string
 getAbsoluteTemplatePath(BlossomLeaf &blossomLeaf)

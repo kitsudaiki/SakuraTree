@@ -26,12 +26,16 @@
 #include <libKitsunemimiPersistence/files/text_file.h>
 
 /**
- * @brief checkFile
- * @param filePath
- * @return
+ * @brief check if path exist and is a file
+ *
+ * @param filePath path of the file to check
+ * @param errorMessage reference for error-message
+ *
+ * @return true, if path is valid, else false
  */
 bool
-checkFile(const std::string &filePath, std::string &errorMessage)
+checkFile(const std::string &filePath,
+          std::string &errorMessage)
 {
     if(bfs::exists(filePath) == false)
     {

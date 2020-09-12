@@ -66,11 +66,9 @@ SakuraRoot::~SakuraRoot()
 /**
  * initialize and start rollout-process
  *
- * @param initialTreePath
- * @param seedPath
- * @param initialValues
- * @param serverAddress
- * @param port
+ * @param inputPath initial path to parse
+ * @param initialValues key-value-pairs to override the values of the initial file
+ * @param dryRun true to start a run with parsing and validating, but without execution
  *
  * @return true if successful, else false
  */
@@ -89,6 +87,7 @@ SakuraRoot::startProcess(const std::string &inputPath,
         treeFile = treeFile + "/root.sakura";
     }
 
+    // process
     std::string errorMessage = "";
     const bool result = m_interface->processFiles(treeFile,
                                                   initialValues,
@@ -105,7 +104,7 @@ SakuraRoot::startProcess(const std::string &inputPath,
 }
 
 /**
- * @brief SakuraRoot::initBlossoms
+ * @brief register all blossoms
  */
 void
 SakuraRoot::initBlossoms()
@@ -145,8 +144,17 @@ SakuraRoot::initBlossoms()
     assert(m_interface->addBlossom("ssh", "cmd", new SshCmdBlossom()));
 }
 
+/**
+ * @brief execute a cli-command
+ *
+ * @param command cli-command to execute
+ * @param errorMessage reference for error-message
+ *
+ * @return true, if successful, else false
+ */
 bool
-SakuraRoot::runCommand(const std::string &command, std::string &errorMessage)
+SakuraRoot::runCommand(const std::string &command,
+                       std::string &errorMessage)
 {
     LOG_DEBUG("run command: " + command);
 
