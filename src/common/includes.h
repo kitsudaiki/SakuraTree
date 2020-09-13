@@ -44,6 +44,9 @@
 #include <sys/ioctl.h>
 #include <unistd.h>
 
+#include <libKitsunemimiSakuraLang/sakura_lang_interface.h>
+using Kitsunemimi::Sakura::SakuraLangInterface;
+
 #include <libKitsunemimiSakuraLang/blossom.h>
 using Kitsunemimi::Sakura::Blossom;
 using Kitsunemimi::Sakura::BlossomLeaf;

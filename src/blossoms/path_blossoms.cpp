@@ -142,8 +142,8 @@ PathCopyBlossom::runTask(BlossomLeaf &blossomLeaf, std::string &errorMessage)
     {
         localStorage = true;
         const bfs::path filePath = bfs::path("files") / bfs::path(sourcePath);
-        sourcePath = SakuraRoot::m_interface->getRelativePath(blossomLeaf.blossomPath,
-                                                              filePath).string();
+        SakuraLangInterface* interface = SakuraLangInterface::getInstance();
+        sourcePath = interface->getRelativePath(blossomLeaf.blossomPath,  filePath).string();
     }
 
     // precheck
@@ -161,7 +161,8 @@ PathCopyBlossom::runTask(BlossomLeaf &blossomLeaf, std::string &errorMessage)
     // run task
     if(localStorage == true)
     {
-        Kitsunemimi::DataBuffer* buffer = SakuraRoot::m_interface->getFile(sourcePath);
+        SakuraLangInterface* interface = SakuraLangInterface::getInstance();
+        Kitsunemimi::DataBuffer* buffer = interface->getFile(sourcePath);
 
         if(buffer == nullptr)
         {

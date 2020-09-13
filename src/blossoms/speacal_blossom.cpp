@@ -113,8 +113,8 @@ CmdBlossom::runTask(BlossomLeaf &blossomLeaf, std::string &errorMessage)
         Kitsunemimi::trim(processResult.processOutput);
     }
 
-    blossomLeaf.output.insert("output",
-                                     new Kitsunemimi::DataValue(processResult.processOutput));
+    blossomLeaf.output.insert("output", new Kitsunemimi::DataValue(processResult.processOutput));
+
     return true;
 }
 

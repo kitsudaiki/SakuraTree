@@ -78,8 +78,7 @@ SshCmdBlossom::runTask(BlossomLeaf &blossomLeaf, std::string &errorMessage)
         return false;
     }
 
-    blossomLeaf.output.insert("output",
-                                     new Kitsunemimi::DataValue(processResult.processOutput));
+    blossomLeaf.output.insert("output", new Kitsunemimi::DataValue(processResult.processOutput));
 
     return true;
 }

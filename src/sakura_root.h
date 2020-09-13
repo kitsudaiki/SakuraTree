@@ -54,7 +54,6 @@ public:
     // static values
     static SakuraRoot* m_root;
     static std::string m_executablePath;
-    static Kitsunemimi::Sakura::SakuraLangInterface* m_interface;
 
 private:
     void initBlossoms();

@@ -31,6 +31,8 @@
 
 #include <sakura_root.h>
 
+using Kitsunemimi::Jinja2::Jinja2Converter;
+
 /**
  * @brief convert a jinja2-template with values into a new string
  *
@@ -48,7 +50,8 @@ convertTemplate(std::string &output,
                 std::string &errorMessage)
 {
     // read template-file
-    const std::string templateCont = SakuraRoot::m_interface->getTemplate(templatePath);
+    SakuraLangInterface* interface = SakuraLangInterface::getInstance();
+    const std::string templateCont = interface->getTemplate(templatePath);
     if(templateCont == "")
     {
         errorMessage = "couldn't find template-file " + templatePath;
@@ -56,10 +59,11 @@ convertTemplate(std::string &output,
     }
 
     // create file-content form template
-    const bool jinja2Result = SakuraRoot::m_interface->jinja2Converter->convert(output,
-                                                                                templateCont,
-                                                                                &values,
-                                                                                errorMessage);
+    Jinja2Converter* converter = Jinja2Converter::getInstance();
+    const bool jinja2Result = converter->convert(output,
+                                                 templateCont,
+                                                 &values,
+                                                 errorMessage);
 
     if(jinja2Result == false)
     {
@@ -85,7 +89,9 @@ getAbsoluteTemplatePath(BlossomLeaf &blossomLeaf)
 {
     std::string templatePath = blossomLeaf.input.getStringByKey("source_path");
     const bfs::path path = bfs::path("templates") / bfs::path(templatePath);
-    templatePath = SakuraRoot::m_interface->getRelativePath(blossomLeaf.blossomPath, path).string();
+
+    SakuraLangInterface* interface = SakuraLangInterface::getInstance();
+    templatePath = interface->getRelativePath(blossomLeaf.blossomPath, path).string();
     return templatePath;
 }
 
