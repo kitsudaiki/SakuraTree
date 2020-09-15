@@ -101,11 +101,11 @@ getAbsoluteTemplatePath(BlossomLeaf &blossomLeaf)
 TemplateCreateFileBlossom::TemplateCreateFileBlossom()
     : Blossom()
 {
-    m_requiredKeys.insert("source_path", new Kitsunemimi::DataValue(true));
-    m_requiredKeys.insert("dest_path", new Kitsunemimi::DataValue(true));
-    m_requiredKeys.insert("owner", new Kitsunemimi::DataValue(false));
-    m_requiredKeys.insert("permission", new Kitsunemimi::DataValue(false));
-    m_requiredKeys.insert("variables", new Kitsunemimi::DataValue(true));
+    validationMap.emplace("source_path", BlossomValidDef(IO_ValueType::INPUT_TYPE, true));
+    validationMap.emplace("dest_path", BlossomValidDef(IO_ValueType::INPUT_TYPE, true));
+    validationMap.emplace("owner", BlossomValidDef(IO_ValueType::INPUT_TYPE, false));
+    validationMap.emplace("permission", BlossomValidDef(IO_ValueType::INPUT_TYPE, false));
+    validationMap.emplace("variables", BlossomValidDef(IO_ValueType::INPUT_TYPE, true));
 }
 
 /**
@@ -189,10 +189,9 @@ TemplateCreateFileBlossom::runTask(BlossomLeaf &blossomLeaf, std::string &errorM
 TemplateCreateStringBlossom::TemplateCreateStringBlossom()
     : Blossom()
 {
-    m_hasOutput = true;
-
-    m_requiredKeys.insert("source_path", new Kitsunemimi::DataValue(true));
-    m_requiredKeys.insert("variables", new Kitsunemimi::DataValue(true));
+    validationMap.emplace("source_path", BlossomValidDef(IO_ValueType::INPUT_TYPE, true));
+    validationMap.emplace("variables", BlossomValidDef(IO_ValueType::INPUT_TYPE, true));
+    validationMap.emplace("text", BlossomValidDef(IO_ValueType::OUTPUT_TYPE, true));
 }
 
 /**

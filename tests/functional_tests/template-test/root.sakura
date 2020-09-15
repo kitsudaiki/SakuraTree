@@ -11,11 +11,11 @@ template("create a template")
     - dest_path = dest_path
     - permission = 666
     - variables = { - checker = 42
-					- name = test_input }
+                    - name = test_input }
 -> create_string:
     - text >> converted_output
     - variables = { - checker = 42
-					- name = test_input }
+                    - name = test_input }
 
 
 text_file("read written file")

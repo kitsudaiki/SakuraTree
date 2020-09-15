@@ -58,8 +58,8 @@ checkFile(const std::string &filePath,
 TextAppendBlossom::TextAppendBlossom()
     : Blossom()
 {
-    m_requiredKeys.insert("file_path", new Kitsunemimi::DataValue(true));
-    m_requiredKeys.insert("text", new Kitsunemimi::DataValue(true));
+    validationMap.emplace("file_path", BlossomValidDef(IO_ValueType::INPUT_TYPE, true));
+    validationMap.emplace("text", BlossomValidDef(IO_ValueType::INPUT_TYPE, true));
 }
 
 /**
@@ -85,9 +85,8 @@ TextAppendBlossom::runTask(BlossomLeaf &blossomLeaf, std::string &errorMessage)
 TextReadBlossom::TextReadBlossom()
     : Blossom()
 {
-    m_hasOutput = true;
-
-    m_requiredKeys.insert("file_path", new Kitsunemimi::DataValue(true));
+    validationMap.emplace("file_path", BlossomValidDef(IO_ValueType::INPUT_TYPE, true));
+    validationMap.emplace("text", BlossomValidDef(IO_ValueType::OUTPUT_TYPE, true));
 }
 
 /**
@@ -121,9 +120,9 @@ TextReadBlossom::runTask(BlossomLeaf &blossomLeaf, std::string &errorMessage)
 TextReplaceBlossom::TextReplaceBlossom()
     : Blossom()
 {
-    m_requiredKeys.insert("file_path", new Kitsunemimi::DataValue(true));
-    m_requiredKeys.insert("old_text", new Kitsunemimi::DataValue(true));
-    m_requiredKeys.insert("new_text", new Kitsunemimi::DataValue(true));
+    validationMap.emplace("file_path", BlossomValidDef(IO_ValueType::INPUT_TYPE, true));
+    validationMap.emplace("old_text", BlossomValidDef(IO_ValueType::INPUT_TYPE, true));
+    validationMap.emplace("new_text", BlossomValidDef(IO_ValueType::INPUT_TYPE, true));
 }
 
 /**
@@ -155,8 +154,8 @@ TextReplaceBlossom::runTask(BlossomLeaf &blossomLeaf, std::string &errorMessage)
 TextWriteBlossom::TextWriteBlossom()
     : Blossom()
 {
-    m_requiredKeys.insert("file_path", new Kitsunemimi::DataValue(true));
-    m_requiredKeys.insert("text", new Kitsunemimi::DataValue(true));
+    validationMap.emplace("file_path", BlossomValidDef(IO_ValueType::INPUT_TYPE, true));
+    validationMap.emplace("text", BlossomValidDef(IO_ValueType::INPUT_TYPE, true));
 }
 
 /**

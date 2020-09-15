@@ -50,6 +50,8 @@ using Kitsunemimi::Sakura::SakuraLangInterface;
 #include <libKitsunemimiSakuraLang/blossom.h>
 using Kitsunemimi::Sakura::Blossom;
 using Kitsunemimi::Sakura::BlossomLeaf;
+using Kitsunemimi::Sakura::BlossomValidDef;
+using Kitsunemimi::Sakura::IO_ValueType;
 
 #include <boost/filesystem.hpp>
 namespace bfs = boost::filesystem;
