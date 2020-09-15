@@ -43,8 +43,8 @@ using Kitsunemimi::splitStringByDelimiter;
 PathChmodBlossom::PathChmodBlossom()
     : Blossom()
 {
-    m_requiredKeys.insert("path", new Kitsunemimi::DataValue(true));
-    m_requiredKeys.insert("permission", new Kitsunemimi::DataValue(true));
+    validationMap.emplace("path", BlossomValidDef(IO_ValueType::INPUT_TYPE, true));
+    validationMap.emplace("permission", BlossomValidDef(IO_ValueType::INPUT_TYPE, true));
 }
 
 /**
@@ -81,8 +81,8 @@ PathChmodBlossom::runTask(BlossomLeaf &blossomLeaf, std::string &errorMessage)
 PathChownBlossom::PathChownBlossom()
     : Blossom()
 {
-    m_requiredKeys.insert("path", new Kitsunemimi::DataValue(true));
-    m_requiredKeys.insert("owner", new Kitsunemimi::DataValue(true));
+    validationMap.emplace("path", BlossomValidDef(IO_ValueType::INPUT_TYPE, true));
+    validationMap.emplace("owner", BlossomValidDef(IO_ValueType::INPUT_TYPE, true));
 }
 
 /**
@@ -119,11 +119,12 @@ PathChownBlossom::runTask(BlossomLeaf &blossomLeaf, std::string &errorMessage)
 PathCopyBlossom::PathCopyBlossom()
     : Blossom()
 {
-    m_requiredKeys.insert("source_path", new Kitsunemimi::DataValue(true));
-    m_requiredKeys.insert("dest_path", new Kitsunemimi::DataValue(true));
-    m_requiredKeys.insert("mode", new Kitsunemimi::DataValue(false));
-    m_requiredKeys.insert("owner", new Kitsunemimi::DataValue(false));
+    validationMap.emplace("source_path", BlossomValidDef(IO_ValueType::INPUT_TYPE, true));
+    validationMap.emplace("dest_path", BlossomValidDef(IO_ValueType::INPUT_TYPE, true));
+    validationMap.emplace("mode", BlossomValidDef(IO_ValueType::INPUT_TYPE, false));
+    validationMap.emplace("owner", BlossomValidDef(IO_ValueType::INPUT_TYPE, false));
 }
+
 /**
  * @brief PathCopyBlossom::runTask
  * @param blossomLeaf
@@ -237,7 +238,7 @@ PathCopyBlossom::runTask(BlossomLeaf &blossomLeaf, std::string &errorMessage)
 PathDeleteBlossom::PathDeleteBlossom()
     : Blossom()
 {
-    m_requiredKeys.insert("path", new Kitsunemimi::DataValue(true));
+    validationMap.emplace("path", BlossomValidDef(IO_ValueType::INPUT_TYPE, true));
 }
 
 /**
@@ -279,8 +280,8 @@ PathDeleteBlossom::runTask(BlossomLeaf &blossomLeaf, std::string &errorMessage)
 PathRenameBlossom::PathRenameBlossom()
     : Blossom()
 {
-    m_requiredKeys.insert("path", new Kitsunemimi::DataValue(true));
-    m_requiredKeys.insert("new_name", new Kitsunemimi::DataValue(true));
+    validationMap.emplace("path", BlossomValidDef(IO_ValueType::INPUT_TYPE, true));
+    validationMap.emplace("new_name", BlossomValidDef(IO_ValueType::INPUT_TYPE, true));
 }
 
 /**

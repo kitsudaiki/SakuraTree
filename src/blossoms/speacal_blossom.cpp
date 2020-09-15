@@ -32,7 +32,7 @@
 AssertBlossom::AssertBlossom()
     : Blossom()
 {
-    m_requiredKeys.insert("*", new Kitsunemimi::DataValue(false));
+    allowUnmatched = true;
 }
 
 /**
@@ -71,11 +71,10 @@ AssertBlossom::runTask(BlossomLeaf &blossomLeaf, std::string &errorMessage)
 CmdBlossom::CmdBlossom()
     : Blossom()
 {
-    m_hasOutput = true;
-
-    m_requiredKeys.insert("command", new Kitsunemimi::DataValue(true));
-    m_requiredKeys.insert("ignore_errors", new Kitsunemimi::DataValue(false));
-    m_requiredKeys.insert("trim_output", new Kitsunemimi::DataValue(false));
+    validationMap.emplace("command", BlossomValidDef(IO_ValueType::INPUT_TYPE, true));
+    validationMap.emplace("ignore_errors", BlossomValidDef(IO_ValueType::INPUT_TYPE, false));
+    validationMap.emplace("trim_output", BlossomValidDef(IO_ValueType::INPUT_TYPE, false));
+    validationMap.emplace("output", BlossomValidDef(IO_ValueType::OUTPUT_TYPE, false));
 }
 
 /**
@@ -124,7 +123,7 @@ CmdBlossom::runTask(BlossomLeaf &blossomLeaf, std::string &errorMessage)
 ExitBlossom::ExitBlossom()
     : Blossom()
 {
-    m_requiredKeys.insert("status", new Kitsunemimi::DataValue(false));
+    validationMap.emplace("status", BlossomValidDef(IO_ValueType::INPUT_TYPE, false));
 }
 
 /**
@@ -144,7 +143,7 @@ ExitBlossom::runTask(BlossomLeaf &blossomLeaf, std::string &errorMessage)
 ItemUpdateBlossom::ItemUpdateBlossom()
     : Blossom()
 {
-    m_requiredKeys.insert("*", new Kitsunemimi::DataValue(false));
+    allowUnmatched = true;
 }
 
 /**
@@ -178,7 +177,7 @@ ItemUpdateBlossom::runTask(BlossomLeaf &blossomLeaf, std::string &errorMessage)
 PrintBlossom::PrintBlossom()
     : Blossom()
 {
-    m_requiredKeys.insert("*", new Kitsunemimi::DataValue(false));
+    allowUnmatched = true;
 }
 
 /**

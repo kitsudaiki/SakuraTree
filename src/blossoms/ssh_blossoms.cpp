@@ -31,13 +31,12 @@
 SshCmdBlossom::SshCmdBlossom()
     : Blossom()
 {
-    m_hasOutput = true;
-
-    m_requiredKeys.insert("user", new Kitsunemimi::DataValue(true));
-    m_requiredKeys.insert("address", new Kitsunemimi::DataValue(true));
-    m_requiredKeys.insert("command", new Kitsunemimi::DataValue(true));
-    m_requiredKeys.insert("port", new Kitsunemimi::DataValue(false));
-    m_requiredKeys.insert("ssh_key", new Kitsunemimi::DataValue(false));
+    validationMap.emplace("user", BlossomValidDef(IO_ValueType::INPUT_TYPE, true));
+    validationMap.emplace("address", BlossomValidDef(IO_ValueType::INPUT_TYPE, true));
+    validationMap.emplace("command", BlossomValidDef(IO_ValueType::INPUT_TYPE, true));
+    validationMap.emplace("port", BlossomValidDef(IO_ValueType::INPUT_TYPE, false));
+    validationMap.emplace("ssh_key", BlossomValidDef(IO_ValueType::INPUT_TYPE, false));
+    validationMap.emplace("output", BlossomValidDef(IO_ValueType::OUTPUT_TYPE, false));
 }
 
 /**
@@ -89,12 +88,12 @@ SshCmdBlossom::runTask(BlossomLeaf &blossomLeaf, std::string &errorMessage)
 SshCmdCreateFileBlossom::SshCmdCreateFileBlossom()
     : Blossom()
 {
-    m_requiredKeys.insert("user", new Kitsunemimi::DataValue(true));
-    m_requiredKeys.insert("address", new Kitsunemimi::DataValue(true));
-    m_requiredKeys.insert("file_content", new Kitsunemimi::DataValue(true));
-    m_requiredKeys.insert("file_path", new Kitsunemimi::DataValue(true));
-    m_requiredKeys.insert("port", new Kitsunemimi::DataValue(false));
-    m_requiredKeys.insert("ssh_key", new Kitsunemimi::DataValue(false));
+    validationMap.emplace("user", BlossomValidDef(IO_ValueType::INPUT_TYPE, true));
+    validationMap.emplace("address", BlossomValidDef(IO_ValueType::INPUT_TYPE, true));
+    validationMap.emplace("file_content", BlossomValidDef(IO_ValueType::INPUT_TYPE, true));
+    validationMap.emplace("file_path", BlossomValidDef(IO_ValueType::INPUT_TYPE, true));
+    validationMap.emplace("port", BlossomValidDef(IO_ValueType::INPUT_TYPE, false));
+    validationMap.emplace("ssh_key", BlossomValidDef(IO_ValueType::INPUT_TYPE, false));
 }
 
 /**
@@ -182,12 +181,12 @@ SshCmdCreateFileBlossom::runTask(BlossomLeaf &blossomLeaf, std::string &errorMes
 SshScpBlossom::SshScpBlossom()
     : Blossom()
 {
-    m_requiredKeys.insert("user", new Kitsunemimi::DataValue(true));
-    m_requiredKeys.insert("address", new Kitsunemimi::DataValue(true));
-    m_requiredKeys.insert("target_path", new Kitsunemimi::DataValue(true));
-    m_requiredKeys.insert("source_path", new Kitsunemimi::DataValue(true));
-    m_requiredKeys.insert("port", new Kitsunemimi::DataValue(false));
-    m_requiredKeys.insert("ssh_key", new Kitsunemimi::DataValue(false));
+    validationMap.emplace("user", BlossomValidDef(IO_ValueType::INPUT_TYPE, true));
+    validationMap.emplace("address", BlossomValidDef(IO_ValueType::INPUT_TYPE, true));
+    validationMap.emplace("target_path", BlossomValidDef(IO_ValueType::INPUT_TYPE, true));
+    validationMap.emplace("source_path", BlossomValidDef(IO_ValueType::INPUT_TYPE, true));
+    validationMap.emplace("port", BlossomValidDef(IO_ValueType::INPUT_TYPE, false));
+    validationMap.emplace("ssh_key", BlossomValidDef(IO_ValueType::INPUT_TYPE, false));
 }
 
 /**

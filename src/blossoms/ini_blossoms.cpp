@@ -33,9 +33,9 @@ using Kitsunemimi::Ini::IniItem;
 IniDeleteEntryBlossom::IniDeleteEntryBlossom()
     : Blossom()
 {
-    m_requiredKeys.insert("file_path", new Kitsunemimi::DataValue(true));
-    m_requiredKeys.insert("group", new Kitsunemimi::DataValue(true));
-    m_requiredKeys.insert("entry", new Kitsunemimi::DataValue(false));
+    validationMap.emplace("file_path", BlossomValidDef(IO_ValueType::INPUT_TYPE, true));
+    validationMap.emplace("group", BlossomValidDef(IO_ValueType::INPUT_TYPE, true));
+    validationMap.emplace("entry", BlossomValidDef(IO_ValueType::INPUT_TYPE, false));
 }
 
 /**
@@ -82,11 +82,10 @@ IniDeleteEntryBlossom::runTask(BlossomLeaf &blossomLeaf, std::string &errorMessa
 IniReadEntryBlossom::IniReadEntryBlossom()
     : Blossom()
 {
-    m_hasOutput = true;
-
-    m_requiredKeys.insert("file_path", new Kitsunemimi::DataValue(true));
-    m_requiredKeys.insert("group", new Kitsunemimi::DataValue(true));
-    m_requiredKeys.insert("entry", new Kitsunemimi::DataValue(true));
+    validationMap.emplace("file_path", BlossomValidDef(IO_ValueType::INPUT_TYPE, true));
+    validationMap.emplace("group", BlossomValidDef(IO_ValueType::INPUT_TYPE, true));
+    validationMap.emplace("entry", BlossomValidDef(IO_ValueType::INPUT_TYPE, true));
+    validationMap.emplace("value", BlossomValidDef(IO_ValueType::OUTPUT_TYPE, true));
 }
 
 /**
@@ -129,10 +128,10 @@ IniReadEntryBlossom::runTask(BlossomLeaf &blossomLeaf, std::string &errorMessage
 IniSetEntryBlossom::IniSetEntryBlossom()
     : Blossom()
 {
-    m_requiredKeys.insert("file_path", new Kitsunemimi::DataValue(true));
-    m_requiredKeys.insert("group", new Kitsunemimi::DataValue(true));
-    m_requiredKeys.insert("entry", new Kitsunemimi::DataValue(true));
-    m_requiredKeys.insert("value", new Kitsunemimi::DataValue(true));
+    validationMap.emplace("file_path", BlossomValidDef(IO_ValueType::INPUT_TYPE, true));
+    validationMap.emplace("group", BlossomValidDef(IO_ValueType::INPUT_TYPE, true));
+    validationMap.emplace("entry", BlossomValidDef(IO_ValueType::INPUT_TYPE, true));
+    validationMap.emplace("value", BlossomValidDef(IO_ValueType::INPUT_TYPE, true));
 }
 
 /**

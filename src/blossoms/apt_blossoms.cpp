@@ -140,7 +140,7 @@ getInstalledPackages(const std::vector<std::string> &packageList)
 AptAbsentBlossom::AptAbsentBlossom()
     : Blossom()
 {
-    m_requiredKeys.insert("packages", new Kitsunemimi::DataValue(true));
+    validationMap.emplace("packages", BlossomValidDef(IO_ValueType::INPUT_TYPE, true));
 }
 
 /**
@@ -212,7 +212,7 @@ AptAbsentBlossom::runTask(BlossomLeaf &blossomLeaf, std::string &errorMessage)
 AptLatestBlossom::AptLatestBlossom()
     : Blossom()
 {
-    m_requiredKeys.insert("packages", new Kitsunemimi::DataValue(true));
+    validationMap.emplace("packages", BlossomValidDef(IO_ValueType::INPUT_TYPE, true));
 }
 
 /**
@@ -279,7 +279,7 @@ AptLatestBlossom::runTask(BlossomLeaf &blossomLeaf, std::string &errorMessage)
 AptPresentBlossom::AptPresentBlossom()
     : Blossom()
 {
-    m_requiredKeys.insert("packages", new Kitsunemimi::DataValue(true));
+    validationMap.emplace("packages", BlossomValidDef(IO_ValueType::INPUT_TYPE, true));
 }
 
 /**
