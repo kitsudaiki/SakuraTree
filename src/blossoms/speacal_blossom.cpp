@@ -87,19 +87,23 @@ CmdBlossom::runTask(BlossomLeaf &blossomLeaf, std::string &errorMessage)
     bool ignoreResult = false;
     bool trimOutput = false;
 
+    // check if ignore_errors was set
     Kitsunemimi::DataItem* ignoreResultItem = blossomLeaf.input.get("ignore_errors");
     if(ignoreResultItem != nullptr) {
         ignoreResult = ignoreResultItem->toValue()->getBool();
     }
 
+    // check if trim_output was set
     Kitsunemimi::DataItem* trimOutputItem = blossomLeaf.input.get("trim_output");
     if(trimOutputItem != nullptr) {
         trimOutput = trimOutputItem->toValue()->getBool();
     }
 
+    // run command
     LOG_DEBUG("run command: " + command);
     Kitsunemimi::ProcessResult processResult = Kitsunemimi::runSyncProcess(command);
 
+    // check result
     LOG_DEBUG("command-output: \n" + processResult.processOutput);
     if(processResult.success == false
             && ignoreResult == false)
@@ -108,6 +112,7 @@ CmdBlossom::runTask(BlossomLeaf &blossomLeaf, std::string &errorMessage)
         return false;
     }
 
+    // trim output, if required
     if(trimOutput) {
         Kitsunemimi::trim(processResult.processOutput);
     }

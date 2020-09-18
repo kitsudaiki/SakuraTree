@@ -256,6 +256,7 @@ PathDeleteBlossom::runTask(BlossomLeaf &blossomLeaf, std::string &errorMessage)
         return false;
     }
 
+    // delete path
     const bool result = Kitsunemimi::Persistence::deleteFileOrDir(path, errorMessage);
     if(result == false)
     {
@@ -297,6 +298,7 @@ PathRenameBlossom::runTask(BlossomLeaf &blossomLeaf, std::string &errorMessage)
     splitStringByDelimiter(stringParts, path, '/');
     stringParts[stringParts.size()-1] = newFileName;
 
+    // create new file-path
     Kitsunemimi::removeEmptyStrings(stringParts);
     for(const std::string& stringPart : stringParts)
     {
@@ -304,7 +306,7 @@ PathRenameBlossom::runTask(BlossomLeaf &blossomLeaf, std::string &errorMessage)
          newFileName += stringPart;
     }
 
-
+    // precheck
     if(bfs::exists(path) == false
              && bfs::exists(newFileName))
     {
@@ -317,11 +319,13 @@ PathRenameBlossom::runTask(BlossomLeaf &blossomLeaf, std::string &errorMessage)
          return false;
     }
 
+    // rename path
     const bool ret = Kitsunemimi::Persistence::renameFileOrDir(path, newFileName, errorMessage);
     if(ret == false) {
         return false;
     }
 
+    // check result
     if(bfs::is_regular_file(path))
     {
         errorMessage = "old object still exist";

@@ -55,25 +55,28 @@ IniDeleteEntryBlossom::runTask(BlossomLeaf &blossomLeaf, std::string &errorMessa
         return false;
     }
 
+    // read file-content
     std::string fileContent = "";
     const bool result = Kitsunemimi::Persistence::readFile(fileContent, filePath, errorMessage);
     if(result == false) {
         return false;
     }
 
+    // parse file-content
     IniItem iniItem;
     const bool parseSuccess = iniItem.parse(fileContent, errorMessage);
     if(parseSuccess == false) {
         return false;
     }
 
+    // delete entry or entire group
     if(entry == "") {
         iniItem.removeGroup(group);
     } else {
         iniItem.removeEntry(group, entry);
     }
 
-    return false;
+    return true;
 }
 
 //==================================================================================================
@@ -105,18 +108,21 @@ IniReadEntryBlossom::runTask(BlossomLeaf &blossomLeaf, std::string &errorMessage
         return false;
     }
 
+    // read file-content
     std::string fileContent = "";
     const bool result = Kitsunemimi::Persistence::readFile(fileContent, filePath, errorMessage);
     if(result == false) {
         return false;
     }
 
+    // parse file-content
     IniItem iniItem;
     const bool parseSuccess = iniItem.parse(fileContent, errorMessage);
     if(parseSuccess == false) {
         return false;
     }
 
+    // write read value into output-values
     blossomLeaf.output.insert("value", iniItem.get(group, entry)->copy());
 
     return true;
@@ -152,20 +158,24 @@ IniSetEntryBlossom::runTask(BlossomLeaf &blossomLeaf, std::string &errorMessage)
         return false;
     }
 
+    // read file-content
     std::string fileContent = "";
     const bool result = Kitsunemimi::Persistence::readFile(fileContent, filePath, errorMessage);
     if(result == false) {
         return false;
     }
 
+    // parse file-content
     IniItem iniItem;
     const bool parseResult = iniItem.parse(fileContent, errorMessage);
     if(parseResult == false) {
         return false;
     }
 
+    // set new value
     iniItem.set(group, entry, value, true);
 
+    // write updated string back to file
     const std::string newFileContent = iniItem.toString();
     errorMessage.clear();
     const bool writeResult = Kitsunemimi::Persistence::writeFile(filePath,
