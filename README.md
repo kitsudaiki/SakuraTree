@@ -17,8 +17,9 @@ Documentation for latest master-version:
 
 https://gitlab.com/kitsudaiki/Sakura-Project-Documentation/builds/artifacts/master/browse?job=build
 
-**IMPORTANT**: The master-version of the documentation actually differs from the master of the code. The documentation is compatible with the current state of the implementation, but there are some implemented features not in the documentation at the moment (see ticket: https://github.com/kitsudaiki/SakuraTree/issues/136). If you should be interested in this project, then let me know and I will prioritize the update of the documentation.
+For version 0.4.0:
 
+https://files.kitsunemimi.moe/docs/SakuraTree-Documentation_0_4_0.pdf
 
 
 ## Description
@@ -43,13 +44,13 @@ I often encountered things while deploying one or multiple nodes, which could be
 
 **hierarchical client-server-architecture**
 
-*current state: prototype (prototypical Implemented, but not documented now)*
+*current state: prototype (was prototypical Implemented in 0.3.0, was removed with 0.4.0 again. Will be reimplemented again later)*
 
 Similar to Chef, this tool has a client-server-architecture. But this was not enough. Each SakuraTree process can work as client and/or server. So you can create a hierarchical structure of clients and servers for faster data transfer. For example let's say you have a very big image and want to copy it to each node of a deployment with hundreds of nodes. With the ability to spawn new clients and servers within the deployment, you can copy this to one node, which in turn copies the file to two other nodes and these nodes again copy it to the next four nodes and so on.
 
 **live-debugging**
 
-*current state: not implemented now (planned for version 0.4.0)*
+*current state: not implemented now*
 
 Debugging in Ansible and Chef is really slow. When you run into an error and you want to test your fix, you have to run all from the beginning. The changes which were already done in the last run will not be done again but even so the new run can take minutes or hours, until it comes to the point which you attempted to fix. Furthermore, in case the fix was not correct, you have to run this again and wait a massive amount of time and try to process other tasks while waiting. So the plan is that each node stores its process in a local sqlite database to record which task was done and what the input and output was. So after a bugfix, the old process could continue at the point where it failed in the last run.
 
@@ -119,10 +120,10 @@ Repository-Name | Version-Tag | Download-Path
 libKitsunemimiCommon | v0.15.1 | https://github.com/kitsudaiki/libKitsunemimiCommon.git
 libKitsunemimiPersistence | v0.10.0 | https://github.com/kitsudaiki/libKitsunemimiPersistence.git
 libKitsunemimiArgs | v0.2.0 | https://github.com/kitsudaiki/libKitsunemimiArgs.git
-libKitsunemimiJson | v0.10.3 | https://github.com/kitsudaiki/libKitsunemimiJson.git
-libKitsunemimiJinja2 | v0.7.3 | https://github.com/kitsudaiki/libKitsunemimiJinja2.git
-libKitsunemimiIni | v0.4.4 | https://github.com/kitsudaiki/libKitsunemimiIni.git
-libKitsunemimiSakuraLang | v0.4.0 | https://github.com/kitsudaiki/libKitsunemimiSakuraLang.git
+libKitsunemimiJson | v0.10.4 | https://github.com/kitsudaiki/libKitsunemimiJson.git
+libKitsunemimiJinja2 | v0.8.0 | https://github.com/kitsudaiki/libKitsunemimiJinja2.git
+libKitsunemimiIni | v0.4.5 | https://github.com/kitsudaiki/libKitsunemimiIni.git
+libKitsunemimiSakuraLang | v0.5.0 | https://github.com/kitsudaiki/libKitsunemimiSakuraLang.git
 
 ### build programm
 
