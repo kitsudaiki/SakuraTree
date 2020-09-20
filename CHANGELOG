@@ -1,8 +1,18 @@
 # Changelog
 
-## [0.3.0ff] - 2020-08-29
+## [0.4.0] - 2020-09-20
 
-(Feature-Freeze)
+### Changed
+
+- big restructure by moving the complete processing for the scripts into libKitsunemimiSakuraLang
+- updated the remaining code for the new interface of libKitsunemimiSakuraLang
+
+### Removed
+
+- removed the multi-node prototype and so also the complete networing as requirements (will be readded in another form later again)
+
+
+## [0.3.0] - 2020-08-29
 
 ### Added
 
