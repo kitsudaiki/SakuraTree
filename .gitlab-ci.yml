@@ -10,7 +10,7 @@ build:
     - echo Working on branch $CI_COMMIT_REF_NAME
     - pwd
     - apt-get update
-    - apt-get install -y libboost-filesystem-dev libssl-dev
+    - apt-get install -y libboost-filesystem-dev
     - ./build.sh
     - mkdir upload
     - cp -r ../result/* upload/
@@ -28,7 +28,7 @@ functional_tests:
   script: 
     - ls -l
     - apt-get update
-    - apt-get install -y libboost-filesystem-dev libssl-dev
+    - apt-get install -y libboost-filesystem-dev 
     - upload/SakuraTree upload/functional_tests/parse-json-test
     - upload/SakuraTree upload/functional_tests/subtree-ressources-test
     - upload/SakuraTree upload/functional_tests/template-test
