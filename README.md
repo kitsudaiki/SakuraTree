@@ -119,11 +119,11 @@ Repository-Name | Version-Tag | Download-Path
 --- | --- | ---
 libKitsunemimiCommon | v0.15.1 | https://github.com/kitsudaiki/libKitsunemimiCommon.git
 libKitsunemimiPersistence | v0.10.0 | https://github.com/kitsudaiki/libKitsunemimiPersistence.git
-libKitsunemimiArgs | v0.2.0 | https://github.com/kitsudaiki/libKitsunemimiArgs.git
+libKitsunemimiArgs | master | https://github.com/kitsudaiki/libKitsunemimiArgs.git
 libKitsunemimiJson | v0.10.4 | https://github.com/kitsudaiki/libKitsunemimiJson.git
 libKitsunemimiJinja2 | v0.8.0 | https://github.com/kitsudaiki/libKitsunemimiJinja2.git
 libKitsunemimiIni | v0.4.5 | https://github.com/kitsudaiki/libKitsunemimiIni.git
-libKitsunemimiSakuraLang | v0.5.0 | https://github.com/kitsudaiki/libKitsunemimiSakuraLang.git
+libKitsunemimiSakuraLang | master | https://github.com/kitsudaiki/libKitsunemimiSakuraLang.git
 
 ### build programm
 

@@ -29,6 +29,8 @@
 #include <libKitsunemimiPersistence/files/file_methods.h>
 #include <libKitsunemimiArgs/arg_parser.h>
 
+const std::string version = "0.4.0";
+
 int main(int argc, char *argv[])
 {
     Kitsunemimi::Persistence::initConsoleLogger(false);
@@ -38,7 +40,7 @@ int main(int argc, char *argv[])
     KyoukoMind::registerArguments(argParser);
 
     // parse cli-input
-    if(argParser.parse(argc, argv) == false) {
+    if(argParser.parse(argc, argv, version) == false) {
         return 1;
     }
 
