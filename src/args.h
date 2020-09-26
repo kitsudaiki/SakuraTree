@@ -12,9 +12,6 @@ registerArguments(Kitsunemimi::Args::ArgParser &argparser)
     argparser.registerPlain("debug,d",
                             "Enable debug-output.");
 
-    argparser.registerPlain("version,v",
-                            "Print version number.");
-
     argparser.registerString("item-input,i",
                              "Key-value-pairs to override the initial values inside of the file");
 
