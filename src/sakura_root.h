@@ -46,7 +46,7 @@ public:
 
     // start processing
     bool startProcess(const std::string &inputPath,
-                      const DataMap &initialValues,
+                      Kitsunemimi::DataMap &initialValues,
                       const bool dryRun = false);
 
     bool runCommand(const std::string &command, std::string &errorMessage);

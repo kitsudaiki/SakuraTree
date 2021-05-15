@@ -70,7 +70,7 @@ SakuraRoot::~SakuraRoot()
  */
 bool
 SakuraRoot::startProcess(const std::string &inputPath,
-                         const DataMap &initialValues,
+                         DataMap &initialValues,
                          const bool dryRun)
 {
     initBlossoms();
@@ -100,7 +100,8 @@ SakuraRoot::startProcess(const std::string &inputPath,
 
     // run task
     const bfs::path relativePath = bfs::path(treeFile).leaf();
-    result = interface->triggerTree(relativePath.string(), initialValues, errorMessage);
+    DataMap resultItems;
+    result = interface->triggerTree(resultItems, relativePath.string(), initialValues, errorMessage);
     if(result) {
         LOG_INFO("finish", GREEN_COLOR);
     } else {
