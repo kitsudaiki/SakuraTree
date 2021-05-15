@@ -117,13 +117,13 @@ These repositories will be downloaded automatically by the build script of the t
 
 Repository-Name | Version-Tag | Download-Path
 --- | --- | ---
-libKitsunemimiCommon | v0.15.1 | https://github.com/kitsudaiki/libKitsunemimiCommon.git
-libKitsunemimiPersistence | v0.10.0 | https://github.com/kitsudaiki/libKitsunemimiPersistence.git
+libKitsunemimiCommon | v0.18.0 | https://github.com/kitsudaiki/libKitsunemimiCommon.git
+libKitsunemimiPersistence | v0.10.1 | https://github.com/kitsudaiki/libKitsunemimiPersistence.git
 libKitsunemimiArgs | v0.2.1 | https://github.com/kitsudaiki/libKitsunemimiArgs.git
 libKitsunemimiJson | v0.10.4 | https://github.com/kitsudaiki/libKitsunemimiJson.git
 libKitsunemimiJinja2 | v0.8.0 | https://github.com/kitsudaiki/libKitsunemimiJinja2.git
-libKitsunemimiIni | v0.4.5 | https://github.com/kitsudaiki/libKitsunemimiIni.git
-libKitsunemimiSakuraLang | v0.6.0 | https://github.com/kitsudaiki/libKitsunemimiSakuraLang.git
+libKitsunemimiIni | v0.4.6 | https://github.com/kitsudaiki/libKitsunemimiIni.git
+libKitsunemimiSakuraLang | v0.7.2 | https://github.com/kitsudaiki/libKitsunemimiSakuraLang.git
 
 ### build programm
 
@@ -203,7 +203,7 @@ if(packages.size() == 2)
     - group = "DEFAULT"
     - entry = "asdf"
     -> read:
-        - blossom_output >> test_output
+        - text >> test_output
     -> set:
         - value = "123456789"
 
