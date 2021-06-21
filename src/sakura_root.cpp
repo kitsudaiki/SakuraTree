@@ -83,24 +83,14 @@ SakuraRoot::startProcess(const std::string &inputPath,
         treeFile = treeFile + "/root.sakura";
     }
 
-    // parse and check input
+    // process
     std::string errorMessage = "";
     SakuraLangInterface* interface = SakuraLangInterface::getInstance();
-    bool result = interface->readFiles(treeFile, errorMessage);
-    if(result == false)
-    {
-        LOG_ERROR(errorMessage);
-        return false;
-    }
+    const bool result = interface->processFiles(treeFile,
+                                                initialValues,
+                                                dryRun,
+                                                errorMessage);
 
-    // check if only dry-run
-    if(dryRun) {
-        return true;
-    }
-
-    // run task
-    const bfs::path relativePath = bfs::path(treeFile).leaf();
-    result = interface->triggerTree(relativePath.string(), initialValues, errorMessage);
     if(result) {
         LOG_INFO("finish", GREEN_COLOR);
     } else {
