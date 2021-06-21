@@ -203,7 +203,7 @@ if(packages.size() == 2)
     - group = "DEFAULT"
     - entry = "asdf"
     -> read:
-        - blossom_output >> test_output
+        - text >> test_output
     -> set:
         - value = "123456789"
 
