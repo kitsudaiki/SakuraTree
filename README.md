@@ -6,21 +6,12 @@
 ![C++Version](https://img.shields.io/badge/c%2B%2B-14-blue?style=flat-square)
 ![Platform](https://img.shields.io/badge/platform-Linux--x64-lightgrey?style=flat-square)
 
-<p align="center">
-  <img src=".pictures/logo.png?raw=true" alt="Logo"/>
-</p>
+---
 
+**IMPORTANT: For various reasons, this project will not be continued, because it is not needed anymore and I want to focus on my main-project. The core-library `libKitsunemimiSakuraLang`, which contains the parser and execution for the script language, will be continue to exist in my main-project. 
+Beside this, I removed the logo here to avoid confusion. This project here was only a side-project and will not be continued. But I liked the logo a lot and don't want to lose it, so I moved the logo to my main-project. It is my onwn logo and this and the other projects are mine, so it is legitimate for me to do this. Beside this, SakuraTree isn't really used somewhere anyway and it was also originally mentioned to roll out my main-project, which now holds the logo. So there is also a good reason for this move.**
 
-## Documentation
-
-Documentation for latest master-version: 
-
-https://gitlab.com/kitsudaiki/Sakura-Project-Documentation/builds/artifacts/master/browse?job=build
-
-For version 0.4.1:
-
-https://files.kitsunemimi.moe/docs/SakuraTree-Documentation_0_4_1.pdf
-
+---
 
 ## Description
 
